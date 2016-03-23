@@ -6,6 +6,7 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +29,10 @@ public class Contrato implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idPersona", referencedColumnName = "id")
     private Persona persona;
+    private Date fechaFirma;
+    private int numeroContrato;
+    private Persona administrador;
+    
 
     public Persona getPersona() {
         return persona;
@@ -35,6 +40,30 @@ public class Contrato implements Serializable {
 
     public void setPersona(Persona persona) {
         this.persona = persona;
+    }
+    
+     public Persona getAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(Persona administrador) {
+        this.administrador = administrador;
+    }
+    
+      public int getNumeroContrato() {
+        return numeroContrato;
+    }
+
+    public void setNumeroContrato(int numeroContrato) {
+        this.numeroContrato = numeroContrato;
+    }
+    
+      public Date getfechaFirma() {
+        return fechaFirma;
+    }
+
+    public void setFechaFirma(Date fechaFirma) {
+        this.fechaFirma = fechaFirma;
     }
     
     

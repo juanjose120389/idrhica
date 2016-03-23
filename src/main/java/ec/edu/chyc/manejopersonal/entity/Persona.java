@@ -6,6 +6,7 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ import javax.persistence.OneToMany;
 
 /**
  *
- * @author Marcelo
+ * @author Juan José
  */
 @Entity
 public class Persona implements Serializable {
@@ -25,7 +26,18 @@ public class Persona implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+    private String nombres;
+    private String apellidos;
+    private String identificacion;
+    private Date fechaNacimiento;
+    private Date fechaVinculacion;
+    private String correo;
+    private String celular;
+    private String skype;
+    private boolean genero;
+    private String direccion;
+    private boolean activo;
+
     @OneToMany(mappedBy = "persona")
     private Collection<Contrato> contratosCollection = new ArrayList<>();
 
@@ -36,16 +48,93 @@ public class Persona implements Serializable {
     public void setContratosCollection(Collection<Contrato> contratosCollection) {
         this.contratosCollection = contratosCollection;
     }
-    
-    
-    private String nombre;
 
-    public String getNombre() {
-        return nombre;
+    public String getNombres() {
+        return nombres;
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombres = nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Date getFechaVinculacion() {
+        return fechaVinculacion;
+    }
+
+    public void setFechaVinculacion(Date fechaVinculacion) {
+        this.fechaVinculacion = fechaVinculacion;
+    }
+
+    public Boolean getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Boolean genero) {
+        this.genero = genero;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getSkype() {
+        return correo;
+    }
+
+    public void setSkype(String skype) {
+        this.skype = skype;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public Long getId() {
@@ -80,5 +169,5 @@ public class Persona implements Serializable {
     public String toString() {
         return "ec.edu.ucuenca.manejopersonal.entity.Persona[ id=" + id + " ]";
     }
-    
+
 }
