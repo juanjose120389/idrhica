@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
@@ -48,7 +50,10 @@ public class Articulo implements Serializable {
     private Float factorImpacto;
     
     private String referenciaBib;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "idConvenio", referencedColumnName = "id")
+    private Convenio convenio;
     //ManyToMany con Persona; autoresCollection<Persona>
     
     
@@ -58,6 +63,14 @@ public class Articulo implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Convenio getConvenio() {
+        return convenio;
+    }
+
+    public void setConvenio(Convenio convenio) {
+        this.convenio = convenio;
     }
 
     public String getNombre() {

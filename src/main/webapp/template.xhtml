@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="metadata">Metadata and event ....</ui:define>
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            body {
+                font-size: 0.8em;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <div id="wrapper">
+            <div id="content">
+                <h:form id="formContenido">
+                    <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
+                    <ui:insert name="mensaje"/>
+                    <ui:insert name="body"/>
+                </h:form>
+            </div>
+            <div id="footer">
+                <ui:include src="./foot.xhtml"/>
+            </div>
+        </div>
+    </h:body>
+</html>

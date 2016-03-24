@@ -6,14 +6,20 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -28,28 +34,57 @@ public class Proyecto implements Serializable {
     private Long id;
     
     private String titulo;
+
     @ManyToOne
     @JoinColumn(name = "idDirector", referencedColumnName = "id")    
     private Persona director;
+
     @ManyToOne
     @JoinColumn(name = "idCodirector", referencedColumnName = "id")    
     private Persona codirector;
+
     private Integer duracion;
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")    
     private String observaciones;
+    
     private String empresaFinancia;
+    
     private Double monto;
-    private String resumen;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")    
+    private String resumen;
+    
+    @OneToMany(mappedBy = "proyecto")
+    private Collection<Contrato> contratosCollection = new ArrayList<>();           
+
+    @OneToMany(mappedBy = "proyecto")
+    private Collection<Convenio> conveniosCollection = new ArrayList<>();
+    
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Collection<Contrato> getContratosCollection() {
+        return contratosCollection;
+    }
+
+    public void setContratosCollection(Collection<Contrato> contratosCollection) {
+        this.contratosCollection = contratosCollection;
     }
 
     public Persona getDirector() {
@@ -62,6 +97,14 @@ public class Proyecto implements Serializable {
 
     public Persona getCodirector() {
         return codirector;
+    }
+
+    public Collection<Convenio> getConveniosCollection() {
+        return conveniosCollection;
+    }
+
+    public void setConveniosCollection(Collection<Convenio> conveniosCollection) {
+        this.conveniosCollection = conveniosCollection;
     }
 
     public void setCodirector(Persona codirector) {

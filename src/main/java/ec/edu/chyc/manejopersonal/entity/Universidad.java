@@ -32,6 +32,9 @@ public class Universidad implements Serializable {
     
     @OneToMany(mappedBy = "universidad")
     private Collection<Titulo> titulosCollection = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "universidad")
+    private Collection<Pasante> pasantesCollection = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -41,12 +44,28 @@ public class Universidad implements Serializable {
         this.id = id;
     }
 
+    public Collection<Titulo> getTitulosCollection() {
+        return titulosCollection;
+    }
+
+    public void setTitulosCollection(Collection<Titulo> titulosCollection) {
+        this.titulosCollection = titulosCollection;
+    }
+
     public String getNombre() {
         return nombre;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Collection<Pasante> getPasantesCollection() {
+        return pasantesCollection;
+    }
+
+    public void setPasantesCollection(Collection<Pasante> pasantesCollection) {
+        this.pasantesCollection = pasantesCollection;
     }
 
     public String getCiudad() {

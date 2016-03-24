@@ -6,20 +6,28 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
 
 /**
  *
  * @author Juan José
  */
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,18 +37,33 @@ public class Persona implements Serializable {
     private String nombres;
     private String apellidos;
     private String identificacion;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaNacimiento;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaVinculacion;
     private String correo;
     private String celular;
     private String skype;
-    private boolean genero;
+    @Column(length = 2)
+    private String genero; //M=Masculino, F=Femenino
     private String direccion;
-    private boolean activo;
+    private Boolean activo;
 
     @OneToMany(mappedBy = "persona")
     private Collection<Contrato> contratosCollection = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "personaTitulo", joinColumns = {
+        @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idTitulo", referencedColumnName = "id")})
+    private Collection<Titulo> titulosCollection = new ArrayList();
+
+    @ManyToMany
+    @JoinTable(name = "personaArticulo", joinColumns = {
+        @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idArticulo", referencedColumnName = "id")})
+    private Collection<Articulo> articulosCollection = new ArrayList();
+    
     public Collection<Contrato> getContratosCollection() {
         return contratosCollection;
     }
@@ -49,11 +72,27 @@ public class Persona implements Serializable {
         this.contratosCollection = contratosCollection;
     }
 
+    public Collection<Articulo> getArticulosCollection() {
+        return articulosCollection;
+    }
+
+    public void setArticulosCollection(Collection<Articulo> articulosCollection) {
+        this.articulosCollection = articulosCollection;
+    }
+
+    public Collection<Titulo> getTitulosCollection() {
+        return titulosCollection;
+    }
+
+    public void setTitulosCollection(Collection<Titulo> titulosCollection) {
+        this.titulosCollection = titulosCollection;
+    }
+
     public String getNombres() {
         return nombres;
     }
 
-    public void setNombre(String nombre) {
+    public void setNombres(String nombre) {
         this.nombres = nombre;
     }
 
@@ -89,13 +128,14 @@ public class Persona implements Serializable {
         this.fechaVinculacion = fechaVinculacion;
     }
 
-    public Boolean getGenero() {
+    public String getGenero() {
         return genero;
     }
 
-    public void setGenero(Boolean genero) {
+    public void setGenero(String genero) {
         this.genero = genero;
     }
+
 
     public Boolean getActivo() {
         return activo;
@@ -122,7 +162,7 @@ public class Persona implements Serializable {
     }
 
     public String getSkype() {
-        return correo;
+        return skype;
     }
 
     public void setSkype(String skype) {

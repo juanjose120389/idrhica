@@ -6,11 +6,14 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 /**
@@ -30,15 +33,24 @@ public class Titulo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idUniversidad", referencedColumnName = "id")      
     private Universidad universidad;
+       
+    @ManyToMany(mappedBy = "titulosCollection")
+    private Collection<Persona> personasCollection = new ArrayList<>();
     
-    //ManyToMany Persona
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Collection<Persona> getPersonasCollection() {
+        return personasCollection;
+    }
+
+    public void setPersonasCollection(Collection<Persona> personasCollection) {
+        this.personasCollection = personasCollection;
     }
 
     public Integer getNivel() {

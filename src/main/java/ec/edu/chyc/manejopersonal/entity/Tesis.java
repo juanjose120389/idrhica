@@ -6,12 +6,20 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -26,16 +34,32 @@ public class Tesis implements Serializable {
     private Long id;
     
     private String nombre;
-    private String autor;
+    
+    @ManyToOne
+    @JoinColumn(name = "idDirectorTesis", referencedColumnName = "id")
+    private Contratado director;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
+    
     private String observaciones;
+    
     private String tipo;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")    
     private String resumen;
+    
     private String enlace;
+    
     private String actaAprovacion;    
+    
+    @OneToMany(mappedBy = "tesis")
+    private Collection<Tesista> tesistasCollection = new ArrayList<>();    
 
     public Long getId() {
         return id;
@@ -45,20 +69,31 @@ public class Tesis implements Serializable {
         this.id = id;
     }
 
+    public Collection<Tesista> getTesistasCollection() {
+        return tesistasCollection;
+    }
+
+    public void setTesistasCollection(Collection<Tesista> tesistasCollection) {
+        this.tesistasCollection = tesistasCollection;
+    }
+
+
+    public Contratado getDirector() {
+        return director;
+    }
+
+    public void setDirector(Contratado director) {
+        this.director = director;
+    }
+
+    
+
     public String getNombre() {
         return nombre;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
     }
 
     public Date getFechaInicio() {

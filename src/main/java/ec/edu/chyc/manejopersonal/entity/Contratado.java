@@ -6,34 +6,29 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  *
  * @author marcelocaj
  */
 @Entity
-public class Contratado implements Serializable {
+@PrimaryKeyJoinColumn(name = "id")
+public class Contratado extends Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     
     private String cargo;
     private String actividadPrincipal;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @OneToMany(mappedBy = "coordinador")
+    private Collection<Pasantia> pasantiasCollection = new ArrayList<>();    
+    
+    
     public String getCargo() {
         return cargo;
     }
@@ -50,10 +45,18 @@ public class Contratado implements Serializable {
         this.actividadPrincipal = actividadPrincipal;
     }
 
+    public Collection<Pasantia> getPasantiasCollection() {
+        return pasantiasCollection;
+    }
+
+    public void setPasantiasCollection(Collection<Pasantia> pasantiasCollection) {
+        this.pasantiasCollection = pasantiasCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (getId() != null ? getId().hashCode() : 0);
         return hash;
     }
 
@@ -64,7 +67,7 @@ public class Contratado implements Serializable {
             return false;
         }
         Contratado other = (Contratado) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.getId().equals(other.getId()))) {
             return false;
         }
         return true;
@@ -72,7 +75,7 @@ public class Contratado implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.edu.chyc.manejopersonal.entity.Contratado[ id=" + id + " ]";
+        return "ec.edu.chyc.manejopersonal.entity.Contratado[ id=" + getId() + " ]";
     }
     
 }

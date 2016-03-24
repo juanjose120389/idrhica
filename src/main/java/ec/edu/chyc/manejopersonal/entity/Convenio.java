@@ -6,12 +6,20 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -24,12 +32,26 @@ public class Convenio implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String institucion;
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")    
     private String observaciones;
+    
+    @ManyToOne
+    @JoinColumn(name = "idProyecto", referencedColumnName = "id")    
+    private Proyecto proyecto;
+    
+    @OneToMany(mappedBy = "convenio")
+    private Collection<Articulo> articulosCollection = new ArrayList<>();        
 
     public Long getId() {
         return id;
@@ -37,6 +59,54 @@ public class Convenio implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Collection<Articulo> getArticulosCollection() {
+        return articulosCollection;
+    }
+
+    public void setArticulosCollection(Collection<Articulo> articulosCollection) {
+        this.articulosCollection = articulosCollection;
+    }
+
+    public String getInstitucion() {
+        return institucion;
+    }
+
+    public void setInstitucion(String institucion) {
+        this.institucion = institucion;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public Proyecto getProyecto() {
+        return proyecto;
+    }
+
+    public void setProyecto(Proyecto proyecto) {
+        this.proyecto = proyecto;
     }
 
     @Override

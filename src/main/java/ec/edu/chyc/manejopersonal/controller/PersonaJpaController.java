@@ -8,7 +8,9 @@ package ec.edu.chyc.manejopersonal.controller;
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 
 public class PersonaJpaController extends GenericJpaController<Persona> implements Serializable {
@@ -16,6 +18,39 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         setClassRef(Persona.class);
     }
 
+    public List<Persona> listPersonas() throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select p from Persona p");
+            List<Persona> list = q.getResultList();
+            return list;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }        
+    }
+    
+    public Persona getPersona(Persona persona) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select p from Persona p where p.id=:id");
+            q.setParameter("id", persona.getId());
+            List<Persona> list = q.getResultList();
+            if (list != null && !list.isEmpty()) {
+                return list.get(0);
+            } else {
+                return null;
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }    
+    
     public void create(Persona persona) throws Exception {
         EntityManager em = null;
 
@@ -32,18 +67,33 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
     }
 
     public void edit(Persona persona) throws Exception {
-
-    }
-
-    public void destroy(Long id) throws Exception {
         EntityManager em = null;
         try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            em.merge(persona);
+            em.getTransaction().commit();
         } finally {
             if (em != null) {
                 em.close();
             }
         }
-    }
 
+    }
     
+    public void destroy(Long id) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            em.remove(id);
+            em.getTransaction().commit();
+                    
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }    
+
 }

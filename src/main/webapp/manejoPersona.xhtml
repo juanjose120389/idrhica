@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+        <h:panelGrid columns="3">
+            <p:outputLabel value="Cédula/Pasaporte"/>
+            <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
+            <p:message for="txtIdentificacion"/>
+            
+            <p:outputLabel value="Nombres"/>
+            <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.nombres}" maxlength="255"/>  
+            <p:message for="txtNombres"/>
+            
+            <p:outputLabel value="Apellidos"/>
+            <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.apellidos}" maxlength="255"/>  
+            <p:message for="txtApellidos"/>
+           
+
+            <p:outputLabel value="Dirección"/>
+            <p:inputTextarea rows="2" value="#{gestorPersona.persona.direccion}" maxlength="1024"/>  
+            <h:panelGroup layout="block"/> 
+            
+            <p:outputLabel value="Fecha nacimiento"/>
+            <p:calendar pattern="dd/MM/yyyy" maxdate="#{gestorPersona.fechaActual}" value="#{gestorPersona.persona.fechaNacimiento}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Género"/>
+            <p:selectOneMenu value="#{gestorPersona.persona.genero}"
+                                 required="true"
+                                 requiredMessage="Requerido"
+                                 id="cboGenero">
+                    <f:selectItem itemLabel="Masculino" itemValue="M"/>
+                    <f:selectItem itemLabel="Femenino" itemValue="F"/>
+            </p:selectOneMenu>
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Celular"/>
+            <p:inputText value="#{gestorPersona.persona.celular}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Correo electrónico"/>
+            <p:inputText value="#{gestorPersona.persona.correo}"/>  
+            <h:panelGroup layout="block"/>            
+
+            <p:outputLabel value="Skype"/>
+            <p:inputText value="#{gestorPersona.persona.skype}"/>  
+            <h:panelGroup layout="block"/> 
+            
+            <p:outputLabel value="Fecha vinculacion"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorPersona.persona.fechaVinculacion}"/>  
+            <h:panelGroup layout="block"/> 
+
+            <p:outputLabel value="Estado"/>
+            <p:selectOneMenu value="#{gestorPersona.persona.activo}"
+                                 required="true"
+                                 requiredMessage="Requerido"
+                                 id="cboActivo">
+                <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
+                <f:selectItem itemLabel="No Activo" itemValue="#{false}"/>
+            </p:selectOneMenu>
+            <h:panelGroup layout="block"/> 
+        </h:panelGrid>        
+        <p:commandButton value="Crear persona" action="#{gestorPersona.guardar()}" update="formContent"/>
+    </ui:define>
+</ui:composition>

@@ -6,31 +6,37 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  *
  * @author Juan José
  */
 @Entity
-public class Pasante implements Serializable {
+@PrimaryKeyJoinColumn(name = "id")
+public class Pasante extends Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
    
     private String facultad;
-    private String universidad;
+
+    @ManyToOne
+    @JoinColumn(name = "idUniversidad", referencedColumnName = "id")    
+    private Universidad universidad;
+
     private String escuela;
     
-   
+    @OneToMany(mappedBy = "pasante")
+    private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
 
     public String getFacultad() {
         return facultad;
@@ -40,11 +46,11 @@ public class Pasante implements Serializable {
         this.facultad = facultad;
     }
 
-    public String getUniversidad() {
+    public Universidad getUniversidad() {
         return universidad;
     }
 
-    public void setUniversidad(String universidad) {
+    public void setUniversidad(Universidad universidad) {
         this.universidad = universidad;
     }
 
@@ -54,6 +60,14 @@ public class Pasante implements Serializable {
 
     public void setEscuela(String escuela) {
         this.escuela = escuela;
+    }
+
+    public Collection<Pasantia> getPasantiasCollection() {
+        return pasantiasCollection;
+    }
+
+    public void setPasantiasCollection(Collection<Pasantia> pasantiasCollection) {
+        this.pasantiasCollection = pasantiasCollection;
     }
 
 

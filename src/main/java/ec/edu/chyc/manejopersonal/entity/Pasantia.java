@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -23,15 +25,25 @@ import javax.persistence.OneToMany;
 public class Pasantia implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int numeroHoras;
+    
     private String tema;
-    private Persona coordinador;
-    private Persona estudiante;
+    
+    @ManyToOne
+    @JoinColumn(name = "idContratadoCoordinador", referencedColumnName = "id")   
+    private Contratado coordinador;
+    
+    @ManyToOne
+    @JoinColumn(name = "idPasante", referencedColumnName = "id")   
+    private Pasante pasante;
+    
     private Date fechaInicio;
-    private Date fechaFin;
-
+    
+    private Date fechaFin;    
+    
     public Date getFechaInicio() {
         return fechaInicio;
     }
@@ -56,24 +68,22 @@ public class Pasantia implements Serializable {
         this.tema = tema;
     }
 
-
-    public Persona getCoordinador() {
+    public Contratado getCoordinador() {
         return coordinador;
     }
 
-    public void setCoordinador(Persona coordinador) {
+    public void setCoordinador(Contratado coordinador) {
         this.coordinador = coordinador;
     }
 
-    
-    public Persona getEstudiante() {
-        return estudiante;
+    public Pasante getPasante() {
+        return pasante;
     }
 
-    public void setEstudiante(Persona estudiante) {
-        this.estudiante = estudiante;
+    public void setPasante(Pasante pasante) {
+        this.pasante = pasante;
     }
-    
+
 
     public int getNumeroHoras() {
         return numeroHoras;

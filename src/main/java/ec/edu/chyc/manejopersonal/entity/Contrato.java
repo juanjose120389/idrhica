@@ -31,7 +31,13 @@ public class Contrato implements Serializable {
     private Persona persona;
     private Date fechaFirma;
     private int numeroContrato;
+    @ManyToOne
+    @JoinColumn(name = "idAdminContrato", referencedColumnName = "id")
     private Persona administrador;
+    
+    @ManyToOne
+    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
+    private Proyecto proyecto;
     
 
     public Persona getPersona() {
@@ -56,6 +62,14 @@ public class Contrato implements Serializable {
 
     public void setNumeroContrato(int numeroContrato) {
         this.numeroContrato = numeroContrato;
+    }
+
+    public Proyecto getProyecto() {
+        return proyecto;
+    }
+
+    public void setProyecto(Proyecto proyecto) {
+        this.proyecto = proyecto;
     }
     
       public Date getfechaFirma() {
