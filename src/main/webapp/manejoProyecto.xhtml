@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+        <h:panelGrid columns="3">
+            <p:outputLabel value="Titulo"/>
+            <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
+            <p:message for="txtTitulo"/>
+            
+            <p:outputLabel value="Director"/>
+            <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="" maxlength="255"/>  
+            <p:message for="txtNombres"/>
+            
+            <p:outputLabel value="Co-director"/>
+            <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="" maxlength="255"/>  
+            <p:message for="txtApellidos"/>           
+
+            <p:outputLabel value="Duración"/>
+            <h:panelGroup layout="block">
+                <p:inputText value="#{gestorProyecto.proyecto.duracion}" />
+                <p:outputLabel value=" Meses"/>
+            </h:panelGroup>            
+            <h:panelGroup layout="block"/> 
+            
+            <p:outputLabel value="Fecha de inicio"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Fecha de finalización"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Resumen"/>
+            <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.resumen}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Financiamiento"/>
+            <p:inputText value="#{gestorProyecto.proyecto.empresaFinancia}"/>  
+            <h:panelGroup layout="block"/>            
+
+            <p:outputLabel value="Monto"/>
+            <p:inputText value="#{gestorProyecto.proyecto.monto}"/>  
+            <h:panelGroup layout="block"/> 
+            
+            <p:outputLabel value="Observaciones"/>
+            <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.observaciones}"/>  
+            <h:panelGroup layout="block"/> 
+
+        </h:panelGrid>        
+        <p:commandButton value="Guardar" action="#{gestorProyecto.guardar()}"/>
+    </ui:define>
+</ui:composition>

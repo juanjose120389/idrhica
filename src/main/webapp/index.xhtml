@@ -6,43 +6,44 @@
                 template="./template.xhtml">
     <ui:define name="body">
         <h:outputLabel value="contenido"/>
+        <p:commandButton value="Crear proyecto" action="#{gestorProyecto.initCrearProyecto()}"/>
         <p:commandButton value="Crear nueva persona" action="#{gestorPersona.initCrearPersona()}"/>
         <p:commandButton value="Actualizar" action="#{gestorPersona.actualizarListado()}" update=":formContenido"/>
-        <p:dataTable id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         >
-           
-        <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains">
-            <h:outputText value="#{persona.nombres}" />
-        </p:column>
- 
+        <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
+                     paginator="true"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     >
+
+            <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains">
+                <h:outputText value="#{persona.nombres}" />
+            </p:column>
+
             <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains">
-            <h:outputText value="#{persona.apellidos}" />
-        </p:column>
- 
+                <h:outputText value="#{persona.apellidos}" />
+            </p:column>
+
             <p:column headerText="Estado" filterBy="#{persona.activo}" filterMatchMode="equals">
-            <f:facet name="filter">
-                <p:selectOneButton onchange="PF('personasTable').filter()">
-                    <f:converter converterId="javax.faces.Boolean" />
-                    <f:selectItem itemLabel="Todos" itemValue="" />
-                    <f:selectItem itemLabel="Activo" itemValue="true" />
-                    <f:selectItem itemLabel="No Activo" itemValue="false" />
-                </p:selectOneButton>
-            </f:facet>            
-            <h:outputText value="#{persona.activo ? 'Activo' : 'No Activo'}" />
-        </p:column>
- 
-        <p:column headerText="Correo">
-            <h:outputText value="#{persona.correo}" />
-        </p:column>
-            
-        <p:column headerText="Cumpleaños">
-            <h:outputText value="#{persona.fechaNacimiento}">
-                <f:convertDateTime pattern="dd MMMM" />
-            </h:outputText>
-        </p:column>
-            
-    </p:dataTable>        
+                <f:facet name="filter">
+                    <p:selectOneButton onchange="PF('personasTable').filter()">
+                        <f:converter converterId="javax.faces.Boolean" />
+                        <f:selectItem itemLabel="Todos" itemValue="" />
+                        <f:selectItem itemLabel="Activo" itemValue="true" />
+                        <f:selectItem itemLabel="No Activo" itemValue="false" />
+                    </p:selectOneButton>
+                </f:facet>            
+                <h:outputText value="#{persona.activo ? 'Activo' : 'No Activo'}" />
+            </p:column>
+
+            <p:column headerText="Correo">
+                <h:outputText value="#{persona.correo}" />
+            </p:column>
+
+            <p:column headerText="Cumpleaños">
+                <h:outputText value="#{persona.fechaNacimiento}">
+                    <f:convertDateTime pattern="dd MMMM" />
+                </h:outputText>
+            </p:column>
+
+        </p:dataTable>        
     </ui:define>
 </ui:composition>
