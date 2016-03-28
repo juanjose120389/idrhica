@@ -9,31 +9,31 @@
             <p:outputLabel value="Cédula/Pasaporte"/>
             <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
             <p:message for="txtIdentificacion"/>
-            
+
             <p:outputLabel value="Nombres"/>
             <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.nombres}" maxlength="255"/>  
             <p:message for="txtNombres"/>
-            
+
             <p:outputLabel value="Apellidos"/>
             <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.apellidos}" maxlength="255"/>  
             <p:message for="txtApellidos"/>
-           
+
 
             <p:outputLabel value="Dirección"/>
             <p:inputTextarea rows="2" value="#{gestorPersona.persona.direccion}" maxlength="1024"/>  
             <h:panelGroup layout="block"/> 
-            
+
             <p:outputLabel value="Fecha nacimiento"/>
             <p:calendar pattern="dd/MM/yyyy" maxdate="#{gestorPersona.fechaActual}" value="#{gestorPersona.persona.fechaNacimiento}"/>  
             <h:panelGroup layout="block"/>
 
             <p:outputLabel value="Género"/>
             <p:selectOneMenu value="#{gestorPersona.persona.genero}"
-                                 required="true"
-                                 requiredMessage="Requerido"
-                                 id="cboGenero">
-                    <f:selectItem itemLabel="Masculino" itemValue="M"/>
-                    <f:selectItem itemLabel="Femenino" itemValue="F"/>
+                             required="true"
+                             requiredMessage="Requerido"
+                             id="cboGenero">
+                <f:selectItem itemLabel="Masculino" itemValue="M"/>
+                <f:selectItem itemLabel="Femenino" itemValue="F"/>
             </p:selectOneMenu>
             <h:panelGroup layout="block"/>
 
@@ -48,21 +48,58 @@
             <p:outputLabel value="Skype"/>
             <p:inputText value="#{gestorPersona.persona.skype}"/>  
             <h:panelGroup layout="block"/> 
-            
+
             <p:outputLabel value="Fecha vinculacion"/>
             <p:calendar pattern="dd/MM/yyyy" value="#{gestorPersona.persona.fechaVinculacion}"/>  
             <h:panelGroup layout="block"/> 
 
             <p:outputLabel value="Estado"/>
             <p:selectOneMenu value="#{gestorPersona.persona.activo}"
-                                 required="true"
-                                 requiredMessage="Requerido"
-                                 id="cboActivo">
+                             required="true"
+                             requiredMessage="Requerido"
+                             id="cboActivo">
                 <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
                 <f:selectItem itemLabel="No Activo" itemValue="#{false}"/>
             </p:selectOneMenu>
             <h:panelGroup layout="block"/> 
+
+            <p:outputLabel value="Títulos"/>
+            <h:panelGroup layout="block">
+                <p:dataTable id="dtUniversidad" var="titulo" value="#{gestorPersona.listaTitulos}" editable="true" editMode="cell" widgetVar="cellCars">
+
+                    <p:ajax event="cellEdit" listener="#{dtEditView.onCellEdit}"  />
+
+                    <p:column headerText="Nivel">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{titulo.nivel}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="#{titulo.nivel}" style="width:96%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Título">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{titulo.nombre}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{titulo.nombre}" style="width:96%" label="Year"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Universidad">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{titulo.universidad.nombre}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{titulo.universidad}" style="width:100%">
+                                    <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="uni" itemLabel="#{uni}" itemValue="#{uni}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                </p:dataTable>
+                <p:panelGrid columns="2">
+                    <p:commandButton value="Agregar"/>
+                </p:panelGrid>
+            </h:panelGroup>
         </h:panelGrid>        
-        <p:commandButton value="Crear persona" action="#{gestorPersona.guardar()}" update="formContent"/>
+        <p:commandButton value="Crear persona" action="#{gestorPersona.guardar()}" update="formContenido"/>
     </ui:define>
 </ui:composition>

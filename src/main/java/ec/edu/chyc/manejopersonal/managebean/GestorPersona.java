@@ -7,9 +7,11 @@ package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.Titulo;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +38,8 @@ public class GestorPersona implements Serializable {
     private Date fechaActual = new Date();
     
     private Date fechaMinima = new Date();
+    
+    private List<Titulo> listaTitulos = null;
     
     private List<Persona> listaPersonas = null;
 
@@ -68,6 +72,8 @@ public class GestorPersona implements Serializable {
         
         persona.setFechaVinculacion(fechaActual);
         persona.setFechaNacimiento(fechaActual);
+        
+        listaTitulos = new ArrayList<>();
         
         return "manejoPersona";
     }
@@ -120,6 +126,14 @@ public class GestorPersona implements Serializable {
 
     public Date getFechaActual() {
         return fechaActual;
+    }
+
+    public List<Titulo> getListaTitulos() {
+        return listaTitulos;
+    }
+
+    public void setListaTitulos(List<Titulo> listaTitulos) {
+        this.listaTitulos = listaTitulos;
     }
 
 }
