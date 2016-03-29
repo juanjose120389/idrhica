@@ -13,10 +13,26 @@
             <p:outputLabel value="# Horas"/>
             <p:inputMask   id="txtNumero" mask="9999"  maxlength="4"  slotChar=" "   value="#{gestorPasantia.pasantia.numeroHoras}" /> 
             <p:message for="txtNumero" />
-            
+            <!--
             <p:outputLabel value="Coordinador"/>
             <p:inputText id="txtCoordinador" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.coordinador}" maxlength="255"/>  
-            <p:message for="txtApellidos"/>           
+            <p:message for="txtCoordinador"/> 
+             --> 
+             
+               <p:outputLabel for="coordinador" value="Coordinador:"  />
+        <p:selectOneMenu id="coordinador" value="#{gestorPasantia.pasantia.coordinador}" converter="gestorPersona" panelStyle="width:180px"
+                         effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
+            <f:selectItems value="#{gestorPersona.listaPersonas}" var="theme" itemLabel="#{gestorPersona.agregarTitulo}" itemValue="#{persona}" />
+ 
+            <p:column style="width:10%">
+                <h:outputText styleClass="ui-theme ui-theme-#{t.name}" />
+            </p:column>
+ 
+            <p:column>
+                <h:outputText value="#{t.displayName}" />
+            </p:column>
+        </p:selectOneMenu>
+            
 
             <p:outputLabel value="Estudiante"/>
             <p:inputText id="txtEstudiante" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.pasante}" maxlength="255"/>  
