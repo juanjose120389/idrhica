@@ -24,7 +24,7 @@ import javax.faces.bean.ManagedProperty;
  *
  * @author Marcelo
  */
-@Named
+@Named(value = "gestorPersona")
 @SessionScoped
 public class GestorPersona implements Serializable {
 
