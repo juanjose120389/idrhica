@@ -13,7 +13,7 @@ import java.io.Serializable;
  *
  * @author marcelocaj
  */
-@Named
+@Named(value = "gestorConvenio")
 @SessionScoped
 public class GestorConvenio implements Serializable {
 

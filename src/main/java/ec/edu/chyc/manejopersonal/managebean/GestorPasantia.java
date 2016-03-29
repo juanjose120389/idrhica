@@ -14,7 +14,7 @@ import java.io.Serializable;
  *
  * @author marcelocaj
  */
-@Named
+@Named(value = "gestorPasantia")
 @SessionScoped
 public class GestorPasantia implements Serializable {
     private Pasantia pasantia = new Pasantia();

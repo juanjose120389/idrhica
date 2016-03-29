@@ -14,7 +14,7 @@ import java.io.Serializable;
  *
  * @author marcelocaj
  */
-@Named
+@Named(value = "gestorProyecto")
 @SessionScoped
 public class GestorProyecto implements Serializable {
     private Proyecto proyecto = new Proyecto();

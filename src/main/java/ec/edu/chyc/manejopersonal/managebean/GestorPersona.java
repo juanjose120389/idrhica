@@ -78,6 +78,15 @@ public class GestorPersona implements Serializable {
         return "manejoPersona";
     }
     
+    public String agregarTitulo() {
+        Titulo nuevoTitulo = new Titulo();
+        nuevoTitulo.setNivel(3);
+        nuevoTitulo.setNombre("Nuevo título");
+        nuevoTitulo.setUniversidad(null);
+        listaTitulos.add(nuevoTitulo);
+        return "";
+    }
+    
     public String actualizarListado() {
         try {
             listaPersonas = personaController.listPersonas();            

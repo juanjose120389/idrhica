@@ -64,10 +64,10 @@
             <h:panelGroup layout="block"/> 
 
             <p:outputLabel value="Títulos"/>
-            <h:panelGroup layout="block">
-                <p:dataTable id="dtUniversidad" var="titulo" value="#{gestorPersona.listaTitulos}" editable="true" editMode="cell" widgetVar="cellCars">
+            <h:panelGroup layout="block" id="divTitulos">
+                <p:dataTable id="dtTitulos" var="titulo" value="#{gestorPersona.listaTitulos}" editable="true" editMode="cell" widgetVar="cellTitulos">
 
-                    <p:ajax event="cellEdit" listener="#{dtEditView.onCellEdit}"  />
+                    <!-- p:ajax event="cellEdit" listener=""  /-->
 
                     <p:column headerText="Nivel">
                         <p:cellEditor>
@@ -96,7 +96,8 @@
 
                 </p:dataTable>
                 <p:panelGrid columns="2">
-                    <p:commandButton value="Agregar"/>
+                    <p:commandLink value="Agregar" action="#{gestorPersona.agregarTitulo()}"/>
+                    <p:commandButton value="Agregar" partialSubmit="true" action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>
                 </p:panelGrid>
             </h:panelGroup>
         </h:panelGrid>        
