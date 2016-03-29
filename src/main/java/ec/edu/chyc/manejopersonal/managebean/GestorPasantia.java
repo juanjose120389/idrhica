@@ -38,7 +38,7 @@ public class GestorPasantia implements Serializable {
         return pasantia;
     }
 
-    public void setProyecto(Pasantia pasantia) {
+    public void setPasantia(Pasantia pasantia) {
         this.pasantia = pasantia;
     }
     
