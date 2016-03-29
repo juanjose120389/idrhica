@@ -6,50 +6,32 @@
                 template="./template.xhtml">
     <ui:define name="body">
         <h:panelGrid columns="3">
-            <p:outputLabel value="Titulo"/>
-            <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.tema}"/>  
-            <p:message for="txtTitulo"/>
+            <p:outputLabel value="Tema"/>
+            <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.tema}"/>  
+            <p:message for="txtTema"/>
             
-            <p:outputLabel value="Director"/>
-            <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="" maxlength="255"/>  
-            <p:message for="txtNombres"/>
+            <p:outputLabel value="# Horas"/>
+            <p:inputMask   id="txtNumero" mask="9999"  maxlength="4"  slotChar=" "   value="#{gestorPasantia.pasantia.numeroHoras}" /> 
+            <p:message for="txtNumero" />
             
-            <p:outputLabel value="Co-director"/>
-            <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="" maxlength="255"/>  
+            <p:outputLabel value="Coordinador"/>
+            <p:inputText id="txtCoordinador" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.coordinador}" maxlength="255"/>  
             <p:message for="txtApellidos"/>           
 
-            <p:outputLabel value="Duración"/>
-            <h:panelGroup layout="block">
-                <p:inputText value="#{gestorProyecto.proyecto.duracion}" />
-                <p:outputLabel value=" Meses"/>
-            </h:panelGroup>            
-            <h:panelGroup layout="block"/> 
+            <p:outputLabel value="Estudiante"/>
+            <p:inputText id="txtEstudiante" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.pasante}" maxlength="255"/>  
+            <p:message for="txtEstudiante"/> 
             
             <p:outputLabel value="Fecha de inicio"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>  
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorPasantia.pasantia.fechaInicio}"/>  
             <h:panelGroup layout="block"/>
 
             <p:outputLabel value="Fecha de finalización"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>  
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorPasantia.pasantia.fechaFin}"/>  
             <h:panelGroup layout="block"/>
 
-            <p:outputLabel value="Resumen"/>
-            <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.resumen}"/>  
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Financiamiento"/>
-            <p:inputText value="#{gestorProyecto.proyecto.empresaFinancia}"/>  
-            <h:panelGroup layout="block"/>            
-
-            <p:outputLabel value="Monto"/>
-            <p:inputText value="#{gestorProyecto.proyecto.monto}"/>  
-            <h:panelGroup layout="block"/> 
             
-            <p:outputLabel value="Observaciones"/>
-            <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.observaciones}"/>  
-            <h:panelGroup layout="block"/> 
-
         </h:panelGrid>        
-        <p:commandButton value="Guardar" action="#{gestorProyecto.guardar()}"/>
+        <p:commandButton value="Guardar" action="#{gestorPasantia.guardar()}"/>
     </ui:define>
 </ui:composition>
