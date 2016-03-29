@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -24,6 +27,14 @@ import javax.annotation.PostConstruct;
 public class GestorGeneral implements Serializable {
     private List<Universidad> listaUniversidades = null;
     private final UniversidadJpaController universidadController = new UniversidadJpaController();
+
+    public static GestorGeneral getInstance()
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext context = facesContext.getELContext();
+        ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorGeneral}",GestorGeneral.class);
+        return (GestorGeneral)ex.getValue(context);
+    }
     /**
      * Creates a new instance of GestorGeneral
      */
@@ -31,11 +42,16 @@ public class GestorGeneral implements Serializable {
     }
     @PostConstruct
     public void init() {
+        actualizarListaUniversidades();
+    }
+    
+    public void actualizarListaUniversidades() {
         try {
             listaUniversidades = universidadController.listUniversidades();
         } catch (Exception ex) {
             Logger.getLogger(GestorGeneral.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     public List<Universidad> getListaUniversidades() {

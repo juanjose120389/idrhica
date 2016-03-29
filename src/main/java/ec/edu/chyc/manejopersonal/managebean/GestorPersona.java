@@ -8,6 +8,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
+import ec.edu.chyc.manejopersonal.entity.Universidad;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -17,8 +18,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.TreeTableColumn.CellEditEvent;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -27,9 +30,6 @@ import javax.faces.bean.ManagedProperty;
 @Named(value = "gestorPersona")
 @SessionScoped
 public class GestorPersona implements Serializable {
-
-    @ManagedProperty(value="#{gestorGeneral}") 
-    private GestorGeneral gestorGeneral;
     
     private final PersonaJpaController personaController = new PersonaJpaController();
     
@@ -57,7 +57,15 @@ public class GestorPersona implements Serializable {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
-    
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+         
+        if(newValue != null && !newValue.equals(oldValue)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }    
     public String initCrearPersona() {
         persona = new Persona();
         fechaActual = new Date();
@@ -75,6 +83,8 @@ public class GestorPersona implements Serializable {
         
         listaTitulos = new ArrayList<>();
         
+        GestorGeneral.getInstance().actualizarListaUniversidades();
+        
         return "manejoPersona";
     }
     
@@ -83,7 +93,14 @@ public class GestorPersona implements Serializable {
         nuevoTitulo.setNivel(3);
         nuevoTitulo.setNombre("Nuevo título");
         nuevoTitulo.setUniversidad(null);
+        
+        List<Universidad> listaUniversidades = GestorGeneral.getInstance().getListaUniversidades();
+        if (listaUniversidades.size() > 0) {
+            nuevoTitulo.setUniversidad( listaUniversidades.get(0) );
+        }
+        
         listaTitulos.add(nuevoTitulo);
+        
         return "";
     }
     

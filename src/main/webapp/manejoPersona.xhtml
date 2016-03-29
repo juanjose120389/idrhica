@@ -67,7 +67,7 @@
             <h:panelGroup layout="block" id="divTitulos">
                 <p:dataTable id="dtTitulos" var="titulo" value="#{gestorPersona.listaTitulos}" editable="true" editMode="cell" widgetVar="cellTitulos">
 
-                    <!-- p:ajax event="cellEdit" listener=""  /-->
+                    
 
                     <p:column headerText="Nivel">
                         <p:cellEditor>
@@ -87,20 +87,30 @@
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{titulo.universidad.nombre}" /></f:facet>
                             <f:facet name="input">
-                                <h:selectOneMenu value="#{titulo.universidad}" style="width:100%">
-                                    <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="uni" itemLabel="#{uni}" itemValue="#{uni}" />
-                                </h:selectOneMenu>
+                                <p:selectOneMenu id="cmbUniversidad" value="#{titulo.universidad}" converter="universidadConverter"
+                                                 var="uni" filter="true" filterMatchMode="contains">
+                                    <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+
+                                    <p:column style="width:10%">
+                                        <p:outputLabel value="#{uni.nombre}"/>
+                                    </p:column>
+
+                                </p:selectOneMenu>                                
+
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
 
                 </p:dataTable>
                 <p:panelGrid columns="2">
-                    <p:commandLink value="Agregar" action="#{gestorPersona.agregarTitulo()}"/>
-                    <p:commandButton value="Agregar" partialSubmit="true" action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>
+                    
+                    <p:commandButton value="Agregar" partialSubmit="true" process="divTitulos"  action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>
+                    <p:outputLabel value="Total: "/>
+                    <p:outputLabel value="#{gestorPersona.listaTitulos.size()}"/>
                 </p:panelGrid>
             </h:panelGroup>
-        </h:panelGrid>        
+        </h:panelGrid>
         <p:commandButton value="Crear persona" action="#{gestorPersona.guardar()}" update="formContenido"/>
+        <p:commandLink value="Agregar" action="#{gestorPersona.agregarTitulo()}" update="formContenido"/>
     </ui:define>
 </ui:composition>
