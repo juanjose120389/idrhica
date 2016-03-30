@@ -5,6 +5,29 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
+        <p:dialog header="Universidad" widgetVar="dlgUniversidad" resizable="false" modal="true" width="400">
+            <p:panelGrid columns="3">
+                <p:outputLabel value="Nombre"/>
+                <p:inputText id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.nombre}"/>
+                <p:message for="txtNombreUniversidad"/>
+                
+                <p:outputLabel value="País"/>
+                <p:inputText id="txtPaisUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.pais}"/>
+                <p:message for="txtPaisUniversidad"/>
+                
+                <p:outputLabel value="Ciudad"/>
+                <p:inputText id="txtCiudadUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.ciudad}"/>
+                <p:message for="txtCiudadUniversidad"/>
+                
+                <h:panelGroup layout="block"/>
+                <p:panelGrid columns="2">
+                    <p:commandButton value="Aceptar" action="#{gestorPersona.guardarUniversidad()}" onclick="PF('dlgUniversidad').hide();"/>
+                    <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
+                </p:panelGrid>
+                <h:panelGroup layout="block"/>                
+            </p:panelGrid>
+        </p:dialog>  
+
         <h:panelGrid columns="3">
             <p:outputLabel value="Cédula/Pasaporte"/>
             <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
@@ -65,9 +88,9 @@
 
             <p:outputLabel value="Títulos"/>
             <h:panelGroup layout="block" id="divTitulos">
-                <p:dataTable id="dtTitulos" var="titulo" value="#{gestorPersona.listaTitulos}" editable="true" editMode="cell" widgetVar="cellTitulos">
+                <p:dataTable id="dtTitulos" rowKey="#{titulo.id}" var="titulo" value="#{gestorPersona.listaTitulos}" editable="true" editMode="cell" widgetVar="cellTitulos">
 
-                    
+                    <p:ajax event="cellEdit" listener="#{gestorPersona.onCellEdit}"  />
 
                     <p:column headerText="Nivel">
                         <p:cellEditor>
@@ -95,8 +118,8 @@
                                         <p:outputLabel value="#{uni.nombre}"/>
                                     </p:column>
 
-                                </p:selectOneMenu>                                
-
+                                </p:selectOneMenu>
+                                <p:commandLink value=" Nueva universidad" action="#{gestorPersona.abrirUniversidadDialog()}"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>

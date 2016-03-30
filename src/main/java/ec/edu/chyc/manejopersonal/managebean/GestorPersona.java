@@ -18,10 +18,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.TreeTableColumn.CellEditEvent;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
 
 /**
  *
@@ -42,7 +43,11 @@ public class GestorPersona implements Serializable {
     private List<Titulo> listaTitulos = null;
     
     private List<Persona> listaPersonas = null;
+    
+    private Universidad universidad = null;
 
+    private long idTituloGenerado = -1;
+    
     /**
      * Creates a new instance of GestorPersona
      */
@@ -57,6 +62,19 @@ public class GestorPersona implements Serializable {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
+    
+    public void abrirUniversidadDialog() {
+        universidad = new Universidad();
+        ejecutarJS("PF('dlgUniversidad').show()");
+    }
+    public String guardarUniversidad() {
+        
+        return "";
+    }
+    public void ejecutarJS(String codigo) {
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute(codigo);
+    }    
     public void onCellEdit(CellEditEvent event) {
         Object oldValue = event.getOldValue();
         Object newValue = event.getNewValue();
@@ -65,11 +83,13 @@ public class GestorPersona implements Serializable {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-    }    
+    }
     public String initCrearPersona() {
         persona = new Persona();
         fechaActual = new Date();
         fechaMinima = new Date();
+        
+        idTituloGenerado = -1;
         
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fechaMinima);        
@@ -88,8 +108,11 @@ public class GestorPersona implements Serializable {
         return "manejoPersona";
     }
     
+    
     public String agregarTitulo() {
         Titulo nuevoTitulo = new Titulo();
+        
+        nuevoTitulo.setId(idTituloGenerado);
         nuevoTitulo.setNivel(3);
         nuevoTitulo.setNombre("Nuevo título");
         nuevoTitulo.setUniversidad(null);
@@ -100,6 +123,8 @@ public class GestorPersona implements Serializable {
         }
         
         listaTitulos.add(nuevoTitulo);
+        
+        idTituloGenerado--;
         
         return "";
     }
@@ -160,6 +185,14 @@ public class GestorPersona implements Serializable {
 
     public void setListaTitulos(List<Titulo> listaTitulos) {
         this.listaTitulos = listaTitulos;
+    }
+
+    public Universidad getUniversidad() {
+        return universidad;
+    }
+
+    public void setUniversidad(Universidad universidad) {
+        this.universidad = universidad;
     }
 
 }
