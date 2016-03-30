@@ -7,7 +7,6 @@ package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import java.io.Serializable;
-import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Pasantia;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -36,6 +35,7 @@ public class PasantiaJpaController extends GenericJpaController<Pasantia> implem
     
     public void create(Pasantia pasantia) throws Exception {
         EntityManager em = null;
+        
 
         try {
             em = getEntityManager();

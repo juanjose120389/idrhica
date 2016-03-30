@@ -11,32 +11,41 @@
             <p:message for="txtTema"/>
             
             <p:outputLabel value="# Horas"/>
-            <p:inputMask   id="txtNumero" mask="9999"  maxlength="4"  slotChar=" "   value="#{gestorPasantia.pasantia.numeroHoras}" /> 
+            <p:inputText   id="txtNumero" requiredMessage="Requerido" required="true"  value="#{gestorPasantia.pasantia.numeroHoras}" /> 
             <p:message for="txtNumero" />
-            <!--
-            <p:outputLabel value="Coordinador"/>
-            <p:inputText id="txtCoordinador" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.coordinador}" maxlength="255"/>  
-            <p:message for="txtCoordinador"/> 
-             --> 
-             
-               <p:outputLabel for="coordinador" value="Coordinador:"  />
-        <p:selectOneMenu id="coordinador" value="#{gestorPasantia.pasantia.coordinador}" converter="gestorPersona" panelStyle="width:180px"
-                         effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
-            <f:selectItems value="#{gestorPersona.listaPersonas}" var="theme" itemLabel="#{gestorPersona.agregarTitulo}" itemValue="#{persona}" />
- 
-            <p:column style="width:10%">
-                <h:outputText styleClass="ui-theme ui-theme-#{t.name}" />
-            </p:column>
- 
-            <p:column>
-                <h:outputText value="#{t.displayName}" />
-            </p:column>
-        </p:selectOneMenu>
             
+            <p:outputLabel value="Coordinador" />
+           <p:cellEditor>
+                <f:facet name="output" ><h:outputText value="#{gestorPasantia.pasantia.coordinador}" /></f:facet>
+                <f:facet name="input">
+                    <p:selectOneMenu id="cmbPersona" value="#{gestorPersona.persona}" converter="personaConverter"
+                                     var="uni" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
 
-            <p:outputLabel value="Estudiante"/>
-            <p:inputText id="txtEstudiante" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.pasante}" maxlength="255"/>  
-            <p:message for="txtEstudiante"/> 
+                        <p:column style="width:10%">
+                            <p:outputLabel value="#{uni.nombres}"/>
+                        </p:column>
+                    </p:selectOneMenu>                                
+
+                </f:facet>
+            </p:cellEditor>
+            
+             <p:outputLabel value="Pasante"/>
+            <p:cellEditor>
+                <f:facet name="output" ><h:outputText value="#{gestorPasantia.pasantia.pasante}" /></f:facet>
+                <f:facet name="input">
+                    <p:selectOneMenu id="cmbPersona2" value="#{gestorPersona.persona}" converter="personaConverter"
+                                     var="uni" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+
+                        <p:column style="width:10%">
+                            <p:outputLabel value="#{uni.nombres}"/>
+                        </p:column>
+                    </p:selectOneMenu>                                
+
+                </f:facet>
+            </p:cellEditor>
+
             
             <p:outputLabel value="Fecha de inicio"/>
             <p:calendar pattern="dd/MM/yyyy" value="#{gestorPasantia.pasantia.fechaInicio}"/>  

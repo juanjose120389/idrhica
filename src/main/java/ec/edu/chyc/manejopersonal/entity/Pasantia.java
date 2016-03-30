@@ -6,9 +6,10 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -28,6 +30,8 @@ public class Pasantia implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private int numeroHoras;
     
     private String tema;
@@ -39,9 +43,11 @@ public class Pasantia implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idPasante", referencedColumnName = "id")   
     private Pasante pasante;
-    
+   
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
     
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;    
     
     public Date getFechaInicio() {
@@ -82,6 +88,14 @@ public class Pasantia implements Serializable {
 
     public void setPasante(Pasante pasante) {
         this.pasante = pasante;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 
