@@ -15,36 +15,26 @@
             <p:message for="txtNumero" />
             
             <p:outputLabel value="Coordinador" />
-           <p:cellEditor>
-                <f:facet name="output" ><h:outputText value="#{gestorPasantia.pasantia.coordinador}" /></f:facet>
-                <f:facet name="input">
-                    <p:selectOneMenu id="cmbPersona" value="#{gestorPersona.persona}" converter="personaConverter"
-                                     var="uni" filter="true" filterMatchMode="contains">
-                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+            <p:selectOneMenu id="cmbPersona" value="#{gestorPasantia.pasantia.coordinador}" converter="personaConverter"
+                             var="per" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
 
-                        <p:column style="width:10%">
-                            <p:outputLabel value="#{uni.nombres}"/>
-                        </p:column>
-                    </p:selectOneMenu>                                
+                <p:column style="width:10%">
+                    <p:outputLabel value="#{per.nombres}"/>
+                </p:column>
+            </p:selectOneMenu>                                
 
-                </f:facet>
-            </p:cellEditor>
             
-             <p:outputLabel value="Pasante"/>
-            <p:cellEditor>
-                <f:facet name="output" ><h:outputText value="#{gestorPasantia.pasantia.pasante}" /></f:facet>
-                <f:facet name="input">
-                    <p:selectOneMenu id="cmbPersona2" value="#{gestorPersona.persona}" converter="personaConverter"
-                                     var="uni" filter="true" filterMatchMode="contains">
-                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+            <p:outputLabel value="Pasante"/>
+            <p:selectOneMenu id="cmbPersona2" value="#{gestorPasantia.pasantia.pasante}" converter="personaConverter"
+                             var="uni" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
 
-                        <p:column style="width:10%">
-                            <p:outputLabel value="#{uni.nombres}"/>
-                        </p:column>
-                    </p:selectOneMenu>                                
+                <p:column style="width:10%">
+                    <p:outputLabel value="#{uni.nombres}"/>
+                </p:column>
+            </p:selectOneMenu>                                
 
-                </f:facet>
-            </p:cellEditor>
 
             
             <p:outputLabel value="Fecha de inicio"/>
