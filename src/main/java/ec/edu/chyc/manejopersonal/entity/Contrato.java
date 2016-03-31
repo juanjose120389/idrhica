@@ -6,13 +6,14 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -29,6 +30,7 @@ public class Contrato implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idPersona", referencedColumnName = "id")
     private Persona persona;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFirma;
     private int numeroContrato;
     @ManyToOne
