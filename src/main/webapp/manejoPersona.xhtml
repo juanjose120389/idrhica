@@ -5,28 +5,29 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <p:dialog header="Universidad" widgetVar="dlgUniversidad" resizable="false" modal="true" width="400">
-            <p:panelGrid columns="3">
+
+        <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" resizable="false" modal="true" width="400">
+            <h:panelGrid id="panelCamposUniversidad" columns="3">
                 <p:outputLabel value="Nombre"/>
                 <p:inputText id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.nombre}"/>
-                <p:message for="txtNombreUniversidad"/>
+                <p:message for="txtNombreUniversidad"/>                                
                 
                 <p:outputLabel value="País"/>
                 <p:inputText id="txtPaisUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.pais}"/>
                 <p:message for="txtPaisUniversidad"/>
                 
                 <p:outputLabel value="Ciudad"/>
-                <p:inputText id="txtCiudadUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.ciudad}"/>
+                <p:inputText id="txtCiudadUniversidad" value="#{gestorPersona.universidad.ciudad}"/>
                 <p:message for="txtCiudadUniversidad"/>
                 
-                <h:panelGroup layout="block"/>
-                <p:panelGrid columns="2">
-                    <p:commandButton value="Aceptar" action="#{gestorPersona.guardarUniversidad()}" onclick="PF('dlgUniversidad').hide();"/>
-                    <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
-                </p:panelGrid>
-                <h:panelGroup layout="block"/>                
-            </p:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <p:commandButton value="Aceptar" process="dlgUniversidad" update="dtTitulos" action="#{gestorPersona.guardarUniversidad()}"/>
+                <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
+                
+            </h:panelGrid>            
         </p:dialog>  
+
 
         <h:panelGrid columns="3">
             <p:outputLabel value="Cédula/Pasaporte"/>
@@ -92,10 +93,10 @@
 
                     <p:ajax event="cellEdit" listener="#{gestorPersona.onCellEdit}"  />
 
-                    <p:column headerText="Nivel">
+                    <p:column headerText="Nivel" width="120">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{titulo.nivel}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="#{titulo.nivel}" style="width:96%"/></f:facet>
+                            <f:facet name="input"><p:spinner min="1" max="5" value="#{titulo.nivel}" size="2"/></f:facet>
                         </p:cellEditor>
                     </p:column>
 
@@ -110,30 +111,46 @@
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{titulo.universidad.nombre}" /></f:facet>
                             <f:facet name="input">
-                                <p:selectOneMenu id="cmbUniversidad" value="#{titulo.universidad}" converter="universidadConverter"
+                                
+                                <h:panelGroup id="divAccionesUniversidad" layout="block">
+                                    <p:autoComplete id="themeCustom" value="#{titulo.universidad}" completeMethod="#{gestorPersona.completarUniversidad}"
+                                                    dropdown="true" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" converter="universidadConverter" forceSelection="true">
+                                        <p:column>
+                                            <p:outputLabel value="#{u.nombre}"/>
+                                        </p:column>
+                                    </p:autoComplete>
+                                    
+                                    <p:selectOneMenu rendered="false" id="cmbUniversidad" value="#{titulo.universidad}" editable="true" converter="universidadConverter"
                                                  var="uni" filter="true" filterMatchMode="contains">
                                     <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+                                    <f:selectItems value="#{gestorPersona.listaUniversidadesAgregadas}" var="u2" itemLabel="#{u2.nombre}" itemValue="#{u2}" />
 
                                     <p:column style="width:10%">
                                         <p:outputLabel value="#{uni.nombre}"/>
                                     </p:column>
 
                                 </p:selectOneMenu>
-                                <p:commandLink value=" Nueva universidad" action="#{gestorPersona.abrirUniversidadDialog()}"/>
+                                
+                                    <p:commandLink value=" Nueva universidad" style="color: white" partialSubmit="true" process="divAccionesUniversidad" action="#{gestorPersona.abrirUniversidadDialog(titulo)}" />
+                                </h:panelGroup>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
+                    
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton action="#{gestorPersona.quitarTitulo(titulo)}" update="dtTitulos" partialSubmit="true" process=":formContenido:divTitulos" icon="ui-icon-close" title="Eliminar"/>
+                    </p:column>
 
                 </p:dataTable>
-                <p:panelGrid columns="2">
-                    
+                <h:panelGrid columns="2">
                     <p:commandButton value="Agregar" partialSubmit="true" process="divTitulos"  action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>
-                    <p:outputLabel value="Total: "/>
-                    <p:outputLabel value="#{gestorPersona.listaTitulos.size()}"/>
-                </p:panelGrid>
+                </h:panelGrid>
             </h:panelGroup>
         </h:panelGrid>
+        <h:panelGroup layout="block" style="height: 40px"/>
+        
         <p:commandButton value="Crear persona" action="#{gestorPersona.guardar()}" update="formContenido"/>
-        <p:commandLink value="Agregar" action="#{gestorPersona.agregarTitulo()}" update="formContenido"/>
+        
+        
     </ui:define>
 </ui:composition>

@@ -8,6 +8,7 @@ package ec.edu.chyc.manejopersonal.controller;
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.Titulo;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -58,6 +59,22 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(persona);
+            
+            if (persona.getTitulosCollection() != null) {
+                for (Titulo titulo : persona.getTitulosCollection()) {
+                    if (titulo.getId() < 0) {
+                        titulo.setId(null);
+                    }
+                    
+                    if (titulo.getUniversidad().getId() == null) {
+                        em.persist(titulo.getUniversidad());
+                    }
+                    
+                    if (titulo.getId() == null)
+                        em.persist(titulo);
+                }
+            }
+            
             em.getTransaction().commit();
         } finally {
             if (em != null) {

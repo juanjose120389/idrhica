@@ -45,9 +45,11 @@ public class GestorPersona implements Serializable {
     private List<Persona> listaPersonas = null;
     
     private Universidad universidad = null;
+    
+    private List<Universidad> listaUniversidadesAgregadas = new ArrayList<>();
 
     private long idTituloGenerado = -1;
-    
+    private Titulo tituloDeUniversidad;
     /**
      * Creates a new instance of GestorPersona
      */
@@ -61,14 +63,25 @@ public class GestorPersona implements Serializable {
         } catch (Exception ex) {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
+        universidad = new Universidad();
     }    
-    
-    public void abrirUniversidadDialog() {
+    public String abrir() {
+        
+        ejecutarJS("PF('dlgUniversidad').show()");
+        return "";
+    }
+    public void abrirUniversidadDialog(Titulo tituloDeUniversidad) {
+        this.tituloDeUniversidad = tituloDeUniversidad;
         universidad = new Universidad();
         ejecutarJS("PF('dlgUniversidad').show()");
+        RequestContext.getCurrentInstance().update("formContenido:dlgUniversidad");
     }
     public String guardarUniversidad() {
+        listaUniversidadesAgregadas.add(universidad);
+        tituloDeUniversidad.setUniversidad(universidad);
+        universidad = new Universidad();
         
+        ejecutarJS("PF('dlgUniversidad').hide()");
         return "";
     }
     public void ejecutarJS(String codigo) {
@@ -83,6 +96,9 @@ public class GestorPersona implements Serializable {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+    public void quitarTitulo(Titulo tituloQuitar) {
+        listaTitulos.remove(tituloQuitar);
     }
     public String initCrearPersona() {
         persona = new Persona();
@@ -104,6 +120,7 @@ public class GestorPersona implements Serializable {
         listaTitulos = new ArrayList<>();
         
         GestorGeneral.getInstance().actualizarListaUniversidades();
+        listaUniversidadesAgregadas.clear();
         
         return "manejoPersona";
     }
@@ -123,6 +140,7 @@ public class GestorPersona implements Serializable {
         }
         
         listaTitulos.add(nuevoTitulo);
+        universidad = new Universidad();
         
         idTituloGenerado--;
         
@@ -144,9 +162,20 @@ public class GestorPersona implements Serializable {
         javax.el.ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorPersona}", GestorPersona.class);
         return (GestorPersona) ex.getValue(context);
     }    
-    
+    public List<Universidad> completarUniversidad(String query) {
+        List<Universidad> list = GestorGeneral.getInstance().getListaUniversidades();
+        List<Universidad> listResults = new ArrayList<>();
+         
+        for (Universidad uni : list) {
+            if(uni.getNombre().toLowerCase().startsWith(query)) {
+                listResults.add(uni);
+            }
+        }         
+        return listResults;
+    }    
     public String guardar() {
         try {
+            persona.setTitulosCollection(listaTitulos);
             personaController.create(persona);
             return "index";
         } catch (Exception ex) {
@@ -193,6 +222,14 @@ public class GestorPersona implements Serializable {
 
     public void setUniversidad(Universidad universidad) {
         this.universidad = universidad;
+    }
+
+    public List<Universidad> getListaUniversidadesAgregadas() {
+        return listaUniversidadesAgregadas;
+    }
+
+    public void setListaUniversidadesAgregadas(List<Universidad> listaUniversidadesAgregadas) {
+        this.listaUniversidadesAgregadas = listaUniversidadesAgregadas;
     }
 
 }
