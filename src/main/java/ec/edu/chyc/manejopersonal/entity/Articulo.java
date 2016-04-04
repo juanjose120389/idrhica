@@ -14,8 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 /**
@@ -38,8 +38,10 @@ public class Articulo implements Serializable {
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaPublicacion;
-    
-    private String autorPrincipal;
+
+    @ManyToOne
+    @JoinColumn(name = "idAutorPrincipal", referencedColumnName = "id")
+    private Persona autorPrincipal;
     
     private String resumen;
     
@@ -56,6 +58,8 @@ public class Articulo implements Serializable {
     private Convenio convenio;
     //ManyToMany con Persona; autoresCollection<Persona>
     
+    @ManyToMany(mappedBy = "articulosCollection")
+    private Collection<Persona> autoresCollection = new ArrayList<>();
     
     public Long getId() {
         return id;
@@ -111,14 +115,6 @@ public class Articulo implements Serializable {
 
     public void setFechaPublicacion(Date fechaPublicacion) {
         this.fechaPublicacion = fechaPublicacion;
-    }
-
-    public String getAutorPrincipal() {
-        return autorPrincipal;
-    }
-
-    public void setAutorPrincipal(String autorPrincipal) {
-        this.autorPrincipal = autorPrincipal;
     }
 
     public String getResumen() {
@@ -177,5 +173,22 @@ public class Articulo implements Serializable {
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Articulo[ id=" + id + " ]";
     }
+
+    public Persona getAutorPrincipal() {
+        return autorPrincipal;
+    }
+
+    public void setAutorPrincipal(Persona autorPrincipal) {
+        this.autorPrincipal = autorPrincipal;
+    }
+
+    public Collection<Persona> getAutoresCollection() {
+        return autoresCollection;
+    }
+
+    public void setAutoresCollection(Collection<Persona> autoresCollection) {
+        this.autoresCollection = autoresCollection;
+    }
+
     
 }

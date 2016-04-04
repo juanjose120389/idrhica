@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+
+        <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
+                     paginator="true"
+                     >
+
+            <p:column headerText="Nombre" filterBy="#{articulo.nombre}" filterMatchMode="contains">
+                <h:outputText value="#{articulo.nombre}" />
+            </p:column>
+
+            <p:column headerText="Publicación">
+                <h:outputText value="#{articulo.fechaPublicacion}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+
+            <p:column headerText="Revista">
+                <h:outputText value="#{articulo.revista}" />
+            </p:column>
+
+            <p:column headerText="Factor impacto revista">
+                <h:outputText value="#{articulo.factorImpacto}" />
+            </p:column>
+            
+            <p:column headerText="Tema">
+                <h:outputText value="#{articulo.tema}" />
+            </p:column>
+            
+            <p:column headerText="Enlace">
+                <h:outputText value="#{articulo.enlace}" />
+            </p:column>
+            
+        </p:dataTable>        
+    </ui:define>
+</ui:composition>

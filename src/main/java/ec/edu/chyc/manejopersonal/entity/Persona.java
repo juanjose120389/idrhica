@@ -52,6 +52,9 @@ public class Persona implements Serializable {
     @OneToMany(mappedBy = "persona")
     private Collection<Contrato> contratosCollection = new ArrayList<>();
 
+    @OneToMany(mappedBy = "autorPrincipal")
+    private Collection<Articulo> articulosPrincipalCollection = new ArrayList<>();    
+    
     @ManyToMany
     @JoinTable(name = "personaTitulo", joinColumns = {
         @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
@@ -208,6 +211,14 @@ public class Persona implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.ucuenca.manejopersonal.entity.Persona[ id=" + id + " ]";
+    }
+
+    public Collection<Articulo> getArticulosPrincipalCollection() {
+        return articulosPrincipalCollection;
+    }
+
+    public void setArticulosPrincipalCollection(Collection<Articulo> articulosPrincipalCollection) {
+        this.articulosPrincipalCollection = articulosPrincipalCollection;
     }
 
 }
