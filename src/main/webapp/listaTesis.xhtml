@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+
+        <p:dataTable widgetVar="tesisTable" id="tesisTable" var="tesis" value="#{gestorTesis.listaTesis}" rows="10"
+                     paginator="true"
+                     >
+
+            <p:column headerText="Nombre" filterBy="#{tesis.nombre}" filterMatchMode="contains">
+                <h:outputText value="#{tesis.nombre}" />
+            </p:column>
+
+            <p:column headerText="Fecha de Inicio" >
+                <h:outputText value="#{tesis.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+
+            <p:column headerText="Fecha de Finalización">
+                <h:outputText value="#{tesis.fechaFin}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+
+            <p:column headerText="Enlace de la Tesis">
+                <h:outputText value="#{tesis.enlace}" />
+            </p:column>
+
+            <p:column headerText="Director" filterBy="#{tesis.director.nombres}" filterMatchMode="contains">
+                <h:outputText value="#{tesis.director.nombres}" />
+            </p:column>
+
+            <p:column headerText="Resumen" filterBy="#{tesis.resumen}" filterMatchMode="contains">
+                <h:outputText value="#{tesis.resumen}" />
+            </p:column>
+            
+            <p:column headerText="Observaciones" filterBy="#{tesis.observaciones}" filterMatchMode="contains">
+                <h:outputText value="#{tesis.observaciones}" />
+            </p:column>
+            <p:column headerText="Acta de Aprobación" >
+                <h:outputText value="#{tesis.actaAprovacion}" />
+            </p:column>
+
+
+        </p:dataTable>         
+    </ui:define>
+</ui:composition>
