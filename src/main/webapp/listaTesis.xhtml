@@ -39,8 +39,15 @@
             <p:column headerText="Resumen" filterBy="#{tesis.resumen}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.resumen}" />
             </p:column>
+            
+            <p:column headerText="Observaciones" filterBy="#{tesis.observaciones}" filterMatchMode="contains">
+                <h:outputText value="#{tesis.observaciones}" />
+            </p:column>
+            <p:column headerText="Acta de Aprobación" >
+                <h:outputText value="#{tesis.actaAprovacion}" />
+            </p:column>
 
 
-        </p:dataTable>        
+        </p:dataTable>         
     </ui:define>
 </ui:composition>
