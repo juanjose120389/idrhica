@@ -6,9 +6,8 @@
 package ec.edu.chyc.manejopersonal.managebean.converter;
 
 //import ec.edu.chyc.manejopersonal.managebean.GestorContratado;
-import ec.edu.chyc.manejopersonal.entity.Contratado;
-import ec.edu.chyc.manejopersonal.entity.Persona;
-import ec.edu.chyc.manejopersonal.managebean.GestorPersona;
+import ec.edu.chyc.manejopersonal.entity.Pasante;
+import ec.edu.chyc.manejopersonal.managebean.GestorPasante;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -16,8 +15,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 
-@FacesConverter("personaConverter")
-public class PersonaConverter implements Converter {
+@FacesConverter("pasanteConverter")
+public class PasanteConverter implements Converter {
  
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
@@ -28,13 +27,13 @@ public class PersonaConverter implements Converter {
             return null;
         }
 
-        List<Persona> list = GestorPersona.getInstance().getListaPersonas();
+        List<Pasante> list = GestorPasante.getInstance().getListaPasantes();
        // List<Contratado> list = GestorContratado.getInstance().getListaContratados();
-        for (Persona per : list) {
-            if (per.getId() == id) 
-                return per;
+        for (Pasante pas : list) {
+            if (pas.getId() == id) 
+                return pas;
         }
-        Persona obj = new Persona();
+        Pasante obj = new Pasante();
         obj.setId(id);
 
         return obj;
@@ -46,7 +45,7 @@ public class PersonaConverter implements Converter {
             return null;
         }
         // Convert ProjectDetail to its unique String representation.
-        Persona obj = (Persona) value;
+        Pasante obj = (Pasante) value;
         String idAsString = String.valueOf(obj.getId());
         return idAsString;
     }   

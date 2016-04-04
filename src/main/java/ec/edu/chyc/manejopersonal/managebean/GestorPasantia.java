@@ -8,13 +8,9 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.PasantiaJpaController;
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Pasantia;
-import ec.edu.chyc.manejopersonal.entity.Persona;
-import ec.edu.chyc.manejopersonal.entity.Titulo;
-import ec.edu.chyc.manejopersonal.entity.Universidad;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -123,7 +119,7 @@ public class GestorPasantia implements Serializable {
         return listPasantes;
     }
 
-    public void setListaPersonas(List<Pasantia> listaPasantia) {
+    public void setListaPasantias(List<Pasantia> listaPasantia) {
         this.listPasantes = listaPasantia;
     }
 

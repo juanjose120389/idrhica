@@ -15,27 +15,27 @@
             <p:message for="txtNumero" />
             
             <p:outputLabel value="Coordinador" />
-            <p:selectOneMenu id="cmbPersona" value="#{gestorPasantia.pasantia.coordinador}" converter="personaConverter"
+            <p:selectOneMenu id="cmbPersona" value="#{gestorPasantia.pasantia.coordinador}" converter="contratadoConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorContratado.listaContratados}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
                     <p:outputLabel value="#{per.nombres}"/>
                 </p:column>
             </p:selectOneMenu>                                
-
+<h:panelGroup layout="block"/>
             
             <p:outputLabel value="Pasante"/>
-            <p:selectOneMenu id="cmbPersona2" value="#{gestorPasantia.pasantia.pasante}" converter="personaConverter"
+            <p:selectOneMenu id="cmbPersona2" value="#{gestorPasantia.pasantia.pasante}" converter="pasanteConverter"
                              var="uni" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
+                <f:selectItems value="#{gestorPasante.listaPasantes}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
 
                 <p:column style="width:10%">
                     <p:outputLabel value="#{uni.nombres}"/>
                 </p:column>
             </p:selectOneMenu>                                
 
-
+<h:panelGroup layout="block"/>
             
             <p:outputLabel value="Fecha de inicio"/>
             <p:calendar pattern="dd/MM/yyyy" value="#{gestorPasantia.pasantia.fechaInicio}"/>  
