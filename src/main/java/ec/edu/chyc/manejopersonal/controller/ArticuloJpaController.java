@@ -22,7 +22,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select a from Articulo a");
+            Query q = em.createQuery("select distinct a from Articulo a join fetch a.autoresCollection");
             List<Articulo> list = q.getResultList();
             return list;
         } finally {

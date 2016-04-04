@@ -10,6 +10,10 @@
                      paginator="true"
                      >
 
+            <p:column headerText="Autor principal">
+                <h:outputText value="#{articulo.autorPrincipal.apellidos} #{articulo.autorPrincipal.nombres}" />
+            </p:column>           
+            
             <p:column headerText="Nombre" filterBy="#{articulo.nombre}" filterMatchMode="contains">
                 <h:outputText value="#{articulo.nombre}" />
             </p:column>
@@ -35,6 +39,13 @@
             
             <p:column headerText="Enlace">
                 <h:outputText value="#{articulo.enlace}" />
+            </p:column>
+
+            
+            <p:column headerText="Autores">
+                <ui:repeat value="#{articulo.autoresCollection}" var="autor">
+                    <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
+                </ui:repeat>
             </p:column>
             
         </p:dataTable>        
