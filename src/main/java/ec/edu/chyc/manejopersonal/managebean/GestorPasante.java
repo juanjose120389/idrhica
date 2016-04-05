@@ -20,7 +20,7 @@ import javax.faces.context.FacesContext;
 
 /**
  *
- * @author CHYC-DK-005
+ * @author Juan José
  */
 @Named(value = "gestorPasante")
 @SessionScoped

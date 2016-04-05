@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+
+        <p:dataTable widgetVar="proyectoTable" id="proyectoTable" var="proyecto" value="#{gestorProyecto.listaProyecto}" rows="10"
+                     paginator="true"
+                     >
+
+            <p:column headerText="Título" filterBy="#{proyecto.titulo}" filterMatchMode="contains">
+                <h:outputText value="#{proyecto.titulo}" />
+            </p:column>
+
+            <p:column headerText="Fecha de Inicio" >
+                <h:outputText value="#{proyecto.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+
+            <p:column headerText="Fecha de Finalización">
+                <h:outputText value="#{proyecto.fechaFin}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+
+            <p:column headerText="Director" filterBy="#{proyecto.director.nombres}" filterMatchMode="contains">
+                <h:outputText value="#{proyecto.director.nombres}" />
+            </p:column>
+            
+            <p:column headerText="Co-Director" filterBy="#{proyecto.codirector.nombres}" filterMatchMode="contains">
+                <h:outputText value="#{proyecto.codirector.nombres}" />
+            </p:column>
+
+            <p:column headerText="Duración" >
+                <h:outputText value="#{proyecto.duracion}" />
+            </p:column>
+            
+            <p:column headerText="Empresa de Financiamiento" filterBy="#{proyecto.empresaFinancia}" filterMatchMode="contains">
+                <h:outputText value="#{proyecto.empresaFinancia}" />
+            </p:column>
+            <p:column headerText="Monto" >
+                <h:outputText value="#{proyecto.monto}" />
+            </p:column>
+            <p:column headerText="Resumen" filterBy="#{proyecto.resumen}" filterMatchMode="contains">
+                <h:outputText value="#{proyecto.resumen}" />
+            </p:column>
+            <p:column headerText="Observaciones" filterBy="#{proyecto.observaciones}" filterMatchMode="contains">
+                <h:outputText value="#{proyecto.observaciones}" />
+            </p:column>
+
+
+        </p:dataTable>         
+    </ui:define>
+</ui:composition>

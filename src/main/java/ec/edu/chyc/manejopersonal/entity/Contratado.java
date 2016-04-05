@@ -14,7 +14,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  *
- * @author marcelocaj
+ * @author Juan José
  */
 @Entity
 @PrimaryKeyJoinColumn(name = "id")

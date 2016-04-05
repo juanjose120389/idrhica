@@ -18,7 +18,7 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         setClassRef(Proyecto.class);
     }
 
-    public List<Proyecto> listProyectos() throws Exception {
+    public List<Proyecto> listProyecto() throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();

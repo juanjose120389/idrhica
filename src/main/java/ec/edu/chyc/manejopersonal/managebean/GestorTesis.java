@@ -21,7 +21,7 @@ import javax.faces.context.FacesContext;
 
 /**
  *
- * @author marcelocaj
+ * @author Juan José
  */
 @Named(value = "gestorTesis")
 @SessionScoped
