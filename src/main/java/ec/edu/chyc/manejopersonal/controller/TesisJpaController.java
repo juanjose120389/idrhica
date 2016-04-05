@@ -22,7 +22,7 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select a from Tesis a");
+            Query q = em.createQuery("select distinct t from Tesis t join fetch t.autoresCollection");
             List<Tesis> list = q.getResultList();
             return list;
         } finally {
