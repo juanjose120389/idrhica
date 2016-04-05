@@ -30,7 +30,7 @@ public class Tesis implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String nombre;
@@ -56,10 +56,10 @@ public class Tesis implements Serializable {
     
     private String enlace;
     
-    private String actaAprovacion;    
+    private String actaAprobacion;    
     
     @OneToMany(mappedBy = "tesis")
-    private Collection<Tesista> tesistasCollection = new ArrayList<>();    
+    private Collection<Tesista> autoresCollection = new ArrayList<>();    
 
     public Long getId() {
         return id;
@@ -68,15 +68,6 @@ public class Tesis implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public Collection<Tesista> getTesistasCollection() {
-        return tesistasCollection;
-    }
-
-    public void setTesistasCollection(Collection<Tesista> tesistasCollection) {
-        this.tesistasCollection = tesistasCollection;
-    }
-
 
     public Contratado getDirector() {
         return director;
@@ -144,14 +135,6 @@ public class Tesis implements Serializable {
         this.enlace = enlace;
     }
 
-    public String getActaAprovacion() {
-        return actaAprovacion;
-    }
-
-    public void setActaAprovacion(String actaAprovacion) {
-        this.actaAprovacion = actaAprovacion;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -175,6 +158,22 @@ public class Tesis implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Tesis[ id=" + id + " ]";
+    }
+
+    public String getActaAprobacion() {
+        return actaAprobacion;
+    }
+
+    public void setActaAprobacion(String actaAprobacion) {
+        this.actaAprobacion = actaAprobacion;
+    }
+
+    public Collection<Tesista> getAutoresCollection() {
+        return autoresCollection;
+    }
+
+    public void setAutoresCollection(Collection<Tesista> autoresCollection) {
+        this.autoresCollection = autoresCollection;
     }
     
 }
