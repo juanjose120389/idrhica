@@ -29,11 +29,11 @@
 
 
             <p:column headerText="Director" filterBy="#{proyecto.director.nombres}" filterMatchMode="contains">
-                <h:outputText value="#{proyecto.director.nombres}" />
+                <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
             </p:column>
             
             <p:column headerText="Co-Director" filterBy="#{proyecto.codirector.nombres}" filterMatchMode="contains">
-                <h:outputText value="#{proyecto.codirector.nombres}" />
+                <h:outputText value="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" />
             </p:column>
 
             <p:column headerText="Duración" >
