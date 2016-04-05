@@ -5,15 +5,26 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-
         <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
                      paginator="true"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}   {Exporters}"
                      >
-
+            <f:facet name="{Exporters}">
+                <h:panelGroup layout="block" style="float:left">
+                <h:commandLink>
+                    <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                    <p:dataExporter type="xls" target="articulosTable" fileName="articulos" />
+                </h:commandLink>
+                <h:commandLink>
+                    <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                    <p:dataExporter type="pdf" target="articulosTable" fileName="articulos" />
+                </h:commandLink>                                
+                    </h:panelGroup>
+            </f:facet>
             <p:column headerText="Autor principal">
                 <h:outputText value="#{articulo.autorPrincipal.apellidos} #{articulo.autorPrincipal.nombres}" />
             </p:column>           
-            
+
             <p:column headerText="Nombre" filterBy="#{articulo.nombre}" filterMatchMode="contains">
                 <h:outputText value="#{articulo.nombre}" />
             </p:column>
@@ -32,22 +43,22 @@
             <p:column headerText="Factor impacto revista">
                 <h:outputText value="#{articulo.factorImpacto}" />
             </p:column>
-            
+
             <p:column headerText="Tema">
                 <h:outputText value="#{articulo.tema}" />
             </p:column>
-            
+
             <p:column headerText="Enlace">
                 <h:outputText value="#{articulo.enlace}" />
             </p:column>
 
-            
+
             <p:column headerText="Autores">
                 <ui:repeat value="#{articulo.autoresCollection}" var="autor">
                     <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
             </p:column>
-            
+
         </p:dataTable>        
     </ui:define>
 </ui:composition>
