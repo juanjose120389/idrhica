@@ -12,3 +12,8 @@ and open the template in the editor.
     float: right;
     margin-right: 5px;
 }*/
+#content {
+}
+.exportButtons {
+    text-align: right; margin-top: -26px;
+}

@@ -7,6 +7,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.ArticuloJpaController;
 import ec.edu.chyc.manejopersonal.entity.Articulo;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -37,6 +38,17 @@ public class GestorArticulo implements Serializable {
     @PostConstruct
     public void init() {
         
+    }
+    public String convertirListaPersonas(List<Persona> listaConvertir) {
+        String r = "";
+        for (Persona per : listaConvertir) {
+            r += String.format("%s %s, ", per.getApellidos(), per.getNombres());
+        }
+        if (!r.isEmpty()) {
+            r = r.substring(0, r.length() - 3);
+        }
+        
+        return r;
     }
     
     public static GestorArticulo getInstance()
