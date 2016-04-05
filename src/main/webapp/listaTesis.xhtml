@@ -13,6 +13,12 @@
             <p:column headerText="Nombre" filterBy="#{tesis.nombre}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.nombre}" />
             </p:column>
+            <p:column headerText="Autor" >
+                <ui:repeat value="#{tesis.autoresCollection}" var="autor">
+                    <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
+                </ui:repeat>
+            </p:column>
+
 
             <p:column headerText="Fecha de Inicio" >
                 <h:outputText value="#{tesis.fechaInicio}">
@@ -33,7 +39,7 @@
             </p:column>
 
             <p:column headerText="Director" filterBy="#{tesis.director.nombres}" filterMatchMode="contains">
-                <h:outputText value="#{tesis.director.nombres}" />
+                <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
             </p:column>
 
             <p:column headerText="Resumen" filterBy="#{tesis.resumen}" filterMatchMode="contains">
