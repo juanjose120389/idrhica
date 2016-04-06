@@ -16,10 +16,21 @@
 
         <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
                      paginator="true"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                      >
-
-            <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains">
+            <f:facet name="{Exporters}">
+                <h:panelGroup layout="block" styleClass="exportButtons">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                        <p:dataExporter type="xls" target="articulosTable" fileName="articulos" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                        <p:dataExporter type="pdf" target="articulosTable" fileName="articulos" encoding="iso-8859-1"/>
+                    </h:commandLink>
+                </h:panelGroup>                    
+            </f:facet>
+            <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
                 <h:outputText value="#{persona.nombres}" />
             </p:column>
 

@@ -45,7 +45,7 @@ public class GestorArticulo implements Serializable {
             r += String.format("%s %s, ", per.getApellidos(), per.getNombres());
         }
         if (!r.isEmpty()) {
-            r = r.substring(0, r.length() - 3);
+            r = r.substring(0, r.length() - 2);
         }
         
         return r;

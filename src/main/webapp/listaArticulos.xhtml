@@ -5,8 +5,13 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <p:dataTable style="width: 100%" widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
-                     paginator="true"
+        <style >
+            .ui-datatable table {
+                table-layout: auto;
+            }
+        </style>
+        <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
+                     paginator="true" resizableColumns="true" liveResize="true"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                      >
             <f:facet name="{Exporters}">
@@ -21,7 +26,7 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
-            <p:column headerText="Autor principal">
+            <p:column headerText="Autor principal" sortBy="#{articulo.autorPrincipal.apellidos}">
                 <h:outputText value="#{articulo.autorPrincipal.apellidos} #{articulo.autorPrincipal.nombres}" />
             </p:column>           
 
@@ -29,26 +34,26 @@
                 <h:outputText style="font-weight: bold;" value="#{articulo.nombre}" />
             </p:column>
 
-            <p:column headerText="Publicación">
+            <p:column headerText="Publicación" sortBy="#{articulo.fechaPublicacion}" width="100">
                 <h:outputText value="#{articulo.fechaPublicacion}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
 
 
-            <p:column headerText="Revista">
+            <p:column headerText="Revista" filterBy="#{articulo.revista}">
                 <h:outputText value="#{articulo.revista}" />
             </p:column>
 
-            <p:column headerText="Factor impacto revista">
+            <p:column headerText="Factor impacto revista" filterBy="#{articulo.factorImpacto}">
                 <h:outputText value="#{articulo.factorImpacto}" />
             </p:column>
 
-            <p:column headerText="Tema">
+            <p:column headerText="Tema" filterBy="#{articulo.tema}">
                 <h:outputText value="#{articulo.tema}" />
             </p:column>
 
-            <p:column headerText="Enlace">
+            <p:column headerText="Enlace" filterBy="#{articulo.enlace}">
                 <h:outputText value="#{articulo.enlace}" />
             </p:column>
 
@@ -58,11 +63,11 @@
                     <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
             </p:column>
-            
-            <p:column headerText="Autores" style="display: none">
-                <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.autoresCollection)}"/>
-            </p:column>
 
-        </p:dataTable>        
+            <p:column headerText="Autores" style="display: none; width: 1px !important; height: 0px !important;">
+                <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.autoresCollection)}" escape="false"/>
+            </p:column>            
+
+        </p:dataTable>
     </ui:define>
 </ui:composition>
