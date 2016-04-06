@@ -10,18 +10,18 @@
                      paginator="true"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}   {Exporters}"
                      >
-            
+
             <f:facet name="{Exporters}">
-                <h:panelGroup layout="block" style="float:left">
-                <h:commandLink>
-                    <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
-                    <p:dataExporter type="xls" target="proyectoTable" fileName="proyectos" />
-                </h:commandLink>
-                <h:commandLink>
-                    <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
-                    <p:dataExporter type="pdf" target="proyectoTable" fileName="proyectos" />
-                </h:commandLink>                                
-                    </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="exportButtons">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                        <p:dataExporter type="xls" target="proyectoTable" fileName="proyecto" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                        <p:dataExporter type="pdf" target="proyectoTable" fileName="proyecto" encoding="iso-8859-1"/>
+                    </h:commandLink>
+                </h:panelGroup>                    
             </f:facet>
 
             <p:column headerText="Título" filterBy="#{proyecto.titulo}" filterMatchMode="contains">
@@ -45,7 +45,7 @@
             <p:column headerText="Director" filterBy="#{proyecto.director.nombres}" filterMatchMode="contains">
                 <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
             </p:column>
-            
+
             <p:column headerText="Co-Director" filterBy="#{proyecto.codirector.nombres}" filterMatchMode="contains">
                 <h:outputText value="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" />
             </p:column>
@@ -53,7 +53,7 @@
             <p:column headerText="Duración" >
                 <h:outputText value="#{proyecto.duracion}" />
             </p:column>
-            
+
             <p:column headerText="Empresa de Financiamiento" filterBy="#{proyecto.empresaFinancia}" filterMatchMode="contains">
                 <h:outputText value="#{proyecto.empresaFinancia}" />
             </p:column>
