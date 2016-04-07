@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+
+        <p:dataTable widgetVar="contratoTable" id="contratoTable" var="contrato" value="#{gestorContrato.listaContrato}" rows="10"
+                     paginator="true"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}   {Exporters}"
+                     >
+
+            <f:facet name="{Exporters}">
+                <h:panelGroup layout="block" styleClass="exportButtons">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                        <p:dataExporter type="xls" target="contratoTable" fileName="contrato" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                        <p:dataExporter type="pdf" target="contratoTable" fileName="contrato" encoding="iso-8859-1"/>
+                    </h:commandLink>
+                </h:panelGroup>                    
+            </f:facet>
+
+            <p:column headerText="Número de Contrato" filterBy="#{contrato.numeroContrato}" filterMatchMode="contains">
+                <h:outputText value="#{contrato.numeroContrato}" />
+            </p:column>
+
+            <p:column headerText="Fecha de Inicio" >
+                <h:outputText value="#{contrato.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Fecha de Fin" >
+                <h:outputText value="#{contrato.fechaFin}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+
+           
+            <p:column headerText="Contratado" filterBy="#{contrato.persona.nombres} #{contrato.persona.apellidos}" filterMatchMode="contains">
+                <h:outputText value="#{contrato.persona.nombres} #{contrato.persona.apellidos}" />
+            </p:column>
+
+            
+            <p:column headerText="Proyecto" filterBy="#{contrato.proyecto.titulo}" filterMatchMode="contains">
+                <h:outputText value="#{contrato.proyecto.titulo}" />
+            </p:column>
+            <p:column headerText="Administrador" filterBy="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" filterMatchMode="contains">
+                <h:outputText value="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" />
+            </p:column>
+
+            
+
+        </p:dataTable>         
+    </ui:define>
+</ui:composition>

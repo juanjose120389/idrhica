@@ -31,7 +31,10 @@ public class Contrato implements Serializable {
     @JoinColumn(name = "idPersona", referencedColumnName = "id")
     private Persona persona;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaFirma;
+    private Date fechaInicio;
+    
+   @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaFin;
     private int numeroContrato;
     @ManyToOne
     @JoinColumn(name = "idAdminContrato", referencedColumnName = "id")
@@ -44,6 +47,22 @@ public class Contrato implements Serializable {
 
     public Persona getPersona() {
         return persona;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public void setPersona(Persona persona) {
@@ -74,13 +93,7 @@ public class Contrato implements Serializable {
         this.proyecto = proyecto;
     }
     
-      public Date getfechaFirma() {
-        return fechaFirma;
-    }
-
-    public void setFechaFirma(Date fechaFirma) {
-        this.fechaFirma = fechaFirma;
-    }
+     
     
     
     public Long getId() {
