@@ -6,7 +6,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
 
-        <p:dataTable widgetVar="pasanteTable" id="tesisTable" var="pasante" value="#{gestorPasante.listaPasantes}" rows="10"
+        <p:dataTable widgetVar="pasanteTable" id="pasanteTable" var="pasante" value="#{gestorPasante.listaPasantes}" rows="10"
                      paginator="true" resizableColumns="true" liveResize="true" 
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                      >
