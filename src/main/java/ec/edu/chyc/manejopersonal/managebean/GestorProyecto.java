@@ -11,10 +11,7 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.ProyectoJpaController;
-import ec.edu.chyc.manejopersonal.controller.TesisJpaController;
-import ec.edu.chyc.manejopersonal.entity.Contratado;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
-import ec.edu.chyc.manejopersonal.entity.Tesis;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;

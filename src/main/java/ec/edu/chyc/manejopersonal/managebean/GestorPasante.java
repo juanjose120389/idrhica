@@ -66,7 +66,10 @@ public class GestorPasante implements Serializable {
         return "manejoPasante";
     }
     
-  
+   public String initListarPasante() {
+        actualizarListado();
+        return "listaPasantes";
+    }
     
     public String actualizarListado() {
         try {
@@ -89,7 +92,7 @@ public class GestorPasante implements Serializable {
             pasanteController.create(pasante);
             return "index";
         } catch (Exception ex) {
-            Logger.getLogger(GestorPasantia.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GestorPasante.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }

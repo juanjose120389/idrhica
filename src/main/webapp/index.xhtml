@@ -12,6 +12,7 @@
         <p:commandButton value="Lista Artículos" action="#{gestorArticulo.initListarArticulos()}"/>
         <p:commandButton value="Lista Tesis" action="#{gestorTesis.initListarTesis()}"/>
         <p:commandButton value="Lista Proyectos" action="#{gestorProyecto.initListarProyectos()}"/>
+        <p:commandButton value="Lista Pasantes" action="#{gestorPasante.initListarPasante()}"/>
         <p:commandButton value="Actualizar" action="#{gestorPersona.actualizarListado()}" update=":formContenido"/>
 
         <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
