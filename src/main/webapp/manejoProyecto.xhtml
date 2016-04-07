@@ -10,13 +10,31 @@
             <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
             <p:message for="txtTitulo"/>
             
-            <p:outputLabel value="Director"/>
-            <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="" maxlength="255"/>  
-            <p:message for="txtNombres"/>
+            <p:outputLabel value="Director" />
+            <p:selectOneMenu id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="contratadoConverter"
+                             var="per" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorContratado.listaContratados}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+
+                <p:column style="width:10%">
+                    <p:outputLabel value="#{per.nombres}"/>
+                </p:column>
+            </p:selectOneMenu>  
+            <h:panelGroup layout="block"/>
+                        <p:outputLabel value="Co-Director" />
+            <p:selectOneMenu id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="contratadoConverter"
+                             var="per2" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorContratado.listaContratados}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
+
+                <p:column style="width:10%">
+                    <p:outputLabel value="#{per2.nombres}"/>
+                </p:column>
+            </p:selectOneMenu>  
+                        <h:panelGroup layout="block"/>
             
-            <p:outputLabel value="Co-director"/>
-            <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="" maxlength="255"/>  
-            <p:message for="txtApellidos"/>           
+            <p:outputLabel value="Empresa que Financia"/>
+            <p:inputText id="txtFinancia" requiredMessage="Requerido" required="true" value="#{gestorProyecto.proyecto.empresaFinancia}" maxlength="255"/>  
+            <p:message for="txtFinancia"/>
+                       
 
             <p:outputLabel value="Duración"/>
             <h:panelGroup layout="block">
@@ -25,11 +43,11 @@
             </h:panelGroup>            
             <h:panelGroup layout="block"/> 
             
-            <p:outputLabel value="Fecha de inicio"/>
+            <p:outputLabel value="Fecha de Inicio"/>
             <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>  
             <h:panelGroup layout="block"/>
 
-            <p:outputLabel value="Fecha de finalización"/>
+            <p:outputLabel value="Fecha de Finalización"/>
             <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>  
             <h:panelGroup layout="block"/>
 
