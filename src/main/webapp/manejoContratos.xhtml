@@ -14,7 +14,7 @@
             <p:outputLabel value="Persona"/>
             <p:selectOneMenu id="cmbPersona2" value="#{gestorContrato.contrato.persona}" converter="personaConverter"
                              var="uni" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPasante.listaPasantes}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
 
                 <p:column style="width:10%">
                     <p:outputLabel value="#{uni.nombres}"/>
@@ -36,14 +36,15 @@
             
             <p:outputLabel value="Proyecto" />
             <p:selectOneMenu id="cmbProyecto" value="#{gestorContrato.contrato.proyecto}" converter="proyectoConverter"
-                             var="proye" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorProyecto.listaProyecto}" var="p2" itemLabel="#{p2.titulo}" itemValue="#{p2}" />
+                             var="per2" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{proye.titulo}"/>
+                    <p:outputLabel value="#{per2.titulo}"/>
                 </p:column>
             </p:selectOneMenu>                                
             <h:panelGroup layout="block"/>
+            
 
 
 
