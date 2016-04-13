@@ -38,6 +38,8 @@ public class GestorContrato implements Serializable {
     private Contrato contrato = new Contrato();
     public GestorContrato() {
     }
+
+    
     
     @PostConstruct
     public void init() {
@@ -62,7 +64,7 @@ public class GestorContrato implements Serializable {
         public String initCrearContrato() {
         contrato = new Contrato();
         
-        return "manejoContrato";
+        return "manejoContratos";
     }
     public String initListarContratos() {
         actualizarListaContrato();
@@ -76,5 +78,23 @@ public class GestorContrato implements Serializable {
     public void setListaContrato(List<Contrato> listaContrato) {
         this.listaContrato = listaContrato;
     }
+    public Contrato getContrato() {
+        return contrato;
+    }
+
+    public void setContrato(Contrato contrato) {
+        this.contrato = contrato;
+    }
+    
+     public String guardar() {
+        try {
+            contratoController.create(contrato);
+            return "index";
+        } catch (Exception ex) {
+            Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+     
 
 }

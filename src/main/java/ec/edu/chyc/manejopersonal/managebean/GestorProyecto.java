@@ -11,14 +11,11 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.ProyectoJpaController;
-import ec.edu.chyc.manejopersonal.entity.Pasantia;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
