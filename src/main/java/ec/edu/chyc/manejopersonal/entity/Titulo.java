@@ -12,9 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -30,12 +28,9 @@ public class Titulo implements Serializable {
     
     private String nombre;
     private Integer nivel;
-    @ManyToOne
-    @JoinColumn(name = "idUniversidad", referencedColumnName = "id")      
-    private Universidad universidad;
-       
-    @ManyToMany(mappedBy = "titulosCollection")
-    private Collection<Persona> personasCollection = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "titulo")
+    private Collection<PersonaTitulo> personasTituloCollection = new ArrayList<>();
     
     public Long getId() {
         return id;
@@ -45,28 +40,12 @@ public class Titulo implements Serializable {
         this.id = id;
     }
 
-    public Collection<Persona> getPersonasCollection() {
-        return personasCollection;
-    }
-
-    public void setPersonasCollection(Collection<Persona> personasCollection) {
-        this.personasCollection = personasCollection;
-    }
-
     public Integer getNivel() {
         return nivel;
     }
 
     public void setNivel(Integer nivel) {
         this.nivel = nivel;
-    }
-
-    public Universidad getUniversidad() {
-        return universidad;
-    }
-
-    public void setUniversidad(Universidad universidad) {
-        this.universidad = universidad;
     }
 
     public String getNombre() {
@@ -100,6 +79,14 @@ public class Titulo implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Titulo[ id=" + id + " ]";
+    }
+
+    public Collection<PersonaTitulo> getPersonasTituloCollection() {
+        return personasTituloCollection;
+    }
+
+    public void setPersonasTituloCollection(Collection<PersonaTitulo> personasTituloCollection) {
+        this.personasTituloCollection = personasTituloCollection;
     }
     
 }

@@ -6,8 +6,12 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Contratado;
+import ec.edu.chyc.manejopersonal.entity.Pasante;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
+import ec.edu.chyc.manejopersonal.entity.Tesista;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -52,29 +56,49 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         }
     }    
     
-    public void create(Persona persona) throws Exception {
+    public void create(Persona persona/*, Contratado contratado, Tesista tesista, Pasante pasante*/) throws Exception {
         EntityManager em = null;
 
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(persona);
-            
-            if (persona.getTitulosCollection() != null) {
-                for (Titulo titulo : persona.getTitulosCollection()) {
-                    if (titulo.getId() < 0) {
+/*            
+            if (contratado != null) {
+                contratado.setId(persona.getId());
+                em.persist(contratado);
+            }
+            if (tesista != null) {
+                tesista.setId(persona.getId());
+                em.persist(tesista);
+            }
+            if (pasante != null) {
+                pasante.setId(persona.getId());
+                em.persist(pasante);
+            }
+  */          
+            if (persona.getPersonaTitulosCollection() != null) {
+                for (PersonaTitulo personaTitulo : persona.getPersonaTitulosCollection()) {
+                    personaTitulo.setPersona(persona);
+                    Titulo titulo = personaTitulo.getTitulo();
+                    if (titulo.getId() < 0 || titulo.getId() == null) {
                         titulo.setId(null);
-                    }
-                    
-                    if (titulo.getUniversidad().getId() == null) {
-                        em.persist(titulo.getUniversidad());
-                    }
-                    
-                    if (titulo.getId() == null)
                         em.persist(titulo);
+                    }
+
+                    if (personaTitulo.getUniversidad().getId() < 0 || personaTitulo.getUniversidad().getId() == null) {
+                        personaTitulo.getUniversidad().setId(null);                        
+                        em.persist(personaTitulo.getUniversidad());
+                    }
+                    
+                    if (personaTitulo.getId() == null || personaTitulo.getId() < 0) {
+                        personaTitulo.setId(null);
+                        em.persist(personaTitulo);
+                    }                    
+                    
                 }
             }
-            
+
             em.getTransaction().commit();
         } finally {
             if (em != null) {

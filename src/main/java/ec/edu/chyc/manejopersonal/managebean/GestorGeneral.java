@@ -5,7 +5,9 @@
  */
 package ec.edu.chyc.manejopersonal.managebean;
 
+import ec.edu.chyc.manejopersonal.controller.TituloJpaController;
 import ec.edu.chyc.manejopersonal.controller.UniversidadJpaController;
+import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -26,7 +28,9 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class GestorGeneral implements Serializable {
     private List<Universidad> listaUniversidades = null;
+    private List<Titulo> listaTitulos = null;
     private final UniversidadJpaController universidadController = new UniversidadJpaController();
+    private final TituloJpaController tituloController = new TituloJpaController();
 
     public static GestorGeneral getInstance()
     {
@@ -43,7 +47,17 @@ public class GestorGeneral implements Serializable {
     @PostConstruct
     public void init() {
         actualizarListaUniversidades();
+        actualizarListaTitulos();
     }
+
+    public void actualizarListaTitulos() {
+        try {
+            listaTitulos = tituloController.listTitulos();
+        } catch (Exception ex) {
+            Logger.getLogger(GestorGeneral.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }    
     
     public void actualizarListaUniversidades() {
         try {
@@ -60,6 +74,14 @@ public class GestorGeneral implements Serializable {
 
     public void setListaUniversidades(List<Universidad> listaUniversidades) {
         this.listaUniversidades = listaUniversidades;
+    }
+
+    public List<Titulo> getListaTitulos() {
+        return listaTitulos;
+    }
+
+    public void setListaTitulos(List<Titulo> listaTitulos) {
+        this.listaTitulos = listaTitulos;
     }
     
 }

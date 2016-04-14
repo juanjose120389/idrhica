@@ -5,152 +5,270 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
+        <style>       
+            .cmbUniversidad {
+                width: 300px;
+            }
+            .cmbTitulo {
+                width: 300px;
+            }
+            .linkDropdown {
+                color: white !important; 
+                margin-left: 15px;
+            }
+            .contentCheckbox {
+                margin-left: 20px;
+            }
+        </style>
+        <h:panelGroup layout="block" id="divDialogs">
+            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" rendered="#{gestorPersona.mostrarDlgUniversidad}" resizable="false" modal="true" width="400">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgUniversidad()}" />
+                <h:panelGroup layout="block" id="divDlgUniversidad">
+                    <h:panelGrid id="panelCamposUniversidad" columns="3">
+                        <p:outputLabel value="Nombre"/>
+                        <p:inputText id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.nombre}"/>
+                        <p:message for="txtNombreUniversidad"/>                                
 
-        <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" resizable="false" modal="true" width="400">
-            <h:panelGrid id="panelCamposUniversidad" columns="3">
-                <p:outputLabel value="Nombre"/>
-                <p:inputText id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.nombre}"/>
-                <p:message for="txtNombreUniversidad"/>                                
-                
-                <p:outputLabel value="País"/>
-                <p:inputText id="txtPaisUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.pais}"/>
-                <p:message for="txtPaisUniversidad"/>
-                
-                <p:outputLabel value="Ciudad"/>
-                <p:inputText id="txtCiudadUniversidad" value="#{gestorPersona.universidad.ciudad}"/>
-                <p:message for="txtCiudadUniversidad"/>
-                
+                        <p:outputLabel value="País"/>
+                        <p:inputText id="txtPaisUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.pais}"/>
+                        <p:message for="txtPaisUniversidad"/>
+
+                        <p:outputLabel value="Ciudad"/>
+                        <p:inputText id="txtCiudadUniversidad" value="#{gestorPersona.universidad.ciudad}"/>
+                        <p:message for="txtCiudadUniversidad"/>
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" process="dlgUniversidad" update="dtTitulos divDlgUniversidad" action="#{gestorPersona.guardarUniversidad()}"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
+                    </h:panelGrid>            
+                </h:panelGroup>
+            </p:dialog>  
+
+            <p:dialog id="dlgTitulo" header="Título" widgetVar="dlgTitulo" resizable="false" modal="true" width="400" rendered="#{gestorPersona.mostrarDlgTitulo}">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgTitulo()}" />
+                <h:panelGroup id="divDlgTitulo" layout="block">
+                    <h:panelGrid id="panelCamposTitulo" columns="3">
+                        <p:outputLabel value="Nombre"/>
+                        <p:inputText id="txtNombreTitulo" required="true" requiredMessage="Requerido" value="#{gestorPersona.titulo.nombre}"/>
+                        <p:message for="txtNombreTitulo"/>
+
+                        <p:outputLabel value="Nivel"/>
+                        <p:spinner id="spnNivel" min="1" max="5" size="2" required="true" requiredMessage="Requerido" value="#{gestorPersona.titulo.nivel}"/>
+                        <p:message for="spnNivel"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" process="dlgTitulo" update="dtTitulos divDlgTitulo" action="#{gestorPersona.guardarTitulo()}" />
+                        <p:commandButton value="Cancelar" onclick="PF('dlgTitulo').hide();"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </p:dialog>  
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" id="divForm">
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Cédula/Pasaporte"/>
+                <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
+                <p:message for="txtIdentificacion"/>
+
+                <p:outputLabel value="Nombres"/>
+                <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.nombres}" maxlength="255"/>  
+                <p:message for="txtNombres"/>
+
+                <p:outputLabel value="Apellidos"/>
+                <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.apellidos}" maxlength="255"/>  
+                <p:message for="txtApellidos"/>
+
+
+                <p:outputLabel value="Dirección"/>
+                <p:inputTextarea rows="2" value="#{gestorPersona.persona.direccion}" maxlength="1024"/>  
+                <h:panelGroup layout="block"/> 
+
+                <p:outputLabel value="Fecha nacimiento"/>
+                <p:calendar pattern="dd/MM/yyyy" maxdate="#{gestorPersona.fechaActual}" value="#{gestorPersona.persona.fechaNacimiento}"/>  
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Género"/>
+                <p:selectOneMenu value="#{gestorPersona.persona.genero}"
+                                 required="true"
+                                 requiredMessage="Requerido"
+                                 id="cboGenero">
+                    <f:selectItem itemLabel="Masculino" itemValue="M"/>
+                    <f:selectItem itemLabel="Femenino" itemValue="F"/>
+                </p:selectOneMenu>
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Celular"/>
+                <p:inputText value="#{gestorPersona.persona.celular}"/>  
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Correo electrónico"/>
+                <p:inputText value="#{gestorPersona.persona.correo}"/>  
+                <h:panelGroup layout="block"/>            
+
+                <p:outputLabel value="Skype"/>
+                <p:inputText value="#{gestorPersona.persona.skype}"/>  
+                <h:panelGroup layout="block"/> 
+
+                <p:outputLabel value="Fecha vinculacion"/>
+                <p:calendar pattern="dd/MM/yyyy" value="#{gestorPersona.persona.fechaVinculacion}"/>  
+                <h:panelGroup layout="block"/> 
+
+                <p:outputLabel value="Estado"/>
+                <p:selectOneMenu value="#{gestorPersona.persona.activo}"
+                                 required="true"
+                                 requiredMessage="Requerido"
+                                 id="cboActivo">
+                    <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
+                    <f:selectItem itemLabel="No Activo" itemValue="#{false}"/>
+                </p:selectOneMenu>
+                <h:panelGroup layout="block"/> 
+
             </h:panelGrid>
-            <h:panelGrid columns="2">
-                <p:commandButton value="Aceptar" process="dlgUniversidad" update="dtTitulos" action="#{gestorPersona.guardarUniversidad()}"/>
-                <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
-                
-            </h:panelGrid>            
-        </p:dialog>  
 
 
-        <h:panelGrid columns="3">
-            <p:outputLabel value="Cédula/Pasaporte"/>
-            <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
-            <p:message for="txtIdentificacion"/>
-
-            <p:outputLabel value="Nombres"/>
-            <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.nombres}" maxlength="255"/>  
-            <p:message for="txtNombres"/>
-
-            <p:outputLabel value="Apellidos"/>
-            <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.apellidos}" maxlength="255"/>  
-            <p:message for="txtApellidos"/>
-
-
-            <p:outputLabel value="Dirección"/>
-            <p:inputTextarea rows="2" value="#{gestorPersona.persona.direccion}" maxlength="1024"/>  
-            <h:panelGroup layout="block"/> 
-
-            <p:outputLabel value="Fecha nacimiento"/>
-            <p:calendar pattern="dd/MM/yyyy" maxdate="#{gestorPersona.fechaActual}" value="#{gestorPersona.persona.fechaNacimiento}"/>  
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Género"/>
-            <p:selectOneMenu value="#{gestorPersona.persona.genero}"
-                             required="true"
-                             requiredMessage="Requerido"
-                             id="cboGenero">
-                <f:selectItem itemLabel="Masculino" itemValue="M"/>
-                <f:selectItem itemLabel="Femenino" itemValue="F"/>
-            </p:selectOneMenu>
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Celular"/>
-            <p:inputText value="#{gestorPersona.persona.celular}"/>  
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Correo electrónico"/>
-            <p:inputText value="#{gestorPersona.persona.correo}"/>  
-            <h:panelGroup layout="block"/>            
-
-            <p:outputLabel value="Skype"/>
-            <p:inputText value="#{gestorPersona.persona.skype}"/>  
-            <h:panelGroup layout="block"/> 
-
-            <p:outputLabel value="Fecha vinculacion"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorPersona.persona.fechaVinculacion}"/>  
-            <h:panelGroup layout="block"/> 
-
-            <p:outputLabel value="Estado"/>
-            <p:selectOneMenu value="#{gestorPersona.persona.activo}"
-                             required="true"
-                             requiredMessage="Requerido"
-                             id="cboActivo">
-                <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
-                <f:selectItem itemLabel="No Activo" itemValue="#{false}"/>
-            </p:selectOneMenu>
-            <h:panelGroup layout="block"/> 
-
+            <h:panelGroup layout="block" style="height: 20px"/>
             <p:outputLabel value="Títulos"/>
             <h:panelGroup layout="block" id="divTitulos">
-                <p:dataTable id="dtTitulos" rowKey="#{titulo.id}" var="titulo" value="#{gestorPersona.listaTitulos}" editable="true" editMode="cell" widgetVar="cellTitulos">
+                <p:dataTable id="dtTitulos" rowKey="#{personaTitulo.id}" var="personaTitulo" value="#{gestorPersona.listaPersonaTitulos}" editable="true" editMode="cell" widgetVar="cellTitulos">
 
                     <p:ajax event="cellEdit" listener="#{gestorPersona.onCellEdit}"  />
 
-                    <p:column headerText="Nivel" width="120">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{titulo.nivel}" /></f:facet>
-                            <f:facet name="input"><p:spinner min="1" max="5" value="#{titulo.nivel}" size="2"/></f:facet>
-                        </p:cellEditor>
-                    </p:column>
 
-                    <p:column headerText="Título">
+                    <p:column headerText="Título" width="500">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{titulo.nombre}" /></f:facet>
-                            <f:facet name="input"><p:inputText value="#{titulo.nombre}" style="width:96%" label="Year"/></f:facet>
+                            <f:facet name="output">
+                                <h:outputText value="#{personaTitulo.titulo.nombre}" />
+                            </f:facet>
+                            <f:facet name="input">
+
+                                <h:panelGroup id="divAccionesTitulos" layout="block">
+                                    <p:selectOneMenu id="cmbTitulo" styleClass="cmbTitulo" value="#{personaTitulo.titulo}" converter="tituloConverter"
+                                                     var="titulo" filter="true" filterMatchMode="contains">
+                                        <f:selectItems value="#{gestorPersona.listaTitulosAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                                        <f:selectItems value="#{gestorGeneral.listaTitulos}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+
+                                        <p:column style="width:10%">
+                                            <p:outputLabel value="#{titulo.nombre}"/>
+                                        </p:column>
+                                    </p:selectOneMenu>                                
+
+                                    <p:commandLink value="Nuevo títulso" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirTituloDialog(personaTitulo)}" />
+                                </h:panelGroup>
+                            </f:facet>
                         </p:cellEditor>
                     </p:column>
 
                     <p:column headerText="Universidad">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{titulo.universidad.nombre}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{personaTitulo.universidad.nombre}" /></f:facet>
                             <f:facet name="input">
-                                
+
                                 <h:panelGroup id="divAccionesUniversidad" layout="block">
-                                    <p:autoComplete id="themeCustom" value="#{titulo.universidad}" completeMethod="#{gestorPersona.completarUniversidad}"
-                                                    dropdown="true" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" converter="universidadConverter" forceSelection="true">
-                                        <p:column>
-                                            <p:outputLabel value="#{u.nombre}"/>
+
+                                    <p:selectOneMenu id="cmbUniversidad" styleClass="cmbUniversidad" value="#{personaTitulo.universidad}" converter="universidadConverter"
+                                                     var="uni" filter="true" filterMatchMode="contains">
+                                        <f:selectItems value="#{gestorPersona.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+                                        <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+
+                                        <p:column style="width:10%">
+                                            <p:outputLabel value="#{uni.nombre}"/>
                                         </p:column>
-                                    </p:autoComplete>
-                                    
-                                    <p:selectOneMenu rendered="false" id="cmbUniversidad" value="#{titulo.universidad}" editable="true" converter="universidadConverter"
-                                                 var="uni" filter="true" filterMatchMode="contains">
-                                    <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
-                                    <f:selectItems value="#{gestorPersona.listaUniversidadesAgregadas}" var="u2" itemLabel="#{u2.nombre}" itemValue="#{u2}" />
+                                    </p:selectOneMenu>                                
 
-                                    <p:column style="width:10%">
-                                        <p:outputLabel value="#{uni.nombre}"/>
-                                    </p:column>
-
-                                </p:selectOneMenu>
-                                
-                                    <p:commandLink value=" Nueva universidad" style="color: white" partialSubmit="true" process="divAccionesUniversidad" action="#{gestorPersona.abrirUniversidadDialog(titulo)}" />
+                                    <p:commandLink value="Nueva universidads" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirUniversidadDialog(personaTitulo)}" />
                                 </h:panelGroup>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
-                    
-                    <p:column style="width:32px;text-align: center">
-                        <p:commandButton action="#{gestorPersona.quitarTitulo(titulo)}" update="dtTitulos" partialSubmit="true" process=":formContenido:divTitulos" icon="ui-icon-close" title="Eliminar"/>
+
+                    <p:column style="text-align: center" width="32">
+                        <p:commandButton action="#{gestorPersona.quitarPersonaTitulo(personaTitulo)}" update="dtTitulos" partialSubmit="true" process=":formContenido:divTitulos" icon="ui-icon-close" title="Eliminar"/>
                     </p:column>
 
                 </p:dataTable>
-                <h:panelGrid columns="2">
-                    <p:commandButton value="Agregar" partialSubmit="true" process="divTitulos"  action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>
-                </h:panelGrid>
+                <h:panelGroup layout="block" style="padding-top: 5px">
+                    <p:commandButton value="Agregar" partialSubmit="true" process="divTitulos"  action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>            
+                </h:panelGroup>
             </h:panelGroup>
-        </h:panelGrid>
+
+
+            <h:panelGroup layout="block" style="height: 20px"/>
+
+            <h:panelGroup layout="block" style="clear: both" id="checksTipoPersona">
+                <p:selectBooleanCheckbox id="chkEsTesista" value="#{gestorPersona.esTesista}" itemLabel="Es tesista">
+                    <p:ajax event="change" update="checksTipoPersona chkEsPasante chkEsTesista" listener="#{gestorPersona.onCheckEsTesista()}"/>
+                </p:selectBooleanCheckbox>
+                <h:panelGroup layout="block" id="divTesista" styleClass="contentCheckbox" >
+                    <h:panelGrid columns="2" rendered="#{gestorPersona.esTesista}">
+                        <p:outputLabel value="Universidad"/>
+                        <p:selectOneMenu id="cmbUniversidadTesista" styleClass="cmbUniversidad" value="#{gestorPersona.tesista.universidad}" converter="universidadConverter"
+                                         var="uni" filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{gestorPersona.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+                            <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+
+                            <p:column style="width:10%">
+                                <p:outputLabel value="#{uni.nombre}"/>
+                            </p:column>
+                        </p:selectOneMenu>                                
+
+                        <p:outputLabel value="Facultad"/>
+                        <p:inputText value="#{gestorPersona.tesista.facultad}"/>
+                        <p:outputLabel value="Escuela"/>
+                        <p:inputText value="#{gestorPersona.tesista.escuela}"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" style="height: 5px"/>
+
+                <p:remoteCommand name="updChecks" update="checksTipoPersona" />
+                <p:selectBooleanCheckbox id="chkEsPasante" value="#{gestorPersona.esPasante}" itemLabel="Es pasante">
+                    <p:ajax event="change" update="checksTipoPersona chkEsTesista chkEsPasante" listener="#{gestorPersona.onCheckEsPasante()}"/>
+                </p:selectBooleanCheckbox>
+                <h:panelGroup layout="block" id="divPasante" styleClass="contentCheckbox">
+                    <h:panelGrid columns="2" rendered="#{gestorPersona.esPasante}">
+                        <p:outputLabel value="Universidad"/>
+                        <p:selectOneMenu id="cmbUniversidadPasante" styleClass="cmbUniversidad" value="#{gestorPersona.pasante.universidad}" converter="universidadConverter"
+                                         var="uni" filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{gestorPersona.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+                            <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+
+                            <p:column style="width:10%">
+                                <p:outputLabel value="#{uni.nombre}"/>
+                            </p:column>
+                        </p:selectOneMenu>                                
+
+
+
+                        <p:outputLabel value="Facultad"/>
+                        <p:inputText value="#{gestorPersona.pasante.facultad}"/>
+                        <p:outputLabel value="Escuela"/>
+                        <p:inputText value="#{gestorPersona.pasante.escuela}"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" style="height: 30px"/>
+
+                <p:selectBooleanCheckbox value="#{gestorPersona.esContratado}" itemLabel="Tiene contrato">
+                    <p:ajax event="change" update="divContratado"/>
+                </p:selectBooleanCheckbox>
+                <h:panelGroup layout="block" id="divContratado" styleClass="contentCheckbox">
+                    <h:panelGrid columns="2" rendered="#{gestorPersona.esContratado}">
+                        <p:outputLabel value="Cargo"/>
+                        <p:inputText value="#{gestorPersona.contratado.cargo}"/>
+                        <p:outputLabel value="Actividad principal"/>
+                        <p:inputText value="#{gestorPersona.contratado.actividadPrincipal}"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+
+            </h:panelGroup>
+        </h:panelGroup>
+
+
+        <p:remoteCommand name="upd" update="checksTipoPersona" process="checksTipoPersona"/>
         <h:panelGroup layout="block" style="height: 40px"/>
-        
-        <p:commandButton value="Crear persona" action="#{gestorPersona.guardar()}" update="formContenido"/>
-        
-        
+
+        <p:commandButton value="Crear persona" update="formContenido" onclick="setTimeout('upd()', 20)" action="#{gestorPersona.guardar()}"/>
+
     </ui:define>
 </ui:composition>
