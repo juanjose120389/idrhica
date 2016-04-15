@@ -72,7 +72,7 @@ public class GestorProyecto implements Serializable {
 
     public String initCrearProyecto() {
         proyecto = new Proyecto();
-       
+        GestorContrato.getInstance().actualizarListaContrato();
 
         return "manejoProyecto";
     }
