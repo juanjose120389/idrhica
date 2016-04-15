@@ -68,7 +68,7 @@ public class GestorPasantia implements Serializable {
         pasantia = new Pasantia();
         fechaInicio = new Date();
         fechaFin = new Date();
-        
+        GestorContrato.getInstance().actualizarListaContrato();
         Calendar calendar = Calendar.getInstance();
         //calendar.setTime(fechaInicio);        
         calendar.set(Calendar.MONTH, 0);
