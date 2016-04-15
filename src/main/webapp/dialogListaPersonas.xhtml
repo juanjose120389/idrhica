@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Personas</title>
+        <style type="text/css">
+            .ui-widget {
+                font-size: 0.9em;
+            }
+            body {
+                font-size: 0.9em;
+            }
+
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form id="formTabla">
+            <p:dataTable widgetVar="personasTable" selection="#{gestorDialogListaPersonas.listaPersonasSel}" rowKey="#{persona.id}" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
+                         paginatorAlwaysVisible="false" paginator="true"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         >                
+                <f:facet name="{Exporters}">
+                    <h:panelGroup layout="block" styleClass="exportButtons">
+                        <h:commandLink>
+                            <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                            <p:dataExporter type="xls" target="personasTable" fileName="personas" />
+                        </h:commandLink>
+                        <h:commandLink>
+                            <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                            <p:dataExporter type="pdf" target="personasTable" fileName="personas" encoding="iso-8859-1"/>
+                        </h:commandLink>
+                    </h:panelGroup>                    
+                </f:facet>
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
+                    <h:outputText value="#{persona.nombres}" />
+                </p:column>
+
+                <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.apellidos}" />
+                </p:column>
+
+                <p:column headerText="Estado" filterBy="#{persona.activo}" filterMatchMode="equals">
+                    <f:facet name="filter">
+                        <p:selectOneButton onchange="PF('personasTable').filter()">
+                            <f:converter converterId="javax.faces.Boolean" />
+                            <f:selectItem itemLabel="Todos" itemValue="" />
+                            <f:selectItem itemLabel="Activo" itemValue="true" />
+                            <f:selectItem itemLabel="No Activo" itemValue="false" />
+                        </p:selectOneButton>
+                    </f:facet>            
+                    <h:outputText value="#{persona.activo ? 'Activo' : 'No Activo'}" />
+                </p:column>
+
+                <p:column headerText="Correo">
+                    <h:outputText value="#{persona.correo}" />
+                </p:column>
+
+                <p:column headerText="Cumpleaños">
+                    <h:outputText value="#{persona.fechaNacimiento}">
+                        <f:convertDateTime pattern="dd MMMM" />
+                    </h:outputText>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" action="#{gestorDialogListaPersonas.aceptarSeleccionPersonas()}"/>
+                    <p:commandButton value="Cancelar" action="#{gestorDialogListaPersonas.cancelarSeleccionPersonas()}"/>
+                </f:facet>
+            </p:dataTable>        
+
+        </h:form>
+    </h:body>
+
+</html>
