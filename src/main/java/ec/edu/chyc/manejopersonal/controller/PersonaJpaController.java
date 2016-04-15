@@ -6,12 +6,9 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
-import ec.edu.chyc.manejopersonal.entity.Contratado;
-import ec.edu.chyc.manejopersonal.entity.Pasante;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
-import ec.edu.chyc.manejopersonal.entity.Tesista;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import java.util.List;
 import javax.persistence.EntityManager;

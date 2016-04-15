@@ -5,18 +5,22 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <h:outputLabel value="contenido"/>
-        <p:commandButton value="Crear proyecto" action="#{gestorProyecto.initCrearProyecto()}"/>
-        <p:commandButton value="Crear nueva persona" action="#{gestorPersona.initCrearPersona()}"/>
-        <p:commandButton value="Asignar Pasantia" action="#{gestorPasantia.initCrearPasantia()}"/>
+
         <p:commandButton value="Lista Artículos" action="#{gestorArticulo.initListarArticulos()}"/>
         <p:commandButton value="Lista Tesis" action="#{gestorTesis.initListarTesis()}"/>
         <p:commandButton value="Lista Proyectos" action="#{gestorProyecto.initListarProyectos()}"/>
         <p:commandButton value="Lista Pasantes" action="#{gestorPasante.initListarPasante()}"/>
         <p:commandButton value="Lista Contratos" action="#{gestorContrato.initListarContratos()}"/>
-            <p:commandButton value="Asignar Contrato" action="#{gestorContrato.initCrearContrato()}"/>
-        <p:commandButton value="Actualizar" action="#{gestorPersona.actualizarListado()}" update=":formContenido"/>
+        <p:commandButton value="Actualizar Listado" action="#{gestorPersona.actualizarListado()}" update=":formContenido"/>
+        <br/><br/>
+        <p:commandButton value="Crear proyecto" action="#{gestorProyecto.initCrearProyecto()}"/>
+        <p:commandButton value="Crear nueva persona" action="#{gestorPersona.initCrearPersona()}"/>
+        <p:commandButton value="Crear Artículo" action="#{gestorArticulo.initCrearArticulo()}"/>        
+        <br/><br/>
+        <p:commandButton value="Asignar Pasantia" action="#{gestorPasantia.initCrearPasantia()}"/>        
+        <p:commandButton value="Asignar Contrato" action="#{gestorContrato.initCrearContrato()}"/>
 
+        <br/><br/>
         <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
                      paginator="true"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"

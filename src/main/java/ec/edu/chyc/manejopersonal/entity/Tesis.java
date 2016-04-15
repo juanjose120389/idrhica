@@ -37,7 +37,7 @@ public class Tesis implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "idDirectorTesis", referencedColumnName = "id")
-    private Contratado director;
+    private Persona director;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
@@ -69,11 +69,11 @@ public class Tesis implements Serializable {
         this.id = id;
     }
 
-    public Contratado getDirector() {
+    public Persona getDirector() {
         return director;
     }
 
-    public void setDirector(Contratado director) {
+    public void setDirector(Persona director) {
         this.director = director;
     }
 

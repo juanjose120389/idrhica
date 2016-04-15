@@ -21,15 +21,15 @@ import javax.persistence.PrimaryKeyJoinColumn;
 public class Tesista extends Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
-    private String facultad;   
-    
+
+    private String facultad;
+
     private String escuela;
-    
+
     @ManyToOne
     @JoinColumn(name = "idUniversidad", referencedColumnName = "id")
     private Universidad universidad;
-    
+
     @ManyToOne
     @JoinColumn(name = "idTesis", referencedColumnName = "id")
     private Tesis tesis;
@@ -67,10 +67,14 @@ public class Tesista extends Persona implements Serializable {
     }
 
     @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        
-        return object instanceof Tesista && Objects.equals(((Tesista)object).getId(), getId());
-    }   
+        return object instanceof Tesista && Objects.equals(((Tesista) object).getId(), getId());
+    }
 
 }

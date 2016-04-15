@@ -6,7 +6,6 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
-import ec.edu.chyc.manejopersonal.entity.Contratado;
 import ec.edu.chyc.manejopersonal.entity.Pasante;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
@@ -60,7 +59,7 @@ public class GestorPersona implements Serializable {
     private List<Universidad> listaUniversidadesAgregadas = new ArrayList<>();
     private List<Titulo> listaTitulosAgregados = new ArrayList<>();
     
-    private Contratado contratado;
+    private Persona contratado;
     private Tesista tesista;
     private Pasante pasante;
 
@@ -177,7 +176,7 @@ public class GestorPersona implements Serializable {
         idTituloPersonaGenerado = -1;
         
         pasante = new Pasante();
-        contratado = new Contratado();
+        contratado = new Persona();
         tesista = new Tesista();
         esTesista = false;
         esPasante = false;
@@ -399,11 +398,11 @@ public class GestorPersona implements Serializable {
         this.esPasante = esPasante;
     }
 
-    public Contratado getContratado() {
+    public Persona getContratado() {
         return contratado;
     }
 
-    public void setContratado(Contratado contratado) {
+    public void setContratado(Persona contratado) {
         this.contratado = contratado;
     }
 

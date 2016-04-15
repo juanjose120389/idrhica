@@ -7,16 +7,14 @@ package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 /**
@@ -38,7 +36,7 @@ public class Pasantia implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "idContratadoCoordinador", referencedColumnName = "id")   
-    private Contratado coordinador;
+    private Persona coordinador;
     
     @ManyToOne
     @JoinColumn(name = "idPasante", referencedColumnName = "id")   
@@ -74,11 +72,11 @@ public class Pasantia implements Serializable {
         this.tema = tema;
     }
 
-    public Contratado getCoordinador() {
+    public Persona getCoordinador() {
         return coordinador;
     }
 
-    public void setCoordinador(Contratado coordinador) {
+    public void setCoordinador(Persona coordinador) {
         this.coordinador = coordinador;
     }
 
@@ -107,18 +105,30 @@ public class Pasantia implements Serializable {
         this.numeroHoras = numeroHoras;
     }
 
-   
-
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pasantia)) {
-            return false;
-        }
-        
-        return true;
+    public int hashCode() {
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.id);
+        return hash;
     }
 
-   
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Pasantia other = (Pasantia) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
 
 }
