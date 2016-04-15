@@ -55,12 +55,9 @@ public class Persona implements Serializable {
     @OneToMany(mappedBy = "autorPrincipal")
     private Collection<Articulo> articulosPrincipalCollection = new ArrayList<>();    
     
-    @ManyToMany
-    @JoinTable(name = "personaTitulo", joinColumns = {
-        @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "idTitulo", referencedColumnName = "id")})
-    private Collection<Titulo> titulosCollection = new ArrayList();
-
+    @OneToMany(mappedBy = "persona")
+    private Collection<PersonaTitulo> personaTitulosCollection = new ArrayList<>();
+  
     @ManyToMany
     @JoinTable(name = "personaArticulo", joinColumns = {
         @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
@@ -83,14 +80,14 @@ public class Persona implements Serializable {
         this.articulosCollection = articulosCollection;
     }
 
-    public Collection<Titulo> getTitulosCollection() {
-        return titulosCollection;
+    public Collection<PersonaTitulo> getPersonaTitulosCollection() {
+        return personaTitulosCollection;
     }
 
-    public void setTitulosCollection(Collection<Titulo> titulosCollection) {
-        this.titulosCollection = titulosCollection;
+    public void setPersonaTitulosCollection(Collection<PersonaTitulo> personaTitulosCollection) {
+        this.personaTitulosCollection = personaTitulosCollection;
     }
-
+    
     public String getNombres() {
         return nombres;
     }
@@ -219,6 +216,9 @@ public class Persona implements Serializable {
 
     public void setArticulosPrincipalCollection(Collection<Articulo> articulosPrincipalCollection) {
         this.articulosPrincipalCollection = articulosPrincipalCollection;
+    }
+
+    public Persona() {
     }
 
 }

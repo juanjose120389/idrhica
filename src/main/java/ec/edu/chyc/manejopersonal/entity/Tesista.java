@@ -6,6 +6,7 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,9 +22,13 @@ public class Tesista extends Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
    
-    private String facultad;
-    private String universidad;
+    private String facultad;   
+    
     private String escuela;
+    
+    @ManyToOne
+    @JoinColumn(name = "idUniversidad", referencedColumnName = "id")
+    private Universidad universidad;
     
     @ManyToOne
     @JoinColumn(name = "idTesis", referencedColumnName = "id")
@@ -35,14 +40,6 @@ public class Tesista extends Persona implements Serializable {
 
     public void setFacultad(String facultad) {
         this.facultad = facultad;
-    }
-
-    public String getUniversidad() {
-        return universidad;
-    }
-
-    public void setUniversidad(String universidad) {
-        this.universidad = universidad;
     }
 
     public String getEscuela() {
@@ -61,15 +58,19 @@ public class Tesista extends Persona implements Serializable {
         this.tesis = tesis;
     }
 
+    public Universidad getUniversidad() {
+        return universidad;
+    }
 
+    public void setUniversidad(Universidad universidad) {
+        this.universidad = universidad;
+    }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         
-        return object instanceof Tesista;
-    }
-
-    
+        return object instanceof Tesista && Objects.equals(((Tesista)object).getId(), getId());
+    }   
 
 }

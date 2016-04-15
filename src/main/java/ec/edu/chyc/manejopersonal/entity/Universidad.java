@@ -12,7 +12,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  *
@@ -31,11 +34,14 @@ public class Universidad implements Serializable {
     private String pais;
     
     @OneToMany(mappedBy = "universidad")
-    private Collection<Titulo> titulosCollection = new ArrayList<>();
+    private Collection<PersonaTitulo> personaTitulosCollection = new ArrayList<>();
     
     @OneToMany(mappedBy = "universidad")
     private Collection<Pasante> pasantesCollection = new ArrayList<>();
 
+    @OneToMany(mappedBy = "universidad")
+    private Collection<Tesista> tesistasCollection = new ArrayList<>();    
+    
     public Long getId() {
         return id;
     }
@@ -44,12 +50,12 @@ public class Universidad implements Serializable {
         this.id = id;
     }
 
-    public Collection<Titulo> getTitulosCollection() {
-        return titulosCollection;
+    public Collection<PersonaTitulo> getPersonaTitulosCollection() {
+        return personaTitulosCollection;
     }
 
-    public void setTitulosCollection(Collection<Titulo> titulosCollection) {
-        this.titulosCollection = titulosCollection;
+    public void setPersonaTitulosCollection(Collection<PersonaTitulo> personaTitulosCollection) {
+        this.personaTitulosCollection = personaTitulosCollection;
     }
 
     public String getNombre() {
@@ -107,6 +113,14 @@ public class Universidad implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Universidad[ id=" + id + " ]";
+    }
+
+    public Collection<Tesista> getTesistasCollection() {
+        return tesistasCollection;
+    }
+
+    public void setTesistasCollection(Collection<Tesista> tesistasCollection) {
+        this.tesistasCollection = tesistasCollection;
     }
     
 }

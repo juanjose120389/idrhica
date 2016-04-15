@@ -5,6 +5,7 @@
  */
 package ec.edu.chyc.manejopersonal.managebean.converter;
 
+import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
 import ec.edu.chyc.manejopersonal.managebean.GestorGeneral;
 import ec.edu.chyc.manejopersonal.managebean.GestorPersona;
@@ -15,8 +16,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 
-@FacesConverter("universidadConverter")
-public class UniversidadConverter implements Converter {
+@FacesConverter("tituloConverter")
+public class TituloConverter implements Converter {
  
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
@@ -27,20 +28,17 @@ public class UniversidadConverter implements Converter {
             return null;
         }
 
-        List<Universidad> list = GestorGeneral.getInstance().getListaUniversidades();
-        for (Universidad uni : list) {
-            if (uni.getId() == id) 
-                return uni;
+        List<Titulo> list = GestorGeneral.getInstance().getListaTitulos();
+        for (Titulo titu : list) {
+            if (titu.getId() == id) 
+                return titu;
         }        
-        for (Universidad uni : GestorPersona.getInstance().getListaUniversidadesAgregadas()) {
-            if (uni.getId() == id) 
-                return uni;            
+        for (Titulo titu : GestorPersona.getInstance().getListaTitulosAgregados()) {
+            if (titu.getId() == id) 
+                return titu;            
         }
         
-        Universidad obj = new Universidad();
-        obj.setId(id);
-
-        return obj;
+        return null;
     }
  
     @Override
@@ -49,7 +47,7 @@ public class UniversidadConverter implements Converter {
             return null;
         }
         // Convert ProjectDetail to its unique String representation.
-        Universidad obj = (Universidad) value;
+        Titulo obj = (Titulo) value;
         String idAsString = String.valueOf(obj.getId());
         return idAsString;
     }   
