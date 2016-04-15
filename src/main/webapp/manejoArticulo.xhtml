@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+        <h:panelGrid columns="3">
+            <p:outputLabel value="Nombre"/>
+            <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  
+            <p:message for="txtNombre"/>
+
+            <p:outputLabel value="Tema"/>
+            <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.tema}"/>  
+            <p:message for="txtTema"/>
+
+            <p:outputLabel value="Revista"/>
+            <p:inputText id="txtRevista" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.revista}"/>  
+            <p:message for="txtRevista"/>
+
+
+            <p:outputLabel value="Fecha publicación"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorArticulo.articulo.fechaPublicacion}"/>  
+            <h:panelGroup layout="block"/> 
+
+            <p:outputLabel value="Autor principal"/>
+            <p:inputText/>  
+            <h:panelGroup layout="block"/> 
+
+            <p:outputLabel value="Autores"/>
+            <h:panelGroup layout="block">
+                <p:dataTable id="dtAutores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorArticulo.listaAutores}" rowKey="#{persona.id}">
+                    <p:column headerText="Identificación">
+                        <h:outputText value="#{persona.identificacion}" />
+                    </p:column>
+                    <p:column headerText="Nombres">
+                        <h:outputText value="#{persona.nombres}" />
+                    </p:column>
+                    <p:column headerText="Apellidos">
+                        <h:outputText value="#{persona.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Fecha Nacimiento">
+                        <h:outputText value="#{persona.fechaNacimiento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Fecha Vinculación">
+                        <h:outputText value="#{persona.fechaVinculacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center" width="32">
+                        <p:commandButton action="#{gestorArticulo.quitarAutor(persona)}" update="dtAutores" partialSubmit="true" process="@parent" icon="ui-icon-close" title="Eliminar"/>
+                    </p:column>
+
+                </p:dataTable>
+                <h:panelGroup layout="block" id="divAutorCmd">
+                    <p:commandButton value="Agregar" action="#{gestorArticulo.agregarAutor()}" process="@parent" update="divAutorCmd">
+                        <p:ajax event="dialogReturn" listener="#{gestorArticulo.onPersonaChosen}" update="dtAutores"/>
+                    </p:commandButton>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup layout="block"/> 
+
+
+            <p:outputLabel value="Resumen"/>
+            <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.resumen}"/>  
+            <h:panelGroup layout="block"/> 
+
+
+            <p:outputLabel value="Enlace"/>
+            <p:inputText value="#{gestorArticulo.articulo.enlace}"/>  
+            <h:panelGroup layout="block"/> 
+
+            <p:outputLabel value="Tipo"/>
+            <p:inputText/>  
+            <h:panelGroup layout="block"/> 
+
+            <p:outputLabel value="Referencia Blib"/>
+            <p:inputText/>  
+            <h:panelGroup layout="block"/> 
+
+        </h:panelGrid>        
+        <p:commandButton value="Guardar" update="formContenido" action="#{gestorArticulo.guardar()}"/>
+    </ui:define>
+</ui:composition>
