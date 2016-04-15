@@ -18,11 +18,7 @@
              <p:inputText id="txtActividad" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.actividadPrincipal}"/>  
             <p:message for="txtActividad"/>
             
-            <p:outputLabel value="Número Contrato"/>
-            <p:inputText id="txtNumero" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.numeroContrato}"/>  
-            <p:message for="txtNumero"/>
-
-
+            
             <p:outputLabel value="Persona"/>
             <p:selectOneMenu id="cmbPersona2" value="#{gestorContrato.contrato.persona}" converter="personaConverter"
                              var="uni" filter="true" filterMatchMode="contains">
@@ -36,12 +32,12 @@
             <h:panelGroup layout="block"/>
 
             <p:outputLabel value="Administrador" />
-            <p:selectOneMenu id="cmbPersona" value="#{gestorContrato.contrato.administrador}" converter="contratadoConverter"
+            <p:selectOneMenu id="cmbPersona" value="#{gestorContrato.contrato.administrador}" converter="contratoConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorContratado.listaContratados}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorContrato.listaContrato}" var="u" itemLabel="#{u.persona.nombres}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per.nombres}"/>
+                    <p:outputLabel value="#{per.persona.nombres}"/>
                 </p:column>
             </p:selectOneMenu>                                
             <h:panelGroup layout="block"/>
