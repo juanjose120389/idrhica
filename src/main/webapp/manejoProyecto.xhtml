@@ -11,22 +11,22 @@
             <p:message for="txtTitulo"/>
             
             <p:outputLabel value="Director" />
-            <p:selectOneMenu id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="contratadoConverter"
+            <p:selectOneMenu id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="contratoConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorContratado.listaContratados}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorContrato.listaContrato}" var="u" itemLabel="#{u.persona.nombres}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per.nombres}"/>
+                    <p:outputLabel value="#{per.persona.nombres}"/>
                 </p:column>
             </p:selectOneMenu>  
             <h:panelGroup layout="block"/>
                         <p:outputLabel value="Co-Director" />
-            <p:selectOneMenu id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="contratadoConverter"
+            <p:selectOneMenu id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="contratoConverter"
                              var="per2" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorContratado.listaContratados}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
+                <f:selectItems value="#{gestorContrato.listaContrato}" var="u2" itemLabel="#{u2.persona.nombres}" itemValue="#{u2}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per2.nombres}"/>
+                    <p:outputLabel value="#{per2.persona.nombres}"/>
                 </p:column>
             </p:selectOneMenu>  
                         <h:panelGroup layout="block"/>

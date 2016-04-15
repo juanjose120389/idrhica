@@ -15,12 +15,12 @@
             <p:message for="txtNumero" />
             
             <p:outputLabel value="Coordinador" />
-            <p:selectOneMenu id="cmbPersona" value="#{gestorPasantia.pasantia.coordinador}" converter="contratadoConverter"
+            <p:selectOneMenu id="cmbPersona" value="#{gestorPasantia.pasantia.coordinador}" converter="contratoConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorContratado.listaContratados}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorContrato.listaContrato}" var="u" itemLabel="#{u.persona.nombres}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per.nombres}"/>
+                    <p:outputLabel value="#{per.persona.nombres}"/>
                 </p:column>
             </p:selectOneMenu>                                
 <h:panelGroup layout="block"/>

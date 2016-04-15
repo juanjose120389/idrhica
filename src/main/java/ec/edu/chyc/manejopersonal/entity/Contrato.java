@@ -44,6 +44,26 @@ public class Contrato implements Serializable {
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
     private Proyecto proyecto;
     
+    
+     private String cargo;
+    private String actividadPrincipal;
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getActividadPrincipal() {
+        return actividadPrincipal;
+    }
+
+    public void setActividadPrincipal(String actividadPrincipal) {
+        this.actividadPrincipal = actividadPrincipal;
+    }
+
 
     public Persona getPersona() {
         return persona;
