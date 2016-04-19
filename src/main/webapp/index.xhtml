@@ -15,6 +15,7 @@
         <p:commandButton value="Lista Pasantes" action="#{gestorPasante.initListarPasante()}"/>
         <p:commandButton value="Lista Contratos" action="#{gestorContrato.initListarContratos()}"/>
             <p:commandButton value="Asignar Contrato" action="#{gestorContrato.initCrearContrato()}"/>
+                  <p:commandButton value="Crear Tesis" action="#{gestorTesis.initCrearTesis()}"/>
         <p:commandButton value="Actualizar" action="#{gestorPersona.actualizarListado()}" update=":formContenido"/>
 
         <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
