@@ -9,14 +9,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -25,6 +30,13 @@ import javax.persistence.Temporal;
 @Entity
 public class Articulo implements Serializable {
 
+    public enum TipoArticulo {
+        LIBRO,
+        TESIS,
+        SCOPUS,
+        NOTA_TECNICA
+    }
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,21 +54,30 @@ public class Articulo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idAutorPrincipal", referencedColumnName = "id")
     private Persona autorPrincipal;
-    
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")        
     private String resumen;
     
     private String enlace;
     
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoArticulo tipo;
     
     private Float factorImpacto;
     
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")        
     private String referenciaBib;
 
     @ManyToOne
     @JoinColumn(name = "idConvenio", referencedColumnName = "id")
     private Convenio convenio;
     //ManyToMany con Persona; autoresCollection<Persona>
+
+    private String archivoArticulo;//nombre del archivo subido que corresponde al artículo
     
     @ManyToMany(mappedBy = "articulosCollection")
     private Collection<Persona> autoresCollection = new ArrayList<>();
@@ -133,14 +154,6 @@ public class Articulo implements Serializable {
         this.enlace = enlace;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getReferenciaBib() {
         return referenciaBib;
     }
@@ -190,5 +203,20 @@ public class Articulo implements Serializable {
         this.autoresCollection = autoresCollection;
     }
 
+    public TipoArticulo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoArticulo tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getArchivoArticulo() {
+        return archivoArticulo;
+    }
+
+    public void setArchivoArticulo(String archivoArticulo) {
+        this.archivoArticulo = archivoArticulo;
+    }
     
 }

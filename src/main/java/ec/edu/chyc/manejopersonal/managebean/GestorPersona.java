@@ -52,6 +52,7 @@ public class GestorPersona implements Serializable {
     private List<PersonaTitulo> listaPersonaTitulos = null;
     
     private List<Persona> listaPersonas = null;
+    private List<Persona> listaPersonasConContrato = new ArrayList<>();
     
     private Universidad universidad = null;
     private Titulo titulo = null;
@@ -233,6 +234,14 @@ public class GestorPersona implements Serializable {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
+    }
+
+    public void actualizarListaPersonasConContrato() {
+        try {
+            listaPersonasConContrato = personaController.listPersonasConContrato();
+        } catch (Exception ex) {
+            Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public static GestorPersona getInstance() {
@@ -436,6 +445,14 @@ public class GestorPersona implements Serializable {
 
     public void setMostrarDlgTitulo(boolean mostrarDlgTitulo) {
         this.mostrarDlgTitulo = mostrarDlgTitulo;
+    }
+
+    public List<Persona> getListaPersonasConContrato() {
+        return listaPersonasConContrato;
+    }
+
+    public void setListaPersonasConContrato(List<Persona> listaPersonasConContrato) {
+        this.listaPersonasConContrato = listaPersonasConContrato;
     }
 
 }

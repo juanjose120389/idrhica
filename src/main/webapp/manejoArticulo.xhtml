@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="./template.xhtml">
     <ui:define name="body">
         <style>
@@ -10,9 +11,12 @@
                 width: 40%;
             }
             .calendar {
-                
+
             }
             .ui-calendar > .ui-inputfield {
+                width: 100px;
+            }
+            .ui-inputfield.ui-inputtext.pe-inputNumber {
                 width: 100px;
             }
         </style>
@@ -26,22 +30,34 @@
             <p:message for="txtTema"/>
 
             <p:outputLabel value="Revista"/>
-            <p:inputText id="txtRevista" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.revista}"/>  
-            <p:message for="txtRevista"/>
+            <p:inputText id="txtRevista"  value="#{gestorArticulo.articulo.revista}"/>  
+            <h:panelGroup layout="block"/> 
 
+            <p:outputLabel value="Factor Impacto"/>
+            <pe:inputNumber styleClass="numberInput" id="txtFactorImpacto" value="#{gestorArticulo.articulo.factorImpacto}" decimalPlaces="3"/>
+            <h:panelGroup layout="block"/>           
 
             <p:outputLabel value="Fecha publicación"/>
             <p:calendar pattern="dd/MM/yyyy" value="#{gestorArticulo.articulo.fechaPublicacion}"/>  
             <h:panelGroup layout="block"/> 
 
             <p:outputLabel value="Autor principal"/>
-            <p:inputText/>  
-            <h:panelGroup layout="block"/> 
+            <p:selectOneMenu value="#{gestorArticulo.articulo.autorPrincipal}" converter="personaConverter" style="width: 300px"
+                             var="per" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="p" itemLabel="#{p.nombres} #{p.apellidos}" itemValue="#{p}" />
+
+                <p:column>
+                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                </p:column>
+            </p:selectOneMenu>
+            <h:panelGroup layout="block"/>
+
+
 
             <p:outputLabel value="Autores"/>
             <h:panelGroup layout="block" id="divAutores">
                 <p:dataTable id="dtAutores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorArticulo.listaAutores}" rowKey="#{persona.id}">
-                    <p:column headerText="Identificación">
+                    <p:column headerText="Identificación" width="200">
                         <h:outputText value="#{persona.identificacion}" />
                     </p:column>
                     <p:column headerText="Nombres">
@@ -84,14 +100,37 @@
             <h:panelGroup layout="block"/> 
 
             <p:outputLabel value="Tipo"/>
-            <p:inputText/>  
+            <p:selectOneMenu value="#{gestorArticulo.articulo.tipo}" style="width: 250px">
+                <f:selectItems value="#{gestorArticulo.tiposArticulo}" var="tipo"
+                               itemValue="#{tipo}" itemLabel="#{label['articulo.tipo.' += tipo]}" />                
+            </p:selectOneMenu>
             <h:panelGroup layout="block"/> 
 
             <p:outputLabel value="Referencia Blib"/>
-            <p:inputText/>  
+            <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.referenciaBib}"/>  
+            <h:panelGroup layout="block"/> 
+
+            <p:outputLabel value="Artículo PDF"/>
+            <h:panelGroup layout="block">
+                <p:fileUpload fileUploadListener="#{gestorArticulo.fileUploadListener}" 
+                              mode="advanced"
+                              update="spanTamanioArchivo" 
+                              auto="true" 
+                              sizeLimit="15728640" 
+                              allowTypes="/(\.|\/)(pdf|docx?)$/" 
+                              accept="*.pdf|*.doc|*.docx"
+                              invalidFileMessage="Archivo no válido. Solo se permite PDF y DOC." 
+                              fileLimitMessage="Máximo 15MB" label="Elegir..."
+                              /> 
+                <br/>
+                <h:panelGroup id="spanTamanioArchivo">
+                    <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorArticulo.articulo.archivoArticulo != null and gestorArticulo.articulo.archivoArticulo != ''}" value="Tamaño archivo: #{gestorArticulo.tamanoArchivo}"/>
+                </h:panelGroup>
+            </h:panelGroup> 
             <h:panelGroup layout="block"/> 
 
         </h:panelGrid>        
+        <h:panelGroup layout="block" style="height: 30px"/>
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorArticulo.guardar()}"/>
     </ui:define>
 </ui:composition>
