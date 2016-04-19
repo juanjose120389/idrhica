@@ -8,6 +8,7 @@ package ec.edu.chyc.manejopersonal.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -67,17 +68,17 @@ public class Pasante extends Persona implements Serializable {
         this.pasantiasCollection = pasantiasCollection;
     }
 
-
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pasante)) {
-            return false;
-        }
-        return true;
+        //if (object instanceof Pasante && object != null && ((Pasante)object).getId().equals(this.getId()))
+        return object instanceof Pasante && Objects.equals(((Pasante) object).getId(), getId());
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();        
+    }
     
 
 }

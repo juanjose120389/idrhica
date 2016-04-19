@@ -6,18 +6,24 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.TesisJpaController;
+import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -28,17 +34,40 @@ import javax.faces.context.FacesContext;
 public class GestorTesis implements Serializable {
 
     private final TesisJpaController tesisController = new TesisJpaController();
-    
+     private Tesis tesis = new Tesis();
     private List<Tesis> listaTesis = new ArrayList<>();
+    private List<Persona> listaAutores = new ArrayList<>();
     
     public GestorTesis() {
+    }
+
+    public List<Persona> getListaAutores() {
+        return listaAutores;
+    }
+
+    public void setListaAutores(List<Persona> listaAutores) {
+        this.listaAutores = listaAutores;
+    }
+
+    public Tesis getTesis() {
+        return tesis;
+    }
+
+    public void setTesis(Tesis tesis) {
+        this.tesis = tesis;
     }
     
     @PostConstruct
     public void init() {
         
     }
-    
+    public String initCrearTesis() {
+        tesis = new Tesis();
+        GestorContrato.getInstance().actualizarListaContrato();
+        
+
+        return "manejoTesis";
+    }
     public static GestorTesis getInstance()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -54,6 +83,48 @@ public class GestorTesis implements Serializable {
             Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
+     public void quitarAutor(Persona personaQuitar) {
+        listaAutores.remove(personaQuitar);
+    }
+     public void onPersonaChosen(SelectEvent event) {
+        List <Persona> listaPersonasSel = (List<Persona>) event.getObject();
+        //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Selected", "Id:" + car.getId());
+        if (listaPersonasSel != null) {
+            for (Persona per : listaPersonasSel) {
+                if (listaAutores.indexOf(per) < 0) {
+                    listaAutores.add(per);
+                }
+            }
+            
+            //listaAutores.addAll(listaPersonasSel);
+            RequestContext.getCurrentInstance().update("formContenido:dtAutores");
+        }
+    }
+    
+    public void agregarAutor() {
+        Persona personaNueva = new Persona();
+        
+        Map<String,Object> options = new HashMap<>();
+        options.put("resizable", true);
+        options.put("draggable", true);
+        options.put("width", "75%");
+        options.put("modal", true);
+        options.put("contentWidth", "100%");
+        GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
+        RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
+    }
+    
+    public String convertirListaPersonas(List<Persona> listaConvertir) {
+        String r = "";
+        for (Persona per : listaConvertir) {
+            r += String.format("%s %s, ", per.getApellidos(), per.getNombres());
+        }
+        if (!r.isEmpty()) {
+            r = r.substring(0, r.length() - 2);
+        }
+        
+        return r;
+    }
     
     public String initListarTesis() {
         actualizarListaTesis();
@@ -66,6 +137,16 @@ public class GestorTesis implements Serializable {
 
     public void setListaTesis(List<Tesis> listaTesis) {
         this.listaTesis = listaTesis;
+    }
+    
+    public String guardar() {
+        try {
+            tesisController.create(tesis);
+            return "index";
+        } catch (Exception ex) {
+            Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
     }
 
 }

@@ -13,16 +13,19 @@
             body {
                 font-size: 0.9em;
             }
+            .ui-datatable table {
+                /*width: auto !important;*/
+            }
 
         </style>
     </h:head>
 
     <h:body>
         <h:form id="formTabla">
-            <p:dataTable widgetVar="personasTable" selection="#{gestorDialogListaPersonas.listaPersonasSel}" rowKey="#{persona.id}" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
+            <p:dataTable widgetVar="personasTable" resizableColumns="false" selection="#{gestorDialogListaPersonas.listaPersonasSel}" rowKey="#{persona.id}" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
                          paginatorAlwaysVisible="false" paginator="true"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         >                
+                         >
                 <f:facet name="{Exporters}">
                     <h:panelGroup layout="block" styleClass="exportButtons">
                         <h:commandLink>
@@ -36,11 +39,16 @@
                     </h:panelGroup>                    
                 </f:facet>
                 <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                
+                <p:column headerText="Identificación" filterBy="#{persona.identificacion}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.identificacion}" />
+                </p:column>
+                
                 <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
                     <h:outputText value="#{persona.nombres}" />
                 </p:column>
 
-                <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains">
+                <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains" sortBy="#{persona.apellidos}">
                     <h:outputText value="#{persona.apellidos}" />
                 </p:column>
 
@@ -58,12 +66,6 @@
 
                 <p:column headerText="Correo">
                     <h:outputText value="#{persona.correo}" />
-                </p:column>
-
-                <p:column headerText="Cumpleaños">
-                    <h:outputText value="#{persona.fechaNacimiento}">
-                        <f:convertDateTime pattern="dd MMMM" />
-                    </h:outputText>
                 </p:column>
 
                 <f:facet name="footer">

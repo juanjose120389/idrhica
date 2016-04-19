@@ -5,8 +5,6 @@
  */
 package ec.edu.chyc.manejopersonal.managebean.converter;
 
-//import ec.edu.chyc.manejopersonal.managebean.GestorContratado;
-import ec.edu.chyc.manejopersonal.entity.Contratado;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.managebean.GestorPersona;
 import java.util.List;

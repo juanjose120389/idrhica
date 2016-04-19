@@ -5,6 +5,17 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
+        <style>
+            .ui-inputfield {
+                width: 40%;
+            }
+            .calendar {
+                
+            }
+            .ui-calendar > .ui-inputfield {
+                width: 100px;
+            }
+        </style>
         <h:panelGrid columns="3">
             <p:outputLabel value="Nombre"/>
             <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  
@@ -28,7 +39,7 @@
             <h:panelGroup layout="block"/> 
 
             <p:outputLabel value="Autores"/>
-            <h:panelGroup layout="block">
+            <h:panelGroup layout="block" id="divAutores">
                 <p:dataTable id="dtAutores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorArticulo.listaAutores}" rowKey="#{persona.id}">
                     <p:column headerText="Identificación">
                         <h:outputText value="#{persona.identificacion}" />
@@ -50,7 +61,7 @@
                         </h:outputText>
                     </p:column>
                     <p:column style="text-align: center" width="32">
-                        <p:commandButton action="#{gestorArticulo.quitarAutor(persona)}" update="dtAutores" partialSubmit="true" process="@parent" icon="ui-icon-close" title="Eliminar"/>
+                        <p:commandButton id="cmdQuitarAutor" action="#{gestorArticulo.quitarAutor(persona)}" update="dtAutores" process=":formContenido:divAutores" icon="ui-icon-close" title="Eliminar"/>
                     </p:column>
 
                 </p:dataTable>

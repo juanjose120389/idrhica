@@ -104,6 +104,8 @@ public class GestorArticulo implements Serializable {
     public String initCrearArticulo() {
         articulo = new Articulo();
         
+        listaAutores.clear();
+        
         return "manejoArticulo";
     }
     

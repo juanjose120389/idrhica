@@ -47,7 +47,7 @@ public class Persona implements Serializable {
     @Column(length = 2)
     private String genero; //M=Masculino, F=Femenino
     private String direccion;
-    private Boolean activo;
+    private Boolean activo = true;
 
     @OneToMany(mappedBy = "persona")
     private Collection<Contrato> contratosCollection = new ArrayList<>();
@@ -218,7 +218,7 @@ public class Persona implements Serializable {
         this.articulosPrincipalCollection = articulosPrincipalCollection;
     }
 
-    public Persona() {
+    public Persona() {        
     }
 
 }

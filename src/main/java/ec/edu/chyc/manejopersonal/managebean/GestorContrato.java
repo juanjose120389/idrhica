@@ -61,9 +61,10 @@ public class GestorContrato implements Serializable {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
-        public String initCrearContrato() {
+    public String initCrearContrato() {
         contrato = new Contrato();
         GestorProyecto.getInstance().actualizarListaProyecto();
+        actualizarListaContrato();
         return "manejoContratos";
     }
     public String initListarContratos() {

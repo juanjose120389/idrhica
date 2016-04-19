@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+        <h:panelGrid columns="3">
+            <p:outputLabel value="Nombre"/>
+            <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorTesis.tesis.nombre}"/>  
+            <p:message for="txtNombre"/>
+
+            <p:outputLabel value="Acta Aprobación"/>
+            <p:inputText   id="txtActa" requiredMessage="Requerido" required="true"  value="#{gestorTesis.tesis.actaAprobacion}" /> 
+            <p:message for="txtActa" />
+            
+            <p:outputLabel value="Autores"/>
+            <h:panelGroup layout="block">
+                <p:dataTable id="dtAutores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorTesis.listaAutores}" rowKey="#{persona.id}">
+                    <p:column headerText="Identificación">
+                        <h:outputText value="#{persona.identificacion}" />
+                    </p:column>
+                    <p:column headerText="Nombres">
+                        <h:outputText value="#{persona.nombres}" />
+                    </p:column>
+                    <p:column headerText="Apellidos">
+                        <h:outputText value="#{persona.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Fecha Nacimiento">
+                        <h:outputText value="#{persona.fechaNacimiento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Fecha Vinculación">
+                        <h:outputText value="#{persona.fechaVinculacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center" width="32">
+                        <p:commandButton action="#{gestorTesis.quitarAutor(persona)}" update="dtAutores" partialSubmit="true" process="@parent" icon="ui-icon-close" title="Eliminar"/>
+                    </p:column>
+
+                </p:dataTable>
+                <h:panelGroup layout="block" id="divAutorCmd">
+                    <p:commandButton value="Agregar" action="#{gestorTesis.agregarAutor()}" process="@parent" update="divAutorCmd">
+                        <p:ajax event="dialogReturn" listener="#{gestorTesis.onPersonaChosen}" update="dtAutores"/>
+                    </p:commandButton>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup layout="block"/> 
+               
+
+            <p:outputLabel value="Fecha de Inicio"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorTesis.tesis.fechaInicio}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Fecha de finalización"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorTesis.tesis.fechaFin}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Director" />
+            <p:selectOneMenu id="cmbPersona" value="#{gestorTesis.tesis.director}" converter="contratoConverter"
+                             var="per" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorContrato.listaContrato}" var="u" itemLabel="#{u.persona.nombres}" itemValue="#{u}" />
+
+                <p:column style="width:10%">
+                    <p:outputLabel value="#{per.persona.nombres}"/>
+                </p:column>
+            </p:selectOneMenu>                                
+            <h:panelGroup layout="block"/>
+            <p:outputLabel value="Enlace"/>
+            <p:inputText   id="txtEnlace" requiredMessage="Requerido" required="true"  value="#{gestorTesis.tesis.enlace}" /> 
+            <p:message for="txtEnlace" />
+            
+            <p:outputLabel value="Tipo" />
+            <p:selectOneMenu id="cmbTipo" value="#{gestorTesis.tesis.tipo}" style="width:125px">
+                <f:selectItem itemLabel="Pregrado" itemValue="Pregrado" />
+                <f:selectItem itemLabel="Máster" itemValue="Máster" />
+                <f:selectItem itemLabel="Doctorado" itemValue="Doctorado" />
+
+            </p:selectOneMenu>
+            <h:panelGroup layout="block"/>
+            
+            
+            <p:outputLabel value="Resumen"/>
+            <p:inputTextarea   id="txtResumen"  requiredMessage="Requerido" required="true"  value="#{gestorTesis.tesis.resumen}" /> 
+            <p:message for="txtResumen" />
+
+            <p:outputLabel value="Observaciones"/>
+            <p:inputText   id="txtObservaciones" requiredMessage="Requerido" required="true"  value="#{gestorTesis.tesis.observaciones}" /> 
+            <p:message for="txtObservaciones" />
+
+
+
+        </h:panelGrid>        
+        <p:commandButton value="Guardar" action="#{gestorTesis.guardar()}"/>
+    </ui:define>
+</ui:composition>
