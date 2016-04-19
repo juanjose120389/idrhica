@@ -34,6 +34,20 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         }        
     }
     
+    public List<Persona> listPersonasConContrato() throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select p from Persona p where p.contratosCollection is not empty");
+            List<Persona> list = q.getResultList();
+            return list;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }        
+    }
+    
     public Persona getPersona(Persona persona) {
         EntityManager em = null;
         try {

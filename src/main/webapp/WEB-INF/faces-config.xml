@@ -7,5 +7,10 @@
         <action-listener>org.primefaces.application.DialogActionListener</action-listener>
         <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
         <view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+        
+        <resource-bundle>
+            <base-name>labels</base-name>
+            <var>label</var>
+        </resource-bundle>        
     </application>
 </faces-config>

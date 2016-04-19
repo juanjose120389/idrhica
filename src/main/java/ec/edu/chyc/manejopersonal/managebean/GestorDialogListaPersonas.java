@@ -26,7 +26,8 @@ import org.primefaces.context.RequestContext;
 public class GestorDialogListaPersonas implements Serializable {
 
     private List<Persona> listaPersonasSel = new ArrayList<>();
-    
+    private String modoSeleccion = "multiple";// single - multiple
+    private Persona personaSel = null;
     /**
      * Creates a new instance of GestorDialogListaPersonas
      */
@@ -62,6 +63,21 @@ public class GestorDialogListaPersonas implements Serializable {
     public void setListaPersonasSel(List<Persona> listaPersonasSel) {
         this.listaPersonasSel = listaPersonasSel;
     }
-    
-    
+
+    public Persona getPersonaSel() {
+        return personaSel;
+    }
+
+    public void setPersonaSel(Persona personaSel) {
+        this.personaSel = personaSel;
+    }
+
+    public String getModoSeleccion() {
+        return modoSeleccion;
+    }
+
+    public void setModoSeleccion(String modoSeleccion) {
+        this.modoSeleccion = modoSeleccion;
+    }
+        
 }
