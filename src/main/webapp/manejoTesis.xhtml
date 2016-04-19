@@ -15,35 +15,35 @@
             <p:message for="txtActa" />
             
             <p:outputLabel value="Autores"/>
-            <h:panelGroup layout="block">
-                <p:dataTable id="dtAutores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorTesis.listaAutores}" rowKey="#{persona.id}">
+            <h:panelGroup layout="block" id="divAutoresTesis">
+                <p:dataTable id="dtAutoresTesis" paginator="true" paginatorAlwaysVisible="false" rows="10" var="personaT" value="#{gestorTesis.listaAutores}" rowKey="#{personaT.id}">
                     <p:column headerText="Identificación">
-                        <h:outputText value="#{persona.identificacion}" />
+                        <h:outputText value="#{personaT.identificacion}" />
                     </p:column>
                     <p:column headerText="Nombres">
-                        <h:outputText value="#{persona.nombres}" />
+                        <h:outputText value="#{personaT.nombres}" />
                     </p:column>
                     <p:column headerText="Apellidos">
-                        <h:outputText value="#{persona.apellidos}" />
+                        <h:outputText value="#{personaT.apellidos}" />
                     </p:column>
                     <p:column headerText="Fecha Nacimiento">
-                        <h:outputText value="#{persona.fechaNacimiento}">
+                        <h:outputText value="#{personaT.fechaNacimiento}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Fecha Vinculación">
-                        <h:outputText value="#{persona.fechaVinculacion}">
+                        <h:outputText value="#{personaT.fechaVinculacion}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
                     <p:column style="text-align: center" width="32">
-                        <p:commandButton action="#{gestorTesis.quitarAutor(persona)}" update="dtAutores" partialSubmit="true" process="@parent" icon="ui-icon-close" title="Eliminar"/>
+                        <p:commandButton action="#{gestorTesis.quitarAutor(personaT)}" update="dtAutoresTesis" process=":formContenido:divAutoresTesis" partialSubmit="true"  icon="ui-icon-close" title="Eliminar"/>
                     </p:column>
 
                 </p:dataTable>
-                <h:panelGroup layout="block" id="divAutorCmd">
-                    <p:commandButton value="Agregar" action="#{gestorTesis.agregarAutor()}" process="@parent" update="divAutorCmd">
-                        <p:ajax event="dialogReturn" listener="#{gestorTesis.onPersonaChosen}" update="dtAutores"/>
+                <h:panelGroup layout="block" id="divAutorCmdTesis">
+                    <p:commandButton value="Agregar" action="#{gestorTesis.agregarAutor()}" process="@parent" update="divAutorCmdTesis">
+                        <p:ajax event="dialogReturn" listener="#{gestorTesis.onPersonaChosen}" update="dtAutoresTesis"/>
                     </p:commandButton>
                 </h:panelGroup>
             </h:panelGroup>
@@ -59,12 +59,12 @@
             <h:panelGroup layout="block"/>
 
             <p:outputLabel value="Director" />
-            <p:selectOneMenu id="cmbPersona" value="#{gestorTesis.tesis.director}" converter="contratoConverter"
+            <p:selectOneMenu id="cmbPersona" value="#{gestorTesis.tesis.director}" converter="personaConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorContrato.listaContrato}" var="u" itemLabel="#{u.persona.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per.persona.nombres}"/>
+                    <p:outputLabel value="#{per.nombres}"/>
                 </p:column>
             </p:selectOneMenu>                                
             <h:panelGroup layout="block"/>

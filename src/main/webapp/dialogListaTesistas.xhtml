@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Tesistas</title>
+        <style type="text/css">
+            .ui-widget {
+                font-size: 0.9em;
+            }
+            body {
+                font-size: 0.9em;
+            }
+            .ui-datatable table {
+                /*width: auto !important;*/
+            }
+
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form id="formTabla">
+            <p:dataTable widgetVar="tesistasTable" resizableColumns="false" selection="#{gestorDialogListaTesistas.listaTesistasSel}" rowKey="#{tesista.id}" id="personasTable" var="tesista" value="#{gestorTesista.listTesistas}" rows="10"
+                         paginatorAlwaysVisible="false" paginator="true"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         >
+                <f:facet name="{Exporters}">
+                    <h:panelGroup layout="block" styleClass="exportButtons">
+                        <h:commandLink>
+                            <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                            <p:dataExporter type="xls" target="tesistasTable" fileName="tesistas" />
+                        </h:commandLink>
+                        <h:commandLink>
+                            <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                            <p:dataExporter type="pdf" target="tesistasTable" fileName="tesistas" encoding="iso-8859-1"/>
+                        </h:commandLink>
+                    </h:panelGroup>                    
+                </f:facet>
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                
+                <p:column headerText="Identificación" filterBy="#{tesista.identificacion}" filterMatchMode="contains">
+                    <h:outputText value="#{tesista.identificacion}" />
+                </p:column>
+                
+                <p:column headerText="Nombres" filterBy="#{tesista.nombres}" filterMatchMode="contains" sortBy="#{tesista.nombres}">
+                    <h:outputText value="#{tessita.nombres}" />
+                </p:column>
+
+                <p:column headerText="Apellidos" filterBy="#{tesista.apellidos}" filterMatchMode="contains" sortBy="#{tesista.apellidos}">
+                    <h:outputText value="#{tesista.apellidos}" />
+                </p:column>
+
+                <p:column headerText="Estado" filterBy="#{tesista.activo}" filterMatchMode="equals">
+                    <f:facet name="filter">
+                        <p:selectOneButton onchange="PF('tesistasTable').filter()">
+                            <f:converter converterId="javax.faces.Boolean" />
+                            <f:selectItem itemLabel="Todos" itemValue="" />
+                            <f:selectItem itemLabel="Activo" itemValue="true" />
+                            <f:selectItem itemLabel="No Activo" itemValue="false" />
+                        </p:selectOneButton>
+                    </f:facet>            
+                    <h:outputText value="#{tesista.activo ? 'Activo' : 'No Activo'}" />
+                </p:column>
+
+                <p:column headerText="Correo">
+                    <h:outputText value="#{tesista.correo}" />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" action="#{gestorDialogListaTesistas.aceptarSeleccionTesistas()}"/>
+                    <p:commandButton value="Cancelar" action="#{gestorDialogListaTesistas.cancelarSeleccionTesistas()}"/>
+                </f:facet>
+            </p:dataTable>        
+
+        </h:form>
+    </h:body>
+
+</html>

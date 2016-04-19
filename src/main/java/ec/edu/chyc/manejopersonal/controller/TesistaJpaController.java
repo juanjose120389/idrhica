@@ -6,26 +6,24 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
-import ec.edu.chyc.manejopersonal.entity.Tesis;
+import ec.edu.chyc.manejopersonal.entity.Tesista;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 
-public class TesisJpaController extends GenericJpaController<Tesis> implements Serializable {
-    public TesisJpaController() {
-        setClassRef(Tesis.class);
+public class TesistaJpaController extends GenericJpaController<Tesista> implements Serializable {
+    public TesistaJpaController() {
+        setClassRef(Tesista.class);
     }
 
-    public List<Tesis> listTesis() throws Exception {
+    public List<Tesista> listTesista() throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select distinct t from Tesis t join fetch t.autoresCollection");
-            
-            //Query q = em.createQuery("select  t from Tesis t");
-            List<Tesis> list = q.getResultList();
+            Query q = em.createQuery("select p from Tesista p");
+            List<Tesista> list = q.getResultList();
             return list;
         } finally {
             if (em != null) {
@@ -35,16 +33,14 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
     }
     
     
-    public void create(Tesis obj) throws Exception {
+    public void create(Tesista tesista) throws Exception {
         EntityManager em = null;
+        
 
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(obj);
-            
-
-            
+            em.persist(tesista);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -53,12 +49,12 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
         }
     }
 
-    public void edit(Tesis tesis) throws Exception {
+    public void edit(Tesista tesista) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.merge(tesis);
+            em.merge(tesista);
             em.getTransaction().commit();
         } finally {
             if (em != null) {

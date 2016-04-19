@@ -9,6 +9,7 @@ import ec.edu.chyc.manejopersonal.controller.TesisJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
+import ec.edu.chyc.manejopersonal.entity.Tesista;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -36,17 +37,17 @@ public class GestorTesis implements Serializable {
     private final TesisJpaController tesisController = new TesisJpaController();
      private Tesis tesis = new Tesis();
     private List<Tesis> listaTesis = new ArrayList<>();
-    private List<Persona> listaAutores = new ArrayList<>();
+    private List<Tesista> listaAutoresTesis = new ArrayList<>();
     
     public GestorTesis() {
     }
 
-    public List<Persona> getListaAutores() {
-        return listaAutores;
+    public List<Tesista> getListaAutores() {
+        return listaAutoresTesis;
     }
 
-    public void setListaAutores(List<Persona> listaAutores) {
-        this.listaAutores = listaAutores;
+    public void setListaAutores(List<Tesista> listaAutores) {
+        this.listaAutoresTesis = listaAutores;
     }
 
     public Tesis getTesis() {
@@ -64,7 +65,7 @@ public class GestorTesis implements Serializable {
     public String initCrearTesis() {
         tesis = new Tesis();
         GestorContrato.getInstance().actualizarListaContrato();
-        
+        listaAutoresTesis.clear();
 
         return "manejoTesis";
     }
@@ -83,26 +84,26 @@ public class GestorTesis implements Serializable {
             Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
-     public void quitarAutor(Persona personaQuitar) {
-        listaAutores.remove(personaQuitar);
+     public void quitarAutor(Tesista personaQuitar) {
+        listaAutoresTesis.remove(personaQuitar);
     }
      public void onPersonaChosen(SelectEvent event) {
-        List <Persona> listaPersonasSel = (List<Persona>) event.getObject();
+        List <Tesista> listaPersonasSel = (List<Tesista>) event.getObject();
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Selected", "Id:" + car.getId());
         if (listaPersonasSel != null) {
-            for (Persona per : listaPersonasSel) {
-                if (listaAutores.indexOf(per) < 0) {
-                    listaAutores.add(per);
+            for (Tesista per : listaPersonasSel) {
+                if (listaAutoresTesis.indexOf(per) < 0) {
+                    listaAutoresTesis.add(per);
                 }
             }
             
             //listaAutores.addAll(listaPersonasSel);
-            RequestContext.getCurrentInstance().update("formContenido:dtAutores");
+            RequestContext.getCurrentInstance().update("formContenido:dtAutoresTesis");
         }
     }
     
     public void agregarAutor() {
-        Persona personaNueva = new Persona();
+        Tesista personaNueva = new Tesista();
         
         Map<String,Object> options = new HashMap<>();
         options.put("resizable", true);
@@ -111,7 +112,7 @@ public class GestorTesis implements Serializable {
         options.put("modal", true);
         options.put("contentWidth", "100%");
         GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
-        RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
+        RequestContext.getCurrentInstance().openDialog("dialogListaTesistas", options, null);
     }
     
     public String convertirListaPersonas(List<Persona> listaConvertir) {
@@ -128,6 +129,8 @@ public class GestorTesis implements Serializable {
     
     public String initListarTesis() {
         actualizarListaTesis();
+       
+       // listaAutores.clear();
         return "listaTesis";
     }
 
@@ -141,6 +144,7 @@ public class GestorTesis implements Serializable {
     
     public String guardar() {
         try {
+           tesis.setAutoresCollection(listaAutoresTesis);
             tesisController.create(tesis);
             return "index";
         } catch (Exception ex) {
