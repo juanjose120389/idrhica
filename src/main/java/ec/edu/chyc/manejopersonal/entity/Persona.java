@@ -9,8 +9,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +24,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
@@ -49,21 +53,21 @@ public class Persona implements Serializable {
     private String direccion;
     private Boolean activo = true;
 
-    @OneToMany(mappedBy = "persona")
+    @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<Contrato> contratosCollection = new ArrayList<>();
 
-    @OneToMany(mappedBy = "autorPrincipal")
+    @OneToMany(mappedBy = "autorPrincipal", fetch = FetchType.LAZY)
     private Collection<Articulo> articulosPrincipalCollection = new ArrayList<>();    
     
-    @OneToMany(mappedBy = "persona")
+    @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<PersonaTitulo> personaTitulosCollection = new ArrayList<>();
   
     @ManyToMany
     @JoinTable(name = "personaArticulo", joinColumns = {
         @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idArticulo", referencedColumnName = "id")})
-    private Collection<Articulo> articulosCollection = new ArrayList();
-    
+    private Set<Articulo> articulosCollection = new HashSet();
+
     public Collection<Contrato> getContratosCollection() {
         return contratosCollection;
     }
@@ -72,11 +76,11 @@ public class Persona implements Serializable {
         this.contratosCollection = contratosCollection;
     }
 
-    public Collection<Articulo> getArticulosCollection() {
+    public Set<Articulo> getArticulosCollection() {
         return articulosCollection;
     }
 
-    public void setArticulosCollection(Collection<Articulo> articulosCollection) {
+    public void setArticulosCollection(Set<Articulo> articulosCollection) {
         this.articulosCollection = articulosCollection;
     }
 

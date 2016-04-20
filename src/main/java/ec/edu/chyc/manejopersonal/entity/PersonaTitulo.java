@@ -13,12 +13,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author marcelocaj
  */
 @Entity
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"idPersona", "idTitulo","idUniversidad"})
+)
 public class PersonaTitulo implements Serializable {
     private static final long serialVersionUID = 1L;
 

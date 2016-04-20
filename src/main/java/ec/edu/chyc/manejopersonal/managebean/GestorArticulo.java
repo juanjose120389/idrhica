@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -125,6 +126,7 @@ public class GestorArticulo implements Serializable {
         if (file != null) {
             String extension = FilenameUtils.getExtension(file.getFileName());
             String nombreArchivo = ServerUtils.generateB64Uuid().replace("=", "") + (new Random()).nextInt(9999) + "." + extension;
+            nombreArchivo = ServerUtils.convertirNombreArchivo(nombreArchivo);
             Path pathArchivo = ServerUtils.getPathTemp().resolve(nombreArchivo).normalize();
 
             File newFile = pathArchivo.toFile();
@@ -182,27 +184,16 @@ public class GestorArticulo implements Serializable {
     }
     
     public String guardar() {
-        articulo.setAutoresCollection(listaAutores);
+        articulo.setAutoresCollection(new HashSet(listaAutores));
         //articuloController.create(articulo);
         
-        if (articulo.getArchivoArticulo() != null || !articulo.getArchivoArticulo().isEmpty()) {
-            //si se subió el archivo, copiar del directorio de temporales al original de artículos, después eliminar el archivo temporal
-            File origen = ServerUtils.getPathTemp().resolve(articulo.getArchivoArticulo()).toFile();
-            File destino = ServerUtils.getPathArticulos().resolve(articulo.getArchivoArticulo()).toFile();
-            try {
-                //FileUtils.copyFile(origen, destino);
-                FileUtils.moveFile(origen, destino);
-                //origen.delete();
-            } catch (IOException ex) {
-                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         try {
             articuloController.create(articulo);
+            return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "index";
+            return "";
+        }        
     }
     public TipoArticulo[] getTiposArticulo() {
         return TipoArticulo.values();

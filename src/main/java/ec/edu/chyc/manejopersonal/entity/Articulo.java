@@ -6,9 +6,10 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -80,7 +81,7 @@ public class Articulo implements Serializable {
     private String archivoArticulo;//nombre del archivo subido que corresponde al artículo
     
     @ManyToMany(mappedBy = "articulosCollection")
-    private Collection<Persona> autoresCollection = new ArrayList<>();
+    private Set<Persona> autoresCollection = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -195,11 +196,11 @@ public class Articulo implements Serializable {
         this.autorPrincipal = autorPrincipal;
     }
 
-    public Collection<Persona> getAutoresCollection() {
+    public Set<Persona> getAutoresCollection() {
         return autoresCollection;
     }
 
-    public void setAutoresCollection(Collection<Persona> autoresCollection) {
+    public void setAutoresCollection(Set<Persona> autoresCollection) {
         this.autoresCollection = autoresCollection;
     }
 
