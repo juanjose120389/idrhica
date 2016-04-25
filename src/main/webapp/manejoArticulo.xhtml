@@ -10,9 +10,6 @@
             .ui-inputfield {
                 width: 40%;
             }
-            .calendar {
-
-            }
             .ui-calendar > .ui-inputfield {
                 width: 100px;
             }
@@ -106,9 +103,22 @@
             </p:selectOneMenu>
             <h:panelGroup layout="block"/> 
 
-            <p:outputLabel value="Referencia Blib"/>
+            <p:outputLabel value="Referencia Bib"/>
             <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.referenciaBib}"/>  
             <h:panelGroup layout="block"/> 
+            
+            <p:outputLabel value="Convenio" />
+            <p:selectOneMenu id="cmbProyecto" value="#{gestorArticulo.articulo.convenio}" converter="convenioConverter" style="width: 250px"
+                             var="con" filter="true" filterMatchMode="contains">
+                <f:selectItem itemLabel="Ninguno" itemValue=""/>
+                <f:selectItems value="#{gestorConvenio.listaConvenios}" var="c" itemLabel="#{c.institucion}" itemValue="#{c}" />
+
+                <p:column>
+                    <p:outputLabel value="#{con.institucion}"/>
+                </p:column>
+            </p:selectOneMenu>                                
+            <h:panelGroup layout="block"/>
+            
 
             <p:outputLabel value="Artículo PDF"/>
             <h:panelGroup layout="block">

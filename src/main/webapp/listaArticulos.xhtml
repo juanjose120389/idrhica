@@ -59,14 +59,18 @@
 
 
             <p:column headerText="Autores" exportable="false">
-                <ui:repeat value="#{articulo.autoresCollection}" var="autor">
+                <ui:repeat value="#{articulo.autoresCollection.toArray()}" var="autor">
                     <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
             </p:column>
 
             <p:column headerText="Autores" style="display: none; width: 1px !important; height: 0px !important;">
                 <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.autoresCollection)}" escape="false"/>
-            </p:column>            
+            </p:column> 
+            
+            <p:column exportable="false">
+                <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}"/>
+            </p:column>
 
         </p:dataTable>
     </ui:define>

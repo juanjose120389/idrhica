@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+        <style >
+            .ui-datatable table {
+                table-layout: auto;
+            }
+        </style>
+        <p:dataTable widgetVar="conveniosTable" id="conveniosTable" var="convenio" value="#{gestorConvenio.listaConvenios}" rows="10"
+                     paginator="true" resizableColumns="true" liveResize="true"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                     >
+            <f:facet name="{Exporters}">
+                <h:panelGroup layout="block" styleClass="exportButtons">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                        <p:dataExporter type="xls" target="conveniosTable" fileName="convenios" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                        <p:dataExporter type="pdf" target="conveniosTable" fileName="convenios" encoding="iso-8859-1"/>
+                    </h:commandLink>
+                </h:panelGroup>                    
+            </f:facet>
+            <p:column headerText="Institución" sortBy="#{convenio.institucion}" filterBy="#{convenio.institucion}" filterMatchMode="contains">
+                <h:outputText value="#{convenio.institucion}" />
+            </p:column>           
+
+            <p:column headerText="Proyecto" sortBy="#{convenio.proyecto.titulo}" filterBy="#{convenio.proyecto.titulo}" filterMatchMode="contains">
+                <h:outputText value="#{convenio.proyecto.titulo}" />
+            </p:column>           
+
+            <p:column headerText="Fecha Inicio" >
+                <h:outputText value="#{convenio.fechaInicio}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Fecha Finalización" >
+                <h:outputText value="#{convenio.fechaFin}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>                
+            <p:column>
+                <p:commandLink value="Editar" action="#{gestorConvenio.initModificarConvenio(convenio.id)}"/>
+            </p:column>
+
+        </p:dataTable>
+    </ui:define>
+</ui:composition>

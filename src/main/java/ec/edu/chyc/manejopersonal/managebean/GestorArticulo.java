@@ -17,6 +17,7 @@ import java.io.InputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -31,7 +33,6 @@ import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -52,6 +53,7 @@ public class GestorArticulo implements Serializable {
     private List<Persona> listaAutores = new ArrayList<>();
     private Articulo articulo;
     private String tamanoArchivo;
+    private boolean modoModificar = false;
     
     public GestorArticulo() {
     }
@@ -93,7 +95,7 @@ public class GestorArticulo implements Serializable {
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
     
-    public String convertirListaPersonas(List<Persona> listaConvertir) {
+    public String convertirListaPersonas(Set<Persona> listaConvertir) {
         String r = "";
         for (Persona per : listaConvertir) {
             r += String.format("%s %s, ", per.getApellidos(), per.getNombres());
@@ -188,7 +190,11 @@ public class GestorArticulo implements Serializable {
         //articuloController.create(articulo);
         
         try {
-            articuloController.create(articulo);
+            if (modoModificar) {
+                articuloController.edit(articulo);
+            } else {
+                articuloController.create(articulo);
+            }
             return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
@@ -198,11 +204,31 @@ public class GestorArticulo implements Serializable {
     public TipoArticulo[] getTiposArticulo() {
         return TipoArticulo.values();
     }
+    public String initModificarArticulo(Long id) {
+        articulo = articuloController.findArticulo(id);
+        listaAutores = new ArrayList<>(articulo.getAutoresCollection());
+        
+        try {
+            Long size = Files.size(ServerUtils.getPathArticulos().resolve( articulo.getArchivoArticulo() ));
+            tamanoArchivo = ServerUtils.humanReadableByteCount(size);
+        } catch (IOException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        modoModificar = true;
+        
+        GestorPersona.getInstance().actualizarListaPersonasConContrato();
+        GestorConvenio.getInstance().actualizarListaConvenios();
+        
+        return "manejoArticulo";
+    }
     public String initCrearArticulo() {
         articulo = new Articulo();
         listaAutores.clear();
         tamanoArchivo = "";
+        modoModificar = false;
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
+        GestorConvenio.getInstance().actualizarListaConvenios();
         
         return "manejoArticulo";
     }

@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+        <style>
+            .ui-inputfield {
+                width: 400px;
+            }
+            .ui-calendar > .ui-inputfield {
+                width: 100px;
+            }
+
+        </style>
+            <p:messages id="messages" showDetail="true" globalOnly="true" autoUpdate="true" closable="true" />
+        <h:panelGrid columns="3">            
+            <p:outputLabel value="Institución"/>
+            <p:inputText id="txtInstitucion" requiredMessage="Requerido" required="true" value="#{gestorConvenio.convenio.institucion}"/>  
+            <p:message for="txtInstitucion"/>
+            
+            <p:outputLabel value="Fecha de Inicio"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaInicio}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Fecha de Finalización"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaFin}"/>  
+            <h:panelGroup layout="block"/>
+            
+            <p:outputLabel value="Proyecto" />
+            <p:selectOneMenu id="cmbProyecto" value="#{gestorConvenio.convenio.proyecto}" converter="proyectoConverter"
+                             var="per2" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
+
+                <p:column style="width:10%">
+                    <p:outputLabel value="#{per2.titulo}"/>
+                </p:column>
+            </p:selectOneMenu>                                
+            <h:panelGroup layout="block"/>
+            
+            
+            <p:outputLabel value="Observaciones"/>
+            <p:inputTextarea rows="3" value="#{gestorConvenio.convenio.observaciones}"/>
+            <h:panelGroup layout="block"/>
+
+        </h:panelGrid>        
+        <p:commandButton value="Guardar" update="formContenido" action="#{gestorConvenio.guardar()}"/>
+    </ui:define>
+</ui:composition>
