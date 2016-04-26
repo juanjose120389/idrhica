@@ -91,10 +91,12 @@ public class ServerUtils {
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
-    
+    public static String toFileSystemSafeName(String name) {
+        return toFileSystemSafeName(name, true, 250);
+    }
     /***
      * Reemplaza caracteres inválidos de nombre de archivo a un nombre válido
-     * Obtenido y modificado para que sea una función independiente:
+     * Obtenido y modificado para que sea una función independiente e incluir acentos como válidos y reemplazar el espacio por _:
      *  http://grepcode.com/file/repository.springsource.com/org.apache.activemq/com.springsource.org.apache.kahadb/5.3.0/org/apache/kahadb/util/IOHelper.java    
      * @param name Nombre del archivo a convertir.
      * @param dirSeparators Si es true, reemplaza también los separadores de path ("/" ó "\"), si es false se mantienen.
@@ -112,8 +114,15 @@ public class ServerUtils {
             valid = valid || (c == '_') || (c == '-') || (c == '.') || (c == '#')
                     || (dirSeparators && ((c == '/') || (c == '\\')));
 
+            int indexAccent = "áéíóúÁÉÍÓÚñÑüÜ".indexOf(c);
+            
             if (valid) {
                 rc.append(c);
+            } else if (indexAccent >= 0) {
+                String replacement = "aeiouAEOIOUnNuU";
+                rc.append(replacement.charAt(indexAccent));
+            } else if (c == ' ') {
+                rc.append("_");
             } else {
                 // Encode the character using hex notation
                 rc.append('#');

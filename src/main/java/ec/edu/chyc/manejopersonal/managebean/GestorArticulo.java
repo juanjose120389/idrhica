@@ -10,7 +10,10 @@ import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Articulo.TipoArticulo;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,11 +35,14 @@ import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -54,6 +60,8 @@ public class GestorArticulo implements Serializable {
     private Articulo articulo;
     private String tamanoArchivo;
     private boolean modoModificar = false;
+    
+    private StreamedContent streamParaDescarga;
     
     public GestorArticulo() {
     }
@@ -93,7 +101,50 @@ public class GestorArticulo implements Serializable {
         options.put("contentWidth", "100%");
         GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
+    }   
+    
+    public String corregirUrl(String url) {
+        if (!url.contains("://")) {
+            url = "http://" + url;
+        }
+        /*if (!url.toLowerCase().matches("^\\w+://.*")) {
+            url = "http://" + url;
+        }*/
+        return url;
     }
+
+    public StreamedContent streamParaDescarga(Articulo articuloDescarga) {
+        InputStream stream = null;
+        streamParaDescarga = null;
+        try {
+            String nombreArchivo = articuloDescarga.getArchivoArticulo();
+            String extension = FilenameUtils.getExtension(nombreArchivo);
+            
+            
+            Path pathArchivo = ServerUtils.getPathArticulos().resolve(nombreArchivo);
+            stream = new BufferedInputStream(new FileInputStream(pathArchivo.toFile()));
+            
+            String nuevoNombre = "articulo_";
+            String nombreArticulo = articuloDescarga.getNombre();
+            if (articuloDescarga.getNombre().length() - extension.length() - 1 > 25) {
+                nombreArticulo = nombreArticulo.substring(0, 25);
+            } 
+            nuevoNombre += ServerUtils.toFileSystemSafeName(nombreArticulo + "." + extension);
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            streamParaDescarga = new DefaultStreamedContent(stream, externalContext.getMimeType(nuevoNombre), nuevoNombre);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                if (stream != null) {
+                    stream.close();
+                }
+            } catch (IOException ex2) {
+                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+        } 
+        
+        return streamParaDescarga;
+    }    
     
     public String convertirListaPersonas(Set<Persona> listaConvertir) {
         String r = "";
@@ -277,6 +328,12 @@ public class GestorArticulo implements Serializable {
 
     public void setTamanoArchivo(String tamanoArchivo) {
         this.tamanoArchivo = tamanoArchivo;
+    }
+
+
+
+    public void setStreamParaDescarga(StreamedContent streamParaDescarga) {
+        this.streamParaDescarga = streamParaDescarga;
     }
 
 }

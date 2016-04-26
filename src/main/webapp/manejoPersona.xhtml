@@ -236,28 +236,12 @@
                             <p:column style="width:10%">
                                 <p:outputLabel value="#{uni.nombre}"/>
                             </p:column>
-                        </p:selectOneMenu>                                
-
-
+                        </p:selectOneMenu>
 
                         <p:outputLabel value="Facultad"/>
                         <p:inputText value="#{gestorPersona.pasante.facultad}"/>
                         <p:outputLabel value="Escuela"/>
                         <p:inputText value="#{gestorPersona.pasante.escuela}"/>
-                    </h:panelGrid>
-                </h:panelGroup>
-
-                <h:panelGroup layout="block" style="height: 30px"/>
-
-                <p:selectBooleanCheckbox value="#{gestorPersona.esContratado}" itemLabel="Tiene contrato">
-                    <p:ajax event="change" update="divContratado"/>
-                </p:selectBooleanCheckbox>
-                <h:panelGroup layout="block" id="divContratado" styleClass="contentCheckbox">
-                    <h:panelGrid columns="2" rendered="#{gestorPersona.esContratado}">
-                        <p:outputLabel value="Cargo"/>
-                        <p:inputText value="#{gestorPersona.contratado.cargo}"/>
-                        <p:outputLabel value="Actividad principal"/>
-                        <p:inputText value="#{gestorPersona.contratado.actividadPrincipal}"/>
                     </h:panelGrid>
                 </h:panelGroup>
 

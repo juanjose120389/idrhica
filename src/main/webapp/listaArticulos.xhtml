@@ -41,20 +41,20 @@
             </p:column>
 
 
-            <p:column headerText="Revista" filterBy="#{articulo.revista}">
+            <p:column headerText="Revista" filterBy="#{articulo.revista}" filterMatchMode="contains">
                 <h:outputText value="#{articulo.revista}" />
             </p:column>
 
-            <p:column headerText="Factor impacto revista" filterBy="#{articulo.factorImpacto}">
+            <p:column headerText="Factor impacto revista" filterBy="#{articulo.factorImpacto}" filterMatchMode="contains">
                 <h:outputText value="#{articulo.factorImpacto}" />
             </p:column>
 
-            <p:column headerText="Tema" filterBy="#{articulo.tema}">
+            <p:column headerText="Tema" filterBy="#{articulo.tema}" filterMatchMode="contains">
                 <h:outputText value="#{articulo.tema}" />
             </p:column>
 
-            <p:column headerText="Enlace" filterBy="#{articulo.enlace}">
-                <h:outputText value="#{articulo.enlace}" />
+            <p:column headerText="Enlace" filterBy="#{articulo.enlace}" filterMatchMode="contains">
+                <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>
             </p:column>
 
 
@@ -67,6 +67,11 @@
             <p:column headerText="Autores" style="display: none; width: 1px !important; height: 0px !important;">
                 <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.autoresCollection)}" escape="false"/>
             </p:column> 
+            <p:column exportable="false">
+                <p:commandLink value="Descargar" ajax="false" rendered="#{articulo.archivoArticulo != null and articulo.archivoArticulo != ''}">
+                    <p:fileDownload value="#{gestorArticulo.streamParaDescarga(articulo)}" />
+                </p:commandLink>
+            </p:column>
             
             <p:column exportable="false">
                 <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}"/>

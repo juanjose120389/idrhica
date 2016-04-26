@@ -47,6 +47,24 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             }
         }        
     }
+    public Persona findPersona(Long id) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select p from Persona p left join fetch p.personaTitulosCollection where p.id=:id");
+            q.setParameter("id", id);
+            List<Persona> list = q.getResultList();
+            if (list != null && !list.isEmpty()) {
+                return list.get(0);
+            } else {
+                return null;
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }    
     
     public Persona getPersona(Persona persona) {
         EntityManager em = null;
