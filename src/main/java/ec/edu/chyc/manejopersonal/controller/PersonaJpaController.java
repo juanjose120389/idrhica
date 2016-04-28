@@ -6,13 +6,18 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Pasante;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
+import ec.edu.chyc.manejopersonal.entity.Tesista;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import org.hibernate.Hibernate;
 
 
 public class PersonaJpaController extends GenericJpaController<Persona> implements Serializable {
@@ -65,6 +70,66 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             }
         }
     }    
+
+    public Persona findPersona(Long id, boolean incluirArticulos, boolean incluirContratos, boolean incluirTitulos, boolean incluirTesis, boolean incluirPasantia) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            
+            String incluir = "";
+            ArrayList<String> listaFetchs = new ArrayList<>();
+            
+            int totalFetchs = 0;
+            if (incluirContratos) {
+                listaFetchs.add(" left join fetch p.contratosCollection ");
+                totalFetchs++;
+            }            
+            if (incluirArticulos) {
+                listaFetchs.add(" left join fetch p.articulosCollection ");
+                totalFetchs++;
+            }            
+            if (incluirTitulos) {
+                listaFetchs.add(" left join fetch p.personaTitulosCollection ");
+                totalFetchs++;
+            }
+            if (listaFetchs.size() > 1) {
+                incluir = listaFetchs.get(0);
+            }
+            
+            TypedQuery<Persona> q = em.createQuery("select p from Persona p " + incluir + " where p.id=:id",Persona.class);            
+            q.setParameter("id", id);
+            Persona p = q.getSingleResult();
+            
+            if (incluirContratos) {
+                Hibernate.initialize(p.getContratosCollection());
+            }
+            if (incluirArticulos) {
+                Hibernate.initialize(p.getArticulosCollection());
+            }
+            if (incluirTitulos) {
+                Hibernate.initialize(p.getPersonaTitulosCollection());
+            }
+            
+            if (incluirTesis && p instanceof Tesista) {
+                Tesista tesista = (Tesista)p;
+                if (tesista.getTesis() != null) {
+                    Hibernate.initialize(tesista.getTesis());
+                    //cargar la entidad tesis
+                }
+                
+            } else if (incluirPasantia && p instanceof Pasante) {
+                Pasante pasante = (Pasante)p;
+                if (pasante.getPasantiasCollection().size() > 0) {
+                    Hibernate.initialize(pasante.getPasantiasCollection());
+                }
+            }
+            return p;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
     
     public Persona getPersona(Persona persona) {
         EntityManager em = null;

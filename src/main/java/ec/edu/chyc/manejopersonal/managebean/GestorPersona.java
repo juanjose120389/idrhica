@@ -45,6 +45,12 @@ public class GestorPersona implements Serializable {
     
     private final PersonaJpaController personaController = new PersonaJpaController();
     
+    private enum Modo {
+        AGREGAR,
+        EDITAR,
+        VER
+    }
+    
     private Persona persona = new Persona();
     
     private Date fechaActual = new Date();
@@ -78,7 +84,8 @@ public class GestorPersona implements Serializable {
     private boolean esContratado = false;
     private boolean esPasante = false;
     
-    private boolean modoModificar = false;
+    //private boolean modoModificar = false;
+    private Modo modo;
 
     /**
      * Creates a new instance of GestorPersona
@@ -194,9 +201,15 @@ public class GestorPersona implements Serializable {
         
         return false;
     }
-    public String initModificarPersona(Long id) {
-        persona = personaController.findPersona(id);
-        modoModificar = true;
+    
+    public void cargarInformacionPersona(Long id, boolean infoCompleta) {
+        if (infoCompleta) {
+            persona = personaController.findPersona(id, true, true, true, true, true);
+        } else {
+            persona = personaController.findPersona(id);
+        }
+        //modoModificar = true;
+        
         
         listaPersonaTitulos = new ArrayList<>(persona.getPersonaTitulosCollection());
         pasante = new Pasante();
@@ -214,8 +227,16 @@ public class GestorPersona implements Serializable {
             }
         } catch (IllegalAccessException | InvocationTargetException ex) {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }        
+    }
+    public String initVerPersona(Long id) {
+        cargarInformacionPersona(id, true);     
+        modo = Modo.VER;
+        return "verPersona";        
+    }
+    public String initModificarPersona(Long id) {
+        cargarInformacionPersona(id, false);     
+        modo = Modo.EDITAR;
         return "manejoPersona";
     }
 
@@ -223,7 +244,8 @@ public class GestorPersona implements Serializable {
         persona = new Persona();
         fechaActual = new Date();
         
-        modoModificar = false;
+        //modoModificar = false;
+        modo = Modo.AGREGAR;
         
         mostrarDlgTitulo = false;
         mostrarDlgUniversidad = false;
@@ -365,7 +387,7 @@ public class GestorPersona implements Serializable {
             
             personaGuardar.setPersonaTitulosCollection(listaPersonaTitulos);
             
-            if (modoModificar) {
+            if (modo == Modo.EDITAR) {
                 personaController.edit(personaGuardar);
             } else {
                 personaController.create(personaGuardar);
@@ -382,6 +404,10 @@ public class GestorPersona implements Serializable {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", format.format(event.getObject())));
+    }
+
+    public boolean esModoVer() {
+        return modo == Modo.VER;
     }
     
     public List<Persona> getListaPersonas() {
@@ -523,5 +549,5 @@ public class GestorPersona implements Serializable {
     public void setFiltroFechaFin(Date filtroFechaFin) {
         this.filtroFechaFin = filtroFechaFin;
     }
-    
+   
 }

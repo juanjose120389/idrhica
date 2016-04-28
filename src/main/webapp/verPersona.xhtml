@@ -1,0 +1,256 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
+                template="./template.xhtml">
+    <ui:define name="body">
+        <style>       
+            .contentCheckbox {
+                margin-left: 20px;
+            }
+            .labelscol {
+                padding-right: 15px;
+                width: 100px;
+            }
+        </style>
+        <h:panelGrid columns="2" width="100%" columnClasses="labelscol,inputscol">
+            <p:outputLabel value="Cédula/Pasaporte"/>
+            <p:outputLabel value="#{gestorPersona.persona.identificacion}"/>  
+
+            <p:outputLabel value="Nombres"/>
+            <p:outputLabel value="#{gestorPersona.persona.nombres}" />  
+
+            <p:outputLabel value="Apellidos"/>
+            <p:outputLabel value="#{gestorPersona.persona.apellidos}"/>  
+
+            <p:outputLabel value="Dirección"/>
+            <p:outputLabel value="#{gestorPersona.persona.direccion}" />  
+
+            <p:outputLabel value="Fecha nacimiento"/>
+            <p:outputLabel value="#{gestorPersona.persona.fechaNacimiento}">
+                <f:convertDateTime pattern="dd//MM/yyyy" />
+            </p:outputLabel>
+
+            <p:outputLabel value="Género"/>
+            <p:outputLabel value="#{gestorPersona.persona.genero == 'M'?'Masculino':'Femenino'}"/>
+
+            <p:outputLabel value="Celular"/>
+            <p:outputLabel value="#{gestorPersona.persona.celular}"/>  
+
+            <p:outputLabel value="Correo electrónico"/>
+            <p:outputLabel value="#{gestorPersona.persona.correo}"/>  
+
+            <p:outputLabel value="Skype"/>
+            <p:outputLabel value="#{gestorPersona.persona.skype}"/>  
+
+            <p:outputLabel value="Fecha vinculacion"/>
+            <p:outputLabel value="#{gestorPersona.persona.fechaVinculacion}">
+                <f:convertDateTime pattern="dd//MM/yyyy" />
+            </p:outputLabel>           
+
+            <p:outputLabel value="Estado"/>
+            <p:outputLabel value="#{gestorPersona.persona.activo?'Activo':'No Activo'}"/>
+        </h:panelGrid>
+
+
+
+        <h:panelGroup layout="block" style="height: 20px"/>
+
+        <p:dataTable id="dtTitulos" rowKey="#{personaTitulo.id}" var="personaTitulo" value="#{gestorPersona.listaPersonaTitulos}">
+            <f:facet name="header">
+                Títulos
+            </f:facet>
+
+            <p:column headerText="Título" width="500">
+                <h:outputText value="#{personaTitulo.titulo.nombre}" />
+            </p:column>
+
+            <p:column headerText="Universidad">
+                <h:outputText value="#{personaTitulo.universidad.nombre}" />
+            </p:column>
+
+        </p:dataTable>
+
+
+        <h:panelGroup layout="block" style="height: 20px"/>
+
+        <h:panelGroup rendered="#{gestorPersona.esTesista or gestorPersona.esPasante}" layout="block" style="clear: both" id="checksTipoPersona">
+            <p:outputLabel rendered="#{gestorPersona.esTesista}" value="Tesista de:"/>
+            <h:panelGroup layout="block" id="divTesista" styleClass="contentCheckbox" >
+                <h:panelGrid columns="2" rendered="#{gestorPersona.esTesista}" columnClasses="labelscol,inputscol">
+                    <p:outputLabel value="Universidad"/>
+                    <p:outputLabel value="#{gestorPersona.tesista.universidad.nombre}"/>                    
+                    <p:outputLabel value="Facultad"/>
+                    <p:outputLabel value="#{gestorPersona.tesista.facultad}"/>
+                    <p:outputLabel value="Escuela"/>
+                    <p:outputLabel value="#{gestorPersona.tesista.escuela}"/>
+
+                </h:panelGrid>
+            </h:panelGroup>
+            <p:outputLabel rendered="#{gestorPersona.esPasante}" value="Pasante de:"/>            
+
+            <h:panelGroup layout="block" id="divPasante" styleClass="contentCheckbox">
+                <h:panelGrid columns="2" rendered="#{gestorPersona.esPasante}" columnClasses="labelscol,inputscol">
+                    <p:outputLabel value="Universidad"/>
+                    <p:outputLabel value="#{gestorPersona.pasante.universidad.nombre}"/>
+
+                    <p:outputLabel value="Facultad"/>
+                    <p:outputLabel value="#{gestorPersona.pasante.facultad}"/>
+                    <p:outputLabel value="Escuela"/>
+                    <p:outputLabel value="#{gestorPersona.pasante.escuela}"/>
+                </h:panelGrid>
+            </h:panelGroup>
+
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" rendered="#{not empty gestorPersona.tesista.tesis}">
+            <h:panelGroup layout="block" style="height: 20px"/>
+
+            <p:outputLabel value="Tesis"/>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Título"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.nombre}"/>
+
+                <p:outputLabel value="Inicio"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <p:outputLabel value="Director"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.director.nombres} #{gestorPersona.tesista.tesis.director.apellidos}"/>
+
+                <p:outputLabel value="Observaciones"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.observaciones}"/>
+            </h:panelGrid>
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" style="height: 20px"/>
+
+        <p:dataTable rendered="#{not empty gestorPersona.pasante.pasantiasCollection}" var="pasantia" value="#{gestorPersona.pasante.pasantiasCollection}">
+            <f:facet name="header">
+                Pasantías
+            </f:facet>
+            <p:column headerText="Tema" width="500">
+                <h:outputText value="#{pasantia.tema}" />
+            </p:column>
+            <p:column headerText="# Horas" width="100">
+                <h:outputText value="#{pasantia.numeroHoras}" />
+            </p:column>                
+            <p:column headerText="Inicio" width="150">
+                <h:outputText value="#{pasantia.fechaInicio}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Finalización" width="150">
+                <h:outputText value="#{pasantia.fechaFin}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Cordinador">
+                <h:outputText value="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" />
+            </p:column>
+        </p:dataTable>        
+
+        <h:panelGroup layout="block" rendered="#{gestorPersona.tesista.tesis != null}">
+            <h:panelGroup layout="block" style="height: 20px"/>
+            <p:outputLabel value="Tesis"/>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Título"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.nombre}"/>
+
+                <p:outputLabel value="Fecha inicio"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <p:outputLabel value="Director"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.director.nombres} #{gestorPersona.tesista.tesis.director.apellidos}"/>
+
+                <p:outputLabel value="Acta aprobación"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.actaAprobacion}"/>                
+
+                <p:outputLabel value="Observaciones"/>
+                <p:outputLabel value="#{gestorPersona.tesista.tesis.observaciones}"/>
+            </h:panelGrid>
+            <h:panelGroup layout="block" style="height: 20px"/>
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.articulosCollection}">
+            <h:panelGroup layout="block" style="height: 20px"/>
+
+            <p:dataTable var="articulo" value="#{gestorPersona.persona.articulosCollection}">
+                <f:facet name="header">
+                    Artículos
+                </f:facet>
+                <p:column headerText="Título" width="500">
+                    <h:outputText value="#{articulo.nombre}" />
+                </p:column>
+
+                <p:column headerText="Tipo" width="100">
+                    <h:outputText value="#{label['articulo.tipo.' += articulo.tipo]}" />
+                </p:column>                                
+                
+                <p:column headerText="Revista" width="150">
+                    <h:outputText value="#{articulo.revista}" />
+                </p:column>                
+
+                <p:column headerText="Publicación" width="100">
+                    <h:outputText value="#{articulo.fechaPublicacion}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>                        
+                </p:column>                
+                
+                <p:column headerText="Enlace">
+                    <h:outputText value="#{articulo.enlace}" />
+                </p:column>
+
+            </p:dataTable>        
+
+        </h:panelGroup>
+
+
+        <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.contratosCollection}">
+            <h:panelGroup layout="block" style="height: 20px"/>
+
+            <p:dataTable var="contrato" value="#{gestorPersona.persona.contratosCollection}">
+                <f:facet name="header">
+                    Contratos
+                </f:facet>
+
+                <p:column headerText="# Contrato" width="80">
+                    <h:outputText value="#{contrato.numeroContrato}" />
+                </p:column>                
+                
+                <p:column headerText="Proyecto al que pertenece" width="500">
+                    <h:outputText value="#{contrato.proyecto.titulo}" />
+                </p:column>
+
+                <p:column headerText="Inicio Contrato" width="100">
+                    <h:outputText value="#{contrato.fechaInicio}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+                
+                <p:column headerText="Finalización Contrato" width="100">
+                    <h:outputText value="#{contrato.fechaFin}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+                
+                <p:column headerText="Cargo" width="150">
+                    <h:outputText value="#{contrato.cargo}" />
+                </p:column>
+                
+                <p:column headerText="Administrador del contrato">
+                    <h:outputText value="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" />
+                </p:column>                
+            </p:dataTable>        
+
+        </h:panelGroup>
+
+
+
+    </ui:define>
+</ui:composition>
