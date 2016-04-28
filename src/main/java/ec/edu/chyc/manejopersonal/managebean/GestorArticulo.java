@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -38,6 +39,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
@@ -298,6 +300,42 @@ public class GestorArticulo implements Serializable {
         return "listaArticulos";
     }
 
+    public boolean filtrarPorAutores(Object value, Object filter, Locale locale) {
+        String filterText = (filter == null) ? null : filter.toString().trim();
+        if(filterText == null||filterText.equals("")) {
+            return true;
+        }
+         
+        if(value == null) {
+            return false;
+        }
+        
+        Set<Persona> autores = (Set) value;
+        for (Persona per : autores) {
+            if (StringUtils.containsIgnoreCase(per.getNombres(), filterText) || StringUtils.containsIgnoreCase(per.getApellidos(), filterText)) {
+                return true;
+            }
+        }
+         
+        return false;
+    }    
+    public boolean filtrarPorAutorPrincipal(Object value, Object filter, Locale locale) {
+        String filterText = (filter == null) ? null : filter.toString().trim();
+        if(filterText == null||filterText.equals("")) {
+            return true;
+        }
+         
+        if(value == null) {
+            return false;
+        }
+        
+        Persona autorPrincipal = (Persona)value;
+
+        return StringUtils.containsIgnoreCase(autorPrincipal.getNombres(), filterText) 
+                || StringUtils.containsIgnoreCase(autorPrincipal.getApellidos(), filterText);
+    }    
+    
+    
     public List<Articulo> getListaArticulos() {
         return listaArticulos;
     }

@@ -3,20 +3,36 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="./template.xhtml">
     <ui:define name="body">
-
+        <style>
+            .calendarFilter > .ui-inputfield {
+                width: 50px;
+            }
+            .buttonset > div > span {
+                padding-left: 0.5em !important;
+                padding-right: 0.5em !important;
+                font-weight: normal;
+            }
+            /*.ui-calendar > .ui-inputfield {
+                width: 100px;
+            } */           
+        </style>
         <p:commandButton value="Lista Artículos" action="#{gestorArticulo.initListarArticulos()}"/>
         <p:commandButton value="Lista Tesis" action="#{gestorTesis.initListarTesis()}"/>
         <p:commandButton value="Lista Proyectos" action="#{gestorProyecto.initListarProyectos()}"/>
         <p:commandButton value="Lista Pasantes" action="#{gestorPasante.initListarPasante()}"/>
-        <p:commandButton value="Lista Contratos" action="#{gestorContrato.initListarContratos()}"/>
+        <p:commandButton value="Lista Contratos" action="#{gestorContrato.initListarContratos()}"/>        
+        <p:commandButton value="Lista Convenios" action="#{gestorConvenio.initListarConvenios()}" />
         <p:commandButton value="Actualizar Listado" action="#{gestorPersona.actualizarListado()}" update=":formContenido"/>
+
         <br/><br/>
         <p:commandButton value="Crear proyecto" action="#{gestorProyecto.initCrearProyecto()}"/>
         <p:commandButton value="Crear nueva persona" action="#{gestorPersona.initCrearPersona()}"/>
-        <p:commandButton value="Crear Artículo" action="#{gestorArticulo.initCrearArticulo()}"/>    
-          <p:commandButton value="Crear Tesis" action="#{gestorArticulo.initCrearTesis()}"/> 
+        <p:commandButton value="Crear Artículo" action="#{gestorArticulo.initCrearArticulo()}"/>
+        <p:commandButton value="Crear Tesis" action="#{gestorTesis.initCrearTesis()}"/>
+        <p:commandButton value="Crear Convenio" action="#{gestorConvenio.initCrearConvenio()}"/>
         <br/><br/>
         <p:commandButton value="Asignar Pasantia" action="#{gestorPasantia.initCrearPasantia()}"/>        
         <p:commandButton value="Asignar Contrato" action="#{gestorContrato.initCrearContrato()}"/>
@@ -30,11 +46,14 @@
                 <h:panelGroup layout="block" styleClass="exportButtons">
                     <h:commandLink>
                         <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
-                        <p:dataExporter type="xls" target="personasTable" fileName="personas" />
+                        <pe:exporter type="xls" target="personasTable" fileName="personas" />
+                                               
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
-                        <p:dataExporter type="pdf" target="personasTable" fileName="personas" encoding="iso-8859-1"/>
+                        
+                        <pe:exporter skipComponents="org.primefaces.component.tooltip.Tooltip" fontName="Verdana"
+                                     type="pdf" target="personasTable" fileName="personas_" encoding="iso-8859-1"/>   
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
@@ -42,32 +61,64 @@
                 <h:outputText value="#{persona.nombres}" />
             </p:column>
 
-            <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains">
+            <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains" sortBy="#{persona.apellidos}">
                 <h:outputText value="#{persona.apellidos}" />
             </p:column>
 
-            <p:column headerText="Estado" filterBy="#{persona.activo}" filterMatchMode="equals">
+            <p:column width="90" filterBy="#{persona.activo}" filterMatchMode="exact">
+                <f:facet name="header">
+                    <h:outputLabel id="lblEstado" value="Estado"/>
+                    
+                    <p:tooltip id="tipEstado" for="lblEstado" value="T=Todos, A=Activos, I=Inactivos" />                    
+                </f:facet>
                 <f:facet name="filter">
-                    <p:selectOneButton onchange="PF('personasTable').filter()">
+                    <p:selectOneButton id="cmdsEstados" styleClass="buttonset" onchange="PF('personasTable').filter()">
                         <f:converter converterId="javax.faces.Boolean" />
-                        <f:selectItem itemLabel="Todos" itemValue="" />
-                        <f:selectItem itemLabel="Activo" itemValue="true" />
-                        <f:selectItem itemLabel="No Activo" itemValue="false" />
+                        <f:selectItem itemLabel="T" itemValue="" noSelectionOption="true"/>
+                        <f:selectItem itemLabel="A" itemValue="true" />
+                        <f:selectItem itemLabel="I" itemValue="false" />                        
                     </p:selectOneButton>
+
                 </f:facet>            
-                <h:outputText value="#{persona.activo ? 'Activo' : 'No Activo'}" />
+                <h:outputText value="#{persona.activo ? 'Activo' : 'Inactivo'}" />
             </p:column>
 
-            <p:column headerText="Correo">
+            <p:column headerText="Correo" filterBy="#{persona.correo}" filterMatchMode="contains">
                 <h:outputText value="#{persona.correo}" />
             </p:column>
 
-            <p:column headerText="Cumpleaños">
+            <p:column headerText="Skype" width="200" filterBy="#{persona.skype}" filterMatchMode="contains">
+                <h:outputText value="#{persona.skype}" />
+            </p:column>            
+
+            <p:column width="200">
+                <f:facet name="header">
+                    Cumpleaños
+                    <h:panelGroup layout="block" style="display: block;  width: 100%; margin: auto;" rendered="false">
+                        <p:calendar pattern="dd/MM" id="firstDate" styleClass="calendarFilter" value="#{gestorPersona.filtroFechaInicio}">
+                            <p:ajax event="dateSelect" process="@this" onsuccess="PF('personasTable').filter()" listener="#{gestorPersona.onDateSelectFilter}" />
+                        </p:calendar>
+                        -
+                        <p:calendar pattern="dd/MM" id="lastDate" styleClass="calendarFilter" value="#{gestorPersona.filtroFechaFin}">
+                            <p:ajax event="dateSelect" process="@this" listener="#{gestorPersona.onDateSelectFilter}" />
+                        </p:calendar>
+                    </h:panelGroup>
+                </f:facet>
+                <f:facet name="filter">
+                    <h:inputText id="txtFiltroFecha" style="display: none;"/>
+                </f:facet>
                 <h:outputText value="#{persona.fechaNacimiento}">
-                    <f:convertDateTime pattern="dd MMMM" />
+                    <f:convertDateTime pattern="dd MMMM" locale="es_EC" />
                 </h:outputText>
+
+
             </p:column>
 
+            <p:column headerText="" exportable="false">
+                <p:commandLink value="Ver" action="#{gestorPersona.initVerPersona(persona.id)}"/>
+                <p:outputLabel value=" "/>
+                <p:commandLink value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
+            </p:column>            
         </p:dataTable>        
     </ui:define>
 </ui:composition>

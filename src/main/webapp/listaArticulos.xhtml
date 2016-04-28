@@ -26,7 +26,7 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
-            <p:column headerText="Autor principal" sortBy="#{articulo.autorPrincipal.apellidos}">
+            <p:column headerText="Autor principal" sortBy="#{articulo.autorPrincipal.apellidos}" filterBy="#{articulo.autorPrincipal}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}">
                 <h:outputText value="#{articulo.autorPrincipal.apellidos} #{articulo.autorPrincipal.nombres}" />
             </p:column>           
 
@@ -58,7 +58,7 @@
             </p:column>
 
 
-            <p:column headerText="Autores" exportable="false">
+            <p:column headerText="Autores" exportable="false" filterBy="#{articulo.autoresCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
                 <ui:repeat value="#{articulo.autoresCollection.toArray()}" var="autor">
                     <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
