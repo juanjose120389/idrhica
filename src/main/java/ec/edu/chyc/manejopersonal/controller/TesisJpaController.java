@@ -6,6 +6,7 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
 import ec.edu.chyc.manejopersonal.entity.Tesista;
 import java.io.Serializable;
@@ -45,10 +46,11 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
             em.getTransaction().begin();
             em.persist(obj);
             
-            for (Tesista t : obj.getAutoresCollection()) {
-                Tesista tes = em.find(Tesista.class, t.getId());
-                tes.setTesis(obj);
-                em.merge(tes);
+            for (Persona t : obj.getAutoresCollection()) {
+                Persona per = em.find(Persona.class, t.getId());
+                per.getTesisCollection().add(obj);
+                //tes.setTesis(obj);
+                //em.merge(per);
             }
 
             

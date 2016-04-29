@@ -70,6 +70,12 @@ public class Proyecto implements Serializable {
 
     @OneToMany(mappedBy = "proyecto")
     private Collection<Convenio> conveniosCollection = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proyecto")
+    private Collection<Tesis> tesisCollection = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proyecto")
+    private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
     
     public Long getId() {
         return id;
@@ -175,11 +181,27 @@ public class Proyecto implements Serializable {
         this.resumen = resumen;
     }
 
+    public Collection<Tesis> getTesisCollection() {
+        return tesisCollection;
+    }
+
+    public void setTesisCollection(Collection<Tesis> tesisCollection) {
+        this.tesisCollection = tesisCollection;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
+    }
+
+    public Collection<Pasantia> getPasantiasCollection() {
+        return pasantiasCollection;
+    }
+
+    public void setPasantiasCollection(Collection<Pasantia> pasantiasCollection) {
+        this.pasantiasCollection = pasantiasCollection;
     }
 
     @Override

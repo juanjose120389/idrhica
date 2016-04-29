@@ -5,7 +5,9 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-
+        <p:commandButton value="Regresar" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>
+        
         <p:dataTable widgetVar="proyectoTable" id="proyectoTable" var="proyecto" value="#{gestorProyecto.listaProyecto}" rows="10"
                      paginator="true"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}   {Exporters}"
@@ -66,8 +68,6 @@
             <p:column headerText="Observaciones" filterBy="#{proyecto.observaciones}" filterMatchMode="contains">
                 <h:outputText value="#{proyecto.observaciones}" />
             </p:column>
-
-
         </p:dataTable>         
     </ui:define>
 </ui:composition>

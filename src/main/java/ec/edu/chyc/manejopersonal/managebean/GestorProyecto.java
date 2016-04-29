@@ -70,9 +70,19 @@ public class GestorProyecto implements Serializable {
         this.proyecto = proyecto;
     }
 
+    public void cargarInformacionProyecto(Long id) {
+        proyecto = proyectoController.findEntity(id);
+    }
+    
+    public String initVerProyecto() {
+        
+        return "verProyecto";
+    }
+    
     public String initCrearProyecto() {
         proyecto = new Proyecto();
         GestorContrato.getInstance().actualizarListaContrato();
+        GestorPersona.getInstance().actualizarListaPersonasConContrato();
 
         return "manejoProyecto";
     }

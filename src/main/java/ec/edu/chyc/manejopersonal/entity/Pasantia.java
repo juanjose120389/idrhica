@@ -33,6 +33,12 @@ public class Pasantia implements Serializable {
     private int numeroHoras;
     
     private String tema;
+
+    private int cicloPasante;
+    
+    private String facultad;
+    
+    private String escuela;
     
     @ManyToOne
     @JoinColumn(name = "idContratadoCoordinador", referencedColumnName = "id")   
@@ -40,13 +46,22 @@ public class Pasantia implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "idPasante", referencedColumnName = "id")   
-    private Pasante pasante;
+    private Persona pasante;
    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;    
+    
+    @ManyToOne
+    @JoinColumn(name = "idUniversidad", referencedColumnName = "id")   
+    private Universidad universidad;    
+    
+    @ManyToOne
+    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
+    private Proyecto proyecto;
+    
     
     public Date getFechaInicio() {
         return fechaInicio;
@@ -78,14 +93,6 @@ public class Pasantia implements Serializable {
 
     public void setCoordinador(Persona coordinador) {
         this.coordinador = coordinador;
-    }
-
-    public Pasante getPasante() {
-        return pasante;
-    }
-
-    public void setPasante(Pasante pasante) {
-        this.pasante = pasante;
     }
 
     public Long getId() {
@@ -129,6 +136,53 @@ public class Pasantia implements Serializable {
         }
         return true;
     }
-    
+
+    public int getCicloPasante() {
+        return cicloPasante;
+    }
+
+    public void setCicloPasante(int cicloPasante) {
+        this.cicloPasante = cicloPasante;
+    }
+
+    public Universidad getUniversidad() {
+        return universidad;
+    }
+
+    public void setUniversidad(Universidad universidad) {
+        this.universidad = universidad;
+    }
+
+    public String getFacultad() {
+        return facultad;
+    }
+
+    public void setFacultad(String facultad) {
+        this.facultad = facultad;
+    }
+
+    public String getEscuela() {
+        return escuela;
+    }
+
+    public void setEscuela(String escuela) {
+        this.escuela = escuela;
+    }
+
+    public Proyecto getProyecto() {
+        return proyecto;
+    }
+
+    public void setProyecto(Proyecto proyecto) {
+        this.proyecto = proyecto;
+    }
+
+    public Persona getPasante() {
+        return pasante;
+    }
+
+    public void setPasante(Persona pasante) {
+        this.pasante = pasante;
+    }
 
 }

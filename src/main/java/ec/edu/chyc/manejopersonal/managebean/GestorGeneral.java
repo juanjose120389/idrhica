@@ -49,6 +49,10 @@ public class GestorGeneral implements Serializable {
         actualizarListaUniversidades();
         actualizarListaTitulos();
     }
+    
+    public String regresarPaginaPrincipal() {
+        return "index";
+    }
 
     public void actualizarListaTitulos() {
         try {

@@ -216,7 +216,7 @@
         <h:panelGroup layout="block" style="height: 20px"/>
 
         <h:panelGroup layout="block" style="clear: both" id="checksTipoPersona">
-            <p:selectBooleanCheckbox id="chkEsTesista" value="#{gestorPersona.esTesista}" itemLabel="Es tesista">
+            <p:selectBooleanCheckbox rendered="false" id="chkEsTesista" value="#{gestorPersona.esTesista}" itemLabel="Es tesista">
                 <p:ajax event="change" update="checksTipoPersona chkEsPasante chkEsTesista" listener="#{gestorPersona.onCheckEsTesista()}"/>
             </p:selectBooleanCheckbox>
             <h:panelGroup layout="block" id="divTesista" styleClass="contentCheckbox" >
@@ -242,7 +242,7 @@
             <h:panelGroup layout="block" style="height: 5px"/>
 
             <p:remoteCommand name="updChecks" update="checksTipoPersona" />
-            <p:selectBooleanCheckbox id="chkEsPasante" value="#{gestorPersona.esPasante}" itemLabel="Es pasante">
+            <p:selectBooleanCheckbox rendered="false" id="chkEsPasante" value="#{gestorPersona.esPasante}" itemLabel="Es pasante">
                 <p:ajax event="change" update="checksTipoPersona chkEsTesista chkEsPasante" listener="#{gestorPersona.onCheckEsPasante()}"/>
             </p:selectBooleanCheckbox>
             <h:panelGroup layout="block" id="divPasante" styleClass="contentCheckbox">
@@ -271,7 +271,7 @@
         <p:remoteCommand name="upd" update="checksTipoPersona" process="checksTipoPersona"/>
         <h:panelGroup layout="block" style="height: 40px"/>
 
-        <p:commandButton value="Crear persona" update="formContenido" onclick="setTimeout('upd()', 20)" action="#{gestorPersona.guardar()}"/>
+        <p:commandButton value="Guardar" update="formContenido" onclick="setTimeout('upd()', 20)" action="#{gestorPersona.guardar()}"/>
 
     </ui:define>
 </ui:composition>

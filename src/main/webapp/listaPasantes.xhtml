@@ -5,7 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-
+        <p:commandButton value="Regresar" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>
         <p:dataTable widgetVar="pasanteTable" id="pasanteTable" var="pasante" value="#{gestorPasante.listaPasantes}" rows="10"
                      paginator="true" resizableColumns="true" liveResize="true" 
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"

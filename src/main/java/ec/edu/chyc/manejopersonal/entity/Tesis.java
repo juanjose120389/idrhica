@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -32,34 +35,47 @@ public class Tesis implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String nombre;
-    
+
     @ManyToOne
     @JoinColumn(name = "idDirectorTesis", referencedColumnName = "id")
     private Persona director;
+
+    @ManyToOne
+    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
+    private Proyecto proyecto;    
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
-    
+
     private String observaciones;
-    
-    private String tipo;
-    
+
+    private String tipo;//M=Master, D=Doctorado, P=Pregrado
+
     @Lob
     @Column(columnDefinition = "TEXT")
-    @Type(type = "text")    
+    @Type(type = "text")
     private String resumen;
-    
+
     private String enlace;
+
+    private String actaAprobacion;
     
-    private String actaAprobacion;    
+    private String archivoActaAprobacion;
     
-    @OneToMany(mappedBy = "tesis")
-    private Collection<Tesista> autoresCollection = new ArrayList<>();    
+    @ManyToMany(mappedBy = "tesisCollection")
+    private Set<Persona> autoresCollection = new HashSet<>();
+    
+    private String facultad;
+    private String escuela;
+    
+    @ManyToOne
+    @JoinColumn(name = "idUniversidad", referencedColumnName = "id")
+    private Universidad universidad;    
 
     public Long getId() {
         return id;
@@ -76,8 +92,6 @@ public class Tesis implements Serializable {
     public void setDirector(Persona director) {
         this.director = director;
     }
-
-    
 
     public String getNombre() {
         return nombre;
@@ -160,20 +174,60 @@ public class Tesis implements Serializable {
         return "ec.edu.chyc.manejopersonal.entity.Tesis[ id=" + id + " ]";
     }
 
+    public String getArchivoActaAprobacion() {
+        return archivoActaAprobacion;
+    }
+
+    public void setArchivoActaAprobacion(String archivoActaAprobacion) {
+        this.archivoActaAprobacion = archivoActaAprobacion;
+    }    
+
+    public Proyecto getProyecto() {
+        return proyecto;
+    }
+
+    public void setProyecto(Proyecto proyecto) {
+        this.proyecto = proyecto;
+    }
+
+    public String getFacultad() {
+        return facultad;
+    }
+
+    public void setFacultad(String facultad) {
+        this.facultad = facultad;
+    }
+
+    public String getEscuela() {
+        return escuela;
+    }
+
+    public void setEscuela(String escuela) {
+        this.escuela = escuela;
+    }
+
+    public Universidad getUniversidad() {
+        return universidad;
+    }
+
+    public void setUniversidad(Universidad universidad) {
+        this.universidad = universidad;
+    }
+
+    public Set<Persona> getAutoresCollection() {
+        return autoresCollection;
+    }
+
+    public void setAutoresCollection(Set<Persona> autoresCollection) {
+        this.autoresCollection = autoresCollection;
+    }
+
     public String getActaAprobacion() {
         return actaAprobacion;
     }
 
     public void setActaAprobacion(String actaAprobacion) {
         this.actaAprobacion = actaAprobacion;
-    }
-
-    public Collection<Tesista> getAutoresCollection() {
-        return autoresCollection;
-    }
-
-    public void setAutoresCollection(Collection<Tesista> autoresCollection) {
-        this.autoresCollection = autoresCollection;
     }
     
 }

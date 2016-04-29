@@ -24,7 +24,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
-import javax.persistence.UniqueConstraint;
 
 /**
  *
@@ -67,6 +66,16 @@ public class Persona implements Serializable {
         @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idArticulo", referencedColumnName = "id")})
     private Set<Articulo> articulosCollection = new HashSet();
+    
+    @ManyToMany
+    @JoinTable(name = "personaTesis", joinColumns = {
+        @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idTesis", referencedColumnName = "id")})
+    private Set<Tesis> tesisCollection = new HashSet();    
+    
+    @OneToMany(mappedBy = "pasante", fetch = FetchType.LAZY)
+    private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
+    
 
     public Collection<Contrato> getContratosCollection() {
         return contratosCollection;
@@ -223,6 +232,22 @@ public class Persona implements Serializable {
     }
 
     public Persona() {        
+    }
+
+    public Set<Tesis> getTesisCollection() {
+        return tesisCollection;
+    }
+
+    public void setTesisCollection(Set<Tesis> tesisCollection) {
+        this.tesisCollection = tesisCollection;
+    }
+
+    public Collection<Pasantia> getPasantiasCollection() {
+        return pasantiasCollection;
+    }
+
+    public void setPasantiasCollection(Collection<Pasantia> pasantiasCollection) {
+        this.pasantiasCollection = pasantiasCollection;
     }
 
 }

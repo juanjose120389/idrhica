@@ -5,7 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-
+        <p:commandButton value="Regresar" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>
         <p:dataTable widgetVar="tesisTable" id="tesisTable" var="tesis" value="#{gestorTesis.listaTesis}" rows="10"
                      paginator="true"
                      >
@@ -30,7 +31,7 @@
             </p:column>
 
 
-            <p:column headerText="Enlace de la Tesis">
+            <p:column headerText="Enlace de la Tesis" filterBy="#{tesis.enlace}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.enlace}" />
             </p:column>
 
@@ -41,23 +42,23 @@
             <p:column headerText="Resumen" filterBy="#{tesis.resumen}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.resumen}" />
             </p:column>
-            
+
             <p:column headerText="Observaciones" filterBy="#{tesis.observaciones}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.observaciones}" />
             </p:column>
-            <p:column headerText="Acta de Aprobación" >
+            <p:column headerText="Acta de Aprobación" filterBy="#{tesis.actaAprobacion}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.actaAprobacion}" />
             </p:column>
-                        <p:column headerText="Autor" >
-                <ui:repeat value="#{tesis.autoresCollection}" var="autor">
+            <p:column headerText="Autor" >
+                <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
                     <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
             </p:column>
 
 
         </p:dataTable>   
-        
-        
-     
+
+
+
     </ui:define>
 </ui:composition>

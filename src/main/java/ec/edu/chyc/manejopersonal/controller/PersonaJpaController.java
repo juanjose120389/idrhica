@@ -71,7 +71,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         }
     }    
 
-    public Persona findPersona(Long id, boolean incluirArticulos, boolean incluirContratos, boolean incluirTitulos, boolean incluirTesis, boolean incluirPasantia) {
+    public Persona findPersona(Long id, boolean incluirArticulos, boolean incluirContratos, boolean incluirTitulos, boolean incluirTesis, boolean incluirPasantias) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -92,6 +92,15 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 listaFetchs.add(" left join fetch p.personaTitulosCollection ");
                 totalFetchs++;
             }
+            if (incluirTesis) {
+                listaFetchs.add(" left join fetch p.tesisCollection ");
+                totalFetchs++;                
+            }
+            if (incluirPasantias) {
+                listaFetchs.add(" left join fetch p.tesisCollection ");
+                totalFetchs++;                
+            }
+            
             if (listaFetchs.size() > 1) {
                 incluir = listaFetchs.get(0);
             }
@@ -109,20 +118,13 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             if (incluirTitulos) {
                 Hibernate.initialize(p.getPersonaTitulosCollection());
             }
-            
-            if (incluirTesis && p instanceof Tesista) {
-                Tesista tesista = (Tesista)p;
-                if (tesista.getTesis() != null) {
-                    Hibernate.initialize(tesista.getTesis());
-                    //cargar la entidad tesis
-                }
-                
-            } else if (incluirPasantia && p instanceof Pasante) {
-                Pasante pasante = (Pasante)p;
-                if (pasante.getPasantiasCollection().size() > 0) {
-                    Hibernate.initialize(pasante.getPasantiasCollection());
-                }
+            if (incluirTesis) {
+                Hibernate.initialize(p.getTesisCollection());
             }
+            if (incluirPasantias) {
+                Hibernate.initialize(p.getPasantiasCollection());
+            }
+            
             return p;
         } finally {
             if (em != null) {

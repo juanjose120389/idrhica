@@ -6,11 +6,13 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Convenio;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.hibernate.Hibernate;
 
 
 public class ProyectoJpaController extends GenericJpaController<Proyecto> implements Serializable {
@@ -31,7 +33,33 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             }
         }        
     }
-    
+
+    public Proyecto findProyecto(Long id, boolean cargarConvenios, boolean cargarArticulos) {
+        EntityManager em = null;
+
+        try {
+            em = getEntityManager();
+            
+            Query q = em.createQuery("select p from Proyecto p left join fetch p.contratosCollection where p.id=:id");
+            q.setParameter("id", id);
+            Proyecto p = (Proyecto)q.getSingleResult();
+            
+            if (cargarConvenios || cargarArticulos) {
+                Hibernate.initialize(p.getConveniosCollection());
+                
+                if (cargarArticulos) {
+                    for (Convenio convenio : p.getConveniosCollection()) {
+                        Hibernate.initialize(convenio.getArticulosCollection());
+                    }
+                }
+            }
+            return p;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }        
+    }
     
     public void create(Proyecto proyecto) throws Exception {
         EntityManager em = null;

@@ -59,21 +59,21 @@
             <h:panelGroup layout="block"/>
 
             <p:outputLabel value="Director" />
-            <p:selectOneMenu id="cmbPersona" value="#{gestorTesis.tesis.director}" converter="personaConverter"
+            <p:selectOneMenu style="width: 150px" id="cmbPersona" value="#{gestorTesis.tesis.director}" converter="personaConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per.nombres}"/>
+                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                 </p:column>
             </p:selectOneMenu>                                
             <h:panelGroup layout="block"/>
             <p:outputLabel value="Enlace"/>
-            <p:inputText   id="txtEnlace" requiredMessage="Requerido" required="true"  value="#{gestorTesis.tesis.enlace}" /> 
+            <p:inputText id="txtEnlace" value="#{gestorTesis.tesis.enlace}" /> 
             <p:message for="txtEnlace" />
             
             <p:outputLabel value="Tipo" />
-            <p:selectOneMenu id="cmbTipo" value="#{gestorTesis.tesis.tipo}" style="width:125px">
+            <p:selectOneMenu id="cmbTipo" value="#{gestorTesis.tesis.tipo}" style="width:150px">
                 <f:selectItem itemLabel="Pregrado" itemValue="Pregrado" />
                 <f:selectItem itemLabel="Máster" itemValue="Máster" />
                 <f:selectItem itemLabel="Doctorado" itemValue="Doctorado" />
@@ -83,16 +83,16 @@
             
             
             <p:outputLabel value="Resumen"/>
-            <p:inputTextarea   id="txtResumen"  requiredMessage="Requerido" required="true"  value="#{gestorTesis.tesis.resumen}" /> 
+            <p:inputTextarea   id="txtResumen" value="#{gestorTesis.tesis.resumen}" /> 
             <p:message for="txtResumen" />
 
             <p:outputLabel value="Observaciones"/>
-            <p:inputText   id="txtObservaciones" requiredMessage="Requerido" required="true"  value="#{gestorTesis.tesis.observaciones}" /> 
+            <p:inputText   id="txtObservaciones"  value="#{gestorTesis.tesis.observaciones}" /> 
             <p:message for="txtObservaciones" />
 
 
 
         </h:panelGrid>        
-        <p:commandButton value="Guardar" action="#{gestorTesis.guardar()}"/>
+        <p:commandButton value="Guardar" update="formContenido" action="#{gestorTesis.guardar()}"/>
     </ui:define>
 </ui:composition>

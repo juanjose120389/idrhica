@@ -99,7 +99,7 @@ public class ServerUtils {
      * Obtenido y modificado para que sea una función independiente e incluir acentos como válidos y reemplazar el espacio por _:
      *  http://grepcode.com/file/repository.springsource.com/org.apache.activemq/com.springsource.org.apache.kahadb/5.3.0/org/apache/kahadb/util/IOHelper.java    
      * @param name Nombre del archivo a convertir.
-     * @param dirSeparators Si es true, reemplaza también los separadores de path ("/" ó "\"), si es false se mantienen.
+     * @param dirSeparators Si es true, mantiene los separadores de path ("/" ó "\"), si es false se reemplazan.
      * @param maxFileLength Máxima cantidad de caracteres, si el nombre generado es mayor a esta cantidad, será truncado.
      * @return Nombre convertido.
      */
@@ -136,6 +136,6 @@ public class ServerUtils {
         return result;
     }
     public static String convertirNombreArchivo(String nombreOriginal) {
-        return toFileSystemSafeName(nombreOriginal, true, 255);
+        return toFileSystemSafeName(nombreOriginal, false, 255);
     }
 }

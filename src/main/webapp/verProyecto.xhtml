@@ -5,29 +5,27 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <h:panelGrid columns="3">
+        <h:panelGrid columns="2">
             <p:outputLabel value="Titulo"/>
-            <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
-            <p:message for="txtTitulo"/>
+            <p:outputLabel id="txtTitulo" value="#{gestorProyecto.proyecto.titulo}"/>  
             
             <p:outputLabel value="Director" />
-            <p:selectOneMenu style="width: 140px" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
+            <p:selectOneMenu id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="contratoConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorContrato.listaContrato}" var="u" itemLabel="#{u.persona.nombres}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                    <p:outputLabel value="#{per.persona.nombres}"/>
                 </p:column>
             </p:selectOneMenu>  
             <h:panelGroup layout="block"/>
                         <p:outputLabel value="Co-Director" />
-            <p:selectOneMenu style="width: 140px" id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="personaConverter"
+            <p:selectOneMenu id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="contratoConverter"
                              var="per2" filter="true" filterMatchMode="contains">
-                <f:selectItem itemLabel="Ninguno" itemValue="" />
-                <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
+                <f:selectItems value="#{gestorContrato.listaContrato}" var="u2" itemLabel="#{u2.persona.nombres}" itemValue="#{u2}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per2.nombres} #{per2.apellidos}"/>
+                    <p:outputLabel value="#{per2.persona.nombres}"/>
                 </p:column>
             </p:selectOneMenu>  
                         <h:panelGroup layout="block"/>

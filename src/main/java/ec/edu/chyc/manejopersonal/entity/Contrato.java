@@ -33,7 +33,7 @@ public class Contrato implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
     
-   @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
     private int numeroContrato;
     @ManyToOne
@@ -43,11 +43,18 @@ public class Contrato implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
     private Proyecto proyecto;
-    
-    
-     private String cargo;
+        
+    private String cargo;
     private String actividadPrincipal;
-
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaFinDocumento; //fecha cuando termine el contrato de acuerdo al documento
+    
+    private String facultad;
+    private String tipo; // C=Contratado, T=Titular
+    
+    private String archivoContrato;
+    
     public String getCargo() {
         return cargo;
     }
@@ -111,10 +118,7 @@ public class Contrato implements Serializable {
 
     public void setProyecto(Proyecto proyecto) {
         this.proyecto = proyecto;
-    }
-    
-     
-    
+    }   
     
     public Long getId() {
         return id;
@@ -124,6 +128,38 @@ public class Contrato implements Serializable {
         this.id = id;
     }
 
+    public Date getFechaFinDocumento() {
+        return fechaFinDocumento;
+    }
+
+    public void setFechaFinDocumento(Date fechaFinDocumento) {
+        this.fechaFinDocumento = fechaFinDocumento;
+    }
+
+    public String getFacultad() {
+        return facultad;
+    }
+
+    public void setFacultad(String facultad) {
+        this.facultad = facultad;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getArchivoContrato() {
+        return archivoContrato;
+    }
+
+    public void setArchivoContrato(String archivoContrato) {
+        this.archivoContrato = archivoContrato;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

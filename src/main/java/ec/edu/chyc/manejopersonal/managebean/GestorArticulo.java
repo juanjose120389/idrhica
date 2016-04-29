@@ -260,10 +260,17 @@ public class GestorArticulo implements Serializable {
     public String initModificarArticulo(Long id) {
         articulo = articuloController.findArticulo(id);
         listaAutores = new ArrayList<>(articulo.getAutoresCollection());
-        
+        if (articulo.getArchivoArticulo() == null) {
+            articulo.setArchivoArticulo("");
+        }        
         try {
-            Long size = Files.size(ServerUtils.getPathArticulos().resolve( articulo.getArchivoArticulo() ));
-            tamanoArchivo = ServerUtils.humanReadableByteCount(size);
+            if (Files.exists(ServerUtils.getPathArticulos().resolve( articulo.getArchivoArticulo())) ) {
+                Long size = Files.size(ServerUtils.getPathArticulos().resolve( articulo.getArchivoArticulo() ));
+                tamanoArchivo = ServerUtils.humanReadableByteCount(size);
+            } else {
+                tamanoArchivo = "";
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
         }

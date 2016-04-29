@@ -20,24 +20,24 @@
             
             
             <p:outputLabel value="Persona"/>
-            <p:selectOneMenu id="cmbPersona2" value="#{gestorContrato.contrato.persona}" converter="personaConverter"
+            <p:selectOneMenu style="width: 150px" id="cmbPersona2" value="#{gestorContrato.contrato.persona}" converter="personaConverter"
                              var="uni" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{uni.nombres}"/>
+                    <p:outputLabel value="#{uni.nombres} #{uni.apellidos}"/>
                 </p:column>
             </p:selectOneMenu>                                
 
             <h:panelGroup layout="block"/>
 
             <p:outputLabel value="Administrador" />
-            <p:selectOneMenu id="cmbPersona" value="#{gestorContrato.contrato.administrador}" converter="contratoConverter"
+            <p:selectOneMenu style="width: 150px" id="cmbPersona" value="#{gestorContrato.contrato.administrador}" converter="personaConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorContrato.listaContrato}" var="u" itemLabel="#{u.persona.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per.persona.nombres}"/>
+                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                 </p:column>
             </p:selectOneMenu>                                
             <h:panelGroup layout="block"/>

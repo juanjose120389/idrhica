@@ -7,7 +7,6 @@ package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.TesisJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
-import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
 import ec.edu.chyc.manejopersonal.entity.Tesista;
 import javax.inject.Named;
@@ -15,6 +14,7 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -37,16 +37,16 @@ public class GestorTesis implements Serializable {
     private final TesisJpaController tesisController = new TesisJpaController();
      private Tesis tesis = new Tesis();
     private List<Tesis> listaTesis = new ArrayList<>();
-    private List<Tesista> listaAutoresTesis = new ArrayList<>();
+    private List<Persona> listaAutoresTesis = new ArrayList<>();
     
     public GestorTesis() {
     }
 
-    public List<Tesista> getListaAutores() {
+    public List<Persona> getListaAutores() {
         return listaAutoresTesis;
     }
 
-    public void setListaAutores(List<Tesista> listaAutores) {
+    public void setListaAutores(List<Persona> listaAutores) {
         this.listaAutoresTesis = listaAutores;
     }
 
@@ -88,10 +88,10 @@ public class GestorTesis implements Serializable {
         listaAutoresTesis.remove(personaQuitar);
     }
      public void onPersonaChosen(SelectEvent event) {
-        List <Tesista> listaPersonasSel = (List<Tesista>) event.getObject();
+        List <Persona> listaPersonasSel = (List<Persona>) event.getObject();
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Selected", "Id:" + car.getId());
         if (listaPersonasSel != null) {
-            for (Tesista per : listaPersonasSel) {
+            for (Persona per : listaPersonasSel) {
                 if (listaAutoresTesis.indexOf(per) < 0) {
                     listaAutoresTesis.add(per);
                 }
@@ -112,7 +112,7 @@ public class GestorTesis implements Serializable {
         options.put("modal", true);
         options.put("contentWidth", "100%");
         GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
-        RequestContext.getCurrentInstance().openDialog("dialogListaTesistas", options, null);
+        RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
     
     public String convertirListaPersonas(List<Persona> listaConvertir) {
@@ -144,7 +144,7 @@ public class GestorTesis implements Serializable {
     
     public String guardar() {
         try {
-           tesis.setAutoresCollection(listaAutoresTesis);
+            tesis.setAutoresCollection(new HashSet(listaAutoresTesis));
             tesisController.create(tesis);
             return "index";
         } catch (Exception ex) {
