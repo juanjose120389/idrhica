@@ -17,6 +17,8 @@
                 width: 100px;
             }
         </style>
+        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>                
         <h:panelGrid columns="3">
             <p:outputLabel value="Nombre"/>
             <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  

@@ -15,6 +15,8 @@
                 width: 100px;
             }
         </style>
+        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>                
         <h:panelGrid columns="2" width="100%" columnClasses="labelscol,inputscol">
             <p:outputLabel value="Cédula/Pasaporte"/>
             <p:outputLabel value="#{gestorPersona.persona.identificacion}"/>  
@@ -170,6 +172,13 @@
                 <p:column headerText="Enlace">
                     <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>
                 </p:column>
+                
+                <p:column headerText="" exportable="false" width="150">
+                <p:commandLink value="Descargar" ajax="false" rendered="#{articulo.archivoArticulo != null and articulo.archivoArticulo != ''}">
+                    <p:fileDownload value="#{gestorArticulo.streamParaDescarga(articulo)}" />
+                </p:commandLink>
+                    </p:column>
+                
 
             </p:dataTable>        
 

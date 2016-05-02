@@ -5,6 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
+        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>                
         <h:panelGrid columns="3">
             <p:outputLabel value="Número Contrato"/>
             <p:inputText id="txtNumero" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.numeroContrato}"/>  
@@ -68,6 +70,6 @@
 
 
         </h:panelGrid>        
-        <p:commandButton value="Guardar" action="#{gestorContrato.guardar()}"/>
+        <p:commandButton value="Guardar" update="formContenido" action="#{gestorContrato.guardar()}"/>
     </ui:define>
 </ui:composition>

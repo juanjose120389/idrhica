@@ -5,6 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
+        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>                
         <h:panelGrid columns="3">
             <p:outputLabel value="Tema"/>
             <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.tema}"/>  
@@ -15,20 +17,20 @@
             <p:message for="txtNumero" />
             
             <p:outputLabel value="Coordinador" />
-            <p:selectOneMenu id="cmbPersona" value="#{gestorPasantia.pasantia.coordinador}" converter="contratoConverter"
+            <p:selectOneMenu id="cmbPersona" value="#{gestorPasantia.pasantia.coordinador}" converter="personaConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorContrato.listaContrato}" var="u" itemLabel="#{u.persona.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
 
                 <p:column style="width:10%">
-                    <p:outputLabel value="#{per.persona.nombres}"/>
+                    <p:outputLabel value="#{per.nombres}"/>
                 </p:column>
             </p:selectOneMenu>                                
 <h:panelGroup layout="block"/>
             
             <p:outputLabel value="Pasante"/>
-            <p:selectOneMenu id="cmbPersona2" value="#{gestorPasantia.pasantia.pasante}" converter="pasanteConverter"
+            <p:selectOneMenu id="cmbPersona2" value="#{gestorPasantia.pasantia.pasante}" converter="personaConverter"
                              var="uni" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPasante.listaPasantes}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
 
                 <p:column style="width:10%">
                     <p:outputLabel value="#{uni.nombres}"/>
