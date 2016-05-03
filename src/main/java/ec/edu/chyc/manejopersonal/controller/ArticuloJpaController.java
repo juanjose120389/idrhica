@@ -8,8 +8,9 @@ package ec.edu.chyc.manejopersonal.controller;
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
-import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,10 +20,10 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.apache.commons.io.FileUtils;
-
+import org.hibernate.Hibernate;
 
 public class ArticuloJpaController extends GenericJpaController<Articulo> implements Serializable {
+
     public ArticuloJpaController() {
         setClassRef(Articulo.class);
     }
@@ -31,35 +32,54 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select distinct a from Articulo a join fetch a.autoresCollection");
+            Query q = em.createQuery("select distinct a from Articulo a join fetch a.personasArticuloCollection");
             List<Articulo> list = q.getResultList();
             return list;
         } finally {
             if (em != null) {
                 em.close();
             }
-        }        
+        }
     }
-    
-    
+
     public void create(Articulo obj) throws Exception {
         EntityManager em = null;
 
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-           
-            Set<Persona> listaAutores = obj.getAutoresCollection();            
+
             em.persist(obj);
+
+            Set<Proyecto> listaProyectos = obj.getProyectosCollection();
+            for (Proyecto proyecto : listaProyectos) {
+                Proyecto proyectoAttached = em.find(Proyecto.class, proyecto.getId());
+                proyectoAttached.getArticulosCollection().add(obj);
+            }
             
-            for (Persona per : listaAutores) {
+            /*for (Persona per : listaAutores) {
                 //para cada una de los autores, agregar este artículo a su lista de artículos
                 // no hace falta hacer un merge ya que lo detecta automáticamente
                 Persona perAttached = em.find(Persona.class, per.getId());                
                 perAttached.getArticulosCollection().add(obj);
+            }*/
+            if (!obj.getPersonasArticuloCollection().isEmpty()) {
+                for (PersonaArticulo personaArticulo : obj.getPersonasArticuloCollection()) {
+                    personaArticulo.setArticulo(obj);
+                    Persona persona = personaArticulo.getPersona();
+
+                    if (persona.getId() < 0 || persona.getId() == null) {
+                        persona.setId(null);
+                        em.persist(persona);
+                    }
+
+                    if (personaArticulo.getId() == null || personaArticulo.getId() < 0) {
+                        personaArticulo.setId(null);
+                        em.persist(personaArticulo);
+                    }
+                }
             }
-            
-            
+
             if (obj.getArchivoArticulo() != null && !obj.getArchivoArticulo().isEmpty()) {
                 //si se subió el archivo, copiar del directorio de temporales al original de artículos, después eliminar el archivo temporal
                 Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoArticulo());
@@ -68,10 +88,9 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                 Files.move(origen, destino, REPLACE_EXISTING);
                 //FileUtils.moveFile(origen, destino);
             }
-            
+
             //em.merge(obj);
             //em.persist(obj);
-            
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -79,14 +98,22 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             }
         }
     }
-    
+
     public Articulo findArticulo(Long id) {
+        return findArticulo(id, false);
+    }
+
+    public Articulo findArticulo(Long id, boolean incluirProyectos) {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select a from Articulo a join fetch a.autoresCollection where a.id = :id",Articulo.class);
+            Query q = em.createQuery("select a from Articulo a join fetch a.personasArticuloCollection where a.id = :id", Articulo.class);
             q.setParameter("id", id);
-            return (Articulo)q.getSingleResult();
+            Articulo articulo = (Articulo) q.getSingleResult();
+            if (incluirProyectos) {
+                Hibernate.initialize(articulo.getProyectosCollection());
+            }
+            return articulo;
         } finally {
             if (em != null) {
                 em.close();
@@ -100,9 +127,43 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+
+            Articulo articuloAntiguo = em.find(Articulo.class, obj.getId());
             
-            Articulo articuloAntiguo = findArticulo(obj.getId());
-           
+            Set<Proyecto> listaProyectos = obj.getProyectosCollection();
+            Iterator<Proyecto> iterProyectoAnterior = articuloAntiguo.getProyectosCollection().iterator();
+            while (iterProyectoAnterior.hasNext()) {
+                Proyecto proy = em.find(Proyecto.class, iterProyectoAnterior.next().getId());
+                if (!listaProyectos.contains(proy)) {
+                    iterProyectoAnterior.remove();
+                    proy.getArticulosCollection().remove(articuloAntiguo);
+                }
+            }
+            for (Proyecto proy : listaProyectos) {
+                if (!articuloAntiguo.getProyectosCollection().contains(proy)){
+                    Proyecto proyectoExistenteAsignado = em.find(Proyecto.class, proy.getId());
+                    proyectoExistenteAsignado.getArticulosCollection().add(obj);
+                }
+            }
+
+            for (PersonaArticulo pa : articuloAntiguo.getPersonasArticuloCollection()) {
+                //quitar PersonaArticulo que no existan en el nuevo articulo editado
+                if (!obj.getPersonasArticuloCollection().contains(pa)) {
+                    em.remove(pa);
+                }
+            }
+            
+            for (PersonaArticulo perArt : obj.getPersonasArticuloCollection()) {
+                //si hay ids menores a uno, significa que son nuevos y deben ser puestos a null para que sean creados
+                if (perArt.getId() != null && perArt.getId() < 0) {
+                    perArt.setId(null);                    
+                }
+                if (perArt.getArticulo() == null) {
+                    perArt.setArticulo(obj);
+                }
+                em.merge(perArt);
+            }
+            /*           
             Set<Persona> listaAutores = obj.getAutoresCollection();
             
             Iterator<Persona> iterPersonaAnterior = articuloAntiguo.getAutoresCollection().iterator();
@@ -123,17 +184,18 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     autorExistenteAsignado.getArticulosCollection().add(obj);                    
                 }
             }
-            
+             */
             String archivoAntiguo = articuloAntiguo.getArchivoArticulo();
             String archivoNuevo = obj.getArchivoArticulo();
-            
+
+            //si no se ha cambiado el nombre del archivo, es porque el archivo subido no se ha modificado            
             boolean archivoSeMantiene = false;
-            if (archivoAntiguo != null && !archivoAntiguo.isEmpty() //si no se ha cambiado el nombre del archivo, es porque el archivo subido no se ha modificado
+            if (archivoAntiguo != null && !archivoAntiguo.isEmpty()
                     && archivoNuevo != null && !archivoNuevo.isEmpty()
                     && archivoAntiguo.equals(archivoNuevo)) {
                 archivoSeMantiene = true;
             }
-            
+
             if (archivoAntiguo != null && !archivoAntiguo.isEmpty() && !archivoSeMantiene) {
                 //en caso de que existió un archivo almacenado anteriormente, se elimina, pero solo en caso de que se haya modificado el archivo original
                 Path pathAntiguo = ServerUtils.getPathArticulos().resolve(archivoAntiguo);
@@ -142,8 +204,8 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     Files.move(pathAntiguo, pathNuevoDestino, REPLACE_EXISTING);
                 }
             }
-            
-            if (archivoNuevo != null && !archivoNuevo.isEmpty() && !archivoSeMantiene) {                
+
+            if (archivoNuevo != null && !archivoNuevo.isEmpty() && !archivoSeMantiene) {
                 //si se subió el archivo, copiar del directorio de temporales al original de artículos, después eliminar el archivo temporal
                 // solo realizarlo si se modificó el archivo original
                 Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoArticulo());
@@ -152,10 +214,10 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                 //FileUtils.copyFile(origen, destino);
                 Files.move(origen, destino, REPLACE_EXISTING);
             }
-            
+
             em.merge(obj);
             //em.persist(obj);
-            
+
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -164,7 +226,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
         }
 
     }
-    
+
     public void destroy(Long id) throws Exception {
         EntityManager em = null;
         try {
@@ -172,12 +234,12 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             em.getTransaction().begin();
             em.remove(id);
             em.getTransaction().commit();
-                    
+
         } finally {
             if (em != null) {
                 em.close();
             }
         }
-    }    
+    }
 
 }

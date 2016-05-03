@@ -60,14 +60,14 @@
             </p:column>
 
 
-            <p:column headerText="Autores" exportable="false" filterBy="#{articulo.autoresCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
-                <ui:repeat value="#{articulo.autoresCollection.toArray()}" var="autor">
-                    <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
+            <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
+                <ui:repeat value="#{articulo.personasArticuloCollection}" var="autor">
+                    <p:outputLabel value="#{autor.persona.apellidos} #{autor.persona.nombres}"/><br />
                 </ui:repeat>
             </p:column>
 
             <p:column headerText="Autores" style="display: none; width: 1px !important; height: 0px !important;">
-                <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.autoresCollection)}" escape="false"/>
+                <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.personasArticuloCollection)}" escape="false"/>
             </p:column> 
             <p:column exportable="false">
                 <p:commandLink value="Descargar" ajax="false" rendered="#{articulo.archivoArticulo != null and articulo.archivoArticulo != ''}">

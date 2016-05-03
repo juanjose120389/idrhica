@@ -6,7 +6,7 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.TesistaJpaController;
-import ec.edu.chyc.manejopersonal.entity.Tesista;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -28,10 +28,10 @@ public class GestorTesista implements Serializable {
     
    // private final PersonaJpaController personaController = new PersonaJpaController();
     private final TesistaJpaController tesistaController = new TesistaJpaController();
-    private Tesista tesista = new Tesista();
+    private Persona tesista = new Persona();
     
    
-    private List<Tesista> listTesistas = null;
+    private List<Persona> listTesistas = null;
 
     /**
      * Creates a new instance of GestorContratado
@@ -57,7 +57,7 @@ public class GestorTesista implements Serializable {
         }
     }    
     public String initCrearTesista() {
-        tesista = new Tesista();
+        tesista = new Persona();
                 
 //        pasantia.setFechaInicio((java.sql.Date) fechaInicio);
   //      pasantia.setFechaFin((java.sql.Date) fechaFin);
@@ -97,33 +97,33 @@ public class GestorTesista implements Serializable {
         return "";
     }
 
-    public Tesista getTesista() {
+    public Persona getTesista() {
         return tesista;
     }
 
-    public void setTesista(Tesista tesista) {
+    public void setTesista(Persona tesista) {
         this.tesista = tesista;
     }
 
-    public List<Tesista> getListTesistas() {
+    public List<Persona> getListTesistas() {
         return listTesistas;
     }
 
-    public void setListTesistas(List<Tesista> listTesistas) {
+    public void setListTesistas(List<Persona> listTesistas) {
         this.listTesistas = listTesistas;
     }
 
 
 
-    public void setListaContratados(List<Tesista> listaPasantes) {
+    public void setListaContratados(List<Persona> listaPasantes) {
         this.listTesistas = listaPasantes;
     }
 
-    public Tesista getContratado() {
+    public Persona getContratado() {
         return tesista;
     }
 
-    public void setContratado(Tesista tesista) {
+    public void setContratado(Persona tesista) {
         this.tesista = tesista;
     }
 

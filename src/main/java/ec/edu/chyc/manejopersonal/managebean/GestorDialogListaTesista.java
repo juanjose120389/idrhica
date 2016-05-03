@@ -5,7 +5,7 @@
  */
 package ec.edu.chyc.manejopersonal.managebean;
 
-import ec.edu.chyc.manejopersonal.entity.Tesista;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -25,7 +25,7 @@ import org.primefaces.context.RequestContext;
 @SessionScoped
 public class GestorDialogListaTesista implements Serializable {
 
-    private List<Tesista> listaTesistasSel = new ArrayList<>();
+    private List<Persona> listaTesistasSel = new ArrayList<>();
     
     /**
      * Creates a new instance of GestorDialogListaPersonas
@@ -55,11 +55,11 @@ public class GestorDialogListaTesista implements Serializable {
         RequestContext.getCurrentInstance().closeDialog(null);
     }
     
-    public List<Tesista> getListaTesistasSel() {
+    public List<Persona> getListaTesistasSel() {
         return listaTesistasSel;
     }
 
-    public void setListaTesistasSel(List<Tesista> listaTesistasSel) {
+    public void setListaTesistasSel(List<Persona> listaTesistasSel) {
         this.listaTesistasSel = listaTesistasSel;
     }
     

@@ -16,17 +16,26 @@
             .ui-inputfield.ui-inputtext.pe-inputNumber {
                 width: 100px;
             }
+            .ui-messages-error, .ui-message-error {
+                display: inline-block;
+            }
         </style>
         <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>                
         <h:panelGrid columns="3">
-            <p:outputLabel value="Nombre"/>
-            <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  
-            <p:message for="txtNombre"/>
+            <p:outputLabel value="Título"/>
+            <h:panelGroup>
+                <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  
+                <p:message styleClass="asdf" for="txtNombre" style="width: 150px"/>
+            </h:panelGroup>
+            <h:panelGroup layout="block"/> 
 
             <p:outputLabel value="Tema"/>
-            <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.tema}"/>  
-            <p:message for="txtTema"/>
+            <h:panelGroup>
+                <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.tema}"/>  
+                <p:message for="txtTema"/>
+            </h:panelGroup>
+            <h:panelGroup layout="block"/> 
 
             <p:outputLabel value="Revista"/>
             <p:inputText id="txtRevista"  value="#{gestorArticulo.articulo.revista}"/>  
@@ -40,49 +49,67 @@
             <p:calendar pattern="dd/MM/yyyy" locale="es" value="#{gestorArticulo.articulo.fechaPublicacion}"/>  
             <h:panelGroup layout="block"/> 
 
-            <p:outputLabel value="Autor principal"/>
-            <p:selectOneMenu value="#{gestorArticulo.articulo.autorPrincipal}" converter="personaConverter" style="width: 300px"
-                             var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="p" itemLabel="#{p.nombres} #{p.apellidos}" itemValue="#{p}" />
-
-                <p:column>
-                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
-                </p:column>
-            </p:selectOneMenu>
-            <h:panelGroup layout="block"/>
-
-
-
             <p:outputLabel value="Autores"/>
             <h:panelGroup layout="block" id="divAutores">
-                <p:dataTable id="dtAutores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorArticulo.listaAutores}" rowKey="#{persona.id}">
+                <p:dataTable draggableRows="true" id="dtAutores" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}" rowKey="#{personaArticulo.id}">
+                    <p:ajax event="rowReorder" update="dtAutores" />
+                    <p:column headerText="# Autor" width="70">
+                        <h:outputText value="#{rowIndex+1}" />
+                        <h:panelGroup rendered="#{rowIndex == 0}">
+                            <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
+                        </h:panelGroup>
+                    </p:column>
                     <p:column headerText="Identificación" width="200">
-                        <h:outputText value="#{persona.identificacion}" />
+                        <h:outputText value="#{personaArticulo.persona.identificacion}" />
                     </p:column>
                     <p:column headerText="Nombres">
-                        <h:outputText value="#{persona.nombres}" />
+                        <h:outputText value="#{personaArticulo.persona.nombres}" />
                     </p:column>
                     <p:column headerText="Apellidos">
-                        <h:outputText value="#{persona.apellidos}" />
+                        <h:outputText value="#{personaArticulo.persona.apellidos}" />
                     </p:column>
                     <p:column headerText="Fecha Nacimiento">
-                        <h:outputText value="#{persona.fechaNacimiento}">
+                        <h:outputText value="#{personaArticulo.persona.fechaNacimiento}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Fecha Vinculación">
-                        <h:outputText value="#{persona.fechaVinculacion}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column style="text-align: center" width="32">
-                        <p:commandButton id="cmdQuitarAutor" action="#{gestorArticulo.quitarAutor(persona)}" update="dtAutores" process=":formContenido:divAutores" icon="ui-icon-close" title="Eliminar"/>
+                    <p:column style="text-align: center" width="125">
+                        <p:commandButton disabled="#{rowIndex == 0}" action="#{gestorArticulo.moverArriba(personaArticulo, rowIndex)}" update="dtAutores" process="@this" icon="fa fa-angle-up" title="Mover hacia arriba"/>                        
+                        <p:commandButton disabled="#{rowIndex == (gestorArticulo.listaPersonaArticulo.size()-1)}" action="#{gestorArticulo.moverAbajo(personaArticulo, rowIndex)}" update="dtAutores" process="@this" icon="fa fa-angle-down" title="Mover hacia abajo"/>
+                        <p:commandButton id="cmdQuitarAutor" style="margin-left: 15px" action="#{gestorArticulo.quitarAutor(personaArticulo)}" update="dtAutores" process="@this" icon="fa fa-remove" title="Eliminar"/>
                     </p:column>
 
                 </p:dataTable>
-                <h:panelGroup layout="block" id="divAutorCmd">
-                    <p:commandButton value="Agregar" action="#{gestorArticulo.agregarAutor()}" process="@parent" update="divAutorCmd">
+                <h:panelGroup layout="block">
+                    <p:commandButton value="Agregar" action="#{gestorArticulo.agregarAutor()}" process="@parent">
                         <p:ajax event="dialogReturn" listener="#{gestorArticulo.onPersonaChosen}" update="dtAutores"/>
+                    </p:commandButton>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup layout="block"/> 
+
+            <p:outputLabel value="Proyectos"/>
+            <h:panelGroup layout="block" id="divProyectos">
+                <p:dataTable id="dtProyectos" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorArticulo.listaProyectos}">
+                    <p:column headerText="Título" width="450">
+                        <h:outputText value="#{proyecto.titulo}"/>
+                    </p:column>
+                    <p:column headerText="Director">
+                        <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Fecha Inicio" width="150">
+                        <h:outputText value="#{proyecto.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center" width="60">
+                        <p:commandButton id="cmdQuitarAutor" style="margin-left: 15px" action="#{gestorArticulo.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                    </p:column>
+
+                </p:dataTable>
+                <h:panelGroup layout="block">
+                    <p:commandButton value="Agregar" action="#{gestorArticulo.agregarProyecto()}" process="@parent">
+                        <p:ajax event="dialogReturn" listener="#{gestorArticulo.onProyectoChosen}" update="dtProyectos"/>
                     </p:commandButton>
                 </h:panelGroup>
             </h:panelGroup>
@@ -107,20 +134,7 @@
 
             <p:outputLabel value="Referencia Bib"/>
             <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.referenciaBib}"/>  
-            <h:panelGroup layout="block"/> 
-            
-            <p:outputLabel value="Convenio" />
-            <p:selectOneMenu id="cmbProyecto" value="#{gestorArticulo.articulo.convenio}" converter="convenioConverter" style="width: 250px"
-                             var="con" filter="true" filterMatchMode="contains">
-                <f:selectItem itemLabel="Ninguno" itemValue=""/>
-                <f:selectItems value="#{gestorConvenio.listaConvenios}" var="c" itemLabel="#{c.institucion}" itemValue="#{c}" />
-
-                <p:column>
-                    <p:outputLabel value="#{con.institucion}"/>
-                </p:column>
-            </p:selectOneMenu>                                
-            <h:panelGroup layout="block"/>
-            
+            <h:panelGroup layout="block"/>             
 
             <p:outputLabel value="Artículo PDF"/>
             <h:panelGroup layout="block">

@@ -6,22 +6,27 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Type;
 
 /**
@@ -46,8 +51,9 @@ public class Articulo implements Serializable {
     private String nombre;
     
     private String tema;
-    
-    private String revista;
+
+    @NotNull
+    private String revista = "";
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaPublicacion;
@@ -59,9 +65,11 @@ public class Articulo implements Serializable {
     @Lob
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")        
-    private String resumen;
+    @NotNull
+    private String resumen = "";
     
-    private String enlace;
+    @NotNull
+    private String enlace = "";
     
     @Enumerated(EnumType.STRING)
     private TipoArticulo tipo;
@@ -70,18 +78,32 @@ public class Articulo implements Serializable {
     
     @Lob
     @Column(columnDefinition = "TEXT")
-    @Type(type = "text")        
-    private String referenciaBib;
-
+    @Type(type = "text")
+    @NotNull
+    private String referenciaBib = "";
+/*
     @ManyToOne
     @JoinColumn(name = "idConvenio", referencedColumnName = "id")
     private Convenio convenio;
-    //ManyToMany con Persona; autoresCollection<Persona>
-
-    private String archivoArticulo;//nombre del archivo subido que corresponde al artículo
-    
+*/
+    @NotNull
+    private String archivoArticulo = "";//nombre del archivo subido que corresponde al artículo
+    /*
     @ManyToMany(mappedBy = "articulosCollection")
     private Set<Persona> autoresCollection = new HashSet<>();
+    */
+    @OneToMany(mappedBy = "articulo", fetch = FetchType.LAZY)
+    private Collection<PersonaArticulo> personasArticuloCollection = new ArrayList<>();
+    
+    @ManyToMany(mappedBy = "articulosCollection")
+    private Set<Proyecto> proyectosCollection = new HashSet<>();    
+
+    @ManyToMany
+    @JoinTable(name = "articuloInstitucion", joinColumns = {
+        @JoinColumn(name = "idArticulo", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idInstitucion", referencedColumnName = "id")})
+    private Set<Institucion> agradecimientosCollection = new HashSet();
+    
     
     public Long getId() {
         return id;
@@ -90,7 +112,7 @@ public class Articulo implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+/*
     public Convenio getConvenio() {
         return convenio;
     }
@@ -98,7 +120,7 @@ public class Articulo implements Serializable {
     public void setConvenio(Convenio convenio) {
         this.convenio = convenio;
     }
-
+*/
     public String getNombre() {
         return nombre;
     }
@@ -196,14 +218,6 @@ public class Articulo implements Serializable {
         this.autorPrincipal = autorPrincipal;
     }
 
-    public Set<Persona> getAutoresCollection() {
-        return autoresCollection;
-    }
-
-    public void setAutoresCollection(Set<Persona> autoresCollection) {
-        this.autoresCollection = autoresCollection;
-    }
-
     public TipoArticulo getTipo() {
         return tipo;
     }
@@ -218,6 +232,30 @@ public class Articulo implements Serializable {
 
     public void setArchivoArticulo(String archivoArticulo) {
         this.archivoArticulo = archivoArticulo;
+    }
+
+    public Set<Proyecto> getProyectosCollection() {
+        return proyectosCollection;
+    }
+
+    public void setProyectosCollection(Set<Proyecto> proyectosCollection) {
+        this.proyectosCollection = proyectosCollection;
+    }
+
+    public Set<Institucion> getAgradecimientosCollection() {
+        return agradecimientosCollection;
+    }
+
+    public void setAgradecimientosCollection(Set<Institucion> agradecimientosCollection) {
+        this.agradecimientosCollection = agradecimientosCollection;
+    }
+
+    public Collection<PersonaArticulo> getPersonasArticuloCollection() {
+        return personasArticuloCollection;
+    }
+
+    public void setPersonasArticuloCollection(Collection<PersonaArticulo> personasArticuloCollection) {
+        this.personasArticuloCollection = personasArticuloCollection;
     }
     
 }

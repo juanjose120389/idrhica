@@ -48,9 +48,7 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
                 Hibernate.initialize(p.getConveniosCollection());
                 
                 if (cargarArticulos) {
-                    for (Convenio convenio : p.getConveniosCollection()) {
-                        Hibernate.initialize(convenio.getArticulosCollection());
-                    }
+                    Hibernate.initialize(p.getArticulosCollection());
                 }
             }
             return p;

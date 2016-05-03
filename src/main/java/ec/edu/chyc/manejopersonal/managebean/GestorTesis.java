@@ -8,7 +8,6 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.TesisJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
-import ec.edu.chyc.manejopersonal.entity.Tesista;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -84,7 +83,7 @@ public class GestorTesis implements Serializable {
             Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
-     public void quitarAutor(Tesista personaQuitar) {
+     public void quitarAutor(Persona personaQuitar) {
         listaAutoresTesis.remove(personaQuitar);
     }
      public void onPersonaChosen(SelectEvent event) {
@@ -103,7 +102,7 @@ public class GestorTesis implements Serializable {
     }
     
     public void agregarAutor() {
-        Tesista personaNueva = new Tesista();
+        Persona personaNueva = new Persona();
         
         Map<String,Object> options = new HashMap<>();
         options.put("resizable", true);

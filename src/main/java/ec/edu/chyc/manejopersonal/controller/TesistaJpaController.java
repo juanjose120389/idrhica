@@ -6,24 +6,24 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
-import ec.edu.chyc.manejopersonal.entity.Tesista;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 
-public class TesistaJpaController extends GenericJpaController<Tesista> implements Serializable {
+public class TesistaJpaController extends GenericJpaController<Persona> implements Serializable {
     public TesistaJpaController() {
-        setClassRef(Tesista.class);
+        setClassRef(Persona.class);
     }
 
-    public List<Tesista> listTesista() throws Exception {
+    public List<Persona> listTesista() throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select p from Tesista p");
-            List<Tesista> list = q.getResultList();
+            Query q = em.createQuery("select p from Persona p");
+            List<Persona> list = q.getResultList();
             return list;
         } finally {
             if (em != null) {
@@ -33,7 +33,7 @@ public class TesistaJpaController extends GenericJpaController<Tesista> implemen
     }
     
     
-    public void create(Tesista tesista) throws Exception {
+    public void create(Persona tesista) throws Exception {
         EntityManager em = null;
         
 
@@ -49,7 +49,7 @@ public class TesistaJpaController extends GenericJpaController<Tesista> implemen
         }
     }
 
-    public void edit(Tesista tesista) throws Exception {
+    public void edit(Persona tesista) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();

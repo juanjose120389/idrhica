@@ -37,10 +37,10 @@ public class Universidad implements Serializable {
     private Collection<PersonaTitulo> personaTitulosCollection = new ArrayList<>();
     
     @OneToMany(mappedBy = "universidad")
-    private Collection<Pasante> pasantesCollection = new ArrayList<>();
+    private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
 
     @OneToMany(mappedBy = "universidad")
-    private Collection<Tesista> tesistasCollection = new ArrayList<>();    
+    private Collection<Tesis> tesisCollection = new ArrayList<>();    
     
     public Long getId() {
         return id;
@@ -66,14 +66,6 @@ public class Universidad implements Serializable {
         this.nombre = nombre;
     }
 
-    public Collection<Pasante> getPasantesCollection() {
-        return pasantesCollection;
-    }
-
-    public void setPasantesCollection(Collection<Pasante> pasantesCollection) {
-        this.pasantesCollection = pasantesCollection;
-    }
-
     public String getCiudad() {
         return ciudad;
     }
@@ -88,6 +80,22 @@ public class Universidad implements Serializable {
 
     public void setPais(String pais) {
         this.pais = pais;
+    }
+
+    public Collection<Pasantia> getPasantiasCollection() {
+        return pasantiasCollection;
+    }
+
+    public void setPasantiasCollection(Collection<Pasantia> pasantiasCollection) {
+        this.pasantiasCollection = pasantiasCollection;
+    }
+
+    public Collection<Tesis> getTesisCollection() {
+        return tesisCollection;
+    }
+
+    public void setTesisCollection(Collection<Tesis> tesisCollection) {
+        this.tesisCollection = tesisCollection;
     }
 
     @Override
@@ -113,14 +121,5 @@ public class Universidad implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Universidad[ id=" + id + " ]";
-    }
-
-    public Collection<Tesista> getTesistasCollection() {
-        return tesistasCollection;
-    }
-
-    public void setTesistasCollection(Collection<Tesista> tesistasCollection) {
-        this.tesistasCollection = tesistasCollection;
-    }
-    
+    }    
 }

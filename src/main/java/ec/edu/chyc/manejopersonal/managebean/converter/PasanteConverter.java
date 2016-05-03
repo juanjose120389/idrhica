@@ -6,7 +6,7 @@
 package ec.edu.chyc.manejopersonal.managebean.converter;
 
 //import ec.edu.chyc.manejopersonal.managebean.GestorContratado;
-import ec.edu.chyc.manejopersonal.entity.Pasante;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.managebean.GestorPasante;
 import java.util.List;
 import javax.faces.component.UIComponent;
@@ -27,13 +27,13 @@ public class PasanteConverter implements Converter {
             return null;
         }
 
-        List<Pasante> list = GestorPasante.getInstance().getListaPasantes();
+        List<Persona> list = GestorPasante.getInstance().getListaPasantes();
        // List<Contratado> list = GestorContratado.getInstance().getListaContratados();
-        for (Pasante pas : list) {
+        for (Persona pas : list) {
             if (pas.getId() == id) 
                 return pas;
         }
-        Pasante obj = new Pasante();
+        Persona obj = new Persona();
         obj.setId(id);
 
         return obj;
@@ -45,7 +45,7 @@ public class PasanteConverter implements Converter {
             return null;
         }
         // Convert ProjectDetail to its unique String representation.
-        Pasante obj = (Pasante) value;
+        Persona obj = (Persona) value;
         String idAsString = String.valueOf(obj.getId());
         return idAsString;
     }   

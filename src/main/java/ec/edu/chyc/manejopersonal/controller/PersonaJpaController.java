@@ -6,11 +6,9 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
-import ec.edu.chyc.manejopersonal.entity.Pasante;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
-import ec.edu.chyc.manejopersonal.entity.Tesista;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +83,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 totalFetchs++;
             }            
             if (incluirArticulos) {
-                listaFetchs.add(" left join fetch p.articulosCollection ");
+                listaFetchs.add(" left join fetch p.personaArticulosCollection ");
                 totalFetchs++;
             }            
             if (incluirTitulos) {
@@ -113,7 +111,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 Hibernate.initialize(p.getContratosCollection());
             }
             if (incluirArticulos) {
-                Hibernate.initialize(p.getArticulosCollection());
+                Hibernate.initialize(p.getPersonaArticulosCollection());
             }
             if (incluirTitulos) {
                 Hibernate.initialize(p.getPersonaTitulosCollection());
@@ -208,6 +206,26 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            
+            Persona personaAntigua = em.find(Persona.class, persona.getId());
+            
+            //quitar los personaTitulo que no existan en la nueva persona editada
+            for (PersonaTitulo perTituloAntiguo : personaAntigua.getPersonaTitulosCollection()) {
+                if (!persona.getPersonaTitulosCollection().contains(perTituloAntiguo)) {
+                    em.remove(perTituloAntiguo);
+                }
+            }
+            //poner en null los ids negativos para que se puedan crear
+            for (PersonaTitulo perTitulo : persona.getPersonaTitulosCollection()) {
+                if (perTitulo.getId() != null && perTitulo.getId() < 0) {
+                    perTitulo.setId(null);
+                }
+                if (perTitulo.getPersona() == null) {
+                    perTitulo.setPersona(persona);
+                }
+                em.merge(perTitulo);
+            }
+            
             em.merge(persona);
             em.getTransaction().commit();
         } finally {

@@ -14,6 +14,11 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>client</param-value>
     </context-param>    
+    <context-param>
+        <description>FontAwesome</description>
+        <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
+    </context-param>        
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -31,4 +36,8 @@
     <welcome-file-list>
         <welcome-file>index.jsf</welcome-file>
     </welcome-file-list>
+    <mime-mapping> 
+        <extension>woff2</extension> 
+        <mime-type>application/x-font-woff2</mime-type> 
+    </mime-mapping>    
 </web-app>

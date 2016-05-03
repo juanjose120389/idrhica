@@ -41,7 +41,13 @@ public class Tesis implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idDirectorTesis", referencedColumnName = "id")
     private Persona director;
+    
+    @ManyToMany(mappedBy = "tesisComoCodirectorCollection")
+    private Set<Persona> codirectoresCollection = new HashSet<>();    
 
+    @ManyToMany(mappedBy = "tesisComoTutorCollection")
+    private Set<Persona> tutoresCollection = new HashSet<>();
+    
     @ManyToOne
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
     private Proyecto proyecto;    
@@ -228,6 +234,22 @@ public class Tesis implements Serializable {
 
     public void setActaAprobacion(String actaAprobacion) {
         this.actaAprobacion = actaAprobacion;
+    }
+
+    public Set<Persona> getCodirectoresCollection() {
+        return codirectoresCollection;
+    }
+
+    public void setCodirectoresCollection(Set<Persona> codirectoresCollection) {
+        this.codirectoresCollection = codirectoresCollection;
+    }
+
+    public Set<Persona> getTutoresCollection() {
+        return tutoresCollection;
+    }
+
+    public void setTutoresCollection(Set<Persona> tutoresCollection) {
+        this.tutoresCollection = tutoresCollection;
     }
     
 }

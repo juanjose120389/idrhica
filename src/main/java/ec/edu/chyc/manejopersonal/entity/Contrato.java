@@ -22,6 +22,17 @@ import javax.persistence.Temporal;
 @Entity
 public class Contrato implements Serializable {
 
+    public enum TipoContrato {
+        RRHH,//los profesores solo pueden tener este tipo de contrato
+        SERCOP,
+        SERV_PROFESIONALES
+    }
+    public enum TipoProfesor {
+        CONTRATADO,
+        PRINCIPAL,
+        AGREGADO
+    }
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

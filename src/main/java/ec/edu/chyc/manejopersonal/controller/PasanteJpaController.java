@@ -6,24 +6,24 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
-import ec.edu.chyc.manejopersonal.entity.Pasante;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 
-public class PasanteJpaController extends GenericJpaController<Pasante> implements Serializable {
+public class PasanteJpaController extends GenericJpaController<Persona> implements Serializable {
     public PasanteJpaController() {
-        setClassRef(Pasante.class);
+        setClassRef(Persona.class);
     }
 
-    public List<Pasante> listPasante() throws Exception {
+    public List<Persona> listPasante() throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             Query q = em.createQuery("select p from Pasante p");
-            List<Pasante> list = q.getResultList();
+            List<Persona> list = q.getResultList();
             return list;
         } finally {
             if (em != null) {
@@ -33,7 +33,7 @@ public class PasanteJpaController extends GenericJpaController<Pasante> implemen
     }
     
     
-    public void create(Pasante pasante) throws Exception {
+    public void create(Persona pasante) throws Exception {
         EntityManager em = null;
         
 
@@ -49,7 +49,7 @@ public class PasanteJpaController extends GenericJpaController<Pasante> implemen
         }
     }
 
-    public void edit(Pasante pasante) throws Exception {
+    public void edit(Persona pasante) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();

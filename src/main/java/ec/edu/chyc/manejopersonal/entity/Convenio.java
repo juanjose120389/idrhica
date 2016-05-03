@@ -33,13 +33,14 @@ public class Convenio implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String institucion;
-
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
+    
+    private String objetivo;
+    private String titulo;    
     
     @Lob
     @Column(columnDefinition = "TEXT")
@@ -50,8 +51,16 @@ public class Convenio implements Serializable {
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")    
     private Proyecto proyecto;
     
-    @OneToMany(mappedBy = "convenio")
-    private Collection<Articulo> articulosCollection = new ArrayList<>();        
+    /*@OneToMany(mappedBy = "convenio")
+    private Collection<Articulo> articulosCollection = new ArrayList<>();*/
+    
+    @ManyToOne
+    @JoinColumn(name = "idAdministrador", referencedColumnName = "id")    
+    private Persona administrador;    
+    
+    @ManyToOne
+    @JoinColumn(name = "idInstitucion", referencedColumnName = "id")    
+    private Institucion institucion;        
 
     public Long getId() {
         return id;
@@ -60,7 +69,7 @@ public class Convenio implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+/*
     public Collection<Articulo> getArticulosCollection() {
         return articulosCollection;
     }
@@ -68,15 +77,7 @@ public class Convenio implements Serializable {
     public void setArticulosCollection(Collection<Articulo> articulosCollection) {
         this.articulosCollection = articulosCollection;
     }
-
-    public String getInstitucion() {
-        return institucion;
-    }
-
-    public void setInstitucion(String institucion) {
-        this.institucion = institucion;
-    }
-
+*/
     public Date getFechaInicio() {
         return fechaInicio;
     }
@@ -107,6 +108,38 @@ public class Convenio implements Serializable {
 
     public void setProyecto(Proyecto proyecto) {
         this.proyecto = proyecto;
+    }
+
+    public String getObjetivo() {
+        return objetivo;
+    }
+
+    public void setObjetivo(String objetivo) {
+        this.objetivo = objetivo;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Persona getAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(Persona administrador) {
+        this.administrador = administrador;
+    }
+
+    public Institucion getInstitucion() {
+        return institucion;
+    }
+
+    public void setInstitucion(Institucion institucion) {
+        this.institucion = institucion;
     }
 
     @Override

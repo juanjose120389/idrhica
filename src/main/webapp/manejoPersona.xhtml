@@ -202,6 +202,14 @@
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
+                <p:column headerText="Año" width="150">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{personaTitulo.anio}" /></f:facet>
+                        <f:facet name="input">
+                            <p:spinner min="1950" max="2099" value="#{personaTitulo.anio}" size="5"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
 
                 <p:column style="text-align: center" width="32" >
                     <p:commandButton action="#{gestorPersona.quitarPersonaTitulo(personaTitulo)}" update="dtTitulos" partialSubmit="true" process=":formContenido:divTitulos" icon="ui-icon-close" title="Eliminar"/>

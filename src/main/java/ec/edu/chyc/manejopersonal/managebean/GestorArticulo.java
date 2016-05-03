@@ -9,6 +9,8 @@ import ec.edu.chyc.manejopersonal.controller.ArticuloJpaController;
 import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Articulo.TipoArticulo;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -23,6 +25,8 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -58,10 +62,12 @@ public class GestorArticulo implements Serializable {
     private final ArticuloJpaController articuloController = new ArticuloJpaController();
     
     private List<Articulo> listaArticulos = new ArrayList<>();
-    private List<Persona> listaAutores = new ArrayList<>();
+    private List<PersonaArticulo> listaPersonaArticulo = new ArrayList<>();
+    private List<Proyecto> listaProyectos = new ArrayList<>();
     private Articulo articulo;
     private String tamanoArchivo;
     private boolean modoModificar = false;
+    private Long idPersonaArticuloGen = -1L;
     
     private StreamedContent streamParaDescarga;
     
@@ -73,8 +79,23 @@ public class GestorArticulo implements Serializable {
         
     }
     
-    public void quitarAutor(Persona personaQuitar) {
-        listaAutores.remove(personaQuitar);
+    public void moverArriba(PersonaArticulo personaArticuloMover, Integer indexActual) {
+        if (indexActual != 0) {
+            Collections.swap(listaPersonaArticulo, indexActual, indexActual - 1);
+        }
+    }
+
+    public void moverAbajo(PersonaArticulo personaArticuloMover, Integer indexActual) {
+        if (indexActual != listaPersonaArticulo.size() - 1) {
+            Collections.swap(listaPersonaArticulo, indexActual, indexActual + 1);
+        }
+    }
+    
+    public void quitarAutor(PersonaArticulo personaArticuloQuitar) {
+        listaPersonaArticulo.remove(personaArticuloQuitar);
+    }
+    public void quitarProyecto(Proyecto proyectoQuitar) {
+        listaProyectos.remove(proyectoQuitar);
     }
     
     public void onPersonaChosen(SelectEvent event) {
@@ -82,9 +103,20 @@ public class GestorArticulo implements Serializable {
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Selected", "Id:" + car.getId());
         if (listaPersonasSel != null) {
             for (Persona per : listaPersonasSel) {
-                if (listaAutores.indexOf(per) < 0) {
-                    listaAutores.add(per);
+                boolean encontrado = false;
+                for (PersonaArticulo perart : listaPersonaArticulo) {
+                    if (perart.getPersona().getId().equals(per.getId())) {
+                        encontrado = true;
+                        break;
+                    }
                 }
+                if (!encontrado) {
+                    PersonaArticulo perArt = new PersonaArticulo();
+                    perArt.setPersona(per);
+                    perArt.setId(idPersonaArticuloGen);
+                    listaPersonaArticulo.add(perArt);
+                    idPersonaArticuloGen--;
+                }                
             }
             
             //listaAutores.addAll(listaPersonasSel);
@@ -92,9 +124,20 @@ public class GestorArticulo implements Serializable {
         }
     }
     
+    public void onProyectoChosen(SelectEvent event) {
+        List <Proyecto> listaProyectosSel = (List<Proyecto>) event.getObject();
+        if (listaProyectosSel != null) {
+            for (Proyecto proy : listaProyectosSel) {
+                if (!listaProyectos.contains(proy)) {
+                    listaProyectos.add(proy);
+                }
+            }
+            RequestContext.getCurrentInstance().update("formContenido:dtAutores");
+        }
+    }
+    
+    
     public void agregarAutor() {
-        Persona personaNueva = new Persona();
-        
         Map<String,Object> options = new HashMap<>();
         options.put("resizable", true);
         options.put("draggable", true);
@@ -104,7 +147,16 @@ public class GestorArticulo implements Serializable {
         GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }   
-    
+    public void agregarProyecto() {        
+        Map<String,Object> options = new HashMap<>();
+        options.put("resizable", true);
+        options.put("draggable", true);
+        options.put("width", "75%");
+        options.put("modal", true);
+        options.put("contentWidth", "100%");
+        GestorDialogListaProyectos.getInstance().clearListaProyectosSel();
+        RequestContext.getCurrentInstance().openDialog("dialogListaProyectos", options, null);
+    }       
     public String corregirUrl(String url) {
         if (!url.contains("://")) {
             url = "http://" + url;
@@ -148,10 +200,10 @@ public class GestorArticulo implements Serializable {
         return streamParaDescarga;
     }    
     
-    public String convertirListaPersonas(Set<Persona> listaConvertir) {
+    public String convertirListaPersonas(Collection<PersonaArticulo> listaConvertir) {
         String r = "";
-        for (Persona per : listaConvertir) {
-            r += String.format("%s %s, ", per.getApellidos(), per.getNombres());
+        for (PersonaArticulo per : listaConvertir) {
+            r += String.format("%s %s, ", per.getPersona().getApellidos(), per.getPersona().getNombres());
         }
         if (!r.isEmpty()) {
             r = r.substring(0, r.length() - 2);
@@ -239,10 +291,17 @@ public class GestorArticulo implements Serializable {
     }
     
     public String guardar() {
-        articulo.setAutoresCollection(new HashSet(listaAutores));
+        //articulo.setAutoresCollection(new HashSet(listaAutores));
+        articulo.setPersonasArticuloCollection(listaPersonaArticulo);
+        articulo.setProyectosCollection(new HashSet(listaProyectos));
         //articuloController.create(articulo);
         
-        try {
+        try {            
+            for (int c=0;c<listaPersonaArticulo.size();c++) {
+                //guardar el orden de acuerdo al orden de la lista
+                listaPersonaArticulo.get(c).setOrden(c+1);
+            }
+            
             if (modoModificar) {
                 articuloController.edit(articulo);
             } else {
@@ -252,14 +311,23 @@ public class GestorArticulo implements Serializable {
         } catch (Exception ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
             return "";
-        }        
+        }
     }
     public TipoArticulo[] getTiposArticulo() {
         return TipoArticulo.values();
     }
+    
+    private void ordenarListaPersonaArticulo(List<PersonaArticulo> listaPersonaArticulo) {
+        Collections.sort(listaPersonaArticulo, (left, right) -> left.getOrden() - right.getOrden());
+    }
+    
     public String initModificarArticulo(Long id) {
         articulo = articuloController.findArticulo(id);
-        listaAutores = new ArrayList<>(articulo.getAutoresCollection());
+        //listaAutores = new ArrayList<>(articulo.getAutoresCollection());
+        listaPersonaArticulo = new ArrayList<>(articulo.getPersonasArticuloCollection());
+        ordenarListaPersonaArticulo(listaPersonaArticulo);
+        GestorProyecto.getInstance().actualizarListaProyecto();
+        idPersonaArticuloGen = -1L;
         if (articulo.getArchivoArticulo() == null) {
             articulo.setArchivoArticulo("");
         }        
@@ -283,12 +351,14 @@ public class GestorArticulo implements Serializable {
         return "manejoArticulo";
     }
     public String initCrearArticulo() {
-        articulo = new Articulo();
-        listaAutores.clear();
+        articulo = new Articulo();        
+        listaPersonaArticulo.clear();
+        listaProyectos.clear();
         tamanoArchivo = "";
         modoModificar = false;
+        idPersonaArticuloGen = -1L;
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
-        GestorConvenio.getInstance().actualizarListaConvenios();
+        GestorProyecto.getInstance().actualizarListaProyecto();
         
         return "manejoArticulo";
     }
@@ -303,7 +373,6 @@ public class GestorArticulo implements Serializable {
     
     public String initListarArticulos() {
         actualizarListaArticulos();        
-        listaAutores.clear();
         return "listaArticulos";
     }
 
@@ -359,12 +428,12 @@ public class GestorArticulo implements Serializable {
         this.articulo = articulo;
     }
 
-    public List<Persona> getListaAutores() {
-        return listaAutores;
+    public List<PersonaArticulo> getListaPersonaArticulo() {
+        return listaPersonaArticulo;
     }
 
-    public void setListaAutores(List<Persona> listaAutores) {
-        this.listaAutores = listaAutores;
+    public void setListaPersonaArticulo(List<PersonaArticulo> listaPersonaArticulo) {
+        this.listaPersonaArticulo = listaPersonaArticulo;
     }
 
     public String getTamanoArchivo() {
@@ -375,10 +444,16 @@ public class GestorArticulo implements Serializable {
         this.tamanoArchivo = tamanoArchivo;
     }
 
-
-
     public void setStreamParaDescarga(StreamedContent streamParaDescarga) {
         this.streamParaDescarga = streamParaDescarga;
     }
 
+    public List<Proyecto> getListaProyectos() {
+        return listaProyectos;
+    }
+
+    public void setListaProyectos(List<Proyecto> listaProyectos) {
+        this.listaProyectos = listaProyectos;
+    }
+    
 }

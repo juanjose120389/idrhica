@@ -9,13 +9,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -51,15 +55,14 @@ public class Proyecto implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
     
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaAmplicacion;    
+    
     @Lob
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")    
     private String observaciones;
     
-    private String empresaFinancia;
-    
-    private Double monto;
-
     @Lob
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")    
@@ -72,10 +75,22 @@ public class Proyecto implements Serializable {
     private Collection<Convenio> conveniosCollection = new ArrayList<>();
 
     @OneToMany(mappedBy = "proyecto")
-    private Collection<Tesis> tesisCollection = new ArrayList<>();
-
-    @OneToMany(mappedBy = "proyecto")
     private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "proyecto")
+    private Collection<Financiamiento> financiamientosCollection = new ArrayList<>();    
+    
+    @ManyToMany
+    @JoinTable(name = "proyectoTesis", joinColumns = {
+        @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idTesis", referencedColumnName = "id")})
+    private Set<Tesis> tesisCollection = new HashSet();
+
+    @ManyToMany
+    @JoinTable(name = "proyectoArticulo", joinColumns = {
+        @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idArticulo", referencedColumnName = "id")})
+    private Set<Articulo> articulosCollection = new HashSet();    
     
     public Long getId() {
         return id;
@@ -115,14 +130,6 @@ public class Proyecto implements Serializable {
 
     public void setCodirector(Persona codirector) {
         this.codirector = codirector;
-    }
-
-    public String getEmpresaFinancia() {
-        return empresaFinancia;
-    }
-
-    public void setEmpresaFinancia(String empresaFinancia) {
-        this.empresaFinancia = empresaFinancia;
     }
 
     public String getTitulo() {
@@ -165,14 +172,6 @@ public class Proyecto implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public Double getMonto() {
-        return monto;
-    }
-
-    public void setMonto(Double monto) {
-        this.monto = monto;
-    }
-
     public String getResumen() {
         return resumen;
     }
@@ -181,12 +180,12 @@ public class Proyecto implements Serializable {
         this.resumen = resumen;
     }
 
-    public Collection<Tesis> getTesisCollection() {
-        return tesisCollection;
+    public Date getFechaAmplicacion() {
+        return fechaAmplicacion;
     }
 
-    public void setTesisCollection(Collection<Tesis> tesisCollection) {
-        this.tesisCollection = tesisCollection;
+    public void setFechaAmplicacion(Date fechaAmplicacion) {
+        this.fechaAmplicacion = fechaAmplicacion;
     }
     
     @Override
@@ -194,6 +193,14 @@ public class Proyecto implements Serializable {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
+    }
+
+    public Collection<Financiamiento> getFinanciamientosCollection() {
+        return financiamientosCollection;
+    }
+
+    public void setFinanciamientosCollection(Collection<Financiamiento> financiamientosCollection) {
+        this.financiamientosCollection = financiamientosCollection;
     }
 
     public Collection<Pasantia> getPasantiasCollection() {
@@ -204,6 +211,22 @@ public class Proyecto implements Serializable {
         this.pasantiasCollection = pasantiasCollection;
     }
 
+    public Set<Tesis> getTesisCollection() {
+        return tesisCollection;
+    }
+
+    public void setTesisCollection(Set<Tesis> tesisCollection) {
+        this.tesisCollection = tesisCollection;
+    }
+
+    public Set<Articulo> getArticulosCollection() {
+        return articulosCollection;
+    }
+
+    public void setArticulosCollection(Set<Articulo> articulosCollection) {
+        this.articulosCollection = articulosCollection;
+    }    
+    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set

@@ -6,10 +6,8 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
-import ec.edu.chyc.manejopersonal.entity.Pasante;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
-import ec.edu.chyc.manejopersonal.entity.Tesista;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
 import ec.edu.chyc.manejopersonal.util.DateUtils;
@@ -71,9 +69,6 @@ public class GestorPersona implements Serializable {
     
     private List<Universidad> listaUniversidadesAgregadas = new ArrayList<>();
     private List<Titulo> listaTitulosAgregados = new ArrayList<>();
-    
-    private Tesista tesista;
-    private Pasante pasante;
     
     private long idTituloGenerado = -1;
     private long idUniversidadGenerada = -1;
@@ -212,22 +207,10 @@ public class GestorPersona implements Serializable {
         
         
         listaPersonaTitulos = new ArrayList<>(persona.getPersonaTitulosCollection());
-        pasante = new Pasante();
-        tesista = new Tesista();
         esTesista = false;
-        esPasante = false;
-        
-        try {
-            if (persona instanceof Tesista) {
-                BeanUtils.copyProperties(tesista, (Tesista) persona);
-                esTesista = true;
-            } else if (persona instanceof Pasante) {
-                BeanUtils.copyProperties(pasante, (Pasante) persona);
-                esPasante = true;
-            }
-        } catch (IllegalAccessException | InvocationTargetException ex) {
-            Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        esPasante = false;        
+
+        //BeanUtils.copyProperties(tesista, (Tesista) persona);
     }
     public String initVerPersona(Long id) {
         cargarInformacionPersona(id, true);     
@@ -254,8 +237,6 @@ public class GestorPersona implements Serializable {
         idUniversidadGenerada = -1;
         idTituloPersonaGenerado = -1;
         
-        pasante = new Pasante();
-        tesista = new Tesista();
         esTesista = false;
         esPasante = false;
         esContratado = false;
@@ -288,6 +269,7 @@ public class GestorPersona implements Serializable {
         if (listaTitulos.size() > 0) {
             personaTituloNuevo.setTitulo(listaTitulos.get(0));
         }
+        personaTituloNuevo.setAnio(LocalDate.now().getYear());
         
         personaTituloNuevo.setId(idTituloPersonaGenerado);
         listaPersonaTitulos.add(personaTituloNuevo);
@@ -374,16 +356,6 @@ public class GestorPersona implements Serializable {
     public String guardar() {
         try {            
             Persona personaGuardar = persona;
-            
-            if (esTesista) {
-                //tesista = null;
-                BeanUtils.copyProperties(tesista, persona);
-                personaGuardar = tesista;
-            } else if (esPasante) {
-                //pasante = null;
-                BeanUtils.copyProperties(pasante, persona);
-                personaGuardar = pasante;
-            }
             
             personaGuardar.setPersonaTitulosCollection(listaPersonaTitulos);
             
@@ -493,22 +465,6 @@ public class GestorPersona implements Serializable {
     public void setEsPasante(boolean esPasante) {
         this.esPasante = esPasante;
     }   
-   
-    public Tesista getTesista() {
-        return tesista;
-    }
-    
-    public void setTesista(Tesista tesista) {
-        this.tesista = tesista;
-    }
-    
-    public Pasante getPasante() {
-        return pasante;
-    }
-    
-    public void setPasante(Pasante pasante) {
-        this.pasante = pasante;
-    }
     
     public boolean isMostrarDlgUniversidad() {
         return mostrarDlgUniversidad;

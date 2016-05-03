@@ -6,7 +6,7 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.PasanteJpaController;
-import ec.edu.chyc.manejopersonal.entity.Pasante;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -28,10 +28,10 @@ public class GestorPasante implements Serializable {
     
    // private final PersonaJpaController personaController = new PersonaJpaController();
     private final PasanteJpaController pasanteController = new PasanteJpaController();
-    private Pasante pasante = new Pasante();
+    private Persona pasante = new Persona();
     
    
-    private List<Pasante> listPasantes = null;
+    private List<Persona> listPasantes = null;
 
     /**
      * Creates a new instance of GestorContratado
@@ -57,7 +57,7 @@ public class GestorPasante implements Serializable {
         }
     }    
     public String initCrearPasante() {
-        pasante = new Pasante();
+        pasante = new Persona();
                 
 //        pasantia.setFechaInicio((java.sql.Date) fechaInicio);
   //      pasantia.setFechaFin((java.sql.Date) fechaFin);
@@ -97,19 +97,19 @@ public class GestorPasante implements Serializable {
         return "";
     }
 
-    public List<Pasante> getListaPasantes() {
+    public List<Persona> getListaPasantes() {
         return listPasantes;
     }
 
-    public void setListaContratados(List<Pasante> listaPasantes) {
+    public void setListaContratados(List<Persona> listaPasantes) {
         this.listPasantes = listaPasantes;
     }
 
-    public Pasante getContratado() {
+    public Persona getContratado() {
         return pasante;
     }
 
-    public void setContratado(Pasante pasante) {
+    public void setContratado(Persona pasante) {
         this.pasante = pasante;
     }
 

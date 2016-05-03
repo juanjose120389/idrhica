@@ -50,7 +50,7 @@ public class Persona implements Serializable {
     @Column(length = 2)
     private String genero; //M=Masculino, F=Femenino
     private String direccion;
-    private Boolean activo = true;
+    private Boolean activo;
 
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<Contrato> contratosCollection = new ArrayList<>();
@@ -60,18 +60,33 @@ public class Persona implements Serializable {
     
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<PersonaTitulo> personaTitulosCollection = new ArrayList<>();
-  
+/*  
     @ManyToMany
     @JoinTable(name = "personaArticulo", joinColumns = {
         @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idArticulo", referencedColumnName = "id")})
     private Set<Articulo> articulosCollection = new HashSet();
+  */  
+    @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
+    private Collection<PersonaArticulo> personaArticulosCollection = new ArrayList<>();    
     
     @ManyToMany
     @JoinTable(name = "personaTesis", joinColumns = {
         @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idTesis", referencedColumnName = "id")})
     private Set<Tesis> tesisCollection = new HashSet();    
+    
+    @ManyToMany
+    @JoinTable(name = "codirectorTesis", joinColumns = {
+        @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idTesis", referencedColumnName = "id")})
+    private Set<Tesis> tesisComoCodirectorCollection = new HashSet();
+
+    @ManyToMany
+    @JoinTable(name = "tutorTesis", joinColumns = {
+        @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idTesis", referencedColumnName = "id")})
+    private Set<Tesis> tesisComoTutorCollection = new HashSet();    
     
     @OneToMany(mappedBy = "pasante", fetch = FetchType.LAZY)
     private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
@@ -83,14 +98,6 @@ public class Persona implements Serializable {
 
     public void setContratosCollection(Collection<Contrato> contratosCollection) {
         this.contratosCollection = contratosCollection;
-    }
-
-    public Set<Articulo> getArticulosCollection() {
-        return articulosCollection;
-    }
-
-    public void setArticulosCollection(Set<Articulo> articulosCollection) {
-        this.articulosCollection = articulosCollection;
     }
 
     public Collection<PersonaTitulo> getPersonaTitulosCollection() {
@@ -248,6 +255,30 @@ public class Persona implements Serializable {
 
     public void setPasantiasCollection(Collection<Pasantia> pasantiasCollection) {
         this.pasantiasCollection = pasantiasCollection;
+    }
+
+    public Set<Tesis> getTesisComoCodirectorCollection() {
+        return tesisComoCodirectorCollection;
+    }
+
+    public void setTesisComoCodirectorCollection(Set<Tesis> tesisComoCodirectorCollection) {
+        this.tesisComoCodirectorCollection = tesisComoCodirectorCollection;
+    }
+
+    public Set<Tesis> getTesisComoTutorCollection() {
+        return tesisComoTutorCollection;
+    }
+
+    public void setTesisComoTutorCollection(Set<Tesis> tesisComoTutorCollection) {
+        this.tesisComoTutorCollection = tesisComoTutorCollection;
+    }
+
+    public Collection<PersonaArticulo> getPersonaArticulosCollection() {
+        return personaArticulosCollection;
+    }
+
+    public void setPersonaArticulosCollection(Collection<PersonaArticulo> personaArticulosCollection) {
+        this.personaArticulosCollection = personaArticulosCollection;
     }
 
 }
