@@ -81,11 +81,7 @@ public class Articulo implements Serializable {
     @Type(type = "text")
     @NotNull
     private String referenciaBib = "";
-/*
-    @ManyToOne
-    @JoinColumn(name = "idConvenio", referencedColumnName = "id")
-    private Convenio convenio;
-*/
+
     @NotNull
     private String archivoArticulo = "";//nombre del archivo subido que corresponde al artículo
     /*
@@ -112,15 +108,6 @@ public class Articulo implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-/*
-    public Convenio getConvenio() {
-        return convenio;
-    }
-
-    public void setConvenio(Convenio convenio) {
-        this.convenio = convenio;
-    }
-*/
     public String getNombre() {
         return nombre;
     }
