@@ -19,6 +19,9 @@
             .ui-messages-error, .ui-message-error {
                 display: inline-block;
             }
+            .hide-column-names table thead tr {
+                display: none;
+            }
         </style>
         <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>                
@@ -53,7 +56,7 @@
             <h:panelGroup layout="block" id="divAutores">
                 <p:dataTable draggableRows="true" id="dtAutores" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}" rowKey="#{personaArticulo.id}">
                     <p:ajax event="rowReorder" update="dtAutores" />
-                    <p:column headerText="# Autor" width="70">
+                    <p:column headerText="Autor #" width="70">
                         <h:outputText value="#{rowIndex+1}" />
                         <h:panelGroup rendered="#{rowIndex == 0}">
                             <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
@@ -90,6 +93,7 @@
 
             <p:outputLabel value="Proyectos"/>
             <h:panelGroup layout="block" id="divProyectos">
+                <h:panelGroup layout="block" style="height: 15px"/>
                 <p:dataTable id="dtProyectos" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorArticulo.listaProyectos}">
                     <p:column headerText="Título" width="450">
                         <h:outputText value="#{proyecto.titulo}"/>
@@ -103,7 +107,7 @@
                         </h:outputText>
                     </p:column>
                     <p:column style="text-align: center" width="60">
-                        <p:commandButton id="cmdQuitarAutor" style="margin-left: 15px" action="#{gestorArticulo.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                        <p:commandButton id="cmdQuitarAutor" action="#{gestorArticulo.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
                     </p:column>
 
                 </p:dataTable>
@@ -112,6 +116,30 @@
                         <p:ajax event="dialogReturn" listener="#{gestorArticulo.onProyectoChosen}" update="dtProyectos"/>
                     </p:commandButton>
                 </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup layout="block"/> 
+
+
+            <p:outputLabel value="Agradecimientos"/>
+            <h:panelGroup layout="block" id="divAgradecimientos">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable id="dtAgradecimientos" style="width: 40%" paginator="true" paginatorAlwaysVisible="false" 
+                             rows="10" var="institucion" value="#{gestorArticulo.listaAgradecimientos}">
+                    <p:column headerText="Institución">
+                        <h:outputText value="#{institucion.nombre}"/>
+                    </p:column>
+                    <p:column style="text-align: center" width="60">
+                        <p:commandButton id="cmdQuitarAutor" action="#{gestorArticulo.quitarAgradecimiento(institucion)}" update="dtAgradecimientos" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                    </p:column>                    
+                </p:dataTable>
+                
+                <h:panelGroup layout="block">
+                    <p:commandButton value="Agregar" action="#{gestorArticulo.agregarAgradecimiento()}" process="@parent">
+                        <p:ajax event="dialogReturn" listener="#{gestorArticulo.onInstitucionChosen}" update="dtAgradecimientos"/>
+                    </p:commandButton>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" style="height: 15px"/>
             </h:panelGroup>
             <h:panelGroup layout="block"/> 
 

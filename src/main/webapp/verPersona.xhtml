@@ -129,7 +129,7 @@
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Director">
-                    <h:outputText value="#{tesis.director.nombres} #{pasantia.coordinador.apellidos}" />
+                    <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
                 </p:column>
 
                 <p:column headerText="Universidad" width="150">
@@ -144,41 +144,47 @@
             </p:dataTable>        
         </h:panelGroup>
 
-        <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.articulosCollection}">
+
+        <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.personaArticulosCollection}">
             <h:panelGroup layout="block" style="height: 20px"/>
 
-            <p:dataTable var="articulo" value="#{gestorPersona.persona.articulosCollection}">
+            <p:dataTable var="perarticulo" value="#{gestorPersona.persona.personaArticulosCollection}">
                 <f:facet name="header">
                     Artículos
                 </f:facet>
                 <p:column headerText="Título" width="500">
-                    <h:outputText value="#{articulo.nombre}" />
+                    <h:outputText value="#{perarticulo.articulo.nombre}" />
                 </p:column>
-
+                <p:column headerText="Autor #" width="70">
+                    <h:outputText value="#{perarticulo.orden}" />
+                    <h:panelGroup rendered="#{perarticulo.orden == 1}">
+                        <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
+                    </h:panelGroup>
+                </p:column>
                 <p:column headerText="Tipo" width="100">
-                    <h:outputText value="#{label['articulo.tipo.' += articulo.tipo]}" />
+                    <h:outputText value="#{label['articulo.tipo.' += perarticulo.articulo.tipo]}" />
                 </p:column>                                
 
                 <p:column headerText="Revista" width="150">
-                    <h:outputText value="#{articulo.revista}" />
+                    <h:outputText value="#{perarticulo.articulo.revista}" />
                 </p:column>                
 
                 <p:column headerText="Publicación" width="100">
-                    <h:outputText value="#{articulo.fechaPublicacion}" >
+                    <h:outputText value="#{perarticulo.articulo.fechaPublicacion}" >
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>                        
                 </p:column>                
 
                 <p:column headerText="Enlace">
-                    <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>
+                    <p:link value="#{perarticulo.articulo.enlace}" href="#{gestorArticulo.corregirUrl(perarticulo.articulo.enlace)}" target="_blank"/>
                 </p:column>
-                
+
                 <p:column headerText="" exportable="false" width="150">
-                <p:commandLink value="Descargar" ajax="false" rendered="#{articulo.archivoArticulo != null and articulo.archivoArticulo != ''}">
-                    <p:fileDownload value="#{gestorArticulo.streamParaDescarga(articulo)}" />
-                </p:commandLink>
-                    </p:column>
-                
+                    <p:commandLink value="Descargar" ajax="false" rendered="#{perarticulo.articulo.archivoArticulo != ''}">
+                        <p:fileDownload value="#{gestorArticulo.streamParaDescarga(perarticulo.articulo)}" />
+                    </p:commandLink>
+                </p:column>
+
 
             </p:dataTable>        
 
@@ -223,7 +229,6 @@
             </p:dataTable>        
 
         </h:panelGroup>
-
 
 
     </ui:define>

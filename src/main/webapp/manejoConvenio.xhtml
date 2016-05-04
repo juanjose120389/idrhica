@@ -18,6 +18,15 @@
         <h:panelGroup layout="block" style="height: 20px"/>                
             <p:messages id="messages" showDetail="true" globalOnly="true" autoUpdate="true" closable="true" />
         <h:panelGrid columns="3">            
+            <p:outputLabel value="Título"/>
+            <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorConvenio.convenio.titulo}"/>  
+            <p:message for="txtTitulo"/>
+
+            <p:outputLabel value="Objetivo"/>
+            <p:inputTextarea rows="2" id="txtObjetivo" value="#{gestorConvenio.convenio.objetivo}"/>
+            <p:message for="txtObjetivo"/>
+
+            
             <p:outputLabel value="Institución"/>
             <p:inputText id="txtInstitucion" requiredMessage="Requerido" required="true" value="#{gestorConvenio.convenio.institucion}"/>  
             <p:message for="txtInstitucion"/>

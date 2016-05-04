@@ -8,6 +8,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.ArticuloJpaController;
 import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Articulo.TipoArticulo;
+import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
@@ -64,6 +65,7 @@ public class GestorArticulo implements Serializable {
     private List<Articulo> listaArticulos = new ArrayList<>();
     private List<PersonaArticulo> listaPersonaArticulo = new ArrayList<>();
     private List<Proyecto> listaProyectos = new ArrayList<>();
+    private List<Institucion> listaAgradecimientos = new ArrayList<>();
     private Articulo articulo;
     private String tamanoArchivo;
     private boolean modoModificar = false;
@@ -97,6 +99,9 @@ public class GestorArticulo implements Serializable {
     public void quitarProyecto(Proyecto proyectoQuitar) {
         listaProyectos.remove(proyectoQuitar);
     }
+    public void quitarAgradecimiento(Institucion institucionQuitar) {
+        listaAgradecimientos.remove(institucionQuitar);
+    }
     
     public void onPersonaChosen(SelectEvent event) {
         List <Persona> listaPersonasSel = (List<Persona>) event.getObject();
@@ -123,7 +128,17 @@ public class GestorArticulo implements Serializable {
             RequestContext.getCurrentInstance().update("formContenido:dtAutores");
         }
     }
-    
+    public void onInstitucionChosen(SelectEvent event) {
+        List <Institucion> listaSel = (List<Institucion>) event.getObject();
+        if (listaSel != null) {
+            for (Institucion inst : listaSel) {
+                if (!listaAgradecimientos.contains(inst)) {
+                    listaAgradecimientos.add(inst);
+                }
+            }
+            RequestContext.getCurrentInstance().update("formContenido:dtAutores");
+        }        
+    }
     public void onProyectoChosen(SelectEvent event) {
         List <Proyecto> listaProyectosSel = (List<Proyecto>) event.getObject();
         if (listaProyectosSel != null) {
@@ -157,6 +172,18 @@ public class GestorArticulo implements Serializable {
         GestorDialogListaProyectos.getInstance().clearListaProyectosSel();
         RequestContext.getCurrentInstance().openDialog("dialogListaProyectos", options, null);
     }       
+    
+    public void agregarAgradecimiento() {
+        Map<String,Object> options = new HashMap<>();
+        options.put("resizable", true);
+        options.put("draggable", true);
+        options.put("width", "50%");
+        options.put("modal", true);
+        options.put("contentWidth", "100%");
+        GestorDialogListaInstituciones.getInstance().clearListaSeleccionados();
+        RequestContext.getCurrentInstance().openDialog("dialogListaInstituciones", options, null);
+    }
+    
     public String corregirUrl(String url) {
         if (!url.contains("://")) {
             url = "http://" + url;
@@ -294,6 +321,7 @@ public class GestorArticulo implements Serializable {
         //articulo.setAutoresCollection(new HashSet(listaAutores));
         articulo.setPersonasArticuloCollection(listaPersonaArticulo);
         articulo.setProyectosCollection(new HashSet(listaProyectos));
+        articulo.setAgradecimientosCollection(new HashSet(listaAgradecimientos));
         //articuloController.create(articulo);
         
         try {            
@@ -326,7 +354,9 @@ public class GestorArticulo implements Serializable {
         //listaAutores = new ArrayList<>(articulo.getAutoresCollection());
         listaPersonaArticulo = new ArrayList<>(articulo.getPersonasArticuloCollection());
         ordenarListaPersonaArticulo(listaPersonaArticulo);
-        GestorProyecto.getInstance().actualizarListaProyecto();
+        listaAgradecimientos = new ArrayList<>(articulo.getAgradecimientosCollection());
+        listaProyectos = new ArrayList<>(articulo.getProyectosCollection());
+        
         idPersonaArticuloGen = -1L;
         if (articulo.getArchivoArticulo() == null) {
             articulo.setArchivoArticulo("");
@@ -345,19 +375,22 @@ public class GestorArticulo implements Serializable {
         
         modoModificar = true;
         
-        GestorPersona.getInstance().actualizarListaPersonasConContrato();
-        GestorConvenio.getInstance().actualizarListaConvenios();
+        GestorPersona.getInstance().actualizarListaPersonasConContrato();        
+        GestorInstitucion.getInstance().actualizarListaInstituciones();
+        GestorProyecto.getInstance().actualizarListaProyecto();
         
         return "manejoArticulo";
     }
     public String initCrearArticulo() {
         articulo = new Articulo();        
         listaPersonaArticulo.clear();
+        listaAgradecimientos.clear();
         listaProyectos.clear();
         tamanoArchivo = "";
         modoModificar = false;
         idPersonaArticuloGen = -1L;
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
+        GestorInstitucion.getInstance().actualizarListaInstituciones();
         GestorProyecto.getInstance().actualizarListaProyecto();
         
         return "manejoArticulo";
@@ -454,6 +487,14 @@ public class GestorArticulo implements Serializable {
 
     public void setListaProyectos(List<Proyecto> listaProyectos) {
         this.listaProyectos = listaProyectos;
+    }
+
+    public List<Institucion> getListaAgradecimientos() {
+        return listaAgradecimientos;
+    }
+
+    public void setListaAgradecimientos(List<Institucion> listaAgradecimientos) {
+        this.listaAgradecimientos = listaAgradecimientos;
     }
     
 }

@@ -7,6 +7,7 @@ package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Articulo;
+import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
@@ -100,10 +101,10 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
     }
 
     public Articulo findArticulo(Long id) {
-        return findArticulo(id, false);
+        return findArticulo(id, true, true);
     }
 
-    public Articulo findArticulo(Long id, boolean incluirProyectos) {
+    public Articulo findArticulo(Long id, boolean incluirProyectos, boolean incluirAgradecimientos) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -112,6 +113,9 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             Articulo articulo = (Articulo) q.getSingleResult();
             if (incluirProyectos) {
                 Hibernate.initialize(articulo.getProyectosCollection());
+            }
+            if (incluirAgradecimientos) {
+                Hibernate.initialize(articulo.getAgradecimientosCollection());
             }
             return articulo;
         } finally {
@@ -129,20 +133,39 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             em.getTransaction().begin();
 
             Articulo articuloAntiguo = em.find(Articulo.class, obj.getId());
+
             
             Set<Proyecto> listaProyectos = obj.getProyectosCollection();
             Iterator<Proyecto> iterProyectoAnterior = articuloAntiguo.getProyectosCollection().iterator();
             while (iterProyectoAnterior.hasNext()) {
-                Proyecto proy = em.find(Proyecto.class, iterProyectoAnterior.next().getId());
+                //quitar los proyectos que ya no estan en el articulo editado
+                Proyecto proy = iterProyectoAnterior.next();
                 if (!listaProyectos.contains(proy)) {
                     iterProyectoAnterior.remove();
                     proy.getArticulosCollection().remove(articuloAntiguo);
                 }
             }
             for (Proyecto proy : listaProyectos) {
+                //agregar proyectos que han sido agregados en el articulo editado
                 if (!articuloAntiguo.getProyectosCollection().contains(proy)){
                     Proyecto proyectoExistenteAsignado = em.find(Proyecto.class, proy.getId());
                     proyectoExistenteAsignado.getArticulosCollection().add(obj);
+                }
+            }
+            
+            Set<Institucion> listaAgradecimientos = obj.getAgradecimientosCollection();
+            Iterator<Institucion> iterAgradecimientoAnterior = articuloAntiguo.getAgradecimientosCollection().iterator();
+            while (iterAgradecimientoAnterior.hasNext()) {
+                Institucion inst = iterAgradecimientoAnterior.next();
+                if (!listaAgradecimientos.contains(inst)) {
+                    iterAgradecimientoAnterior.remove();
+                    inst.getArticulosCollection().remove(articuloAntiguo);
+                }
+            }
+            for (Institucion inst : listaAgradecimientos) {
+                if (!articuloAntiguo.getAgradecimientosCollection().contains(inst)) {
+                    Institucion instExistenteAsignado = em.find(Institucion.class, inst.getId());
+                    instExistenteAsignado.getArticulosCollection().add(obj);
                 }
             }
 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Instituciones</title>
+        <style type="text/css">
+            .ui-widget {
+                font-size: 0.9em;
+            }
+            body {
+                font-size: 0.9em;
+            }
+            .ui-datatable table {
+                /*width: auto !important;*/
+            }
+            .ui-state-highlight .ui-icon {
+                background-image: url("#{resource['primefaces-bootstrap:images/ui-icons_333333_256x240.png']}");
+
+            }
+
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form id="formTabla">
+            <p:dataTable widgetVar="dtInstituciones" id="dtInstituciones" var="institucion" rowKey="#{institucion.id}" resizableColumns="false" 
+                         selection="#{gestorDialogListaInstituciones.listaSeleccionados}" value="#{gestorInstitucion.listaInstituciones}" rows="10"
+                         paginatorAlwaysVisible="false" paginator="true"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         >
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                <p:column headerText="Institución" filterBy="#{institucion.nombre}" filterMatchMode="contains" sortBy="#{institucion.nombre}">
+                    <h:outputText value="#{institucion.nombre}" />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" action="#{gestorDialogListaInstituciones.aceptarSeleccion()}"/>
+                    <p:commandButton value="Cancelar" action="#{gestorDialogListaInstituciones.cancelarSeleccion()}"/>
+                </f:facet>
+            </p:dataTable>        
+
+        </h:form>
+    </h:body>
+
+</html>
