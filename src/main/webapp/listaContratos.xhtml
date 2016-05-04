@@ -25,8 +25,8 @@
                 </h:panelGroup>                    
             </f:facet>
 
-            <p:column headerText="Número de Contrato" filterBy="#{contrato.numeroContrato}" filterMatchMode="contains">
-                <h:outputText value="#{contrato.numeroContrato}" />
+            <p:column headerText="Código Contrato" filterBy="#{contrato.codigoContrato}" filterMatchMode="contains">
+                <h:outputText value="#{contrato.codigoContrato}" />
             </p:column>
 
             <p:column headerText="Fecha de Inicio" >
@@ -54,7 +54,13 @@
                 <h:outputText value="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" />
             </p:column>
 
-            
+            <p:column headerText="Tipo" filterBy="#{contrato.tipo}" filterMatchMode="contains">
+                <h:outputText value="#{label['contrato.tipo.' += contrato.tipo]}" />
+                <h:panelGroup layout="block" rendered="#{contrato.tipoProfesor != null}">
+                    <br/>
+                    <p:outputLabel value="Profesor: #{label['contrato.tipoProfesor.' += contrato.tipoProfesor]}"/>
+                </h:panelGroup>
+            </p:column>
 
         </p:dataTable>         
     </ui:define>

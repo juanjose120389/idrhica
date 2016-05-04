@@ -8,12 +8,15 @@ package ec.edu.chyc.manejopersonal.entity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -23,16 +26,17 @@ import javax.persistence.Temporal;
 public class Contrato implements Serializable {
 
     public enum TipoContrato {
-        RRHH,//los profesores solo pueden tener este tipo de contrato
-        SERCOP,
+        SERCOP,//los profesores solo pueden tener este tipo de contrato
+        OCASIONAL,
         SERV_PROFESIONALES
     }
+
     public enum TipoProfesor {
         CONTRATADO,
         PRINCIPAL,
         AGREGADO
     }
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,31 +45,41 @@ public class Contrato implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idPersona", referencedColumnName = "id")
     private Persona persona;
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
-    private int numeroContrato;
+
+    @NotNull
+    private String codigoContrato = "";
+
     @ManyToOne
     @JoinColumn(name = "idAdminContrato", referencedColumnName = "id")
     private Persona administrador;
-    
+
     @ManyToOne
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
     private Proyecto proyecto;
-        
+
     private String cargo;
     private String actividadPrincipal;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFinDocumento; //fecha cuando termine el contrato de acuerdo al documento
-    
+
     private String facultad;
-    private String tipo; // C=Contratado, T=Titular
-    
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private TipoContrato tipo = TipoContrato.SERCOP;
+
+    @Enumerated(EnumType.STRING)
+    private TipoProfesor tipoProfesor;
+
     private String archivoContrato;
-    
+
     public String getCargo() {
         return cargo;
     }
@@ -81,7 +95,6 @@ public class Contrato implements Serializable {
     public void setActividadPrincipal(String actividadPrincipal) {
         this.actividadPrincipal = actividadPrincipal;
     }
-
 
     public Persona getPersona() {
         return persona;
@@ -106,21 +119,13 @@ public class Contrato implements Serializable {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
-    
-     public Persona getAdministrador() {
+
+    public Persona getAdministrador() {
         return administrador;
     }
 
     public void setAdministrador(Persona administrador) {
         this.administrador = administrador;
-    }
-    
-      public int getNumeroContrato() {
-        return numeroContrato;
-    }
-
-    public void setNumeroContrato(int numeroContrato) {
-        this.numeroContrato = numeroContrato;
     }
 
     public Proyecto getProyecto() {
@@ -129,8 +134,8 @@ public class Contrato implements Serializable {
 
     public void setProyecto(Proyecto proyecto) {
         this.proyecto = proyecto;
-    }   
-    
+    }
+
     public Long getId() {
         return id;
     }
@@ -155,14 +160,6 @@ public class Contrato implements Serializable {
         this.facultad = facultad;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getArchivoContrato() {
         return archivoContrato;
     }
@@ -170,7 +167,7 @@ public class Contrato implements Serializable {
     public void setArchivoContrato(String archivoContrato) {
         this.archivoContrato = archivoContrato;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -195,5 +192,29 @@ public class Contrato implements Serializable {
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Contrato[ id=" + id + " ]";
     }
-    
+
+    public TipoContrato getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoContrato tipo) {
+        this.tipo = tipo;
+    }
+
+    public TipoProfesor getTipoProfesor() {
+        return tipoProfesor;
+    }
+
+    public void setTipoProfesor(TipoProfesor tipoProfesor) {
+        this.tipoProfesor = tipoProfesor;
+    }
+
+    public String getCodigoContrato() {
+        return codigoContrato;
+    }
+
+    public void setCodigoContrato(String codigoContrato) {
+        this.codigoContrato = codigoContrato;
+    }
+
 }

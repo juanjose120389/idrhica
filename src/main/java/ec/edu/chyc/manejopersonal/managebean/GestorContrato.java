@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -33,63 +33,54 @@ import javax.faces.context.FacesContext;
 public class GestorContrato implements Serializable {
 
     private final ContratoJpaController contratoController = new ContratoJpaController();
-    
+
     private List<Contrato> listaContrato = new ArrayList<>();
     private Contrato contrato = new Contrato();
+
+    private boolean esProfesor = false;
+
     public GestorContrato() {
     }
 
-    
-    
     @PostConstruct
     public void init() {
-        
     }
-    
-    public static GestorContrato getInstance()
-    {
+
+    public static GestorContrato getInstance() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELContext context = facesContext.getELContext();
-        ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorContrato}",GestorContrato.class);
-        return (GestorContrato)ex.getValue(context);
+        ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorContrato}", GestorContrato.class);
+        return (GestorContrato) ex.getValue(context);
     }
-    
+
     public void actualizarListaContrato() {
         try {
             listaContrato = contratoController.listContrato();
         } catch (Exception ex) {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
     }
+
     public String initCrearContrato() {
         contrato = new Contrato();
+        esProfesor = false;
         GestorProyecto.getInstance().actualizarListaProyecto();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
         actualizarListaContrato();
         return "manejoContratos";
     }
+
     public String initListarContratos() {
         actualizarListaContrato();
         return "listaContratos";
     }
 
-    public List<Contrato> getListaContrato() {
-        return listaContrato;
-    }
-
-    public void setListaContrato(List<Contrato> listaContrato) {
-        this.listaContrato = listaContrato;
-    }
-    public Contrato getContrato() {
-        return contrato;
-    }
-
-    public void setContrato(Contrato contrato) {
-        this.contrato = contrato;
-    }
-    
-     public String guardar() {
+    public String guardar() {
         try {
+            if (!esProfesor) {
+                contrato.setTipoProfesor(null);
+            }
+            
             contratoController.create(contrato);
             return "index";
         } catch (Exception ex) {
@@ -97,6 +88,40 @@ public class GestorContrato implements Serializable {
         }
         return "";
     }
-     
+    
+    public boolean puedeSerContratoProfesor() {
+        return contrato.getTipo() == Contrato.TipoContrato.SERCOP;
+    }
 
+    public boolean isEsProfesor() {
+        return esProfesor;
+    }
+
+    public void setEsProfesor(boolean esProfesor) {
+        this.esProfesor = esProfesor;
+    }
+
+    public Contrato.TipoContrato[] getTiposContrato() {
+        return Contrato.TipoContrato.values();
+    }
+
+    public Contrato.TipoProfesor[] getTiposProfesor() {
+        return Contrato.TipoProfesor.values();
+    }
+    
+    public List<Contrato> getListaContrato() {
+        return listaContrato;
+    }
+
+    public void setListaContrato(List<Contrato> listaContrato) {
+        this.listaContrato = listaContrato;
+    }
+
+    public Contrato getContrato() {
+        return contrato;
+    }
+
+    public void setContrato(Contrato contrato) {
+        this.contrato = contrato;
+    }
 }
