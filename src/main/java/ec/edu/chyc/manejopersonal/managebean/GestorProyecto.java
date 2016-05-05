@@ -11,6 +11,8 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.ProyectoJpaController;
+import ec.edu.chyc.manejopersonal.entity.Financiamiento;
+import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -35,8 +37,8 @@ public class GestorProyecto implements Serializable {
     private final ProyectoJpaController proyectoController = new ProyectoJpaController();
     private Proyecto proyecto;
     private List<Proyecto> listaProyecto = new ArrayList<>();
-    
-   
+    private List<Financiamiento> listaFinanciamientos = new ArrayList<>();
+    private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
 
     public GestorProyecto() {
         
@@ -54,6 +56,25 @@ public class GestorProyecto implements Serializable {
         return (GestorProyecto) ex.getValue(context);
     }
 
+    public void abrirNuevaInstitucionDlg(Financiamiento financiamientoActual) {
+        
+    }
+    
+    public void quitarFinanciamiento(Financiamiento financiamientoQuitar) {
+        listaFinanciamientos.remove(financiamientoQuitar);
+    }
+    
+    public void agregarFinanciamiento() {
+        Financiamiento nuevoFinan = new Financiamiento();
+        listaFinanciamientos.add(nuevoFinan);
+        List<Institucion> listaInstituciones = GestorInstitucion.getInstance().getListaInstituciones();
+        
+        if (!listaInstituciones.isEmpty()) {
+            nuevoFinan.setInstitucion(listaInstituciones.get(0));            
+        }
+        nuevoFinan.setMonto(0.0);
+    }
+    
     public void actualizarListaProyecto() {
         try {
             listaProyecto = proyectoController.listProyecto();
@@ -79,11 +100,19 @@ public class GestorProyecto implements Serializable {
         return "verProyecto";
     }
     
+    public String initModificarProyecto(Long id) {
+        return "manejoProyecto";
+    }
+    
     public String initCrearProyecto() {
         proyecto = new Proyecto();
         GestorContrato.getInstance().actualizarListaContrato();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
+        GestorInstitucion.getInstance().actualizarListaInstituciones();        
 
+        listaFinanciamientos.clear();
+        listaInstitucionesAgregadas.clear();
+        
         return "manejoProyecto";
     }
 
@@ -108,6 +137,22 @@ public class GestorProyecto implements Serializable {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
+    }
+
+    public List<Financiamiento> getListaFinanciamientos() {
+        return listaFinanciamientos;
+    }
+
+    public void setListaFinanciamientos(List<Financiamiento> listaFinanciamientos) {
+        this.listaFinanciamientos = listaFinanciamientos;
+    }
+
+    public List<Institucion> getListaInstitucionesAgregadas() {
+        return listaInstitucionesAgregadas;
+    }
+
+    public void setListaInstitucionesAgregadas(List<Institucion> listaInstitucionesAgregadas) {
+        this.listaInstitucionesAgregadas = listaInstitucionesAgregadas;
     }
 
 }
