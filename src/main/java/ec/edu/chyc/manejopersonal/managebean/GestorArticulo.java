@@ -428,21 +428,27 @@ public class GestorArticulo implements Serializable {
          
         return false;
     }    
+    
     public boolean filtrarPorAutorPrincipal(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
-        if(filterText == null||filterText.equals("")) {
+        if (filterText == null || filterText.equals("")) {
             return true;
         }
-         
-        if(value == null) {
+
+        if (value == null) {
             return false;
         }
-        
-        Persona autorPrincipal = (Persona)value;
 
-        return StringUtils.containsIgnoreCase(autorPrincipal.getNombres(), filterText) 
-                || StringUtils.containsIgnoreCase(autorPrincipal.getApellidos(), filterText);
-    }    
+        //como el autor principal es siempre el primer elemento, solo revisar el primer elemento
+        PersonaArticulo perArticuloPrincipal = ((Collection<PersonaArticulo>) value).iterator().next();
+        if (perArticuloPrincipal != null) {
+            Persona autorPrincipal = perArticuloPrincipal.getPersona();                
+            return (StringUtils.containsIgnoreCase(autorPrincipal.getNombres(), filterText)
+                    || StringUtils.containsIgnoreCase(autorPrincipal.getApellidos(), filterText));            
+        }
+            
+        return false;
+    }
     
     
     public List<Articulo> getListaArticulos() {

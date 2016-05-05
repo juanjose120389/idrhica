@@ -28,7 +28,7 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
-            <p:column headerText="Autor principal" sortBy="#{articulo.autorPrincipal.apellidos}" filterBy="#{articulo.autorPrincipal}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}">
+            <p:column headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}">
                 <h:outputText value="#{articulo.personasArticuloCollection[0].persona.nombres} #{articulo.personasArticuloCollection[0].persona.apellidos}" />
             </p:column>           
 
@@ -45,10 +45,10 @@
 
             <p:column headerText="Revista" filterBy="#{articulo.revista}" filterMatchMode="contains">
                 <h:outputText value="#{articulo.revista}" />
-            </p:column>
-
-            <p:column headerText="Factor impacto revista" filterBy="#{articulo.factorImpacto}" filterMatchMode="contains">
-                <h:outputText value="#{articulo.factorImpacto}" />
+                <h:panelGroup layout="block" rendered="#{articulo.factorImpacto != null}">
+                    <br/>
+                    <h:outputText value="Factor Impacto: #{articulo.factorImpacto}" />
+                </h:panelGroup>
             </p:column>
 
             <p:column headerText="Tema" filterBy="#{articulo.tema}" filterMatchMode="contains">
