@@ -6,20 +6,14 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.PasantiaJpaController;
-import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Pasantia;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.TreeTableColumn;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 
 /**
  *
@@ -29,15 +23,8 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class GestorPasantia implements Serializable {
     
-    private final PersonaJpaController personaController = new PersonaJpaController();
     private final PasantiaJpaController pasantiaController = new PasantiaJpaController();
-    private Pasantia pasantia = new Pasantia();
-    
-    private Date fechaInicio = new Date();
-    
-    private Date fechaFin = new Date();
-    
-    
+    private Pasantia pasantia = new Pasantia();   
     
     private List<Pasantia> listPasantes = null;
 
@@ -55,35 +42,11 @@ public class GestorPasantia implements Serializable {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
-    public void onCellEdit(TreeTableColumn.CellEditEvent event) {
-        Object oldValue = event.getOldValue();
-        Object newValue = event.getNewValue();
-         
-        if(newValue != null && !newValue.equals(oldValue)) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }    
+
     public String initCrearPasantia() {
         pasantia = new Pasantia();
-        fechaInicio = new Date();
-        fechaFin = new Date();
         GestorContrato.getInstance().actualizarListaContrato();
-        Calendar calendar = Calendar.getInstance();
-        //calendar.setTime(fechaInicio);        
-        calendar.set(Calendar.MONTH, 0);
-        calendar.set(Calendar.DAY_OF_MONTH, 0);
-        calendar.add(Calendar.YEAR, -50);
-        //fechaFin = calendar.getTime();
-        
-//        pasantia.setFechaInicio((java.sql.Date) fechaInicio);
-  //      pasantia.setFechaFin((java.sql.Date) fechaFin);
-        
-        
-
-        
-      
-        
+               
         return "manejoPasantia";
     }
     
@@ -130,15 +93,4 @@ public class GestorPasantia implements Serializable {
     public void setPersona(Pasantia pasantia) {
         this.pasantia = pasantia;
     }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-   
-
 }
