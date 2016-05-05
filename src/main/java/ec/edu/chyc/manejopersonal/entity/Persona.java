@@ -60,6 +60,10 @@ public class Persona implements Serializable {
     
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<PersonaTitulo> personaTitulosCollection = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "administrador", fetch = FetchType.LAZY)
+    private Collection<Convenio> conveniosAdminCollection = new ArrayList<>();
+    
 /*  
     @ManyToMany
     @JoinTable(name = "personaArticulo", joinColumns = {
@@ -279,6 +283,14 @@ public class Persona implements Serializable {
 
     public void setPersonaArticulosCollection(Collection<PersonaArticulo> personaArticulosCollection) {
         this.personaArticulosCollection = personaArticulosCollection;
+    }
+
+    public Collection<Convenio> getConveniosAdminCollection() {
+        return conveniosAdminCollection;
+    }
+
+    public void setConveniosAdminCollection(Collection<Convenio> conveniosAdminCollection) {
+        this.conveniosAdminCollection = conveniosAdminCollection;
     }
 
 }
