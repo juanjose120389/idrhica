@@ -39,9 +39,10 @@ public class GestorProyecto implements Serializable {
     private List<Proyecto> listaProyecto = new ArrayList<>();
     private List<Financiamiento> listaFinanciamientos = new ArrayList<>();
     private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
+    private Long idFinanciamientoGen = -1L;
 
     public GestorProyecto() {
-        
+
     }
 
     @PostConstruct
@@ -57,24 +58,26 @@ public class GestorProyecto implements Serializable {
     }
 
     public void abrirNuevaInstitucionDlg(Financiamiento financiamientoActual) {
-        
+
     }
-    
+
     public void quitarFinanciamiento(Financiamiento financiamientoQuitar) {
         listaFinanciamientos.remove(financiamientoQuitar);
     }
-    
+
     public void agregarFinanciamiento() {
         Financiamiento nuevoFinan = new Financiamiento();
         listaFinanciamientos.add(nuevoFinan);
+        nuevoFinan.setId(idFinanciamientoGen);
+        idFinanciamientoGen--;
         List<Institucion> listaInstituciones = GestorInstitucion.getInstance().getListaInstituciones();
-        
+
         if (!listaInstituciones.isEmpty()) {
-            nuevoFinan.setInstitucion(listaInstituciones.get(0));            
+            nuevoFinan.setInstitucion(listaInstituciones.get(0));
         }
         nuevoFinan.setMonto(0.0);
     }
-    
+
     public void actualizarListaProyecto() {
         try {
             listaProyecto = proyectoController.listProyecto();
@@ -94,25 +97,27 @@ public class GestorProyecto implements Serializable {
     public void cargarInformacionProyecto(Long id) {
         proyecto = proyectoController.findEntity(id);
     }
-    
+
     public String initVerProyecto() {
-        
+
         return "verProyecto";
     }
-    
+
     public String initModificarProyecto(Long id) {
         return "manejoProyecto";
     }
-    
+
     public String initCrearProyecto() {
         proyecto = new Proyecto();
         GestorContrato.getInstance().actualizarListaContrato();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
-        GestorInstitucion.getInstance().actualizarListaInstituciones();        
+        GestorInstitucion.getInstance().actualizarListaInstituciones();
 
+        idFinanciamientoGen = -1L;
+        
         listaFinanciamientos.clear();
         listaInstitucionesAgregadas.clear();
-        
+
         return "manejoProyecto";
     }
 
@@ -128,10 +133,13 @@ public class GestorProyecto implements Serializable {
     public void setListaProyecto(List<Proyecto> listaProyecto) {
         this.listaProyecto = listaProyecto;
     }
-    
-       public String guardar() {
+
+    public String guardar() {
+        proyecto.setFinanciamientosCollection(listaFinanciamientos);
         try {
             proyectoController.create(proyecto);
+            
+            listaInstitucionesAgregadas.clear();
             return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
