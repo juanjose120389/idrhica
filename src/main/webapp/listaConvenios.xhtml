@@ -28,8 +28,8 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
-            <p:column headerText="Institución" sortBy="#{convenio.institucion}" filterBy="#{convenio.institucion}" filterMatchMode="contains">
-                <h:outputText value="#{convenio.institucion}" />
+            <p:column headerText="Institución" sortBy="#{convenio.institucion.nombre}" filterBy="#{convenio.institucion.nombre}" filterMatchMode="contains">
+                <h:outputText value="#{convenio.institucion.nombre}" />
             </p:column>           
 
             <p:column headerText="Proyecto" sortBy="#{convenio.proyecto.titulo}" filterBy="#{convenio.proyecto.titulo}" filterMatchMode="contains">
