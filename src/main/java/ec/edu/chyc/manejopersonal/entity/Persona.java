@@ -23,6 +23,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 
 /**
@@ -59,6 +60,7 @@ public class Persona implements Serializable {
     private Collection<Articulo> articulosPrincipalCollection = new ArrayList<>();    
     
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
+    @OrderBy("orden ASC")
     private Collection<PersonaTitulo> personaTitulosCollection = new ArrayList<>();
     
     @OneToMany(mappedBy = "administrador", fetch = FetchType.LAZY)
