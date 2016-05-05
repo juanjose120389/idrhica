@@ -30,19 +30,23 @@ public class Pasantia implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private int numeroHoras;
+    private Integer numeroHoras;
     
     private String tema;
 
-    private int cicloPasante;
+    private Integer cicloPasante;
     
     private String facultad;
     
     private String escuela;
     
     @ManyToOne
-    @JoinColumn(name = "idContratadoCoordinador", referencedColumnName = "id")   
+    @JoinColumn(name = "idCoordinador", referencedColumnName = "id")   
     private Persona coordinador;
+    
+    @ManyToOne
+    @JoinColumn(name = "idTutor", referencedColumnName = "id")   
+    private Persona tutor;
     
     @ManyToOne
     @JoinColumn(name = "idPasante", referencedColumnName = "id")   
@@ -104,11 +108,11 @@ public class Pasantia implements Serializable {
     }
 
 
-    public int getNumeroHoras() {
+    public Integer getNumeroHoras() {
         return numeroHoras;
     }
 
-    public void setNumeroHoras(int numeroHoras) {
+    public void setNumeroHoras(Integer numeroHoras) {
         this.numeroHoras = numeroHoras;
     }
 
@@ -137,11 +141,11 @@ public class Pasantia implements Serializable {
         return true;
     }
 
-    public int getCicloPasante() {
+    public Integer getCicloPasante() {
         return cicloPasante;
     }
 
-    public void setCicloPasante(int cicloPasante) {
+    public void setCicloPasante(Integer cicloPasante) {
         this.cicloPasante = cicloPasante;
     }
 
@@ -183,6 +187,14 @@ public class Pasantia implements Serializable {
 
     public void setPasante(Persona pasante) {
         this.pasante = pasante;
+    }
+
+    public Persona getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Persona tutor) {
+        this.tutor = tutor;
     }
 
 }
