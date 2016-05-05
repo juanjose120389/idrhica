@@ -14,6 +14,7 @@ import ec.edu.chyc.manejopersonal.controller.ProyectoJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
+import ec.edu.chyc.manejopersonal.managebean.util.BeanUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -25,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -40,6 +42,13 @@ public class GestorProyecto implements Serializable {
     private List<Financiamiento> listaFinanciamientos = new ArrayList<>();
     private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
     private Long idFinanciamientoGen = -1L;
+    private Long idInstitucionGen = -1L;
+    
+    private Financiamiento financiamientoActual = null;
+    
+    private boolean mostrarDlgInstitucion = false;
+    
+    private Institucion institucion = null;
 
     public GestorProyecto() {
 
@@ -58,7 +67,27 @@ public class GestorProyecto implements Serializable {
     }
 
     public void abrirNuevaInstitucionDlg(Financiamiento financiamientoActual) {
-
+        this.institucion = new Institucion();
+        
+        this.financiamientoActual = financiamientoActual;
+        mostrarDlgInstitucion = true;
+        RequestContext.getCurrentInstance().update("formContenido:divDialogs");
+        BeanUtils.ejecutarJS("PF('dlgInstitucion').show()");
+    }
+    public void guardarInstitucion() {
+        institucion.setId(idInstitucionGen);
+        financiamientoActual.setInstitucion(institucion);
+        idInstitucionGen--;
+        listaInstitucionesAgregadas.add(institucion);
+        
+        institucion = new Institucion();
+        mostrarDlgInstitucion = false;
+        BeanUtils.ejecutarJS("PF('dlgInstitucion').hide()");
+    }
+    
+    
+    public void onCloseDlgInstitucion() {
+        mostrarDlgInstitucion = false;
     }
 
     public void quitarFinanciamiento(Financiamiento financiamientoQuitar) {
@@ -86,14 +115,6 @@ public class GestorProyecto implements Serializable {
         }
     }
 
-    public Proyecto getProyecto() {
-        return proyecto;
-    }
-
-    public void setProyecto(Proyecto proyecto) {
-        this.proyecto = proyecto;
-    }
-
     public void cargarInformacionProyecto(Long id) {
         proyecto = proyectoController.findEntity(id);
     }
@@ -113,6 +134,8 @@ public class GestorProyecto implements Serializable {
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
 
+        institucion = null;
+        mostrarDlgInstitucion = false;
         idFinanciamientoGen = -1L;
         
         listaFinanciamientos.clear();
@@ -163,4 +186,27 @@ public class GestorProyecto implements Serializable {
         this.listaInstitucionesAgregadas = listaInstitucionesAgregadas;
     }
 
+    public boolean isMostrarDlgInstitucion() {
+        return mostrarDlgInstitucion;
+    }
+
+    public void setMostrarDlgInstitucion(boolean mostrarDlgInstitucion) {
+        this.mostrarDlgInstitucion = mostrarDlgInstitucion;
+    }
+    public Proyecto getProyecto() {
+        return proyecto;
+    }
+
+    public void setProyecto(Proyecto proyecto) {
+        this.proyecto = proyecto;
+    }
+
+    public Institucion getInstitucion() {
+        return institucion;
+    }
+
+    public void setInstitucion(Institucion institucion) {
+        this.institucion = institucion;
+    }
+    
 }

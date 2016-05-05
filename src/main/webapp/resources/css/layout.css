@@ -17,3 +17,6 @@ and open the template in the editor.
 .exportButtons {
     text-align: right; margin-top: -26px;
 }
+.ui-widget-overlay {
+    opacity: 0.3 !important;
+}
