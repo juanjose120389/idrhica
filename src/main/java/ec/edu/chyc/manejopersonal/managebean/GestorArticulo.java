@@ -230,7 +230,7 @@ public class GestorArticulo implements Serializable {
     public String convertirListaPersonas(Collection<PersonaArticulo> listaConvertir) {
         String r = "";
         for (PersonaArticulo per : listaConvertir) {
-            r += String.format("%s %s, ", per.getPersona().getApellidos(), per.getPersona().getNombres());
+            r += String.format("%s %s, ", per.getPersona().getNombres(), per.getPersona().getApellidos());
         }
         if (!r.isEmpty()) {
             r = r.substring(0, r.length() - 2);

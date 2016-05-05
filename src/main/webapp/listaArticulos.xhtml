@@ -29,7 +29,7 @@
                 </h:panelGroup>                    
             </f:facet>
             <p:column headerText="Autor principal" sortBy="#{articulo.autorPrincipal.apellidos}" filterBy="#{articulo.autorPrincipal}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}">
-                <h:outputText value="#{articulo.autorPrincipal.apellidos} #{articulo.autorPrincipal.nombres}" />
+                <h:outputText value="#{articulo.personasArticuloCollection[0].persona.nombres} #{articulo.personasArticuloCollection[0].persona.apellidos}" />
             </p:column>           
 
             <p:column headerText="Nombre" filterBy="#{articulo.nombre}" filterMatchMode="contains">
@@ -62,7 +62,7 @@
 
             <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
                 <ui:repeat value="#{articulo.personasArticuloCollection}" var="autor">
-                    <p:outputLabel value="#{autor.persona.apellidos} #{autor.persona.nombres}"/><br />
+                    <p:outputLabel value="#{autor.persona.nombres} #{autor.persona.apellidos}"/><br />
                 </ui:repeat>
             </p:column>
 
