@@ -169,7 +169,7 @@
                                     <f:selectItems value="#{gestorPersona.listaTitulosAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
                                     <f:selectItems value="#{gestorGeneral.listaTitulos}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
 
-                                    <p:column style="width:10%">
+                                    <p:column>
                                         <p:outputLabel value="#{titulo.nombre}"/>
                                     </p:column>
                                 </p:selectOneMenu>                                
@@ -192,7 +192,7 @@
                                     <f:selectItems value="#{gestorPersona.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
                                     <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
 
-                                    <p:column style="width:10%">
+                                    <p:column>
                                         <p:outputLabel value="#{uni.nombre}"/>
                                     </p:column>
                                 </p:selectOneMenu>                                
@@ -212,7 +212,7 @@
                 </p:column>
 
                 <p:column style="text-align: center" width="32" >
-                    <p:commandButton action="#{gestorPersona.quitarPersonaTitulo(personaTitulo)}" update="dtTitulos" partialSubmit="true" process=":formContenido:divTitulos" icon="ui-icon-close" title="Eliminar"/>
+                    <p:commandButton action="#{gestorPersona.quitarPersonaTitulo(personaTitulo)}" update="dtTitulos" partialSubmit="true" process="@this" icon="ui-icon-close" title="Eliminar"/>
                 </p:column>
 
             </p:dataTable>
@@ -220,7 +220,6 @@
                 <p:commandButton value="Agregar" partialSubmit="true" process="divTitulos"  action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>            
             </h:panelGroup>
         </h:panelGroup>
-
 
         <h:panelGroup layout="block" style="height: 20px"/>
 
