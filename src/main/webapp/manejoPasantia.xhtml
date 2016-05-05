@@ -11,44 +11,76 @@
             <p:outputLabel value="Tema"/>
             <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.tema}"/>  
             <p:message for="txtTema"/>
-            
+
             <p:outputLabel value="# Horas"/>
-            <p:inputText   id="txtNumero" requiredMessage="Requerido" required="true"  value="#{gestorPasantia.pasantia.numeroHoras}" /> 
-            <p:message for="txtNumero" />
-            
-            <p:outputLabel value="Coordinador" />
-            <p:selectOneMenu id="cmbPersona" value="#{gestorPasantia.pasantia.coordinador}" converter="personaConverter"
+            <p:spinner min="1" size="9" id="spinHoras" required="true" requiredMessage="Requerido" value="#{gestorPasantia.pasantia.numeroHoras}"/>
+            <p:message for="spinHoras" />
+
+            <p:outputLabel value="Director/Profesor" />
+            <p:selectOneMenu id="cmbPersona" style="width: 170px" value="#{gestorPasantia.pasantia.coordinador}" converter="personaConverter"
                              var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres}" itemValue="#{u}" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
-                <p:column style="width:10%">
-                    <p:outputLabel value="#{per.nombres}"/>
+                <p:column>
+                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                 </p:column>
             </p:selectOneMenu>                                
-<h:panelGroup layout="block"/>
-            
+            <h:panelGroup layout="block"/>
+
+            <p:outputLabel value="Tutor" />
+            <p:selectOneMenu style="width: 170px" value="#{gestorPasantia.pasantia.tutor}" converter="personaConverter"
+                             var="per" filter="true" filterMatchMode="contains">
+                <f:selectItem itemLabel="Ninguno" itemValue="" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+
+                <p:column>
+                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                </p:column>
+            </p:selectOneMenu>                                
+            <h:panelGroup layout="block"/>
+
+
             <p:outputLabel value="Pasante"/>
-            <p:selectOneMenu id="cmbPersona2" value="#{gestorPasantia.pasantia.pasante}" converter="personaConverter"
+            <p:selectOneMenu id="cmbPersona2" style="width: 170px" value="#{gestorPasantia.pasantia.pasante}" converter="personaConverter"
                              var="uni" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres}" itemValue="#{u2}" />
+                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
 
-                <p:column style="width:10%">
-                    <p:outputLabel value="#{uni.nombres}"/>
+                <p:column>
+                    <p:outputLabel value="#{uni.nombres} #{uni.apellidos}"/>
                 </p:column>
-            </p:selectOneMenu>                                
+            </p:selectOneMenu>
+            <h:panelGroup layout="block"/>
 
-<h:panelGroup layout="block"/>
-            
+            <p:outputLabel value="Universidad"/>
+            <p:selectOneMenu id="cmbUniversidad" style="width: 170px" styleClass="cmbUniversidad" value="#{gestorPasantia.pasantia.universidad}" converter="universidadConverter"
+                             var="uni" filter="true" filterMatchMode="contains">
+                <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+
+                <p:column>
+                    <p:outputLabel value="#{uni.nombre}"/>
+                </p:column>
+            </p:selectOneMenu>
+            <h:panelGroup/>
+
+
+            <p:outputLabel value="Facultad"/>
+            <p:inputText value="#{gestorPasantia.pasantia.facultad}" /> 
+            <h:panelGroup/>
+
+            <p:outputLabel value="Escuela"/>
+            <p:inputText value="#{gestorPasantia.pasantia.escuela}" />
+            <h:panelGroup/>            
+
             <p:outputLabel value="Fecha de inicio"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorPasantia.pasantia.fechaInicio}"/>  
+            <p:calendar pattern="dd/MM/yyyy" size="11" value="#{gestorPasantia.pasantia.fechaInicio}"/>  
             <h:panelGroup layout="block"/>
 
             <p:outputLabel value="Fecha de finalización"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorPasantia.pasantia.fechaFin}"/>  
+            <p:calendar pattern="dd/MM/yyyy" size="11" value="#{gestorPasantia.pasantia.fechaFin}"/>  
             <h:panelGroup layout="block"/>
 
-            
+
         </h:panelGrid>        
-        <p:commandButton value="Guardar" action="#{gestorPasantia.guardar()}"/>
+        <p:commandButton value="Guardar" update="formContenido" action="#{gestorPasantia.guardar()}"/>
     </ui:define>
 </ui:composition>
