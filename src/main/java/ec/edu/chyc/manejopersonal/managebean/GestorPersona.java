@@ -10,11 +10,11 @@ import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
+import static ec.edu.chyc.manejopersonal.managebean.util.BeanUtils.ejecutarJS;
 import ec.edu.chyc.manejopersonal.util.DateUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
@@ -158,11 +157,6 @@ public class GestorPersona implements Serializable {
         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item Selected", event.getObject().toString()));
     }
     
-    public void ejecutarJS(String codigo) {
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute(codigo);
-    }    
-
     public void onCellEdit(CellEditEvent event) {
         Object oldValue = event.getOldValue();
         Object newValue = event.getNewValue();
