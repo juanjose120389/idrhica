@@ -10,6 +10,9 @@
                 color: white !important; 
                 margin-left: 15px;
             }
+            .ui-messages-error, .ui-message-error {
+                display: inline-block;
+            }            
         </style>
 
         <h:panelGroup layout="block" id="divDialogs">
@@ -19,7 +22,7 @@
                 <h:panelGroup layout="block" id="divDlgInstitucion">
                     <h:panelGrid id="panelCamposInst" columns="3">
                         <p:outputLabel value="Nombre"/>
-                        <p:inputText id="txtNombreInstitucion" required="true" requiredMessage="Requerido" value="#{gestorProyecto.institucion.nombre}"/>
+                        <p:inputText id="txtNombreInstitucion" required="true" requiredMessage="#{label.required}" value="#{gestorProyecto.institucion.nombre}"/>
                         <p:message for="txtNombreInstitucion"/>                                
                     </h:panelGrid>
                     <h:panelGrid columns="2">
@@ -33,12 +36,18 @@
         <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Proyecto">
+            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
             <h:panelGrid columns="3">
                 <h:panelGroup layout="block" style="width: 160px">
-                    <p:outputLabel value="Titulo"/>
-                </h:panelGroup>            
-                <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
-                <p:message for="txtTitulo"/>
+                    <p:outputLabel value="Titulo">
+                        <span class="asterisk"/>
+                    </p:outputLabel>
+                </h:panelGroup>
+                <h:panelGroup layout="block">
+                    <p:inputText id="txtTitulo" requiredMessage="#{label.required}" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
+                    <p:message for="txtTitulo"/>
+                </h:panelGroup>
+                <h:panelGroup/>                
 
                 <p:outputLabel value="Director" />
                 <p:selectOneMenu style="width: 140px" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
@@ -69,21 +78,32 @@
 
                     <p:outputLabel value=" Meses"/>
                 </h:panelGroup>            
-                <h:panelGroup layout="block"/> 
+                <h:panelGroup/> 
 
-                <p:outputLabel value="Fecha de Inicio"/>
-                <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>  
+                <p:outputLabel value="Fecha de Inicio">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <h:panelGroup layout="block">
+                    <p:calendar id="calFechaInicio" required="true" requiredMessage="#{label.required}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>
+                    <p:message for="calFechaInicio"/>
+                </h:panelGroup>
                 <h:panelGroup layout="block"/>
 
-                <p:outputLabel value="Fecha de Finalización (Documento)"/>
-                <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFinEnDocumento}"/>  
-                <h:panelGroup layout="block"/>
+                <p:outputLabel value="Fecha de Finalización (Documento)">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <h:panelGroup layout="block">
+                    <p:calendar id="calFechaFinDoc" required="true" requiredMessage="#{label.required}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFinEnDocumento}"/>  
+                    <p:message for="calFechaFinDoc"/>
+                </h:panelGroup>
+                <h:panelGroup/>
 
                 <p:selectBooleanCheckbox id="chkExtension" itemLabel="Extensión de plazo" value="#{gestorProyecto.hayExtensionFinalizacion}">
                     <p:ajax update="divExtension"/>
                 </p:selectBooleanCheckbox>
                 <h:panelGroup layout="block" id="divExtension">
-                    <p:calendar rendered="#{gestorProyecto.hayExtensionFinalizacion}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>  
+                    <p:calendar id="calFechaFin" rendered="#{gestorProyecto.hayExtensionFinalizacion}" required="true" requiredMessage="#{label.required}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>
+                    <p:message for="calFechaFin"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/>
 

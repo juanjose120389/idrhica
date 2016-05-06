@@ -15,10 +15,13 @@ import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.managebean.util.BeanUtils;
+import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -173,10 +176,24 @@ public class GestorProyecto implements Serializable {
     }
 
     public String guardar() {
+        LocalDate fechaInicio = FechaUtils.asLocalDate(proyecto.getFechaInicio());
+        LocalDate fechaFinDoc = FechaUtils.asLocalDate(proyecto.getFechaFinEnDocumento());
+        
         proyecto.setFinanciamientosCollection(listaFinanciamientos);
         if (!hayExtensionFinalizacion) {
             proyecto.setFechaFin(proyecto.getFechaFinEnDocumento());
         }
+        LocalDate fechaFin = FechaUtils.asLocalDate(proyecto.getFechaFin());
+        
+        if (fechaFinDoc.isBefore(fechaInicio) || fechaFin.isBefore(fechaInicio)) {
+            GestorMensajes.getInstance().mostrarMensajeWarn("La fecha de finalización del proyecto no puede ser menor al inicio del mismo.");
+            return "";
+        }
+        if (fechaFin.isBefore(fechaFinDoc)) {
+            GestorMensajes.getInstance().mostrarMensajeWarn("La fecha extendida de finalización del proyecto no puede ser menor a la fecha original de finalización.");
+            return "";
+        }
+        
         try {
             if (modoModificar) {
                 proyectoController.edit(proyecto);

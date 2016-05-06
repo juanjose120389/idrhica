@@ -20,3 +20,8 @@ and open the template in the editor.
 .ui-widget-overlay {
     opacity: 0.3 !important;
 }
+
+.asterisk:after {
+    content: " * ";
+    color: red;    
+}
