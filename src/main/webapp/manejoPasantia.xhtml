@@ -51,6 +51,17 @@
             </p:selectOneMenu>
             <h:panelGroup layout="block"/>
 
+            <p:outputLabel value="Proyecto" />
+            <p:selectOneMenu style="width: 170px" value="#{gestorPasantia.pasantia.proyecto}" converter="proyectoConverter"
+                             var="proy" filter="true" filterMatchMode="contains">
+                <f:selectItem itemLabel="Ninguno" itemValue="" />
+                <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u" itemLabel="#{u.titulo}" itemValue="#{u}" />
+                <p:column>
+                    <p:outputLabel value="#{proy.titulo}"/>
+                </p:column>
+            </p:selectOneMenu>                                
+            <h:panelGroup layout="block"/>            
+            
             <p:outputLabel value="Universidad"/>
             <p:selectOneMenu id="cmbUniversidad" style="width: 170px" styleClass="cmbUniversidad" value="#{gestorPasantia.pasantia.universidad}" converter="universidadConverter"
                              var="uni" filter="true" filterMatchMode="contains">
