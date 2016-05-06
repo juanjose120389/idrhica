@@ -62,7 +62,7 @@
                 <f:facet name="header">
                     Títulos
                 </f:facet>
-
+               
                 <p:column headerText="Título" width="500">
                     <h:outputText value="#{personaTitulo.titulo.nombre}" />
                 </p:column>
@@ -71,6 +71,10 @@
                     <h:outputText value="#{personaTitulo.universidad.nombre}" />
                 </p:column>
 
+                <p:column headerText="Año" width="100">
+                    <h:outputText value="#{personaTitulo.anio}" />
+                </p:column>
+                
             </p:dataTable>
 
         </h:panelGroup>
