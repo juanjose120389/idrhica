@@ -7,7 +7,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.ConvenioJpaController;
 import ec.edu.chyc.manejopersonal.entity.Convenio;
-import ec.edu.chyc.manejopersonal.util.DateUtils;
+import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -77,8 +77,8 @@ public class GestorConvenio implements Serializable {
     }    
     
     public String guardar() {
-        LocalDate dtInicio = DateUtils.asLocalDate(convenio.getFechaInicio());
-        LocalDate dtFin = DateUtils.asLocalDate(convenio.getFechaFin());
+        LocalDate dtInicio = FechaUtils.asLocalDate(convenio.getFechaInicio());
+        LocalDate dtFin = FechaUtils.asLocalDate(convenio.getFechaFin());
         //MutableDateTime dtInicio = new MutableDateTime(convenio.getFechaInicio());
         //MutableDateTime dtFin = new MutableDateTime(convenio.getFechaFin());
         

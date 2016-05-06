@@ -11,7 +11,7 @@ import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
 import static ec.edu.chyc.manejopersonal.managebean.util.BeanUtils.ejecutarJS;
-import ec.edu.chyc.manejopersonal.util.DateUtils;
+import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -239,7 +239,7 @@ public class GestorPersona implements Serializable {
         dtFechaNacDefault = dtFechaNacDefault.minusYears(25);
         
         persona.setFechaVinculacion(fechaActual);
-        persona.setFechaNacimiento(DateUtils.asDate(dtFechaNacDefault));
+        persona.setFechaNacimiento(FechaUtils.asDate(dtFechaNacDefault));
         
         listaPersonaTitulos = new ArrayList<>();
         
