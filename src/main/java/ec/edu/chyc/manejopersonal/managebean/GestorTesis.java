@@ -40,26 +40,12 @@ public class GestorTesis implements Serializable {
     private List<Tesis> listaTesis = new ArrayList<>();
     private List<Persona> listaAutoresTesis = new ArrayList<>();
     private List<Proyecto> listaProyectos = new ArrayList<>();
+    private List<Persona> listaCodirectores = new ArrayList<>();
+    private List<Persona> listaTutores = new ArrayList<>();
 
     private boolean modoModificar = false;
 
     public GestorTesis() {
-    }
-
-    public List<Persona> getListaAutores() {
-        return listaAutoresTesis;
-    }
-
-    public void setListaAutores(List<Persona> listaAutores) {
-        this.listaAutoresTesis = listaAutores;
-    }
-
-    public Tesis getTesis() {
-        return tesis;
-    }
-
-    public void setTesis(Tesis tesis) {
-        this.tesis = tesis;
     }
 
     @PostConstruct
@@ -70,6 +56,12 @@ public class GestorTesis implements Serializable {
     public String initModificarTesis(Long id) {
         inicializarManejoTesis();
 
+        tesis = tesisController.findTesis(id);
+        listaProyectos = new ArrayList<>(tesis.getProyectosCollection());
+        listaCodirectores = new ArrayList<>(tesis.getCodirectoresCollection());
+        listaTutores = new ArrayList<>(tesis.getTutoresCollection());
+        listaAutoresTesis = new ArrayList<>(tesis.getAutoresCollection());
+        
         modoModificar = true;
 
         return "manejoTesis";
@@ -106,24 +98,41 @@ public class GestorTesis implements Serializable {
             Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    public void quitarCodirector(Persona personaQuitar) {
+        listaCodirectores.remove(personaQuitar);
+    }
+    public void quitarTutor(Persona personaQuitar) {
+        listaTutores.remove(personaQuitar);
+    }    
     public void quitarAutor(Persona personaQuitar) {
         listaAutoresTesis.remove(personaQuitar);
     }
-
+    public void onCodirectoresChosen(SelectEvent event) {
+        List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
+        agregarPersonaALista(listaPersonasSel, listaCodirectores);        
+    }
+    public void onTutoresChosen(SelectEvent event) {
+        List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
+        agregarPersonaALista(listaPersonasSel, listaTutores);
+    }
     public void onPersonaChosen(SelectEvent event) {
         List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
-        //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Selected", "Id:" + car.getId());
-        if (listaPersonasSel != null) {
-            for (Persona per : listaPersonasSel) {
-                if (listaAutoresTesis.indexOf(per) < 0) {
-                    listaAutoresTesis.add(per);
+        agregarPersonaALista(listaPersonasSel, listaAutoresTesis);
+    }
+    
+    /***
+     * Agrega un listado de personas a una lista solo si no están ya en la lista
+     * @param listaPersonasAgregar Listado origen, personas que serán añadidas en la otra lista
+     * @param listadoDePersonas Listado destino, donde se añadirá la persona
+     */
+    private void agregarPersonaALista(List<Persona> listaPersonasAgregar, List<Persona> listadoDePersonas) {
+        if (listadoDePersonas != null && listaPersonasAgregar != null) {
+            for (Persona per : listaPersonasAgregar) {
+                if (!listadoDePersonas.contains(per)) {
+                    listadoDePersonas.add(per);
                 }
             }
-
-            //listaAutores.addAll(listaPersonasSel);
-            RequestContext.getCurrentInstance().update("formContenido:dtAutoresTesis");
-        }
+        }        
     }
 
     public void onProyectoChosen(SelectEvent event) {
@@ -134,13 +143,10 @@ public class GestorTesis implements Serializable {
                     listaProyectos.add(proy);
                 }
             }
-            //RequestContext.getCurrentInstance().update("formContenido:dtAutores");
         }
     }
-
-    public void agregarAutor() {
-        Persona personaNueva = new Persona();
-
+    
+    public void abrirDialogPersonas() {
         Map<String, Object> options = new HashMap<>();
         options.put("resizable", true);
         options.put("draggable", true);
@@ -148,7 +154,7 @@ public class GestorTesis implements Serializable {
         options.put("modal", true);
         options.put("contentWidth", "100%");
         GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
-        RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
+        RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);        
     }
 
     public String convertirListaPersonas(List<Persona> listaConvertir) {
@@ -192,6 +198,9 @@ public class GestorTesis implements Serializable {
     public String guardar() {
         tesis.setAutoresCollection(new HashSet(listaAutoresTesis));
         tesis.setProyectosCollection(new HashSet(listaProyectos));
+        tesis.setCodirectoresCollection(new HashSet(listaCodirectores));
+        tesis.setTutoresCollection(new HashSet(listaTutores));
+        
         try {
             if (modoModificar) {
                 tesisController.edit(tesis);
@@ -220,4 +229,37 @@ public class GestorTesis implements Serializable {
     public void setListaTesis(List<Tesis> listaTesis) {
         this.listaTesis = listaTesis;
     }
+
+    public List<Persona> getListaCodirectores() {
+        return listaCodirectores;
+    }
+
+    public void setListaCodirectores(List<Persona> listaCodirectores) {
+        this.listaCodirectores = listaCodirectores;
+    }
+
+    public List<Persona> getListaTutores() {
+        return listaTutores;
+    }
+
+    public void setListaTutores(List<Persona> listaTutores) {
+        this.listaTutores = listaTutores;
+    }
+    
+    public Tesis getTesis() {
+        return tesis;
+    }
+
+    public void setTesis(Tesis tesis) {
+        this.tesis = tesis;
+    }
+
+    public List<Persona> getListaAutoresTesis() {
+        return listaAutoresTesis;
+    }
+
+    public void setListaAutoresTesis(List<Persona> listaAutoresTesis) {
+        this.listaAutoresTesis = listaAutoresTesis;
+    }
+
 }

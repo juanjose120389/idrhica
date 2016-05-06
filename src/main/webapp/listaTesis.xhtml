@@ -11,7 +11,7 @@
                      paginator="true"
                      >
 
-            <p:column headerText="Nombre" filterBy="#{tesis.nombre}" filterMatchMode="contains">
+            <p:column headerText="Título" filterBy="#{tesis.nombre}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.nombre}" />
             </p:column>
 
@@ -52,6 +52,9 @@
                 </ui:repeat>
             </p:column>
 
+            <p:column exportable="false" width="60">
+                <p:commandLink value="Editar" action="#{gestorTesis.initModificarTesis(tesis.id)}"/>
+            </p:column>
 
         </p:dataTable>   
 
