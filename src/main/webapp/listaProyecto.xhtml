@@ -30,17 +30,24 @@
                 <h:outputText value="#{proyecto.titulo}" />
             </p:column>
 
-            <p:column headerText="Fecha de Inicio" >
+            <p:column headerText="Fecha de Inicio" width="100">
                 <h:outputText value="#{proyecto.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
 
 
-            <p:column headerText="Fecha de Finalización">
+            <p:column headerText="Fecha de Finalización" width="150">
                 <h:outputText value="#{proyecto.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
+                <h:panelGroup rendered="#{!proyecto.fechaFin.equals(proyecto.fechaFinEnDocumento)}">
+                    <br/>
+                    <h:outputText style="font-size: 0.8em" value="Fecha original: "/>
+                    <h:outputText style="font-size: 0.8em" value="#{proyecto.fechaFinEnDocumento}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </h:panelGroup>
             </p:column>
 
 
@@ -52,16 +59,16 @@
                 <h:outputText value="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" />
             </p:column>
 
-            <p:column headerText="Duración" >
+            <p:column headerText="Duración" width="70">
                 <h:outputText value="#{proyecto.duracion}" />
             </p:column>
 
-            <p:column headerText="Resumen" filterBy="#{proyecto.resumen}" filterMatchMode="contains">
-                <h:outputText value="#{proyecto.resumen}" />
-            </p:column>
             <p:column headerText="Observaciones" filterBy="#{proyecto.observaciones}" filterMatchMode="contains">
                 <h:outputText value="#{proyecto.observaciones}" />
             </p:column>
+            <p:column exportable="false" width="50">
+                <p:commandLink value="Editar" action="#{gestorProyecto.initModificarProyecto(proyecto.id)}"/>
+            </p:column>            
         </p:dataTable>         
     </ui:define>
 </ui:composition>

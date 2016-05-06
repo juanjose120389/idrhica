@@ -11,7 +11,7 @@
                 margin-left: 15px;
             }
         </style>
-        
+
         <h:panelGroup layout="block" id="divDialogs">
             <p:dialog id="dlgInstitucion" header="Institución" widgetVar="dlgInstitucion" rendered="#{gestorProyecto.mostrarDlgInstitucion}" 
                       resizable="false" modal="true" width="400">
@@ -29,11 +29,13 @@
                 </h:panelGroup>
             </p:dialog>  
         </h:panelGroup>        
-        
+
         <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <h:panelGrid columns="3">
-            <p:outputLabel value="Titulo"/>
+            <h:panelGroup layout="block" style="width: 160px">
+                <p:outputLabel value="Titulo"/>
+            </h:panelGroup>            
             <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
             <p:message for="txtTitulo"/>
 
@@ -72,8 +74,16 @@
             <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>  
             <h:panelGroup layout="block"/>
 
-            <p:outputLabel value="Fecha de Finalización"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>  
+            <p:outputLabel value="Fecha de Finalización (Documento)"/>
+            <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFinEnDocumento}"/>  
+            <h:panelGroup layout="block"/>
+
+            <p:selectBooleanCheckbox id="chkExtension" itemLabel="Extensión de plazo" value="#{gestorProyecto.hayExtensionFinalizacion}">
+                <p:ajax update="divExtension"/>
+            </p:selectBooleanCheckbox>
+            <h:panelGroup layout="block" id="divExtension">
+                <p:calendar rendered="#{gestorProyecto.hayExtensionFinalizacion}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>  
+            </h:panelGroup>
             <h:panelGroup layout="block"/>
 
             <p:outputLabel value="Resumen"/>

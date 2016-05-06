@@ -34,7 +34,7 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         }
     }
 
-    public Proyecto findProyecto(Long id, boolean cargarConvenios, boolean cargarArticulos) {
+    public Proyecto findProyecto(Long id, boolean cargarFinanciamientos, boolean cargarConvenios, boolean cargarArticulos) {
         EntityManager em = null;
 
         try {
@@ -43,13 +43,16 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             Query q = em.createQuery("select p from Proyecto p left join fetch p.contratosCollection where p.id=:id");
             q.setParameter("id", id);
             Proyecto p = (Proyecto) q.getSingleResult();
-
+            
             if (cargarConvenios || cargarArticulos) {
                 Hibernate.initialize(p.getConveniosCollection());
 
                 if (cargarArticulos) {
                     Hibernate.initialize(p.getArticulosCollection());
                 }
+            }
+            if (cargarFinanciamientos) {
+                Hibernate.initialize(p.getFinanciamientosCollection());
             }
             return p;
         } finally {
@@ -95,6 +98,24 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            
+            //quitar los elementos que ya no existen
+            Proyecto proyectoAntiguo = em.find(Proyecto.class, proyecto.getId());
+            for (Financiamiento finan : proyectoAntiguo.getFinanciamientosCollection()) {
+                if (!proyecto.getFinanciamientosCollection().contains(finan)) {
+                    em.remove(finan);
+                }
+            }
+
+            //agregar los nuevos elementos
+            for (Financiamiento finan : proyecto.getFinanciamientosCollection()) {
+                finan.setProyecto(proyecto);
+                if (finan.getId() == null || finan.getId() < 0) {
+                    finan.setId(null);                    
+                }
+                em.merge(finan);
+            }
+            
             em.merge(proyecto);
             em.getTransaction().commit();
         } finally {

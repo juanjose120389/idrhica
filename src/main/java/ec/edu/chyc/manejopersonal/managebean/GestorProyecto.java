@@ -47,6 +47,8 @@ public class GestorProyecto implements Serializable {
     private Financiamiento financiamientoActual = null;
     
     private boolean mostrarDlgInstitucion = false;
+    private boolean hayExtensionFinalizacion = false;
+    private boolean modoModificar = false;
     
     private Institucion institucion = null;
 
@@ -125,10 +127,17 @@ public class GestorProyecto implements Serializable {
     }
 
     public String initModificarProyecto(Long id) {
+        inicializarManejoProyecto();
+        proyecto = proyectoController.findProyecto(id, true, false, false);        
+        listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
+        modoModificar = true;
+        
+        hayExtensionFinalizacion = !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin());
+        
         return "manejoProyecto";
     }
-
-    public String initCrearProyecto() {
+    
+    private void inicializarManejoProyecto() {
         proyecto = new Proyecto();
         GestorContrato.getInstance().actualizarListaContrato();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
@@ -137,9 +146,15 @@ public class GestorProyecto implements Serializable {
         institucion = null;
         mostrarDlgInstitucion = false;
         idFinanciamientoGen = -1L;
+        hayExtensionFinalizacion = false;
         
         listaFinanciamientos.clear();
-        listaInstitucionesAgregadas.clear();
+        listaInstitucionesAgregadas.clear();        
+    }
+
+    public String initCrearProyecto() {
+        inicializarManejoProyecto();
+        modoModificar = false;
 
         return "manejoProyecto";
     }
@@ -159,8 +174,15 @@ public class GestorProyecto implements Serializable {
 
     public String guardar() {
         proyecto.setFinanciamientosCollection(listaFinanciamientos);
+        if (!hayExtensionFinalizacion) {
+            proyecto.setFechaFin(proyecto.getFechaFinEnDocumento());
+        }
         try {
-            proyectoController.create(proyecto);
+            if (modoModificar) {
+                proyectoController.edit(proyecto);
+            } else {
+                proyectoController.create(proyecto);
+            }
             
             listaInstitucionesAgregadas.clear();
             return "index";
@@ -207,6 +229,22 @@ public class GestorProyecto implements Serializable {
 
     public void setInstitucion(Institucion institucion) {
         this.institucion = institucion;
+    }
+
+    public boolean isHayExtensionFinalizacion() {
+        return hayExtensionFinalizacion;
+    }
+
+    public void setHayExtensionFinalizacion(boolean hayExtensionFinalizacion) {
+        this.hayExtensionFinalizacion = hayExtensionFinalizacion;
+    }
+
+    public boolean isModoModificar() {
+        return modoModificar;
+    }
+
+    public void setModoModificar(boolean modoModificar) {
+        this.modoModificar = modoModificar;
     }
     
 }

@@ -52,11 +52,15 @@ public class Proyecto implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
     
+    //fecha real de finalización del proyecto, puede ser posterior a la fecha indicada en el documento (en 
+    // este caso sería debido a una ampliación).
+    //Para realizar consultas de proyectos terminados, se debe tomar en cuenta siempre esta fecha
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
-    
+
+    //fecha fin del proyecto de acuerdo al documento
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaAmplicacion;    
+    private Date fechaFinEnDocumento;
     
     @Lob
     @Column(columnDefinition = "TEXT")
@@ -179,14 +183,6 @@ public class Proyecto implements Serializable {
     public void setResumen(String resumen) {
         this.resumen = resumen;
     }
-
-    public Date getFechaAmplicacion() {
-        return fechaAmplicacion;
-    }
-
-    public void setFechaAmplicacion(Date fechaAmplicacion) {
-        this.fechaAmplicacion = fechaAmplicacion;
-    }
     
     @Override
     public int hashCode() {
@@ -243,6 +239,14 @@ public class Proyecto implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Proyecto[ id=" + id + " ]";
+    }
+
+    public Date getFechaFinEnDocumento() {
+        return fechaFinEnDocumento;
+    }
+
+    public void setFechaFinEnDocumento(Date fechaFinEnDocumento) {
+        this.fechaFinEnDocumento = fechaFinEnDocumento;
     }
     
 }
