@@ -59,8 +59,7 @@ public class Persona implements Serializable {
     @OneToMany(mappedBy = "autorPrincipal", fetch = FetchType.LAZY)
     private Collection<Articulo> articulosPrincipalCollection = new ArrayList<>();    
     
-    @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
-    @OrderBy("orden ASC")
+    @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)    
     private Collection<PersonaTitulo> personaTitulosCollection = new ArrayList<>();
     
     @OneToMany(mappedBy = "administrador", fetch = FetchType.LAZY)
@@ -74,6 +73,7 @@ public class Persona implements Serializable {
     private Set<Articulo> articulosCollection = new HashSet();
   */  
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
+    @OrderBy("orden ASC")
     private Collection<PersonaArticulo> personaArticulosCollection = new ArrayList<>();    
     
     @ManyToMany
