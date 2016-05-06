@@ -51,6 +51,34 @@
             </h:panelGroup>
             <h:panelGroup layout="block"/> 
                
+            <p:outputLabel value="Asociado a Proyectos"/>
+            <h:panelGroup layout="block" id="divProyectos">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable id="dtProyectos" paginator="true" paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorTesis.listaProyectos}">
+                    <p:column headerText="Título" width="450">
+                        <h:outputText value="#{proyecto.titulo}"/>
+                    </p:column>
+                    <p:column headerText="Director">
+                        <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Fecha Inicio" width="150">
+                        <h:outputText value="#{proyecto.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center" width="60">
+                        <p:commandButton id="cmdQuitarAutor" action="#{gestorTesis.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                    </p:column>
+
+                </p:dataTable>
+                <h:panelGroup layout="block">
+                    <p:commandButton value="Agregar" action="#{gestorTesis.agregarProyecto()}" process="@parent">
+                        <p:ajax event="dialogReturn" listener="#{gestorTesis.onProyectoChosen}" update="dtProyectos"/>
+                    </p:commandButton>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup layout="block"/> 
+            
 
             <p:outputLabel value="Fecha de Inicio"/>
             <p:calendar pattern="dd/MM/yyyy" value="#{gestorTesis.tesis.fechaInicio}"/>  
@@ -70,16 +98,11 @@
                 </p:column>
             </p:selectOneMenu>                                
             <h:panelGroup layout="block"/>
-            <p:outputLabel value="Enlace"/>
-            <p:inputText id="txtEnlace" value="#{gestorTesis.tesis.enlace}" /> 
-            <p:message for="txtEnlace" />
             
             <p:outputLabel value="Tipo" />
-            <p:selectOneMenu id="cmbTipo" value="#{gestorTesis.tesis.tipo}" style="width:150px">
-                <f:selectItem itemLabel="Pregrado" itemValue="Pregrado" />
-                <f:selectItem itemLabel="Máster" itemValue="Máster" />
-                <f:selectItem itemLabel="Doctorado" itemValue="Doctorado" />
-
+            <p:selectOneMenu value="#{gestorTesis.tesis.tipo}" style="width: 150px">
+                <f:selectItems value="#{gestorTesis.tiposTesis}" var="tipo"
+                               itemValue="#{tipo}" itemLabel="#{label['tesis.tipo.' += tipo]}" />
             </p:selectOneMenu>
             <h:panelGroup layout="block"/>
             
