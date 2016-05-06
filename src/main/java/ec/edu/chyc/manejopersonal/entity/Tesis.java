@@ -65,6 +65,9 @@ public class Tesis implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")    
     private String observaciones;
 
     //private String tipo;//M=Master, D=Doctorado, P=Pregrado
@@ -84,6 +87,7 @@ public class Tesis implements Serializable {
     private Set<Persona> autoresCollection = new HashSet<>();
     
     private String facultad;
+    
     private String escuela;
     
     @ManyToOne
