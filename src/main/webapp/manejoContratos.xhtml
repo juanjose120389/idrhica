@@ -7,90 +7,90 @@
     <ui:define name="body">
         <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>                
-        <h:panelGrid columns="3">
-            <p:outputLabel value="Código Contrato"/>
-            <p:inputText id="txtCodigo" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.codigoContrato}"/>  
-            <p:message for="txtCodigo"/>
+        <p:panel header="Contrato">
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Código Contrato"/>
+                <p:inputText id="txtCodigo" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.codigoContrato}"/>  
+                <p:message for="txtCodigo"/>
 
-            <p:outputLabel value="Cargo"/>
-            <p:inputText id="txtCargo" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.cargo}"/>  
-            <p:message for="txtCargo"/>
+                <p:outputLabel value="Cargo"/>
+                <p:inputText id="txtCargo" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.cargo}"/>  
+                <p:message for="txtCargo"/>
 
-            <p:outputLabel value="Actividad Principal"/>
-            <p:inputText id="txtActividad" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.actividadPrincipal}"/>  
-            <p:message for="txtActividad"/>
-
-
-            <p:outputLabel value="Persona"/>
-            <p:selectOneMenu style="width: 150px" id="cmbPersona2" value="#{gestorContrato.contrato.persona}" converter="personaConverter"
-                             var="uni" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
-
-                <p:column style="width:10%">
-                    <p:outputLabel value="#{uni.nombres} #{uni.apellidos}"/>
-                </p:column>
-            </p:selectOneMenu>
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Administrador" />
-            <p:selectOneMenu style="width: 150px" id="cmbPersona" value="#{gestorContrato.contrato.administrador}" converter="personaConverter"
-                             var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
-
-                <p:column style="width:10%">
-                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
-                </p:column>
-            </p:selectOneMenu>                                
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Proyecto" />
-            <p:selectOneMenu id="cmbProyecto" style="width: 150px" value="#{gestorContrato.contrato.proyecto}" converter="proyectoConverter"
-                             var="per2" filter="true" filterMatchMode="contains">
-                <f:selectItem itemLabel="Ninguno" itemValue="" />
-                <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
-
-                <p:column style="width:10%">
-                    <p:outputLabel value="#{per2.titulo}"/>
-                </p:column>
-            </p:selectOneMenu>                                
-            <h:panelGroup layout="block"/>
+                <p:outputLabel value="Actividad Principal"/>
+                <p:inputText id="txtActividad" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.actividadPrincipal}"/>  
+                <p:message for="txtActividad"/>
 
 
-            <p:outputLabel value="Tipo de Contrato"/>
-            <p:selectOneMenu value="#{gestorContrato.contrato.tipo}" style="width: 150px">
-                <f:selectItems value="#{gestorContrato.tiposContrato}" var="tipo"
-                               itemValue="#{tipo}" itemLabel="#{label['contrato.tipo.' += tipo]}" />
-                 <p:ajax event="change" partialSubmit="true" process="@this" update="divChkEsProfesor" />
-            </p:selectOneMenu>
-            <h:panelGroup layout="block"/> 
+                <p:outputLabel value="Persona"/>
+                <p:selectOneMenu style="width: 150px" id="cmbPersona2" value="#{gestorContrato.contrato.persona}" converter="personaConverter"
+                                 var="uni" filter="true" filterMatchMode="contains">
+                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
 
-            <h:panelGroup layout="block" id="divChkEsProfesor">
-                <p:selectBooleanCheckbox rendered="#{gestorContrato.puedeSerContratoProfesor()}" value="#{gestorContrato.esProfesor}" itemLabel="Es profesor">
-                    <p:ajax update="divCmbTipoProfesor"/>
-                </p:selectBooleanCheckbox>
-            </h:panelGroup>
-            <h:panelGroup layout="block" id="divCmbTipoProfesor">
-                <p:selectOneMenu rendered="#{gestorContrato.puedeSerContratoProfesor() and gestorContrato.esProfesor}" value="#{gestorContrato.contrato.tipoProfesor}" style="width: 150px">
-                    <f:selectItems value="#{gestorContrato.tiposProfesor}" var="tipo"
-                                   itemValue="#{tipo}" itemLabel="#{label['contrato.tipoProfesor.' += tipo]}" />
+                    <p:column style="width:10%">
+                        <p:outputLabel value="#{uni.nombres} #{uni.apellidos}"/>
+                    </p:column>
                 </p:selectOneMenu>
-            </h:panelGroup>
-            <h:panelGroup/>
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Administrador" />
+                <p:selectOneMenu style="width: 150px" id="cmbPersona" value="#{gestorContrato.contrato.administrador}" converter="personaConverter"
+                                 var="per" filter="true" filterMatchMode="contains">
+                    <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+
+                    <p:column style="width:10%">
+                        <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                    </p:column>
+                </p:selectOneMenu>                                
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Proyecto" />
+                <p:selectOneMenu id="cmbProyecto" style="width: 150px" value="#{gestorContrato.contrato.proyecto}" converter="proyectoConverter"
+                                 var="per2" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="Ninguno" itemValue="" />
+                    <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
+
+                    <p:column style="width:10%">
+                        <p:outputLabel value="#{per2.titulo}"/>
+                    </p:column>
+                </p:selectOneMenu>                                
+                <h:panelGroup layout="block"/>
+
+
+                <p:outputLabel value="Tipo de Contrato"/>
+                <p:selectOneMenu value="#{gestorContrato.contrato.tipo}" style="width: 150px">
+                    <f:selectItems value="#{gestorContrato.tiposContrato}" var="tipo"
+                                   itemValue="#{tipo}" itemLabel="#{label['contrato.tipo.' += tipo]}" />
+                    <p:ajax event="change" partialSubmit="true" process="@this" update="divChkEsProfesor" />
+                </p:selectOneMenu>
+                <h:panelGroup layout="block"/> 
+
+                <h:panelGroup layout="block" id="divChkEsProfesor">
+                    <p:selectBooleanCheckbox rendered="#{gestorContrato.puedeSerContratoProfesor()}" value="#{gestorContrato.esProfesor}" itemLabel="Es profesor">
+                        <p:ajax update="divCmbTipoProfesor"/>
+                    </p:selectBooleanCheckbox>
+                </h:panelGroup>
+                <h:panelGroup layout="block" id="divCmbTipoProfesor">
+                    <p:selectOneMenu rendered="#{gestorContrato.puedeSerContratoProfesor() and gestorContrato.esProfesor}" value="#{gestorContrato.contrato.tipoProfesor}" style="width: 150px">
+                        <f:selectItems value="#{gestorContrato.tiposProfesor}" var="tipo"
+                                       itemValue="#{tipo}" itemLabel="#{label['contrato.tipoProfesor.' += tipo]}" />
+                    </p:selectOneMenu>
+                </h:panelGroup>
+                <h:panelGroup/>
 
 
 
-            <p:outputLabel value="Fecha de inicio"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorContrato.contrato.fechaInicio}"/>  
-            <h:panelGroup layout="block"/>
+                <p:outputLabel value="Fecha de inicio"/>
+                <p:calendar pattern="dd/MM/yyyy" value="#{gestorContrato.contrato.fechaInicio}"/>  
+                <h:panelGroup layout="block"/>
 
-            <p:outputLabel value="Fecha de finalización"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorContrato.contrato.fechaFin}"/>  
-            <h:panelGroup layout="block"/>
+                <p:outputLabel value="Fecha de finalización"/>
+                <p:calendar pattern="dd/MM/yyyy" value="#{gestorContrato.contrato.fechaFin}"/>  
+                <h:panelGroup layout="block"/>
 
-
-
-
-        </h:panelGrid>        
+            </h:panelGrid>        
+        </p:panel>
+        <h:panelGroup layout="block" style="height: 15px"/>
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorContrato.guardar()}"/>
     </ui:define>
 </ui:composition>

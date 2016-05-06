@@ -16,55 +16,58 @@
         </style>
         <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>                
+        <p:panel header="Convenio">
             <p:messages id="messages" showDetail="true" globalOnly="true" autoUpdate="true" closable="true" />
-        <h:panelGrid columns="3">            
-            <p:outputLabel value="Título"/>
-            <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorConvenio.convenio.titulo}"/>  
-            <p:message for="txtTitulo"/>
+            <h:panelGrid columns="3">            
+                <p:outputLabel value="Título"/>
+                <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorConvenio.convenio.titulo}"/>  
+                <p:message for="txtTitulo"/>
 
-            <p:outputLabel value="Objetivo"/>
-            <p:inputTextarea rows="2" id="txtObjetivo" value="#{gestorConvenio.convenio.objetivo}"/>
-            <p:message for="txtObjetivo"/>
-            
-            <p:outputLabel value="Institución"/>
-            <p:inputText id="txtInstitucion" requiredMessage="Requerido" required="true" value="#{gestorConvenio.convenio.institucion}"/>  
-            <p:message for="txtInstitucion"/>
-            
-            <p:outputLabel value="Fecha de Inicio"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaInicio}"/>  
-            <h:panelGroup layout="block"/>
-            
-            <p:outputLabel value="Fecha de Finalización"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaFin}"/>  
-            <h:panelGroup layout="block"/>
-            
-            <p:outputLabel value="Proyecto" />
-            <p:selectOneMenu id="cmbProyecto" style="width: 150px" value="#{gestorConvenio.convenio.proyecto}" converter="proyectoConverter"
-                             var="per2" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
+                <p:outputLabel value="Objetivo"/>
+                <p:inputTextarea rows="2" id="txtObjetivo" value="#{gestorConvenio.convenio.objetivo}"/>
+                <p:message for="txtObjetivo"/>
 
-                <p:column style="width:10%">
-                    <p:outputLabel value="#{per2.titulo}"/>
-                </p:column>
-            </p:selectOneMenu>                                
-            <h:panelGroup layout="block"/>
-            
-            <p:outputLabel value="Administrador" />
-            <p:selectOneMenu style="width: 150px" id="cmbAdmin" value="#{gestorConvenio.convenio.administrador}" converter="personaConverter"
-                             var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+                <p:outputLabel value="Institución"/>
+                <p:inputText id="txtInstitucion" requiredMessage="Requerido" required="true" value="#{gestorConvenio.convenio.institucion}"/>  
+                <p:message for="txtInstitucion"/>
 
-                <p:column>
-                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
-                </p:column>
-            </p:selectOneMenu>                
-            <h:panelGroup layout="block"/>
-            
-            <p:outputLabel value="Observaciones"/>
-            <p:inputTextarea rows="3" value="#{gestorConvenio.convenio.observaciones}"/>
-            <h:panelGroup layout="block"/>
+                <p:outputLabel value="Fecha de Inicio"/>
+                <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaInicio}"/>  
+                <h:panelGroup layout="block"/>
 
-        </h:panelGrid>        
+                <p:outputLabel value="Fecha de Finalización"/>
+                <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaFin}"/>  
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Proyecto" />
+                <p:selectOneMenu id="cmbProyecto" style="width: 150px" value="#{gestorConvenio.convenio.proyecto}" converter="proyectoConverter"
+                                 var="per2" filter="true" filterMatchMode="contains">
+                    <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
+
+                    <p:column style="width:10%">
+                        <p:outputLabel value="#{per2.titulo}"/>
+                    </p:column>
+                </p:selectOneMenu>                                
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Administrador" />
+                <p:selectOneMenu style="width: 150px" id="cmbAdmin" value="#{gestorConvenio.convenio.administrador}" converter="personaConverter"
+                                 var="per" filter="true" filterMatchMode="contains">
+                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+
+                    <p:column>
+                        <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                    </p:column>
+                </p:selectOneMenu>                
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Observaciones"/>
+                <p:inputTextarea rows="3" value="#{gestorConvenio.convenio.observaciones}"/>
+                <h:panelGroup layout="block"/>
+
+            </h:panelGrid>        
+        </p:panel>
+        <h:panelGroup layout="block" style="height: 15px"/>
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorConvenio.guardar()}"/>
     </ui:define>
 </ui:composition>

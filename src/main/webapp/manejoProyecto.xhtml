@@ -32,118 +32,121 @@
 
         <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
-        <h:panelGrid columns="3">
-            <h:panelGroup layout="block" style="width: 160px">
-                <p:outputLabel value="Titulo"/>
-            </h:panelGroup>            
-            <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
-            <p:message for="txtTitulo"/>
+        <p:panel header="Proyecto">
+            <h:panelGrid columns="3">
+                <h:panelGroup layout="block" style="width: 160px">
+                    <p:outputLabel value="Titulo"/>
+                </h:panelGroup>            
+                <p:inputText id="txtTitulo" requiredMessage="Requerido" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
+                <p:message for="txtTitulo"/>
 
-            <p:outputLabel value="Director" />
-            <p:selectOneMenu style="width: 140px" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
-                             var="per" filter="true" filterMatchMode="contains">
-                <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+                <p:outputLabel value="Director" />
+                <p:selectOneMenu style="width: 140px" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
+                                 var="per" filter="true" filterMatchMode="contains">
+                    <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
-                <p:column style="width:10%">
-                    <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
-                </p:column>
-            </p:selectOneMenu>  
-            <h:panelGroup layout="block"/>
-            <p:outputLabel value="Co-Director" />
-            <p:selectOneMenu style="width: 140px" id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="personaConverter"
-                             var="per2" filter="true" filterMatchMode="contains">
-                <f:selectItem itemLabel="Ninguno" itemValue="" />
-                <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
-
-                <p:column style="width:10%">
-                    <p:outputLabel value="#{per2.nombres} #{per2.apellidos}"/>
-                </p:column>
-            </p:selectOneMenu>  
-            <h:panelGroup layout="block"/>
-
-
-            <p:outputLabel value="Duración"/>
-            <h:panelGroup layout="block">
-                <p:spinner id="basic" value="#{gestorProyecto.proyecto.duracion}" />
-
-                <p:outputLabel value=" Meses"/>
-            </h:panelGroup>            
-            <h:panelGroup layout="block"/> 
-
-            <p:outputLabel value="Fecha de Inicio"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>  
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Fecha de Finalización (Documento)"/>
-            <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFinEnDocumento}"/>  
-            <h:panelGroup layout="block"/>
-
-            <p:selectBooleanCheckbox id="chkExtension" itemLabel="Extensión de plazo" value="#{gestorProyecto.hayExtensionFinalizacion}">
-                <p:ajax update="divExtension"/>
-            </p:selectBooleanCheckbox>
-            <h:panelGroup layout="block" id="divExtension">
-                <p:calendar rendered="#{gestorProyecto.hayExtensionFinalizacion}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>  
-            </h:panelGroup>
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Resumen"/>
-            <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.resumen}"/>  
-            <h:panelGroup layout="block"/>
-
-            <p:outputLabel value="Financiamiento"/>
-            <h:panelGroup layout="block" id="divFinanciamientos">
-                <p:dataTable id="dtFinanciamientos" rowKey="#{financiamiento.id}" var="financiamiento" value="#{gestorProyecto.listaFinanciamientos}" editable="true" editMode="cell" widgetVar="cellTitulos">
-
-                    <p:column headerText="Institución" width="500">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{financiamiento.institucion.nombre}" />
-                            </f:facet>
-                            <f:facet name="input">
-
-                                <h:panelGroup id="divAccionesInstitucion" layout="block">
-                                    <p:selectOneMenu id="cmbInstitucion" style="width: 200px" value="#{financiamiento.institucion}" converter="institucionConverter"
-                                                     var="institucion" filter="true" filterMatchMode="contains">
-                                        <f:selectItems value="#{gestorProyecto.listaInstitucionesAgregadas}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-                                        <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-
-                                        <p:column>
-                                            <p:outputLabel value="#{institucion.nombre}"/>
-                                        </p:column>
-                                    </p:selectOneMenu>                                
-
-                                    <p:commandLink value="Nueva Institución" styleClass="linkDropdown" process="@this" action="#{gestorProyecto.abrirNuevaInstitucionDlg(financiamiento)}" />
-                                </h:panelGroup>
-                            </f:facet>
-                        </p:cellEditor>
+                    <p:column style="width:10%">
+                        <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                     </p:column>
+                </p:selectOneMenu>  
+                <h:panelGroup layout="block"/>
+                <p:outputLabel value="Co-Director" />
+                <p:selectOneMenu style="width: 140px" id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="personaConverter"
+                                 var="per2" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="Ninguno" itemValue="" />
+                    <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
 
-                    <p:column headerText="Monto">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{financiamiento.monto}" /></f:facet>
-                            <f:facet name="input">
-                                <p:inputText value="#{financiamiento.monto}"/>
-                            </f:facet>
-                        </p:cellEditor>
+                    <p:column style="width:10%">
+                        <p:outputLabel value="#{per2.nombres} #{per2.apellidos}"/>
                     </p:column>
+                </p:selectOneMenu>  
+                <h:panelGroup layout="block"/>
 
-                    <p:column style="text-align: center" width="32" >
-                        <p:commandButton action="#{gestorProyecto.quitarFinanciamiento(financiamiento)}" update="dtFinanciamientos" partialSubmit="true" process="@this" icon="ui-icon-close" title="Eliminar"/>
-                    </p:column>
 
-                </p:dataTable>
-                <h:panelGroup layout="block" style="padding-top: 5px" >
-                    <p:commandButton value="Agregar" partialSubmit="true" process="@parent" action="#{gestorProyecto.agregarFinanciamiento()}" update="divFinanciamientos"/>
+                <p:outputLabel value="Duración"/>
+                <h:panelGroup layout="block">
+                    <p:spinner id="basic" value="#{gestorProyecto.proyecto.duracion}" />
+
+                    <p:outputLabel value=" Meses"/>
+                </h:panelGroup>            
+                <h:panelGroup layout="block"/> 
+
+                <p:outputLabel value="Fecha de Inicio"/>
+                <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>  
+                <h:panelGroup layout="block"/>
+
+                <p:outputLabel value="Fecha de Finalización (Documento)"/>
+                <p:calendar pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFinEnDocumento}"/>  
+                <h:panelGroup layout="block"/>
+
+                <p:selectBooleanCheckbox id="chkExtension" itemLabel="Extensión de plazo" value="#{gestorProyecto.hayExtensionFinalizacion}">
+                    <p:ajax update="divExtension"/>
+                </p:selectBooleanCheckbox>
+                <h:panelGroup layout="block" id="divExtension">
+                    <p:calendar rendered="#{gestorProyecto.hayExtensionFinalizacion}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFin}"/>  
                 </h:panelGroup>
-            </h:panelGroup>
+                <h:panelGroup layout="block"/>
 
-            <h:panelGroup layout="block"/>            
+                <p:outputLabel value="Resumen"/>
+                <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.resumen}"/>  
+                <h:panelGroup layout="block"/>
 
-            <p:outputLabel value="Observaciones"/>
-            <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.observaciones}"/>  
-            <h:panelGroup layout="block"/> 
+                <p:outputLabel value="Financiamiento"/>
+                <h:panelGroup layout="block" id="divFinanciamientos">
+                    <p:dataTable id="dtFinanciamientos" rowKey="#{financiamiento.id}" var="financiamiento" value="#{gestorProyecto.listaFinanciamientos}" editable="true" editMode="cell" widgetVar="cellTitulos">
 
-        </h:panelGrid>        
+                        <p:column headerText="Institución" width="500">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{financiamiento.institucion.nombre}" />
+                                </f:facet>
+                                <f:facet name="input">
+
+                                    <h:panelGroup id="divAccionesInstitucion" layout="block">
+                                        <p:selectOneMenu id="cmbInstitucion" style="width: 200px" value="#{financiamiento.institucion}" converter="institucionConverter"
+                                                         var="institucion" filter="true" filterMatchMode="contains">
+                                            <f:selectItems value="#{gestorProyecto.listaInstitucionesAgregadas}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                                            <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+
+                                            <p:column>
+                                                <p:outputLabel value="#{institucion.nombre}"/>
+                                            </p:column>
+                                        </p:selectOneMenu>                                
+
+                                        <p:commandLink value="Nueva Institución" styleClass="linkDropdown" process="@this" action="#{gestorProyecto.abrirNuevaInstitucionDlg(financiamiento)}" />
+                                    </h:panelGroup>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Monto">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{financiamiento.monto}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{financiamiento.monto}"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="text-align: center" width="32" >
+                            <p:commandButton action="#{gestorProyecto.quitarFinanciamiento(financiamiento)}" update="dtFinanciamientos" partialSubmit="true" process="@this" icon="ui-icon-close" title="Eliminar"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <h:panelGroup layout="block" style="padding-top: 5px" >
+                        <p:commandButton value="Agregar" partialSubmit="true" process="@parent" action="#{gestorProyecto.agregarFinanciamiento()}" update="divFinanciamientos"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block"/>            
+
+                <p:outputLabel value="Observaciones"/>
+                <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.observaciones}"/>  
+                <h:panelGroup layout="block"/> 
+
+            </h:panelGrid>        
+        </p:panel>
+        <h:panelGroup layout="block" style="height: 15px"/>
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorProyecto.guardar()}"/>
 
     </ui:define>

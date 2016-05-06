@@ -25,165 +25,167 @@
         </style>
         <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>                
-        <h:panelGrid columns="3">
-            <p:outputLabel value="Título"/>
-            <h:panelGroup>
-                <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  
-                <p:message styleClass="asdf" for="txtNombre" style="width: 150px"/>
-            </h:panelGroup>
-            <h:panelGroup layout="block"/> 
+        <p:panel header="Artículo">
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Título"/>
+                <h:panelGroup>
+                    <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  
+                    <p:message styleClass="asdf" for="txtNombre" style="width: 150px"/>
+                </h:panelGroup>
+                <h:panelGroup layout="block"/> 
 
-            <p:outputLabel value="Tema"/>
-            <h:panelGroup>
-                <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.tema}"/>  
-                <p:message for="txtTema"/>
-            </h:panelGroup>
-            <h:panelGroup layout="block"/> 
+                <p:outputLabel value="Tema"/>
+                <h:panelGroup>
+                    <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.tema}"/>  
+                    <p:message for="txtTema"/>
+                </h:panelGroup>
+                <h:panelGroup layout="block"/> 
 
-            <p:outputLabel value="Revista"/>
-            <p:inputText id="txtRevista"  value="#{gestorArticulo.articulo.revista}"/>  
-            <h:panelGroup layout="block"/> 
+                <p:outputLabel value="Revista"/>
+                <p:inputText id="txtRevista"  value="#{gestorArticulo.articulo.revista}"/>  
+                <h:panelGroup layout="block"/> 
 
-            <p:outputLabel value="Factor Impacto"/>
-            <pe:inputNumber styleClass="numberInput" id="txtFactorImpacto" value="#{gestorArticulo.articulo.factorImpacto}" decimalPlaces="3"/>
-            <h:panelGroup layout="block"/>           
+                <p:outputLabel value="Factor Impacto"/>
+                <pe:inputNumber styleClass="numberInput" id="txtFactorImpacto" value="#{gestorArticulo.articulo.factorImpacto}" decimalPlaces="3"/>
+                <h:panelGroup layout="block"/>           
 
-            <p:outputLabel value="Fecha publicación"/>
-            <p:calendar pattern="dd/MM/yyyy" locale="es" value="#{gestorArticulo.articulo.fechaPublicacion}"/>  
-            <h:panelGroup layout="block"/> 
+                <p:outputLabel value="Fecha publicación"/>
+                <p:calendar pattern="dd/MM/yyyy" locale="es" value="#{gestorArticulo.articulo.fechaPublicacion}"/>  
+                <h:panelGroup layout="block"/> 
 
-            <p:outputLabel value="Autores"/>
-            <h:panelGroup layout="block" id="divAutores">
-                <p:dataTable draggableRows="true" id="dtAutores" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}" rowKey="#{personaArticulo.id}">
-                    <p:ajax event="rowReorder" update="dtAutores" />
-                    <p:column headerText="Autor #" width="70">
-                        <h:outputText value="#{rowIndex+1}" />
-                        <h:panelGroup rendered="#{rowIndex == 0}">
-                            <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
-                        </h:panelGroup>
-                    </p:column>
-                    <p:column headerText="Identificación" width="200">
-                        <h:outputText value="#{personaArticulo.persona.identificacion}" />
-                    </p:column>
-                    <p:column headerText="Nombres">
-                        <h:outputText value="#{personaArticulo.persona.nombres}" />
-                    </p:column>
-                    <p:column headerText="Apellidos">
-                        <h:outputText value="#{personaArticulo.persona.apellidos}" />
-                    </p:column>
-                    <p:column headerText="Fecha Nacimiento">
-                        <h:outputText value="#{personaArticulo.persona.fechaNacimiento}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column style="text-align: center" width="125">
-                        <p:commandButton disabled="#{rowIndex == 0}" action="#{gestorArticulo.moverArriba(personaArticulo, rowIndex)}" update="dtAutores" process="@this" icon="fa fa-angle-up" title="Mover hacia arriba"/>                        
-                        <p:commandButton disabled="#{rowIndex == (gestorArticulo.listaPersonaArticulo.size()-1)}" action="#{gestorArticulo.moverAbajo(personaArticulo, rowIndex)}" update="dtAutores" process="@this" icon="fa fa-angle-down" title="Mover hacia abajo"/>
-                        <p:commandButton id="cmdQuitarAutor" style="margin-left: 15px" action="#{gestorArticulo.quitarAutor(personaArticulo)}" update="dtAutores" process="@this" icon="fa fa-remove" title="Eliminar"/>
-                    </p:column>
+                <p:outputLabel value="Autores"/>
+                <h:panelGroup layout="block" id="divAutores">
+                    <p:dataTable draggableRows="true" id="dtAutores" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}" rowKey="#{personaArticulo.id}">
+                        <p:ajax event="rowReorder" update="dtAutores" />
+                        <p:column headerText="Autor #" width="70">
+                            <h:outputText value="#{rowIndex+1}" />
+                            <h:panelGroup rendered="#{rowIndex == 0}">
+                                <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
+                            </h:panelGroup>
+                        </p:column>
+                        <p:column headerText="Identificación" width="200">
+                            <h:outputText value="#{personaArticulo.persona.identificacion}" />
+                        </p:column>
+                        <p:column headerText="Nombres">
+                            <h:outputText value="#{personaArticulo.persona.nombres}" />
+                        </p:column>
+                        <p:column headerText="Apellidos">
+                            <h:outputText value="#{personaArticulo.persona.apellidos}" />
+                        </p:column>
+                        <p:column headerText="Fecha Nacimiento">
+                            <h:outputText value="#{personaArticulo.persona.fechaNacimiento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="text-align: center" width="125">
+                            <p:commandButton disabled="#{rowIndex == 0}" action="#{gestorArticulo.moverArriba(personaArticulo, rowIndex)}" update="dtAutores" process="@this" icon="fa fa-angle-up" title="Mover hacia arriba"/>                        
+                            <p:commandButton disabled="#{rowIndex == (gestorArticulo.listaPersonaArticulo.size()-1)}" action="#{gestorArticulo.moverAbajo(personaArticulo, rowIndex)}" update="dtAutores" process="@this" icon="fa fa-angle-down" title="Mover hacia abajo"/>
+                            <p:commandButton id="cmdQuitarAutor" style="margin-left: 15px" action="#{gestorArticulo.quitarAutor(personaArticulo)}" update="dtAutores" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                        </p:column>
 
-                </p:dataTable>
+                    </p:dataTable>
+                    <h:panelGroup layout="block">
+                        <p:commandButton value="Agregar" action="#{gestorArticulo.agregarAutor()}" process="@parent">
+                            <p:ajax event="dialogReturn" listener="#{gestorArticulo.onPersonaChosen}" update="dtAutores"/>
+                        </p:commandButton>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup layout="block"/> 
+
+                <p:outputLabel value="Proyectos"/>
+                <h:panelGroup layout="block" id="divProyectos">
+                    <h:panelGroup layout="block" style="height: 15px"/>
+                    <p:dataTable id="dtProyectos" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorArticulo.listaProyectos}">
+                        <p:column headerText="Título" width="450">
+                            <h:outputText value="#{proyecto.titulo}"/>
+                        </p:column>
+                        <p:column headerText="Director">
+                            <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
+                        </p:column>
+                        <p:column headerText="Fecha Inicio" width="150">
+                            <h:outputText value="#{proyecto.fechaInicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="text-align: center" width="60">
+                            <p:commandButton id="cmdQuitarAutor" action="#{gestorArticulo.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <h:panelGroup layout="block">
+                        <p:commandButton value="Agregar" action="#{gestorArticulo.agregarProyecto()}" process="@parent">
+                            <p:ajax event="dialogReturn" listener="#{gestorArticulo.onProyectoChosen}" update="dtProyectos"/>
+                        </p:commandButton>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup layout="block"/> 
+
+
+                <p:outputLabel value="Agradecimientos"/>
+                <h:panelGroup layout="block" id="divAgradecimientos">
+                    <h:panelGroup layout="block" style="height: 15px"/>
+                    <p:dataTable id="dtAgradecimientos" style="width: 40%" paginator="true" paginatorAlwaysVisible="false" 
+                                 rows="10" var="institucion" value="#{gestorArticulo.listaAgradecimientos}">
+                        <p:column headerText="Institución">
+                            <h:outputText value="#{institucion.nombre}"/>
+                        </p:column>
+                        <p:column style="text-align: center" width="60">
+                            <p:commandButton id="cmdQuitarAutor" action="#{gestorArticulo.quitarAgradecimiento(institucion)}" update="dtAgradecimientos" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                        </p:column>                    
+                    </p:dataTable>
+
+                    <h:panelGroup layout="block">
+                        <p:commandButton value="Agregar" action="#{gestorArticulo.agregarAgradecimiento()}" process="@parent">
+                            <p:ajax event="dialogReturn" listener="#{gestorArticulo.onInstitucionChosen}" update="dtAgradecimientos"/>
+                        </p:commandButton>
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block" style="height: 15px"/>
+                </h:panelGroup>
+                <h:panelGroup layout="block"/> 
+
+
+                <p:outputLabel value="Resumen"/>
+                <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.resumen}"/>  
+                <h:panelGroup layout="block"/> 
+
+
+                <p:outputLabel value="Enlace"/>
+                <p:inputText value="#{gestorArticulo.articulo.enlace}"/>  
+                <h:panelGroup layout="block"/> 
+
+                <p:outputLabel value="Tipo"/>
+                <p:selectOneMenu value="#{gestorArticulo.articulo.tipo}" style="width: 250px">
+                    <f:selectItems value="#{gestorArticulo.tiposArticulo}" var="tipo"
+                                   itemValue="#{tipo}" itemLabel="#{label['articulo.tipo.' += tipo]}" />                
+                </p:selectOneMenu>
+                <h:panelGroup layout="block"/> 
+
+                <p:outputLabel value="Referencia Bib"/>
+                <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.referenciaBib}"/>  
+                <h:panelGroup layout="block"/>             
+
+                <p:outputLabel value="Artículo PDF"/>
                 <h:panelGroup layout="block">
-                    <p:commandButton value="Agregar" action="#{gestorArticulo.agregarAutor()}" process="@parent">
-                        <p:ajax event="dialogReturn" listener="#{gestorArticulo.onPersonaChosen}" update="dtAutores"/>
-                    </p:commandButton>
-                </h:panelGroup>
-            </h:panelGroup>
-            <h:panelGroup layout="block"/> 
+                    <p:fileUpload fileUploadListener="#{gestorArticulo.fileUploadListener}" 
+                                  mode="advanced"
+                                  update="spanTamanioArchivo" 
+                                  auto="true" 
+                                  sizeLimit="15728640" 
+                                  allowTypes="/(\.|\/)(pdf|docx?)$/" 
+                                  accept="*.pdf|*.doc|*.docx"
+                                  invalidFileMessage="Archivo no válido. Solo se permite PDF y DOC." 
+                                  fileLimitMessage="Máximo 15MB" label="Elegir..."
+                                  /> 
+                    <br/>
+                    <h:panelGroup id="spanTamanioArchivo">
+                        <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorArticulo.articulo.archivoArticulo != null and gestorArticulo.articulo.archivoArticulo != ''}" value="Tamaño archivo: #{gestorArticulo.tamanoArchivo}"/>
+                    </h:panelGroup>
+                </h:panelGroup> 
+                <h:panelGroup layout="block"/> 
 
-            <p:outputLabel value="Proyectos"/>
-            <h:panelGroup layout="block" id="divProyectos">
-                <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable id="dtProyectos" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorArticulo.listaProyectos}">
-                    <p:column headerText="Título" width="450">
-                        <h:outputText value="#{proyecto.titulo}"/>
-                    </p:column>
-                    <p:column headerText="Director">
-                        <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
-                    </p:column>
-                    <p:column headerText="Fecha Inicio" width="150">
-                        <h:outputText value="#{proyecto.fechaInicio}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column style="text-align: center" width="60">
-                        <p:commandButton id="cmdQuitarAutor" action="#{gestorArticulo.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
-                    </p:column>
-
-                </p:dataTable>
-                <h:panelGroup layout="block">
-                    <p:commandButton value="Agregar" action="#{gestorArticulo.agregarProyecto()}" process="@parent">
-                        <p:ajax event="dialogReturn" listener="#{gestorArticulo.onProyectoChosen}" update="dtProyectos"/>
-                    </p:commandButton>
-                </h:panelGroup>
-            </h:panelGroup>
-            <h:panelGroup layout="block"/> 
-
-
-            <p:outputLabel value="Agradecimientos"/>
-            <h:panelGroup layout="block" id="divAgradecimientos">
-                <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable id="dtAgradecimientos" style="width: 40%" paginator="true" paginatorAlwaysVisible="false" 
-                             rows="10" var="institucion" value="#{gestorArticulo.listaAgradecimientos}">
-                    <p:column headerText="Institución">
-                        <h:outputText value="#{institucion.nombre}"/>
-                    </p:column>
-                    <p:column style="text-align: center" width="60">
-                        <p:commandButton id="cmdQuitarAutor" action="#{gestorArticulo.quitarAgradecimiento(institucion)}" update="dtAgradecimientos" process="@this" icon="fa fa-remove" title="Eliminar"/>
-                    </p:column>                    
-                </p:dataTable>
-                
-                <h:panelGroup layout="block">
-                    <p:commandButton value="Agregar" action="#{gestorArticulo.agregarAgradecimiento()}" process="@parent">
-                        <p:ajax event="dialogReturn" listener="#{gestorArticulo.onInstitucionChosen}" update="dtAgradecimientos"/>
-                    </p:commandButton>
-                </h:panelGroup>
-                
-                <h:panelGroup layout="block" style="height: 15px"/>
-            </h:panelGroup>
-            <h:panelGroup layout="block"/> 
-
-
-            <p:outputLabel value="Resumen"/>
-            <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.resumen}"/>  
-            <h:panelGroup layout="block"/> 
-
-
-            <p:outputLabel value="Enlace"/>
-            <p:inputText value="#{gestorArticulo.articulo.enlace}"/>  
-            <h:panelGroup layout="block"/> 
-
-            <p:outputLabel value="Tipo"/>
-            <p:selectOneMenu value="#{gestorArticulo.articulo.tipo}" style="width: 250px">
-                <f:selectItems value="#{gestorArticulo.tiposArticulo}" var="tipo"
-                               itemValue="#{tipo}" itemLabel="#{label['articulo.tipo.' += tipo]}" />                
-            </p:selectOneMenu>
-            <h:panelGroup layout="block"/> 
-
-            <p:outputLabel value="Referencia Bib"/>
-            <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.referenciaBib}"/>  
-            <h:panelGroup layout="block"/>             
-
-            <p:outputLabel value="Artículo PDF"/>
-            <h:panelGroup layout="block">
-                <p:fileUpload fileUploadListener="#{gestorArticulo.fileUploadListener}" 
-                              mode="advanced"
-                              update="spanTamanioArchivo" 
-                              auto="true" 
-                              sizeLimit="15728640" 
-                              allowTypes="/(\.|\/)(pdf|docx?)$/" 
-                              accept="*.pdf|*.doc|*.docx"
-                              invalidFileMessage="Archivo no válido. Solo se permite PDF y DOC." 
-                              fileLimitMessage="Máximo 15MB" label="Elegir..."
-                              /> 
-                <br/>
-                <h:panelGroup id="spanTamanioArchivo">
-                    <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorArticulo.articulo.archivoArticulo != null and gestorArticulo.articulo.archivoArticulo != ''}" value="Tamaño archivo: #{gestorArticulo.tamanoArchivo}"/>
-                </h:panelGroup>
-            </h:panelGroup> 
-            <h:panelGroup layout="block"/> 
-
-        </h:panelGrid>        
+            </h:panelGrid>        
+        </p:panel>
         <h:panelGroup layout="block" style="height: 30px"/>
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorArticulo.guardar()}"/>
     </ui:define>
