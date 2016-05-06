@@ -32,7 +32,7 @@
                 <h:outputText value="#{articulo.personasArticuloCollection[0].persona.nombres} #{articulo.personasArticuloCollection[0].persona.apellidos}" />
             </p:column>           
 
-            <p:column headerText="Nombre" filterBy="#{articulo.nombre}" filterMatchMode="contains">
+            <p:column headerText="Título" filterBy="#{articulo.nombre}" filterMatchMode="contains">
                 <h:outputText style="font-weight: bold;" value="#{articulo.nombre}" />
             </p:column>
 
@@ -54,6 +54,19 @@
             <p:column headerText="Tema" filterBy="#{articulo.tema}" filterMatchMode="contains">
                 <h:outputText value="#{articulo.tema}" />
             </p:column>
+            
+            <p:column filterBy="#{articulo.listaInstFinanciamientos}" headerText="Financiamiento"
+                      filterFunction="#{gestorArticulo.filtrarPorInstFinanciamiento}">
+                <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('articulosTable').filter()" converter="institucionConverter">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="inst" itemLabel="#{inst.nombre}" itemValue="#{inst}"/>
+                    </p:selectOneMenu>
+                </f:facet>
+                <ui:repeat value="#{articulo.listaInstFinanciamientos}" var="institucion">
+                    <p:outputLabel value="#{institucion.nombre}"/><br/>
+                </ui:repeat>
+            </p:column>            
 
             <p:column headerText="Enlace" filterBy="#{articulo.enlace}" filterMatchMode="contains">
                 <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>

@@ -7,6 +7,7 @@ package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Articulo;
+import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +37,16 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             em = getEntityManager();
             Query q = em.createQuery("select distinct a from Articulo a join fetch a.personasArticuloCollection");
             List<Articulo> list = q.getResultList();
+            for (Articulo articulo : list) {
+                Collection<Proyecto> listProyectos = articulo.getProyectosCollection();
+                for (Proyecto proyecto : listProyectos) {
+                    for (Financiamiento financiamiento : proyecto.getFinanciamientosCollection()) {
+                        if (!articulo.getListaInstFinanciamientos().contains(financiamiento.getInstitucion())) {
+                            articulo.getListaInstFinanciamientos().add(financiamiento.getInstitucion());
+                        }
+                    }
+                }
+            }
             return list;
         } finally {
             if (em != null) {

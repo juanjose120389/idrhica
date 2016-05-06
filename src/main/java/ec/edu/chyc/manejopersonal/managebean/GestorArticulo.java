@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
@@ -405,10 +406,29 @@ public class GestorArticulo implements Serializable {
     }
     
     public String initListarArticulos() {
-        actualizarListaArticulos();        
+        actualizarListaArticulos();
+        GestorInstitucion.getInstance().actualizarListaInstituciones();
         return "listaArticulos";
     }
 
+    public boolean filtrarPorInstFinanciamiento(Object value, Object filter, Locale locale) {
+        Institucion institucionFiltro = (Institucion)filter;
+        if(institucionFiltro == null) {
+            return true;
+        }
+        
+        List<Institucion> instituciones = (List<Institucion>)value;
+        return (instituciones.contains(institucionFiltro));
+        /*
+        for (Institucion inst : instituciones) {
+            if (StringUtils.containsIgnoreCase(inst.getNombre(),filterText)) {
+                return true;
+            }
+        }
+        return false;*/
+    }
+     
+    
     public boolean filtrarPorAutores(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
         if(filterText == null||filterText.equals("")) {
@@ -440,9 +460,10 @@ public class GestorArticulo implements Serializable {
         }
 
         //como el autor principal es siempre el primer elemento, solo revisar el primer elemento
-        PersonaArticulo perArticuloPrincipal = ((Collection<PersonaArticulo>) value).iterator().next();
-        if (perArticuloPrincipal != null) {
-            Persona autorPrincipal = perArticuloPrincipal.getPersona();                
+        Optional<PersonaArticulo> primerElem = ((Collection<PersonaArticulo>) value).stream().findFirst();                
+        //PersonaArticulo perArticuloPrincipal = ((Collection<PersonaArticulo>) value).stream().findFirst().get();
+        if (primerElem.isPresent()) {
+            Persona autorPrincipal = primerElem.get().getPersona();
             return (StringUtils.containsIgnoreCase(autorPrincipal.getNombres(), filterText)
                     || StringUtils.containsIgnoreCase(autorPrincipal.getApellidos(), filterText));            
         }
