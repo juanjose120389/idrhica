@@ -15,32 +15,29 @@
                 <h:outputText value="#{tesis.nombre}" />
             </p:column>
 
-
-
-            <p:column headerText="Fecha de Inicio" >
+            <p:column headerText="Tipo" width="70">
+                <h:outputText value="#{label['tesis.tipo.' += tesis.tipo]}"/>
+            </p:column>
+            
+            <p:column headerText="Fecha de Inicio" width="100">
                 <h:outputText value="#{tesis.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
 
 
-            <p:column headerText="Fecha de Finalización">
+            <p:column headerText="Fecha de Finalización" width="100">
                 <h:outputText value="#{tesis.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
 
-
-            <p:column headerText="Enlace de la Tesis" filterBy="#{tesis.enlace}" filterMatchMode="contains">
-                <h:outputText value="#{tesis.enlace}" />
-            </p:column>
+            <p:column headerText="Facultad" filterBy="#{tesis.facultad}" filterMatchMode="contains" width="100">
+                <h:outputText value="#{tesis.facultad}" />
+            </p:column>            
 
             <p:column headerText="Director" filterBy="#{tesis.director.nombres}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
-            </p:column>
-
-            <p:column headerText="Resumen" filterBy="#{tesis.resumen}" filterMatchMode="contains">
-                <h:outputText value="#{tesis.resumen}" />
             </p:column>
 
             <p:column headerText="Observaciones" filterBy="#{tesis.observaciones}" filterMatchMode="contains">

@@ -7,7 +7,9 @@ package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.TesisJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
+import ec.edu.chyc.manejopersonal.entity.Tesis.TipoTesis;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -34,10 +36,13 @@ import org.primefaces.event.SelectEvent;
 public class GestorTesis implements Serializable {
 
     private final TesisJpaController tesisController = new TesisJpaController();
-     private Tesis tesis = new Tesis();
+    private Tesis tesis = new Tesis();
     private List<Tesis> listaTesis = new ArrayList<>();
     private List<Persona> listaAutoresTesis = new ArrayList<>();
-    
+    private List<Proyecto> listaProyectos = new ArrayList<>();
+
+    private boolean modoModificar = false;
+
     public GestorTesis() {
     }
 
@@ -56,38 +61,58 @@ public class GestorTesis implements Serializable {
     public void setTesis(Tesis tesis) {
         this.tesis = tesis;
     }
-    
+
     @PostConstruct
     public void init() {
-        
+
     }
-    public String initCrearTesis() {
-        tesis = new Tesis();
-        GestorContrato.getInstance().actualizarListaContrato();
-        listaAutoresTesis.clear();
+
+    public String initModificarTesis(Long id) {
+        inicializarManejoTesis();
+
+        modoModificar = true;
 
         return "manejoTesis";
     }
-    public static GestorTesis getInstance()
-    {
+
+    private void inicializarManejoTesis() {
+        tesis = new Tesis();
+        GestorContrato.getInstance().actualizarListaContrato();
+        GestorProyecto.getInstance().actualizarListaProyecto();
+        listaAutoresTesis.clear();
+        listaProyectos.clear();
+
+    }
+
+    public String initCrearTesis() {
+        inicializarManejoTesis();
+
+        modoModificar = false;
+
+        return "manejoTesis";
+    }
+
+    public static GestorTesis getInstance() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELContext context = facesContext.getELContext();
-        ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorTesis}",GestorTesis.class);
-        return (GestorTesis)ex.getValue(context);
+        ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorTesis}", GestorTesis.class);
+        return (GestorTesis) ex.getValue(context);
     }
-    
+
     public void actualizarListaTesis() {
         try {
             listaTesis = tesisController.listTesis();
         } catch (Exception ex) {
             Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
     }
-     public void quitarAutor(Persona personaQuitar) {
+
+    public void quitarAutor(Persona personaQuitar) {
         listaAutoresTesis.remove(personaQuitar);
     }
-     public void onPersonaChosen(SelectEvent event) {
-        List <Persona> listaPersonasSel = (List<Persona>) event.getObject();
+
+    public void onPersonaChosen(SelectEvent event) {
+        List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Selected", "Id:" + car.getId());
         if (listaPersonasSel != null) {
             for (Persona per : listaPersonasSel) {
@@ -95,16 +120,28 @@ public class GestorTesis implements Serializable {
                     listaAutoresTesis.add(per);
                 }
             }
-            
+
             //listaAutores.addAll(listaPersonasSel);
             RequestContext.getCurrentInstance().update("formContenido:dtAutoresTesis");
         }
     }
-    
+
+    public void onProyectoChosen(SelectEvent event) {
+        List<Proyecto> listaProyectosSel = (List<Proyecto>) event.getObject();
+        if (listaProyectosSel != null) {
+            for (Proyecto proy : listaProyectosSel) {
+                if (!listaProyectos.contains(proy)) {
+                    listaProyectos.add(proy);
+                }
+            }
+            //RequestContext.getCurrentInstance().update("formContenido:dtAutores");
+        }
+    }
+
     public void agregarAutor() {
         Persona personaNueva = new Persona();
-        
-        Map<String,Object> options = new HashMap<>();
+
+        Map<String, Object> options = new HashMap<>();
         options.put("resizable", true);
         options.put("draggable", true);
         options.put("width", "75%");
@@ -113,7 +150,7 @@ public class GestorTesis implements Serializable {
         GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
-    
+
     public String convertirListaPersonas(List<Persona> listaConvertir) {
         String r = "";
         for (Persona per : listaConvertir) {
@@ -122,15 +159,58 @@ public class GestorTesis implements Serializable {
         if (!r.isEmpty()) {
             r = r.substring(0, r.length() - 2);
         }
-        
+
         return r;
     }
-    
+
+    public void agregarProyecto() {
+        Map<String, Object> options = new HashMap<>();
+        options.put("resizable", true);
+        options.put("draggable", true);
+        options.put("width", "75%");
+        options.put("modal", true);
+        options.put("contentWidth", "100%");
+        GestorDialogListaProyectos.getInstance().clearListaProyectosSel();
+        RequestContext.getCurrentInstance().openDialog("dialogListaProyectos", options, null);
+    }
+
+    public void quitarProyecto(Proyecto proyectoQuitar) {
+        listaProyectos.remove(proyectoQuitar);
+    }
+
     public String initListarTesis() {
         actualizarListaTesis();
-       
-       // listaAutores.clear();
+
+        // listaAutores.clear();
         return "listaTesis";
+    }
+
+    public TipoTesis[] getTiposTesis() {
+        return TipoTesis.values();
+    }
+
+    public String guardar() {
+        tesis.setAutoresCollection(new HashSet(listaAutoresTesis));
+        tesis.setProyectosCollection(new HashSet(listaProyectos));
+        try {
+            if (modoModificar) {
+                tesisController.edit(tesis);
+            } else {
+                tesisController.create(tesis);
+            }
+            return "index";
+        } catch (Exception ex) {
+            Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    public List<Proyecto> getListaProyectos() {
+        return listaProyectos;
+    }
+
+    public void setListaProyectos(List<Proyecto> listaProyectos) {
+        this.listaProyectos = listaProyectos;
     }
 
     public List<Tesis> getListaTesis() {
@@ -140,16 +220,4 @@ public class GestorTesis implements Serializable {
     public void setListaTesis(List<Tesis> listaTesis) {
         this.listaTesis = listaTesis;
     }
-    
-    public String guardar() {
-        try {
-            tesis.setAutoresCollection(new HashSet(listaAutoresTesis));
-            tesisController.create(tesis);
-            return "index";
-        } catch (Exception ex) {
-            Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
-    }
-
 }

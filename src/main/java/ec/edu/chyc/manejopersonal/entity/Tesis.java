@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,6 +33,12 @@ import org.hibernate.annotations.Type;
 @Entity
 public class Tesis implements Serializable {
 
+    public enum TipoTesis {
+        PREGRADO,
+        MASTER,
+        DOCTORADO
+    }
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,9 +56,8 @@ public class Tesis implements Serializable {
     @ManyToMany(mappedBy = "tesisComoTutorCollection")
     private Set<Persona> tutoresCollection = new HashSet<>();
     
-    @ManyToOne
-    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    private Proyecto proyecto;    
+    @ManyToMany(mappedBy = "tesisCollection")
+    private Set<Proyecto> proyectosCollection = new HashSet<>();
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaInicio;
@@ -60,14 +67,14 @@ public class Tesis implements Serializable {
 
     private String observaciones;
 
-    private String tipo;//M=Master, D=Doctorado, P=Pregrado
+    //private String tipo;//M=Master, D=Doctorado, P=Pregrado
+    @Enumerated(EnumType.STRING)
+    private TipoTesis tipo;
 
     @Lob
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")
     private String resumen;
-
-    private String enlace;
 
     private String actaAprobacion;
     
@@ -131,28 +138,12 @@ public class Tesis implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getResumen() {
         return resumen;
     }
 
     public void setResumen(String resumen) {
         this.resumen = resumen;
-    }
-
-    public String getEnlace() {
-        return enlace;
-    }
-
-    public void setEnlace(String enlace) {
-        this.enlace = enlace;
     }
 
     @Override
@@ -187,14 +178,6 @@ public class Tesis implements Serializable {
     public void setArchivoActaAprobacion(String archivoActaAprobacion) {
         this.archivoActaAprobacion = archivoActaAprobacion;
     }    
-
-    public Proyecto getProyecto() {
-        return proyecto;
-    }
-
-    public void setProyecto(Proyecto proyecto) {
-        this.proyecto = proyecto;
-    }
 
     public String getFacultad() {
         return facultad;
@@ -250,6 +233,22 @@ public class Tesis implements Serializable {
 
     public void setTutoresCollection(Set<Persona> tutoresCollection) {
         this.tutoresCollection = tutoresCollection;
+    }
+
+    public Set<Proyecto> getProyectosCollection() {
+        return proyectosCollection;
+    }
+
+    public void setProyectosCollection(Set<Proyecto> proyectosCollection) {
+        this.proyectosCollection = proyectosCollection;
+    }
+
+    public TipoTesis getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTesis tipo) {
+        this.tipo = tipo;
     }
     
 }

@@ -7,6 +7,7 @@ package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
 import java.io.Serializable;
 import java.util.List;
@@ -45,13 +46,26 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
             em.getTransaction().begin();
             em.persist(obj);
             
-            for (Persona t : obj.getAutoresCollection()) {
-                Persona per = em.find(Persona.class, t.getId());
-                per.getTesisCollection().add(obj);
-                //tes.setTesis(obj);
-                //em.merge(per);
+            for (Persona perAutor : obj.getAutoresCollection()) {
+                Persona perAutorAttached = em.find(Persona.class, perAutor.getId());
+                perAutorAttached.getTesisCollection().add(obj);
             }
-
+            
+            for (Persona perCodirector : obj.getCodirectoresCollection()) {
+                Persona perCodirectorAttached = em.find(Persona.class, perCodirector.getId());
+                perCodirectorAttached.getTesisComoCodirectorCollection().add(obj);
+            }
+            
+            for (Persona perTutor : obj.getTutoresCollection()) {
+                Persona perTutorAttached = em.find(Persona.class, perTutor.getId());
+                perTutorAttached.getTesisComoTutorCollection().add(obj);
+            }            
+            
+            for (Proyecto proy : obj.getProyectosCollection()) {
+                Proyecto proyAttached = em.find(Proyecto.class, proy.getId());
+                proyAttached.getTesisCollection().add(obj);
+            }
+            
             
             em.getTransaction().commit();
         } finally {
