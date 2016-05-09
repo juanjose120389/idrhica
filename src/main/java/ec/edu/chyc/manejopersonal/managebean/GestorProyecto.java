@@ -124,14 +124,19 @@ public class GestorProyecto implements Serializable {
         proyecto = proyectoController.findEntity(id);
     }
 
-    public String initVerProyecto() {
+    public String initVerProyecto(Long id) {
+        inicializarManejoProyecto();
+        proyecto = proyectoController.findProyecto(id, true, true, true, true, true);
+        listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
+        
+        modoModificar = false;
 
         return "verProyecto";
     }
-
+    
     public String initModificarProyecto(Long id) {
         inicializarManejoProyecto();
-        proyecto = proyectoController.findProyecto(id, true, false, false);        
+        proyecto = proyectoController.findProyecto(id, true, false, false, false, false);        
         listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
         modoModificar = true;
         

@@ -34,7 +34,7 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         }
     }
 
-    public Proyecto findProyecto(Long id, boolean cargarFinanciamientos, boolean cargarConvenios, boolean cargarArticulos) {
+    public Proyecto findProyecto(Long id, boolean cargarFinanciamientos, boolean cargarConvenios, boolean cargarArticulos, boolean cargarTesis, boolean cargarPasantias) {
         EntityManager em = null;
 
         try {
@@ -53,6 +53,12 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             }
             if (cargarFinanciamientos) {
                 Hibernate.initialize(p.getFinanciamientosCollection());
+            }
+            if (cargarTesis){
+                Hibernate.initialize(p.getTesisCollection());
+            }
+            if (cargarPasantias) {
+                Hibernate.initialize(p.getPasantiasCollection());
             }
             return p;
         } finally {
