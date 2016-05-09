@@ -15,7 +15,7 @@
                 <h:outputText value="#{pasantia.tema}" />
             </p:column>
             
-            <p:column headerText="Pasante">
+            <p:column headerText="Pasante" filterBy="#{pasantia.pasante.nombres} #{pasantia.pasante.apellidos}" filterMatchMode="contains">
                 <p:outputLabel value="#{pasantia.pasante.nombres} #{pasantia.pasante.apellidos}"/>
             </p:column>            
 
@@ -35,7 +35,7 @@
                 <h:outputText value="#{pasantia.facultad}" />
             </p:column>            
 
-            <p:column headerText="Director" >
+            <p:column headerText="Director" filterBy="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" filterMatchMode="contains">
                 <h:outputText value="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" />
             </p:column>
 
