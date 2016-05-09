@@ -36,6 +36,7 @@ public class GestorContrato implements Serializable {
 
     private List<Contrato> listaContrato = new ArrayList<>();
     private Contrato contrato = new Contrato();
+    private boolean modoModificar = false;
 
     private boolean esProfesor = false;
 
@@ -61,12 +62,31 @@ public class GestorContrato implements Serializable {
         }
     }
 
-    public String initCrearContrato() {
+    private void initializarManejoContrato() {
         contrato = new Contrato();
         esProfesor = false;
         GestorProyecto.getInstance().actualizarListaProyecto();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
-        actualizarListaContrato();
+    }
+    
+    public String initModificarContrato(Long id) {
+        //contrato = contratoController.
+        initializarManejoContrato();
+        
+        contrato = contratoController.findContrato(id);
+        
+        if (contrato.getTipoProfesor() != null) {
+            esProfesor = true;
+        }
+        modoModificar = true;
+        
+        return "manejoContratos";
+    }
+    
+    public String initCrearContrato() {
+        initializarManejoContrato();
+        modoModificar = false;
+        //actualizarListaContrato();
         return "manejoContratos";
     }
 
@@ -76,12 +96,15 @@ public class GestorContrato implements Serializable {
     }
 
     public String guardar() {
+        if (!esProfesor) {
+            contrato.setTipoProfesor(null);
+        }        
         try {
-            if (!esProfesor) {
-                contrato.setTipoProfesor(null);
+            if (modoModificar) {
+                contratoController.edit(contrato);
+            } else {
+                contratoController.create(contrato);
             }
-            
-            contratoController.create(contrato);
             return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);

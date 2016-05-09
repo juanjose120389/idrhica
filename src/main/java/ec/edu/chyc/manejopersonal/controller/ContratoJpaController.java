@@ -32,6 +32,21 @@ public class ContratoJpaController extends GenericJpaController<Contrato> implem
         }        
     }
     
+    public Contrato findContrato(Long id) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select p from Contrato p where p.id=:id");
+            q.setParameter("id", id);
+            Contrato contrato = (Contrato)q.getSingleResult();
+            return contrato;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }        
+        
+    }
     
     public void create(Contrato contrato) throws Exception {
         EntityManager em = null;
