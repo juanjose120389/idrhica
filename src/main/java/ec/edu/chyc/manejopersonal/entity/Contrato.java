@@ -78,7 +78,8 @@ public class Contrato implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipoProfesor tipoProfesor;
 
-    private String archivoContrato;
+    @NotNull
+    private String archivoContrato = "";
 
     public String getCargo() {
         return cargo;
