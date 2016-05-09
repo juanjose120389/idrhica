@@ -45,6 +45,7 @@ public class GestorConvenio implements Serializable {
         convenio = new Convenio();
         modoModificar = false;
         GestorProyecto.getInstance().actualizarListaProyecto();
+        GestorInstitucion.getInstance().actualizarListaInstituciones();
         
         return "manejoConvenio";
     }

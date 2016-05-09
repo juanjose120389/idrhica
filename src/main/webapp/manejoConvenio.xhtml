@@ -28,8 +28,15 @@
                 <p:message for="txtObjetivo"/>
 
                 <p:outputLabel value="Institución"/>
-                <p:inputText id="txtInstitucion" requiredMessage="Requerido" required="true" value="#{gestorConvenio.convenio.institucion}"/>  
-                <p:message for="txtInstitucion"/>
+                <p:selectOneMenu id="cmbInstitucion" style="width: 150px" value="#{gestorConvenio.convenio.institucion}" converter="institucionConverter"
+                                 var="inst" filter="true" filterMatchMode="contains">
+                    <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="ins" itemLabel="#{ins.nombre}" itemValue="#{ins}" />
+
+                    <p:column>
+                        <p:outputLabel value="#{inst.nombre}"/>
+                    </p:column>
+                </p:selectOneMenu>
+                <h:panelGroup/>
 
                 <p:outputLabel value="Fecha de Inicio"/>
                 <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaInicio}"/>  
@@ -44,7 +51,7 @@
                                  var="per2" filter="true" filterMatchMode="contains">
                     <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
 
-                    <p:column style="width:10%">
+                    <p:column>
                         <p:outputLabel value="#{per2.titulo}"/>
                     </p:column>
                 </p:selectOneMenu>                                
