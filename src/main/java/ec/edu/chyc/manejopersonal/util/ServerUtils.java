@@ -16,20 +16,33 @@ import java.util.UUID;
  * @author marcelocaj
  */
 public class ServerUtils {
-
-    /**
-     * *
+    /***
      * Tamaño de buffer, utilizado para descarga o subida de archivos
      */
     public static final int BUFFER_SIZE = 6124;
 
-    /**
-     * *
+    /***
      *
      * @return Path donde se almacenan los artículos
      */
     public static Path getPathArticulos() {
         return getDocRootPath().resolve("articulos");
+    }
+
+    /***
+     *
+     * @return Path donde se almacenan los contratos
+     */
+    public static Path getPathContratos() {
+        return getDocRootPath().resolve("contratos");
+    }
+    
+    /***
+     * 
+     * @return Path donde se almacenan las actas de aprobación de las tesis
+     */
+    public static Path getPathActasAprobacionTesis() {
+        return getDocRootPath().resolve("actasAprobacionTesis");
     }
 
     /**
@@ -41,9 +54,7 @@ public class ServerUtils {
     public static Path getPathTemp() {
         return getDocRootPath().resolve("tmp");
     }
-
-    /**
-     * *
+    /***
      *
      * @return Ruta del docroot de glassfish
      */
@@ -51,17 +62,15 @@ public class ServerUtils {
         return Paths.get("").toAbsolutePath().getParent().resolve("docroot").normalize();
     }
 
-    /**
-     * *
+    /***
      *
-     * @return Ruta en formato String del docroot de flassfish
+     * @return Ruta en formato String del docroot de gflassfish
      */
     public static String getDocRoot() {
         return getDocRootPath().normalize().toString();
     }
 
-    /**
-     * *
+    /***
      * Devuelve un UUID generado y codificado en Base64
      *
      * @return Uuid codificado en Base64
@@ -75,9 +84,11 @@ public class ServerUtils {
     }
 
     /***
-     * Muestra el tamaño de un archivo en una forma amigable (B, KB, MB, GB, TB, PB, EB.
-     * Obtenido y modificado para quitar los formatos con "i" (KiB, MiB, KiB, etc): 
-     *  https://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
+     * Muestra el tamaño de un archivo en una forma amigable (B, KB, MB, GB, TB,
+     * PB, EB. Obtenido y modificado para quitar los formatos con "i" (KiB, MiB,
+     * KiB, etc):
+     * https://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
+     *
      * @param bytes Tamaño en bytes.
      * @return Texto indicando el tamaño en formato amigable.
      */
@@ -91,16 +102,17 @@ public class ServerUtils {
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
-    public static String toFileSystemSafeName(String name) {
-        return toFileSystemSafeName(name, true, 250);
-    }
     /***
      * Reemplaza caracteres inválidos de nombre de archivo a un nombre válido
-     * Obtenido y modificado para que sea una función independiente e incluir acentos como válidos y reemplazar el espacio por _:
-     *  http://grepcode.com/file/repository.springsource.com/org.apache.activemq/com.springsource.org.apache.kahadb/5.3.0/org/apache/kahadb/util/IOHelper.java    
+     * Obtenido y modificado para que sea una función independiente e incluir
+     * acentos como válidos y reemplazar el espacio por _:
+     * http://grepcode.com/file/repository.springsource.com/org.apache.activemq/com.springsource.org.apache.kahadb/5.3.0/org/apache/kahadb/util/IOHelper.java
+     *
      * @param name Nombre del archivo a convertir.
-     * @param dirSeparators Si es true, mantiene los separadores de path ("/" ó "\"), si es false se reemplazan.
-     * @param maxFileLength Máxima cantidad de caracteres, si el nombre generado es mayor a esta cantidad, será truncado.
+     * @param dirSeparators Si es true, mantiene los separadores de path ("/" ó
+     * "\"), si es false se reemplazan.
+     * @param maxFileLength Máxima cantidad de caracteres, si el nombre generado
+     * es mayor a esta cantidad, será truncado.
      * @return Nombre convertido.
      */
     public static String toFileSystemSafeName(String name, boolean dirSeparators, int maxFileLength) {
@@ -115,7 +127,7 @@ public class ServerUtils {
                     || (dirSeparators && ((c == '/') || (c == '\\')));
 
             int indexAccent = "áéíóúÁÉÍÓÚñÑüÜ".indexOf(c);
-            
+
             if (valid) {
                 rc.append(c);
             } else if (indexAccent >= 0) {
@@ -135,6 +147,12 @@ public class ServerUtils {
         }
         return result;
     }
+
+    /***
+     * Convierte el nombre a un nombre de archivo válido (reemplazando caracteres inválidos por válidos)
+     * @param nombreOriginal Nombre del archivo que se quiere transformar
+     * @return Nombre de archivo transformado y válido
+     */
     public static String convertirNombreArchivo(String nombreOriginal) {
         return toFileSystemSafeName(nombreOriginal, false, 255);
     }

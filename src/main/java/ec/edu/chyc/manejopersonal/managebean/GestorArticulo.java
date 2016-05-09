@@ -211,7 +211,7 @@ public class GestorArticulo implements Serializable {
             if (articuloDescarga.getNombre().length() - extension.length() - 1 > 25) {
                 nombreArticulo = nombreArticulo.substring(0, 25);
             } 
-            nuevoNombre += ServerUtils.toFileSystemSafeName(nombreArticulo + "." + extension);
+            nuevoNombre += ServerUtils.convertirNombreArchivo(nombreArticulo + "." + extension);
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
             streamParaDescarga = new DefaultStreamedContent(stream, externalContext.getMimeType(nuevoNombre), nuevoNombre);
         } catch (FileNotFoundException ex) {
