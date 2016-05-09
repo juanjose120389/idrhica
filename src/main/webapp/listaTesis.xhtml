@@ -5,8 +5,6 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <p:commandButton value="Regresar" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
-        <h:panelGroup layout="block" style="height: 20px"/>
         <p:dataTable widgetVar="tesisTable" id="tesisTable" var="tesis" value="#{gestorTesis.listaTesis}" rows="10"
                      paginator="true"
                      >

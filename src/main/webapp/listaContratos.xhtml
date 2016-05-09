@@ -5,8 +5,6 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <p:commandButton value="Regresar" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
-        <h:panelGroup layout="block" style="height: 20px"/>
         <p:dataTable widgetVar="contratoTable" id="contratoTable" var="contrato" value="#{gestorContrato.listaContrato}" rows="10"
                      paginator="true"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}   {Exporters}"
@@ -63,7 +61,7 @@
                     <p:outputLabel value="Profesor: #{label['contrato.tipoProfesor.' += contrato.tipoProfesor]}"/>
                 </h:panelGroup>
             </p:column>
-           <p:column width="70">
+           <p:column width="60">
                <p:commandLink value="Editar" action="#{gestorContrato.initModificarContrato(contrato.id)}"/>
             </p:column>
         </p:dataTable>         
