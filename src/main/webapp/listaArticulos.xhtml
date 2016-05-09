@@ -28,6 +28,9 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
+            <f:facet name="header">
+                Artículos
+            </f:facet>
             <p:column headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}">
                 <h:outputText value="#{articulo.personasArticuloCollection[0].persona.nombres} #{articulo.personasArticuloCollection[0].persona.apellidos}" />
             </p:column>           

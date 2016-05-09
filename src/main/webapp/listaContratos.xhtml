@@ -24,17 +24,19 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
-
+            <f:facet name="header">
+                Contratos
+            </f:facet>
             <p:column headerText="Código Contrato" filterBy="#{contrato.codigoContrato}" filterMatchMode="contains">
                 <h:outputText value="#{contrato.codigoContrato}" />
             </p:column>
 
-            <p:column headerText="Fecha de Inicio" >
+            <p:column headerText="Fecha Inicio" width="100">
                 <h:outputText value="#{contrato.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Fecha de Fin" >
+            <p:column headerText="Fecha Finalización" width="100">
                 <h:outputText value="#{contrato.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -61,7 +63,9 @@
                     <p:outputLabel value="Profesor: #{label['contrato.tipoProfesor.' += contrato.tipoProfesor]}"/>
                 </h:panelGroup>
             </p:column>
-
+           <p:column width="70">
+               <p:commandLink value="Editar" action="#{gestorContrato.initModificarContrato(contrato.id)}"/>
+            </p:column>
         </p:dataTable>         
     </ui:define>
 </ui:composition>

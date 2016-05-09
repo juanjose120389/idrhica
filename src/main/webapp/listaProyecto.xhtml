@@ -25,7 +25,9 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
-
+            <f:facet name="header">
+                Proyectos
+            </f:facet>
             <p:column headerText="Título" filterBy="#{proyecto.titulo}" filterMatchMode="contains">
                 <h:outputText value="#{proyecto.titulo}" />
             </p:column>

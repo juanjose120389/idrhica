@@ -10,7 +10,9 @@
         <p:dataTable widgetVar="tesisTable" id="tesisTable" var="tesis" value="#{gestorTesis.listaTesis}" rows="10"
                      paginator="true"
                      >
-
+            <f:facet name="header">
+                Tesis
+            </f:facet>
             <p:column headerText="Título" filterBy="#{tesis.nombre}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.nombre}" />
             </p:column>
