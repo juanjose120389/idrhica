@@ -147,4 +147,13 @@ public class GestorContrato implements Serializable {
     public void setContrato(Contrato contrato) {
         this.contrato = contrato;
     }
+
+    public boolean isModoModificar() {
+        return modoModificar;
+    }
+
+    public void setModoModificar(boolean modoModificar) {
+        this.modoModificar = modoModificar;
+    }
+    
 }

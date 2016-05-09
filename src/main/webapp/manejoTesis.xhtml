@@ -5,9 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
-        <h:panelGroup layout="block" style="height: 20px"/>                
-        <p:panel header="Tesis">
+        <p:panel header="#{gestorTesis.modoModificar?'Modificar':'Nueva'} Tesis">
             <h:panelGrid columns="3">
                 <p:outputLabel value="Título"/>
                 <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorTesis.tesis.nombre}"/>  

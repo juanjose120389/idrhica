@@ -35,8 +35,6 @@
                 width: 100px;
             }
         </style>
-        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
-        <h:panelGroup layout="block" style="height: 20px"/>        
         <h:panelGroup layout="block" id="divDialogs">
             <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" rendered="#{gestorPersona.mostrarDlgUniversidad}" resizable="false" modal="true" width="400">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgUniversidad()}" />
@@ -82,7 +80,7 @@
             </p:dialog>  
         </h:panelGroup>
 
-        <p:panel header="Persona">
+        <p:panel header="#{gestorPersona.modoModificar?'Modificar':'Nueva'} Persona">
             <h:panelGrid columns="3" width="100%" columnClasses="labelscol,inputscol,tipscol">
                 <p:outputLabel value="Cédula/Pasaporte"/>
                 <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  

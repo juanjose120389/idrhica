@@ -5,9 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
-        <h:panelGroup layout="block" style="height: 20px"/>                
-        <p:panel header="Pasantía">
+        <p:panel header="#{gestorPasantia.modoModificar?'Modificar':'Nueva'} Pasantía">
             <h:panelGrid columns="3">
                 <p:outputLabel value="Tema"/>
                 <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.tema}"/>  

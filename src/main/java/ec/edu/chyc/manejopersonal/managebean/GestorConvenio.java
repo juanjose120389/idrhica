@@ -118,5 +118,13 @@ public class GestorConvenio implements Serializable {
     public void setListaConvenios(List<Convenio> listaConvenios) {
         this.listaConvenios = listaConvenios;
     }
+
+    public boolean isModoModificar() {
+        return modoModificar;
+    }
+
+    public void setModoModificar(boolean modoModificar) {
+        this.modoModificar = modoModificar;
+    }
     
 }

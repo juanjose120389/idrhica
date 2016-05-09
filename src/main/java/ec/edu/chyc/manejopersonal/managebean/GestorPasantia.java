@@ -110,4 +110,12 @@ public class GestorPasantia implements Serializable {
         this.listaPasantias = listaPasantias;
     }
 
+    public boolean isModoModificar() {
+        return modoModificar;
+    }
+
+    public void setModoModificar(boolean modoModificar) {
+        this.modoModificar = modoModificar;
+    }
+
 }

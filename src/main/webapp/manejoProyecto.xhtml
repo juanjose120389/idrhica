@@ -33,9 +33,7 @@
             </p:dialog>  
         </h:panelGroup>        
 
-        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
-        <h:panelGroup layout="block" style="height: 20px"/>        
-        <p:panel header="Proyecto">
+        <p:panel header="#{gestorProyecto.modoModificar?'Modificar':'Nuevo'} Proyecto">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
             <h:panelGrid columns="3">
                 <h:panelGroup layout="block" style="width: 160px">

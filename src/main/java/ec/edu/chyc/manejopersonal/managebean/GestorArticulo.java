@@ -71,7 +71,6 @@ public class GestorArticulo implements Serializable {
     private boolean modoModificar = false;
     private Long idPersonaArticuloGen = -1L;
     
-    private StreamedContent streamParaDescarga;
     
     public GestorArticulo() {
     }
@@ -483,10 +482,6 @@ public class GestorArticulo implements Serializable {
         this.tamanoArchivo = tamanoArchivo;
     }
 
-    public void setStreamParaDescarga(StreamedContent streamParaDescarga) {
-        this.streamParaDescarga = streamParaDescarga;
-    }
-
     public List<Proyecto> getListaProyectos() {
         return listaProyectos;
     }
@@ -501,6 +496,14 @@ public class GestorArticulo implements Serializable {
 
     public void setListaAgradecimientos(List<Institucion> listaAgradecimientos) {
         this.listaAgradecimientos = listaAgradecimientos;
+    }
+
+    public boolean isModoModificar() {
+        return modoModificar;
+    }
+
+    public void setModoModificar(boolean modoModificar) {
+        this.modoModificar = modoModificar;
     }
     
 }

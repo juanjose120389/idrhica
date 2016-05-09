@@ -262,4 +262,12 @@ public class GestorTesis implements Serializable {
         this.listaAutoresTesis = listaAutoresTesis;
     }
 
+    public boolean isModoModificar() {
+        return modoModificar;
+    }
+
+    public void setModoModificar(boolean modoModificar) {
+        this.modoModificar = modoModificar;
+    }
+
 }

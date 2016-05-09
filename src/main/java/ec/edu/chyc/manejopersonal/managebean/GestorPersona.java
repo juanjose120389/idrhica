@@ -499,5 +499,8 @@ public class GestorPersona implements Serializable {
     public void setFiltroFechaFin(Date filtroFechaFin) {
         this.filtroFechaFin = filtroFechaFin;
     }
-   
+
+    public boolean isModoModificar() {
+        return modo == Modo.EDITAR;
+    }
 }

@@ -5,9 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-        <p:commandButton value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
-        <h:panelGroup layout="block" style="height: 20px"/>                
-        <p:panel header="Contrato">
+        <p:panel header="#{gestorContrato.modoModificar?'Modificar':'Nuevo'} Contrato">
             <h:panelGrid columns="3">
                 <p:outputLabel value="Código Contrato"/>
                 <p:inputText id="txtCodigo" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.codigoContrato}"/>  
