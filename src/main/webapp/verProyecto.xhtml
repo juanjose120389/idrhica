@@ -18,8 +18,8 @@
                 <p:outputLabel value="#{gestorProyecto.proyecto.director.nombres} #{gestorProyecto.proyecto.director.apellidos}"/>
 
                 <p:outputLabel value="Co-Director" />
-                <h:panelGroup layout="block" rendered="#{gestorProyecto.proyecto.codirector != null}">
-                    <p:outputLabel value="#{gestorProyecto.proyecto.codirector.nombres} #{gestorProyecto.proyecto.codirector.apellidos}"/>
+                <h:panelGroup layout="block">
+                    <p:outputLabel rendered="#{gestorProyecto.proyecto.codirector != null}" value="#{gestorProyecto.proyecto.codirector.nombres} #{gestorProyecto.proyecto.codirector.apellidos}"/>
                 </h:panelGroup>
                 <p:outputLabel value="Duración"/>
                 <h:panelGroup layout="block">
