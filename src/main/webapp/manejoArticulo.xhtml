@@ -23,7 +23,7 @@
                 display: none;
             }
         </style>
-        <p:panel header="#{gestorArticulo}Artículo">
+        <p:panel header="#{gestorArticulo.modoModificar?'Modificar':'Nuevo'} Artículo">
             <h:panelGrid columns="3">
                 <p:outputLabel value="Título"/>
                 <h:panelGroup>
