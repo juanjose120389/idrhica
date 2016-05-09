@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:menu toggleable="true">
+        <p:submenu label="Listado">
+            <p:menuitem value="Personal" action="#{gestorGeneral.regresarPaginaPrincipal()}" icon="fa fa-list"/>
+            <p:menuitem value="Artículos" action="#{gestorArticulo.initListarArticulos()}" icon="fa fa-list"/>
+            <p:menuitem value="Tesis" action="#{gestorTesis.initListarTesis()}" icon="fa fa-list"/>
+            <p:menuitem value="Proyectos" action="#{gestorProyecto.initListarProyectos()}" icon="fa fa-list"/>
+            <p:menuitem value="Contratos" action="#{gestorContrato.initListarContratos()}" icon="fa fa-list"/>
+            <p:menuitem value="Convenios" action="#{gestorConvenio.initListarConvenios()}" icon="fa fa-list"/>
+        </p:submenu>
+        <p:submenu label="Nuevo">
+            <p:menuitem value="Proyecto" action="#{gestorProyecto.initCrearProyecto()}" icon="fa fa-plus"/>
+            <p:menuitem value="Persona" action="#{gestorPersona.initCrearPersona()}" icon="fa fa-plus"/>
+            <p:menuitem value="Artículo" action="#{gestorArticulo.initCrearArticulo()}" icon="fa fa-plus"/>
+            <p:menuitem value="Tesis" action="#{gestorTesis.initCrearTesis()}" icon="fa fa-plus"/>
+            <p:menuitem value="Convenio" action="#{gestorConvenio.initCrearConvenio()}" icon="fa fa-plus"/>
+            <p:menuitem value="Pasantía" action="#{gestorPasantia.initCrearPasantia()}" icon="fa fa-plus"/>
+            <p:menuitem value="Contrato" action="#{gestorContrato.initCrearContrato()}" icon="fa fa-plus"/>
+        </p:submenu>
+    </p:menu>
+
+
+</ui:composition>

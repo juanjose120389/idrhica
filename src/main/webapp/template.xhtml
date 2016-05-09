@@ -12,6 +12,7 @@ and open the template in the editor.
     <ui:define name="metadata">Metadata and event ....</ui:define>
     <h:head>
         <h:outputStylesheet library="css" name="layout.css"/>
+        <h:outputStylesheet library="css" name="screen.css"/>
         <h:outputScript library="js" name="locale.js"/>
         <title>Manejo Personal</title>
         <meta charset="UTF-8"/>
@@ -24,17 +25,35 @@ and open the template in the editor.
         </style>
     </h:head>
     <h:body>
-        <div id="wrapper">
-            <div id="content">
-                <h:form id="formContenido">
-                    <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
-                    <ui:insert name="mensaje"/>
-                    <ui:insert name="body"/>
-                </h:form>
-            </div>
-            <div id="footer">
-                <ui:include src="./footer.xhtml"/>
+        <div id="header">
+            <!-- HEADER -->
+        </div>
+        <div class="colmask leftmenu">
+            <div class="colleft">
+                <div class="col1">
+                    <!-- Column 1 start -->
+                    <h:form id="formContenido">
+                        <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
+                        <ui:insert name="mensaje"/>
+                        <ui:insert name="body"/>
+                    </h:form>
+
+
+                    <!-- Column 1 end -->
+                </div>
+                <div class="col2">
+                    <!-- Column 2 start -->
+                    <h:form id="formMenu">
+                        <ui:include src="./menu.xhtml"/>
+                    </h:form>
+
+                    <!-- Column 2 end -->
+                </div>
             </div>
         </div>
+        <div id="footer">
+            <ui:include src="./footer.xhtml"/>
+        </div>
+
     </h:body>
 </html>

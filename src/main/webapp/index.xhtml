@@ -19,31 +19,6 @@
                 width: 100px;
             } */           
         </style>
-        <p:panel header="Listado" >
-            <p:commandButton value="Lista Artículos" action="#{gestorArticulo.initListarArticulos()}"/>
-            <p:commandButton value="Lista Tesis" action="#{gestorTesis.initListarTesis()}"/>
-            <p:commandButton value="Lista Proyectos" action="#{gestorProyecto.initListarProyectos()}"/>
-            <p:commandButton rendered="false" value="Lista Pasantes" action="#{gestorPasante.initListarPasante()}"/>
-            <p:commandButton value="Lista Contratos" action="#{gestorContrato.initListarContratos()}"/>        
-            <p:commandButton value="Lista Convenios" action="#{gestorConvenio.initListarConvenios()}" />
-            <p:commandButton value="Actualizar Listado" action="#{gestorPersona.actualizarListado()}" update=":formContenido"/>
-        </p:panel>                    
-
-        <p:panel header="Nuevo" >
-            <p:commandButton value="Crear proyecto" action="#{gestorProyecto.initCrearProyecto()}"/>
-            <p:commandButton value="Crear nueva persona" action="#{gestorPersona.initCrearPersona()}"/>
-            <p:commandButton value="Crear Artículo" action="#{gestorArticulo.initCrearArticulo()}"/>
-            <p:commandButton value="Crear Tesis" action="#{gestorTesis.initCrearTesis()}"/>
-            <p:commandButton value="Crear Convenio" action="#{gestorConvenio.initCrearConvenio()}"/>            
-        </p:panel>
-
-        <p:panel header="Asignar" >
-            <p:commandButton value="Asignar Pasantia" action="#{gestorPasantia.initCrearPasantia()}"/>        
-            <p:commandButton value="Asignar Contrato" action="#{gestorContrato.initCrearContrato()}"/>
-
-        </p:panel>
-
-        <br/><br/>
         <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
                      paginator="true"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
