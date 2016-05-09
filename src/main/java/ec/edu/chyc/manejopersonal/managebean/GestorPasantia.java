@@ -22,68 +22,76 @@ import javax.annotation.PostConstruct;
 @Named(value = "gestorPasantia")
 @SessionScoped
 public class GestorPasantia implements Serializable {
-    
-    private final PasantiaJpaController pasantiaController = new PasantiaJpaController();
-    private Pasantia pasantia = new Pasantia();   
-    
-    private List<Pasantia> listPasantes = null;
 
-    /**
-     * Creates a new instance of GestorPersona
-     */
+    private final PasantiaJpaController pasantiaController = new PasantiaJpaController();
+    private Pasantia pasantia = new Pasantia();
+
+    private List<Pasantia> listaPasantias = null;
+
+    private boolean modoModificar = false;
+
     public GestorPasantia() {
-        
+
     }
+
     @PostConstruct
     public void init() {
-        try {
-            listPasantes = pasantiaController.listPasantias();
-        } catch (Exception ex) {
-            Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }    
+        actualizarListado();
+    }
 
-    public String initCrearPasantia() {
-        pasantia = new Pasantia();
-        GestorContrato.getInstance().actualizarListaContrato();
-               
+    public String initListarPasantias() {
+        actualizarListado();
+        return "listaPasantias";
+    }
+
+    public String initModificarPasantia(Long id) {
+        inicializarManejoPasantia();
+        modoModificar = true;
+
+        pasantia = pasantiaController.findEntity(id);
+
         return "manejoPasantia";
     }
-    
-  
-    
-    public String actualizarListado() {
+
+    private void inicializarManejoPasantia() {
+        pasantia = new Pasantia();
+        GestorContrato.getInstance().actualizarListaContrato();
+    }
+
+    public String initCrearPasantia() {
+        inicializarManejoPasantia();
+        modoModificar = false;
+
+        return "manejoPasantia";
+    }
+
+    public void actualizarListado() {
         try {
-            listPasantes = pasantiaController.listPasantias();            
+            listaPasantias = pasantiaController.listPasantias();
         } catch (Exception ex) {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "";
     }
-    
+
     public static GestorPersona getInstance() {
         javax.faces.context.FacesContext facesContext = javax.faces.context.FacesContext.getCurrentInstance();
         javax.el.ELContext context = facesContext.getELContext();
         javax.el.ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorPersona}", GestorPersona.class);
         return (GestorPersona) ex.getValue(context);
-    }    
-    
+    }
+
     public String guardar() {
         try {
-            pasantiaController.create(pasantia);
+            if (modoModificar) {
+                pasantiaController.edit(pasantia);
+            } else {
+                pasantiaController.create(pasantia);
+            }
             return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorPasantia.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
-    }
-
-    public List<Pasantia> getListaPasantias() {
-        return listPasantes;
-    }
-
-    public void setListaPasantias(List<Pasantia> listaPasantia) {
-        this.listPasantes = listaPasantia;
     }
 
     public Pasantia getPasantia() {
@@ -93,4 +101,13 @@ public class GestorPasantia implements Serializable {
     public void setPersona(Pasantia pasantia) {
         this.pasantia = pasantia;
     }
+
+    public List<Pasantia> getListaPasantias() {
+        return listaPasantias;
+    }
+
+    public void setListaPasantias(List<Pasantia> listaPasantias) {
+        this.listaPasantias = listaPasantias;
+    }
+
 }
