@@ -14,14 +14,13 @@ import ec.edu.chyc.manejopersonal.controller.ProyectoJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
-import ec.edu.chyc.manejopersonal.managebean.util.BeanUtils;
+import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,7 +76,7 @@ public class GestorProyecto implements Serializable {
         this.financiamientoActual = financiamientoActual;
         mostrarDlgInstitucion = true;
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
-        BeanUtils.ejecutarJS("PF('dlgInstitucion').show()");
+        BeansUtils.ejecutarJS("PF('dlgInstitucion').show()");
     }
     public void guardarInstitucion() {
         institucion.setId(idInstitucionGen);
@@ -87,7 +86,7 @@ public class GestorProyecto implements Serializable {
         
         institucion = new Institucion();
         mostrarDlgInstitucion = false;
-        BeanUtils.ejecutarJS("PF('dlgInstitucion').hide()");
+        BeansUtils.ejecutarJS("PF('dlgInstitucion').hide()");
     }
     
     

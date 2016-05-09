@@ -10,7 +10,7 @@ import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
-import static ec.edu.chyc.manejopersonal.managebean.util.BeanUtils.ejecutarJS;
+import static ec.edu.chyc.manejopersonal.managebean.util.BeansUtils.ejecutarJS;
 import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;

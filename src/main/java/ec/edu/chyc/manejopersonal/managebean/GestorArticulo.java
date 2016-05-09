@@ -12,12 +12,12 @@ import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
+import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.inject.Named;
@@ -41,7 +41,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
@@ -196,36 +195,13 @@ public class GestorArticulo implements Serializable {
     }
 
     public StreamedContent streamParaDescarga(Articulo articuloDescarga) {
-        InputStream stream = null;
-        streamParaDescarga = null;
+        String nombreArchivo = articuloDescarga.getArchivoArticulo();
         try {
-            String nombreArchivo = articuloDescarga.getArchivoArticulo();
-            String extension = FilenameUtils.getExtension(nombreArchivo);
-            
-            
-            Path pathArchivo = ServerUtils.getPathArticulos().resolve(nombreArchivo);
-            stream = new BufferedInputStream(new FileInputStream(pathArchivo.toFile()));
-            
-            String nuevoNombre = "articulo_";
-            String nombreArticulo = articuloDescarga.getNombre();
-            if (articuloDescarga.getNombre().length() - extension.length() - 1 > 25) {
-                nombreArticulo = nombreArticulo.substring(0, 25);
-            } 
-            nuevoNombre += ServerUtils.convertirNombreArchivo(nombreArticulo + "." + extension);
-            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-            streamParaDescarga = new DefaultStreamedContent(stream, externalContext.getMimeType(nuevoNombre), nuevoNombre);
+            return BeansUtils.streamParaDescarga(ServerUtils.getPathArticulos().resolve(nombreArchivo), "articulo_" + articuloDescarga.getNombre());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (IOException ex2) {
-                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-            }            
-        } 
-        
-        return streamParaDescarga;
+        }
+        return null;
     }    
     
     public String convertirListaPersonas(Collection<PersonaArticulo> listaConvertir) {
@@ -265,6 +241,17 @@ public class GestorArticulo implements Serializable {
             Path pathArchivo = ServerUtils.getPathTemp().resolve(nombreArchivo).normalize();
 
             File newFile = pathArchivo.toFile();
+
+            try {
+                BeansUtils.subirArchivoPrimefaces(file, newFile);
+
+                articulo.setArchivoArticulo(nombreArchivo);
+
+                tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
+            } catch (IOException ex) {
+                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            /*            
             try {
                 newFile.createNewFile();
             } catch (IOException ex) {
@@ -297,20 +284,12 @@ public class GestorArticulo implements Serializable {
 
                 tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
 
-                //listaImagenes.add(imagen);
-                FacesMessage msg
-                        = new FacesMessage("File Description", "file name: "
-                                + event.getFile().getFileName() + "file size: "
-                                + event.getFile().getSize() / 1024 + " Kb content type: "
-                                + event.getFile().getContentType() + ".");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-
             } catch (IOException e) {
                 e.printStackTrace();
 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         e.getLocalizedMessage(), ""));
-            }
+            }*/
 
         } else {
             System.err.println("Error al subir archivo");

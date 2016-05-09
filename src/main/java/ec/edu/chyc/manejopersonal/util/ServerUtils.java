@@ -156,4 +156,13 @@ public class ServerUtils {
     public static String convertirNombreArchivo(String nombreOriginal) {
         return toFileSystemSafeName(nombreOriginal, false, 255);
     }
+    
+    public static String convertirNombreArchivo(String nombreOriginal, String extension, int caracteres) {
+        String nombre = nombreOriginal;
+        if (nombre.length() - extension.length() - 1 > caracteres) {
+            nombre = nombre.substring(0, caracteres);
+        }
+        nombre = ServerUtils.convertirNombreArchivo(nombre + "." + extension);
+        return nombre;
+    }
 }
