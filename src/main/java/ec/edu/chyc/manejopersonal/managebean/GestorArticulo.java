@@ -223,7 +223,7 @@ public class GestorArticulo implements Serializable {
     }
     public void fileUploadListener(FileUploadEvent event) {
         UploadedFile file = event.getFile();
-        if (articulo.getArchivoArticulo() != null && !articulo.getArchivoArticulo().isEmpty()) {
+        if (articulo.getArchivoArticulo().isEmpty() && !modoModificar) {
             //si la propiedad getArchivoArticulo() esta llena, significa que antes ya subió un archivo y ahora está subiendo uno nuevo para reemplazarlo
             // por lo tanto hay que eliminar el archivo anterior
             Path pathArchivoAnterior = ServerUtils.getPathTemp().resolve(articulo.getArchivoArticulo()).normalize();
@@ -250,45 +250,6 @@ public class GestorArticulo implements Serializable {
             } catch (IOException ex) {
                 Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
             }
-            /*            
-            try {
-                newFile.createNewFile();
-            } catch (IOException ex) {
-                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-            }                     
-            
-            FileOutputStream fileOutputStream;
-            InputStream inputStream;
-            try {
-                fileOutputStream = new FileOutputStream(newFile);
-
-                byte[] buffer = new byte[ServerUtils.BUFFER_SIZE];
-
-                int bulk;
-                inputStream = file.getInputstream();
-
-                while (true) {
-                    bulk = inputStream.read(buffer);
-                    if (bulk < 0) {
-                        break;
-                    }
-                    fileOutputStream.write(buffer, 0, bulk);
-                    fileOutputStream.flush();
-                }
-
-                fileOutputStream.close();
-                inputStream.close();
-
-                articulo.setArchivoArticulo(nombreArchivo);
-
-                tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        e.getLocalizedMessage(), ""));
-            }*/
 
         } else {
             System.err.println("Error al subir archivo");

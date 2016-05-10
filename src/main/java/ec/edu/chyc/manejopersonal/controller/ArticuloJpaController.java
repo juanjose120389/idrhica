@@ -222,33 +222,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
              */
             String archivoAntiguo = articuloAntiguo.getArchivoArticulo();
             String archivoNuevo = obj.getArchivoArticulo();
-
-            //si no se ha cambiado el nombre del archivo, es porque el archivo subido no se ha modificado            
-            boolean archivoSeMantiene = false;
-            if (archivoAntiguo != null && !archivoAntiguo.isEmpty()
-                    && archivoNuevo != null && !archivoNuevo.isEmpty()
-                    && archivoAntiguo.equals(archivoNuevo)) {
-                archivoSeMantiene = true;
-            }
-
-            if (archivoAntiguo != null && !archivoAntiguo.isEmpty() && !archivoSeMantiene) {
-                //en caso de que existió un archivo almacenado anteriormente, se elimina, pero solo en caso de que se haya modificado el archivo original
-                Path pathAntiguo = ServerUtils.getPathArticulos().resolve(archivoAntiguo);
-                if (Files.exists(pathAntiguo)) {
-                    Path pathNuevoDestino = ServerUtils.getPathTemp().resolve("eliminado_" + archivoAntiguo);
-                    Files.move(pathAntiguo, pathNuevoDestino, REPLACE_EXISTING);
-                }
-            }
-
-            if (archivoNuevo != null && !archivoNuevo.isEmpty() && !archivoSeMantiene) {
-                //si se subió el archivo, copiar del directorio de temporales al original de artículos, después eliminar el archivo temporal
-                // solo realizarlo si se modificó el archivo original
-                Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoArticulo());
-                Path destino = ServerUtils.getPathArticulos().resolve(obj.getArchivoArticulo());
-
-                //FileUtils.copyFile(origen, destino);
-                Files.move(origen, destino, REPLACE_EXISTING);
-            }
+            ServerUtils.procesarAntiguoNuevoArchivo(archivoAntiguo, archivoNuevo, ServerUtils.getPathArticulos());
 
             em.merge(obj);
             //em.persist(obj);

@@ -5,9 +5,12 @@
  */
 package ec.edu.chyc.manejopersonal.util;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -164,5 +167,44 @@ public class ServerUtils {
         }
         nombre = ServerUtils.convertirNombreArchivo(nombre + "." + extension);
         return nombre;
+    }
+    
+    /**
+     * Mueve los archivos subidos de acuerdo al nombre del archivo que ha tenido antes y ahora. Si son diferentes,
+     * entonces se mueve el anterior y se lo trata como "eliminado", posteriormente si el nombre del archivo nuevo
+     * existe, se mueve del temporal al directorio destino. Si los dos nombres de archivos son iguales, no se realiza ninguna acción.
+     * @param nombreArchivoAntiguo Nombre del archivo antiguo ya almacenado y que se debe encontrar en pathDestino, 
+     * se lo tratará como eliminado (llevará el prefijo 'eliminado_' si este nombre es diferente al nombreArchivoNuevo.
+     * @param nombreArchivoNuevo Nombre del archivo nuevo que se encuentra en el Path Temporal. Si el nombre no está vacío,
+     * se moverá el archivo del directorio temporal al pathDestino.
+     * @param pathDestino Ruta destino donde se almacenará el nombreArchivoNuevo.
+     * @throws IOException En caso de que no se pueda mover ya sea el archivo antiguo o el archivo nuevo.
+     */
+    public static void procesarAntiguoNuevoArchivo(String nombreArchivoAntiguo, String nombreArchivoNuevo, Path pathDestino) throws IOException {
+
+        //si no se ha cambiado el nombre del archivo, es porque el archivo subido no se ha modificado            
+        boolean archivoSeMantiene = false;
+        if (!nombreArchivoAntiguo.isEmpty() && nombreArchivoAntiguo.equals(nombreArchivoNuevo)) {
+            archivoSeMantiene = true;
+        }
+
+        if (!nombreArchivoAntiguo.isEmpty() && !archivoSeMantiene) {
+            //en caso de que existió un archivo almacenado anteriormente, se elimina, pero solo en caso de que se haya modificado el archivo original
+            Path pathArchivoAntiguo = pathDestino.resolve(nombreArchivoAntiguo).normalize();
+            if (Files.exists(pathArchivoAntiguo) && Files.isRegularFile(pathArchivoAntiguo)) {
+                Path pathNuevoDestino = ServerUtils.getPathTemp().resolve("eliminado_" + nombreArchivoAntiguo);
+                Files.move(pathArchivoAntiguo, pathNuevoDestino, REPLACE_EXISTING);
+            }
+        }
+
+        if (!nombreArchivoNuevo.isEmpty() && !archivoSeMantiene) {
+            //si se subió el nuevo archivo, copiar del directorio de temporales al original de destino, después eliminar el archivo temporal
+            // solo realizarlo si se modificó el archivo original
+            Path origen = ServerUtils.getPathTemp().resolve(nombreArchivoNuevo);
+            Path destino = pathDestino.resolve(nombreArchivoNuevo).normalize();
+
+            //FileUtils.copyFile(origen, destino);
+            Files.move(origen, destino, REPLACE_EXISTING);
+        }
     }
 }
