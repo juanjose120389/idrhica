@@ -9,7 +9,11 @@ import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
+import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -90,6 +94,14 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
                 proyAttached.getTesisCollection().add(obj);
             }
             
+            if (!obj.getArchivoActaAprobacion().isEmpty()) {
+                //si se subió el archivo, copiar del directorio de temporales al original destino, después eliminar el archivo temporal
+                Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoActaAprobacion());
+                Path destino = ServerUtils.getPathActasAprobacionTesis().resolve(obj.getArchivoActaAprobacion());
+
+                Files.move(origen, destino, REPLACE_EXISTING);
+            }
+                        
             
             em.getTransaction().commit();
         } finally {
@@ -185,7 +197,12 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
                     perExistenteAttached.getTesisComoTutorCollection().add(tesis);
                 }
             }            
+
             
+            String archivoAntiguo = tesisAntigua.getArchivoActaAprobacion();
+            String archivoNuevo = tesis.getArchivoActaAprobacion();
+            
+            ServerUtils.procesarAntiguoNuevoArchivo(archivoAntiguo, archivoNuevo, ServerUtils.getPathActasAprobacionTesis());            
             
             em.merge(tesis);
             em.getTransaction().commit();

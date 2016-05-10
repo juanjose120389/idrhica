@@ -6,8 +6,6 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,8 +20,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Type;
 
 /**
@@ -78,10 +76,9 @@ public class Tesis implements Serializable {
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")
     private String resumen;
-
-    private String actaAprobacion;
     
-    private String archivoActaAprobacion;
+    @NotNull
+    private String archivoActaAprobacion = "";
     
     @ManyToMany(mappedBy = "tesisCollection")
     private Set<Persona> autoresCollection = new HashSet<>();
@@ -214,15 +211,7 @@ public class Tesis implements Serializable {
     public void setAutoresCollection(Set<Persona> autoresCollection) {
         this.autoresCollection = autoresCollection;
     }
-
-    public String getActaAprobacion() {
-        return actaAprobacion;
-    }
-
-    public void setActaAprobacion(String actaAprobacion) {
-        this.actaAprobacion = actaAprobacion;
-    }
-
+    
     public Set<Persona> getCodirectoresCollection() {
         return codirectoresCollection;
     }

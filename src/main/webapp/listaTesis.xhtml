@@ -43,13 +43,15 @@
             <p:column headerText="Observaciones" filterBy="#{tesis.observaciones}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.observaciones}" />
             </p:column>
-            <p:column headerText="Acta de Aprobación" filterBy="#{tesis.actaAprobacion}" filterMatchMode="contains">
-                <h:outputText value="#{tesis.actaAprobacion}" />
-            </p:column>
             <p:column headerText="Autor" filterBy="#{tesis.autoresCollection.toArray()}" filterMatchMode="contains">
                 <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
                     <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
+            </p:column>
+            <p:column exportable="false" headerText="Acta Aprobación" width="75">
+                <p:commandLink value="Descargar" ajax="false" rendered="#{tesis.archivoActaAprobacion != ''}">
+                    <p:fileDownload value="#{gestorTesis.streamParaDescarga(tesis)}" />
+                </p:commandLink>
             </p:column>
 
             <p:column exportable="false" width="60">

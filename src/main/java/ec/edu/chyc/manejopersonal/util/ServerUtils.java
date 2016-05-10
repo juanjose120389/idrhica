@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.Base64;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -207,4 +208,10 @@ public class ServerUtils {
             Files.move(origen, destino, REPLACE_EXISTING);
         }
     }
+    
+    public static String generarNombreValidoArchivo(String extension) {
+        String nombreArchivo = ServerUtils.generateB64Uuid().replace("=", "") + ((new Random()).nextInt(8999)+1000) + "." + extension;
+        return ServerUtils.convertirNombreArchivo(nombreArchivo);
+    }
+    
 }

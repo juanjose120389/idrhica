@@ -10,9 +10,16 @@ import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
 import ec.edu.chyc.manejopersonal.entity.Tesis.TipoTesis;
+import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
+import ec.edu.chyc.manejopersonal.util.ServerUtils;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,8 +31,12 @@ import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import org.apache.commons.io.FilenameUtils;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -44,6 +55,7 @@ public class GestorTesis implements Serializable {
     private List<Persona> listaTutores = new ArrayList<>();
 
     private boolean modoModificar = false;
+    private String tamanoArchivo = "";
 
     public GestorTesis() {
     }
@@ -63,6 +75,18 @@ public class GestorTesis implements Serializable {
         listaAutoresTesis = new ArrayList<>(tesis.getAutoresCollection());
         
         modoModificar = true;
+        
+        try {
+            Path pathArchivoSubido = ServerUtils.getPathActasAprobacionTesis().resolve(tesis.getArchivoActaAprobacion());
+            if (Files.isRegularFile(pathArchivoSubido) && Files.exists(pathArchivoSubido)) {
+                Long size = Files.size(pathArchivoSubido);
+                tamanoArchivo = ServerUtils.humanReadableByteCount(size);
+            } else {
+                tamanoArchivo = "";
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
+        }        
 
         return "manejoTesis";
     }
@@ -74,6 +98,7 @@ public class GestorTesis implements Serializable {
         listaAutoresTesis.clear();
         listaProyectos.clear();
 
+        tamanoArchivo = "";
     }
 
     public String initCrearTesis() {
@@ -183,7 +208,52 @@ public class GestorTesis implements Serializable {
     public void quitarProyecto(Proyecto proyectoQuitar) {
         listaProyectos.remove(proyectoQuitar);
     }
+    public void fileUploadListener(FileUploadEvent event) {
+        UploadedFile file = event.getFile();
+        if (!tesis.getArchivoActaAprobacion().isEmpty() && !modoModificar) {
+            //si la propiedad getArchivo esta llena, significa que antes ya subió un archivo y ahora está subiendo uno nuevo para reemplazarlo
+            // por lo tanto hay que eliminar el archivo anterior, no realizarlo cuando está en modo modificar ya que puede darse el caso
+            // que no quiera guardar los cambios (y si ya se borró el archivo, no sería posible recuperarlo en caso de cancelar la edición)
+            Path pathArchivoAnterior = ServerUtils.getPathTemp().resolve(tesis.getArchivoActaAprobacion()).normalize();
+            File archivoEliminar = pathArchivoAnterior.toFile();
+            //borrar el archivo anterior en caso de existir
+            if (archivoEliminar.isFile()) {
+                archivoEliminar.delete();
+            }
+        }
+        if (file != null) {
+            String extension = FilenameUtils.getExtension(file.getFileName());
+            String nombreArchivo = ServerUtils.generarNombreValidoArchivo(extension);
+            Path pathArchivo = ServerUtils.getPathTemp().resolve(nombreArchivo).normalize();
 
+            File newFile = pathArchivo.toFile();
+
+            try {
+                BeansUtils.subirArchivoPrimefaces(file, newFile);
+
+                tesis.setArchivoActaAprobacion(nombreArchivo);
+
+                tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
+            } catch (IOException ex) {
+                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            System.err.println("Error al subir archivo");
+        }
+
+    }
+    
+    public StreamedContent streamParaDescarga(Tesis tesisDescarga) {
+        String nombreArchivo = tesisDescarga.getArchivoActaAprobacion();
+        try {
+            return BeansUtils.streamParaDescarga(ServerUtils.getPathActasAprobacionTesis().resolve(nombreArchivo), "actaTesisAprob_" + tesisDescarga.getNombre());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    } 
+    
     public String initListarTesis() {
         actualizarListaTesis();
 
@@ -268,6 +338,14 @@ public class GestorTesis implements Serializable {
 
     public void setModoModificar(boolean modoModificar) {
         this.modoModificar = modoModificar;
+    }
+
+    public String getTamanoArchivo() {
+        return tamanoArchivo;
+    }
+
+    public void setTamanoArchivo(String tamanoArchivo) {
+        this.tamanoArchivo = tamanoArchivo;
     }
 
 }
