@@ -227,9 +227,9 @@
 
         </p:panel>
         <p:remoteCommand name="upd" update="checksTipoPersona" process="checksTipoPersona"/>
-        <h:panelGroup layout="block" style="height: 20px"/>
+        <h:panelGroup layout="block" style="height: 15px"/>
 
-        <p:commandButton value="Guardar" update="formContenido" onclick="setTimeout('upd()', 20)" action="#{gestorPersona.guardar()}"/>
+        <p:commandButton value="Guardar" update="formContenido" onclick="setTimeout('upd()', 20)" action="#{gestorPersona.guardar()}" icon="fa fa-save"/>
 
     </ui:define>
 </ui:composition>

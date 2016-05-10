@@ -163,11 +163,11 @@
                 <h:panelGroup/>
 
                 <p:outputLabel value="Facultad"/>
-                <p:inputText value="#{gestorTesis.tesis.facultad}" /> 
+                <p:inputText id="txtFacultad" value="#{gestorTesis.tesis.facultad}" /> 
                 <h:panelGroup/>
 
                 <p:outputLabel value="Escuela"/>
-                <p:inputText value="#{gestorTesis.tesis.escuela}" />
+                <p:inputText id="txtEscuela" value="#{gestorTesis.tesis.escuela}" />
                 <h:panelGroup/>            
 
                 <p:outputLabel value="Fecha de Inicio"/>
@@ -210,6 +210,6 @@
             </h:panelGrid>        
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>
-        <p:commandButton value="Guardar" update="formContenido" action="#{gestorTesis.guardar()}"/>
+        <p:commandButton value="Guardar" update="formContenido" action="#{gestorTesis.guardar()}" icon="fa fa-save"/>
     </ui:define>
 </ui:composition>

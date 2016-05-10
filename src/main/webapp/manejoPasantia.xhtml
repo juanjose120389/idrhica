@@ -74,11 +74,11 @@
 
 
                 <p:outputLabel value="Facultad"/>
-                <p:inputText value="#{gestorPasantia.pasantia.facultad}" /> 
+                <p:inputText id="txtFacultad" value="#{gestorPasantia.pasantia.facultad}" /> 
                 <h:panelGroup/>
 
                 <p:outputLabel value="Escuela"/>
-                <p:inputText value="#{gestorPasantia.pasantia.escuela}" />
+                <p:inputText id="txtEscuela" value="#{gestorPasantia.pasantia.escuela}" />
                 <h:panelGroup/>            
 
                 <p:outputLabel value="Fecha de inicio"/>
@@ -91,6 +91,6 @@
             </h:panelGrid>
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>
-        <p:commandButton value="Guardar" update="formContenido" action="#{gestorPasantia.guardar()}"/>
+        <p:commandButton value="Guardar" update="formContenido" action="#{gestorPasantia.guardar()}" icon="fa fa-save"/>
     </ui:define>
 </ui:composition>
