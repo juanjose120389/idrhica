@@ -302,8 +302,9 @@ public class GestorArticulo implements Serializable {
             articulo.setArchivoArticulo("");
         }        
         try {
-            if (Files.exists(ServerUtils.getPathArticulos().resolve( articulo.getArchivoArticulo())) ) {
-                Long size = Files.size(ServerUtils.getPathArticulos().resolve( articulo.getArchivoArticulo() ));
+            Path pathArchivoSubido = ServerUtils.getPathArticulos().resolve(articulo.getArchivoArticulo());
+            if (Files.isRegularFile(pathArchivoSubido) && Files.exists(pathArchivoSubido)) {
+                Long size = Files.size(pathArchivoSubido);
                 tamanoArchivo = ServerUtils.humanReadableByteCount(size);
             } else {
                 tamanoArchivo = "";
