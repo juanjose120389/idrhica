@@ -89,7 +89,7 @@
                 </p:commandLink>
             </p:column>
             
-            <p:column exportable="false">
+            <p:column exportable="false" rendered="#{gestorUsuario.puedeEditar}">
                 <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}"/>
             </p:column>
 

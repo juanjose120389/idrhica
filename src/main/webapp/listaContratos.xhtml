@@ -66,7 +66,7 @@
                     <p:fileDownload value="#{gestorContrato.streamParaDescarga(contrato)}" />
                 </p:commandLink>
             </p:column>            
-            <p:column width="60">
+            <p:column width="60" rendered="#{gestorUsuario.puedeEditar}">
                 <p:commandLink value="Editar" action="#{gestorContrato.initModificarContrato(contrato.id)}"/>
             </p:column>
         </p:dataTable>         

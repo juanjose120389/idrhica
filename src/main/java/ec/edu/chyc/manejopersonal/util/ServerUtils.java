@@ -14,6 +14,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -212,6 +213,10 @@ public class ServerUtils {
     public static String generarNombreValidoArchivo(String extension) {
         String nombreArchivo = ServerUtils.generateB64Uuid().replace("=", "") + ((new Random()).nextInt(8999)+1000) + "." + extension;
         return ServerUtils.convertirNombreArchivo(nombreArchivo);
+    }
+    
+    static public String sha256(String input) {
+        return DigestUtils.sha256Hex(input);
     }
     
 }

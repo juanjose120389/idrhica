@@ -54,7 +54,7 @@
                 </p:commandLink>
             </p:column>
 
-            <p:column exportable="false" width="60">
+            <p:column exportable="false" width="60" rendered="#{gestorUsuario.puedeEditar}">
                 <p:commandLink value="Editar" action="#{gestorTesis.initModificarTesis(tesis.id)}"/>
             </p:column>
 

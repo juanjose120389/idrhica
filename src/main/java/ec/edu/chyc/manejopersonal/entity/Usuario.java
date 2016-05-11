@@ -7,9 +7,12 @@ package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -18,24 +21,25 @@ import javax.persistence.Id;
 @Entity
 public class Usuario implements Serializable {
 
+    public enum TipoUsuario {
+        VISOR,
+        ADMIN
+    }
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    private String usuario = "";
+
+    @NotNull
+    private String password = "";
     
-    private String usuario;
-
-    private String password;
-    
-    private int tipo;
-
-    public int getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TipoUsuario tipo = TipoUsuario.VISOR;
     
     public String getUsuario() {
         return usuario;
@@ -52,8 +56,6 @@ public class Usuario implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
 
     public Long getId() {
         return id;
@@ -86,6 +88,14 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Usuario[ id=" + id + " ]";
+    }
+
+    public TipoUsuario getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoUsuario tipo) {
+        this.tipo = tipo;
     }
     
 }

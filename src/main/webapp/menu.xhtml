@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <p:menu toggleable="true">
         <p:submenu label="Listado">
@@ -14,7 +15,7 @@
             <p:menuitem value="Tesis" action="#{gestorTesis.initListarTesis()}" icon="fa fa-list" update="formContenido"/>
             <p:menuitem value="Pasantías" action="#{gestorPasantia.initListarPasantias()}" icon="fa fa-list" update="formContenido"/>
         </p:submenu>
-        <p:submenu label="Nuevo">
+        <p:submenu label="Nuevo" rendered="#{gestorUsuario.puedeAgregar}">
             <p:menuitem value="Persona" action="#{gestorPersona.initCrearPersona()}" icon="fa fa-plus" update="formContenido"/>
             <p:menuitem value="Proyecto" action="#{gestorProyecto.initCrearProyecto()}" icon="fa fa-plus" update="formContenido"/>
             <p:menuitem value="Contrato" action="#{gestorContrato.initCrearContrato()}" icon="fa fa-plus" update="formContenido"/>
@@ -24,5 +25,19 @@
             <p:menuitem value="Pasantía" action="#{gestorPasantia.initCrearPasantia()}" icon="fa fa-plus" update="formContenido"/>
         </p:submenu>
     </p:menu>
-
+    <p:panel style="margin-top: 15px">
+        <h:panelGroup layout="block" rendered="#{gestorUsuario.logeado}">
+            <p:outputLabel value="Sesión iniciada como: #{gestorUsuario.usuarioActual.usuario}"/>
+            <br/>
+            <p:commandButton value="Cerrar sesión" action="#{gestorUsuario.logout()}" update="formMenu formContenido"/>
+        </h:panelGroup>
+        <h:panelGrid columns="1" rendered="#{!gestorUsuario.logeado}">
+            <p:outputLabel value="Usuario"/>
+            <p:inputText id="txtUser" value="#{gestorUsuario.usuario}" size="12" maxlength="50"/>
+            <p:outputLabel value="Contraseña"/>
+            <p:password id="txtPass" widgetVar="pass" value="#{gestorUsuario.password}" size="12" maxlength="255"/>
+            <p:commandButton value="Login" disabled="#{gestorUsuario.bloquearLogin}" action="#{gestorUsuario.login()}" update="formMenu formContenido"/>
+            <p:poll interval="60" autoStart="false" update="formMenu formContenido" oncomplete="PF('pollEnable').stop()" widgetVar="pollEnable" listener="#{gestorUsuario.pollComplete()}"/>
+        </h:panelGrid>
+    </p:panel>   
 </ui:composition>

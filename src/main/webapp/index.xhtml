@@ -100,7 +100,7 @@
             <p:column headerText="" exportable="false">
                 <p:commandLink value="Ver" action="#{gestorPersona.initVerPersona(persona.id)}"/>
                 <p:outputLabel value=" "/>
-                <p:commandLink value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
+                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
             </p:column>            
         </p:dataTable>        
     </ui:define>

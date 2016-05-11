@@ -43,7 +43,7 @@
                 <h:outputText value="#{pasantia.numeroHoras}" />
             </p:column>
 
-            <p:column exportable="false" width="60">
+            <p:column exportable="false" width="60" rendered="#{gestorUsuario.puedeEditar}">
                 <p:commandLink value="Editar" action="#{gestorPasantia.initModificarPasantia(pasantia.id)}"/>
             </p:column>            
         </p:dataTable>   

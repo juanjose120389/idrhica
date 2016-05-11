@@ -68,7 +68,7 @@
             <p:column exportable="false" width="80">
                 <p:commandLink value="Ver" action="#{gestorProyecto.initVerProyecto(proyecto.id)}"/>
                 <p:outputLabel value=" "/>
-                <p:commandLink value="Editar" action="#{gestorProyecto.initModificarProyecto(proyecto.id)}"/>
+                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorProyecto.initModificarProyecto(proyecto.id)}"/>
             </p:column>            
         </p:dataTable>         
     </ui:define>

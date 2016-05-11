@@ -47,7 +47,7 @@
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>                
-            <p:column width="70">
+            <p:column width="70" rendered="#{gestorUsuario.puedeEditar}">
                 <p:commandLink value="Editar" action="#{gestorConvenio.initModificarConvenio(convenio.id)}"/>
             </p:column>
 
