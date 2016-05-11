@@ -30,6 +30,10 @@
             <f:facet name="header">
                 Convenios
             </f:facet>            
+            <p:column headerText="Título" sortBy="#{convenio.titulo}" filterBy="#{convenio.titulo}" filterMatchMode="contains">
+                <h:outputText value="#{convenio.titulo}" />
+            </p:column>           
+            
             <p:column headerText="Institución" sortBy="#{convenio.institucion.nombre}" filterBy="#{convenio.institucion.nombre}" filterMatchMode="contains">
                 <h:outputText value="#{convenio.institucion.nombre}" />
             </p:column>           
