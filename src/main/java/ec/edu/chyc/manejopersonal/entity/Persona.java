@@ -25,6 +25,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -52,6 +53,9 @@ public class Persona implements Serializable {
     private String genero; //M=Masculino, F=Femenino
     private String direccion;
     private Boolean activo;
+    @NotNull
+    private boolean externo = false;
+    private String firmas;
 
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<Contrato> contratosCollection = new ArrayList<>();
@@ -93,6 +97,12 @@ public class Persona implements Serializable {
         @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idTesis", referencedColumnName = "id")})
     private Set<Tesis> tesisComoTutorCollection = new HashSet();    
+    
+    @ManyToMany
+    @JoinTable(name = "personaFirma", joinColumns = {
+        @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idFirma", referencedColumnName = "id")})
+    private Set<Firma> firmasCollection = new HashSet();        
     
     @OneToMany(mappedBy = "pasante", fetch = FetchType.LAZY)
     private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
@@ -293,6 +303,22 @@ public class Persona implements Serializable {
 
     public void setConveniosAdminCollection(Collection<Convenio> conveniosAdminCollection) {
         this.conveniosAdminCollection = conveniosAdminCollection;
+    }
+
+    public boolean isExterno() {
+        return externo;
+    }
+
+    public void setExterno(boolean externo) {
+        this.externo = externo;
+    }
+
+    public Set<Firma> getFirmasCollection() {
+        return firmasCollection;
+    }
+
+    public void setFirmasCollection(Set<Firma> firmasCollection) {
+        this.firmasCollection = firmasCollection;
     }
 
 }

@@ -14,6 +14,8 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -218,5 +220,25 @@ public class ServerUtils {
     static public String sha256(String input) {
         return DigestUtils.sha256Hex(input);
     }
-    
+
+    /**
+     * Devuelve el tamaño de un archivo en un formato legible (por ejemplo 23KB, 23MB, 2B, etc)
+     *  en caso de no poder obtener el tamaño (puede darse en caso de que el archivo no exista o se trate de 
+     *  un directorio, o algún error I/O) se devuelve una cadena vacía.
+     *  tenga permiso
+     * @param pathArchivoSubido Path del archivo que se desea obtener el tamaño.
+     * @return Tamaño del archivo en formato amigable.
+     */
+    static public String tamanoArchivo(Path pathArchivoSubido) {
+        if (Files.isRegularFile(pathArchivoSubido) && Files.exists(pathArchivoSubido)) {
+            try {
+                Long size = Files.size(pathArchivoSubido);
+                return ServerUtils.humanReadableByteCount(size);
+            } catch (IOException ex) {
+                return "";
+                //Logger.getLogger(ServerUtils.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return "";
+    }
 }

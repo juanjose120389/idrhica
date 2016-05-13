@@ -5,7 +5,6 @@
  */
 package ec.edu.chyc.manejopersonal.managebean.util;
 
-import ec.edu.chyc.manejopersonal.managebean.GestorArticulo;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,8 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
@@ -88,5 +86,11 @@ public class BeansUtils {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         StreamedContent streamParaDescarga = new DefaultStreamedContent(stream, externalContext.getMimeType(nuevoNombre), nuevoNombre);
         return streamParaDescarga;
+    }
+    
+    public static String valorParam(String nombreParametro) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
+        return params.get(nombreParametro);
     }
 }
