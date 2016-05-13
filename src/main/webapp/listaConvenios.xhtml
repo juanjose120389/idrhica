@@ -40,7 +40,14 @@
 
             <p:column headerText="Proyecto" sortBy="#{convenio.proyecto.titulo}" filterBy="#{convenio.proyecto.titulo}" filterMatchMode="contains">
                 <h:outputText value="#{convenio.proyecto.titulo}" />
-            </p:column>           
+            </p:column>   
+            
+             <p:column headerText="Admnistrador" filterBy="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" filterMatchMode="contains">
+                <h:outputText value="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" />
+            </p:column>
+            <p:column headerText="Objetivo" sortBy="#{convenio.objetivo}">
+                <h:outputText value="#{convenio.objetivo}" />
+            </p:column> 
 
             <p:column headerText="Fecha Inicio" >
                 <h:outputText value="#{convenio.fechaInicio}" >
@@ -51,10 +58,14 @@
                 <h:outputText value="#{convenio.fechaFin}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
-            </p:column>                
+            </p:column>    
+            
+
+            
             <p:column width="70" rendered="#{gestorUsuario.puedeEditar}" exportable="false">
                 <p:commandLink value="Editar" action="#{gestorConvenio.initModificarConvenio(convenio.id)}"/>
             </p:column>
+
 
         </p:dataTable>
     </ui:define>
