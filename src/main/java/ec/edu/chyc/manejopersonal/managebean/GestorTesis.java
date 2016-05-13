@@ -6,6 +6,7 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.TesisJpaController;
+import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
@@ -24,7 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -32,6 +35,7 @@ import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
@@ -73,9 +77,9 @@ public class GestorTesis implements Serializable {
         listaCodirectores = new ArrayList<>(tesis.getCodirectoresCollection());
         listaTutores = new ArrayList<>(tesis.getTutoresCollection());
         listaAutoresTesis = new ArrayList<>(tesis.getAutoresCollection());
-        
+
         modoModificar = true;
-        
+
         try {
             Path pathArchivoSubido = ServerUtils.getPathActasAprobacionTesis().resolve(tesis.getArchivoActaAprobacion());
             if (Files.isRegularFile(pathArchivoSubido) && Files.exists(pathArchivoSubido)) {
@@ -86,7 +90,7 @@ public class GestorTesis implements Serializable {
             }
         } catch (IOException ex) {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
 
         return "manejoTesis";
     }
@@ -109,6 +113,27 @@ public class GestorTesis implements Serializable {
         return "manejoTesis";
     }
 
+    public boolean filtrarPorAutor(Object value, Object filter, Locale locale) {
+       String filterText = (filter == null) ? null : filter.toString().trim();
+        if(filterText == null||filterText.equals("")) {
+            return true;
+        }
+         
+        if(value == null) {
+            return false;
+        }
+       
+        Set<Persona> autores = (Set<Persona>)value;
+         
+        for (Persona per : autores) {
+            if (StringUtils.containsIgnoreCase(per.getNombres(), filterText) || StringUtils.containsIgnoreCase(per.getApellidos(), filterText)) {
+                return true;
+            }
+        }
+          return false;
+
+    }
+
     public static GestorTesis getInstance() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELContext context = facesContext.getELContext();
@@ -123,31 +148,40 @@ public class GestorTesis implements Serializable {
             Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public void quitarCodirector(Persona personaQuitar) {
         listaCodirectores.remove(personaQuitar);
     }
+
     public void quitarTutor(Persona personaQuitar) {
         listaTutores.remove(personaQuitar);
-    }    
+    }
+
     public void quitarAutor(Persona personaQuitar) {
         listaAutoresTesis.remove(personaQuitar);
     }
+
     public void onCodirectoresChosen(SelectEvent event) {
         List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
-        agregarPersonaALista(listaPersonasSel, listaCodirectores);        
+        agregarPersonaALista(listaPersonasSel, listaCodirectores);
     }
+
     public void onTutoresChosen(SelectEvent event) {
         List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
         agregarPersonaALista(listaPersonasSel, listaTutores);
     }
+
     public void onPersonaChosen(SelectEvent event) {
         List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
         agregarPersonaALista(listaPersonasSel, listaAutoresTesis);
     }
-    
-    /***
+
+    /**
+     * *
      * Agrega un listado de personas a una lista solo si no están ya en la lista
-     * @param listaPersonasAgregar Listado origen, personas que serán añadidas en la otra lista
+     *
+     * @param listaPersonasAgregar Listado origen, personas que serán añadidas
+     * en la otra lista
      * @param listadoDePersonas Listado destino, donde se añadirá la persona
      */
     private void agregarPersonaALista(List<Persona> listaPersonasAgregar, List<Persona> listadoDePersonas) {
@@ -157,7 +191,7 @@ public class GestorTesis implements Serializable {
                     listadoDePersonas.add(per);
                 }
             }
-        }        
+        }
     }
 
     public void onProyectoChosen(SelectEvent event) {
@@ -170,7 +204,7 @@ public class GestorTesis implements Serializable {
             }
         }
     }
-    
+
     public void abrirDialogPersonas() {
         Map<String, Object> options = new HashMap<>();
         options.put("resizable", true);
@@ -179,7 +213,7 @@ public class GestorTesis implements Serializable {
         options.put("modal", true);
         options.put("contentWidth", "100%");
         GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
-        RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);        
+        RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
 
     public String convertirListaPersonas(List<Persona> listaConvertir) {
@@ -208,6 +242,7 @@ public class GestorTesis implements Serializable {
     public void quitarProyecto(Proyecto proyectoQuitar) {
         listaProyectos.remove(proyectoQuitar);
     }
+
     public void fileUploadListener(FileUploadEvent event) {
         UploadedFile file = event.getFile();
         if (!tesis.getArchivoActaAprobacion().isEmpty() && !modoModificar) {
@@ -243,7 +278,7 @@ public class GestorTesis implements Serializable {
         }
 
     }
-    
+
     public StreamedContent streamParaDescarga(Tesis tesisDescarga) {
         String nombreArchivo = tesisDescarga.getArchivoActaAprobacion();
         try {
@@ -252,8 +287,8 @@ public class GestorTesis implements Serializable {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    } 
-    
+    }
+
     public String initListarTesis() {
         actualizarListaTesis();
 
@@ -270,7 +305,7 @@ public class GestorTesis implements Serializable {
         tesis.setProyectosCollection(new HashSet(listaProyectos));
         tesis.setCodirectoresCollection(new HashSet(listaCodirectores));
         tesis.setTutoresCollection(new HashSet(listaTutores));
-        
+
         try {
             if (modoModificar) {
                 tesisController.edit(tesis);
@@ -315,7 +350,7 @@ public class GestorTesis implements Serializable {
     public void setListaTutores(List<Persona> listaTutores) {
         this.listaTutores = listaTutores;
     }
-    
+
     public Tesis getTesis() {
         return tesis;
     }

@@ -441,9 +441,9 @@ public class GestorArticulo implements Serializable {
             return false;
         }
         
-        Set<Persona> autores = (Set) value;
-        for (Persona per : autores) {
-            if (StringUtils.containsIgnoreCase(per.getNombres(), filterText) || StringUtils.containsIgnoreCase(per.getApellidos(), filterText)) {
+        Collection<PersonaArticulo> autores = (Collection) value;
+        for (PersonaArticulo per : autores) {
+            if (StringUtils.containsIgnoreCase(per.getPersona().getNombres(), filterText) || StringUtils.containsIgnoreCase(per.getPersona().getApellidos(), filterText)) {
                 return true;
             }
         }

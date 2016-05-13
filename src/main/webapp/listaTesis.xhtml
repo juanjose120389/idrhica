@@ -58,7 +58,7 @@
             <p:column headerText="Observaciones" filterBy="#{tesis.observaciones}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.observaciones}" />
             </p:column>
-            <p:column headerText="Autor" filterBy="#{tesis.autoresCollection.toArray()}" filterMatchMode="contains">
+            <p:column headerText="Autor" filterBy="#{tesis.autoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarPorAutor}">
                 <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
                     <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
