@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="./template.xhtml">
     <ui:define name="body">
         <p:dataTable widgetVar="contratoTable" id="contratoTable" var="contrato" value="#{gestorContrato.listaContrato}" rows="10"
@@ -18,7 +19,7 @@
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
-                        <p:dataExporter type="pdf" target="contratoTable" fileName="contrato" encoding="iso-8859-1"/>
+                        <pe:exporter type="pdf" fontName="Verdana" target="contratoTable" fileName="contrato" encoding="iso-8859-1"/>
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
@@ -66,7 +67,7 @@
                     <p:fileDownload value="#{gestorContrato.streamParaDescarga(contrato)}" />
                 </p:commandLink>
             </p:column>            
-            <p:column width="60" rendered="#{gestorUsuario.puedeEditar}">
+            <p:column width="60" rendered="#{gestorUsuario.puedeEditar}" exportable="false">
                 <p:commandLink value="Editar" action="#{gestorContrato.initModificarContrato(contrato.id)}"/>
             </p:column>
         </p:dataTable>         

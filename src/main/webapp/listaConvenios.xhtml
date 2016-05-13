@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="./template.xhtml">
     <ui:define name="body">
         <style >
@@ -22,13 +23,17 @@
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
-                        <p:dataExporter type="pdf" target="conveniosTable" fileName="convenios" encoding="iso-8859-1"/>
+                        <pe:exporter type="pdf" target="conveniosTable" fileName="convenios" encoding="iso-8859-1"/>
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
             <f:facet name="header">
                 Convenios
             </f:facet>            
+            <p:column headerText="Título" sortBy="#{convenio.titulo}" filterBy="#{convenio.titulo}" filterMatchMode="contains">
+                <h:outputText value="#{convenio.titulo}" />
+            </p:column>           
+            
             <p:column headerText="Institución" sortBy="#{convenio.institucion.nombre}" filterBy="#{convenio.institucion.nombre}" filterMatchMode="contains">
                 <h:outputText value="#{convenio.institucion.nombre}" />
             </p:column>           
@@ -47,7 +52,7 @@
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>                
-            <p:column width="70" rendered="#{gestorUsuario.puedeEditar}">
+            <p:column width="70" rendered="#{gestorUsuario.puedeEditar}" exportable="false">
                 <p:commandLink value="Editar" action="#{gestorConvenio.initModificarConvenio(convenio.id)}"/>
             </p:column>
 

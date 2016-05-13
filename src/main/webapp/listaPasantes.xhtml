@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="./template.xhtml">
     <ui:define name="body">
         <p:commandButton value="Regresar" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
@@ -19,7 +20,7 @@
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
-                        <p:dataExporter type="pdf" target="pasanteTable" fileName="pasantes" encoding="iso-8859-1"/>
+                        <pe:exporter type="pdf" target="pasanteTable" fileName="pasantes" encoding="iso-8859-1"/>
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
