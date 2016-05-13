@@ -30,13 +30,13 @@
                 border: none;
             }
         </style>
-        <p:panel header="#{gestorArticulo.modoModificar?'Modificar':'Nuevo'} Artículo">
+        <p:panel header="#{gestorArticulo.modoModificar?'Modificar':'Nuevo'} Artículo" id="panelArticulo">
             <h:panelGrid columns="3">
                 <p:outputLabel value="Archivo BibTeX"/>
                 <h:panelGroup layout="block">
                     <p:fileUpload fileUploadListener="#{gestorArticulo.fileUploadListener}" 
                                   mode="advanced"
-                                  update="spanTamanioArchivoBib" 
+                                  update="panelArticulo" 
                                   auto="true" 
                                   sizeLimit="15728640" 
                                   allowTypes="/(\.|\/)(bib|bibtex)$/" 

@@ -299,16 +299,26 @@ public class GestorArticulo implements Serializable {
             BibTeXDatabase database = bibtexParser.parse(br);
             
             Map<Key, BibTeXEntry> entryMap = database.getEntries();
-            
-            if (entryMap.size() > 0) {
-                BibTeXEntry firstEntry = null;
-                for (Map.Entry<Key, BibTeXEntry> entry : entryMap.entrySet()) {
-                    firstEntry = entry.getValue();
-                    break;
-                    //System.out.println(entry.getKey() + "/" + entry.getValue());
+            BibTeXEntry firstEntry = null;
+            for (Map.Entry<Key, BibTeXEntry> entry : entryMap.entrySet()) {
+                firstEntry = entry.getValue();
+                break;
+                //System.out.println(entry.getKey() + "/" + entry.getValue());
+            }            
+            if (firstEntry != null) {
+                Value valTitulo = firstEntry.getField(BibTeXEntry.KEY_TITLE);
+                Value valRevista = firstEntry.getField(BibTeXEntry.KEY_JOURNAL);
+                Value valPublicado = firstEntry.getField(BibTeXEntry.KEY_YEAR);
+                
+                if (valTitulo != null) {
+                    articulo.setNombre(valTitulo.toUserString());
                 }
-
-                Collection<BibTeXEntry> entries = entryMap.values();
+                if (valRevista != null) {
+                    articulo.setRevista(valRevista.toUserString());
+                }
+                //Value valTitulo = firstEntry.getField(BibTeXEntry.KEY_TITLE);
+                
+                /*Collection<BibTeXEntry> entries = entryMap.values();
                 for (BibTeXEntry entry : entries) {
                     Value value = entry.getField(BibTeXEntry.KEY_TITLE);
                     if (value == null) {
@@ -316,7 +326,7 @@ public class GestorArticulo implements Serializable {
                     }
 
                     // Do something with the title value
-                }
+                }*/
             }
         } catch (ParseException ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
