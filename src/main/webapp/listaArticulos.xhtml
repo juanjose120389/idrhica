@@ -76,7 +76,7 @@
 
 
             <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
-                <ui:repeat value="#{articulo.personasArticuloCollection}" var="autor">
+                <ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="autor">
                     <p:outputLabel value="#{autor.persona.nombres} #{autor.persona.apellidos}"/><br />
                 </ui:repeat>
             </p:column>
