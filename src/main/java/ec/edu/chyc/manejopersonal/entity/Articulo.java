@@ -90,6 +90,10 @@ public class Articulo implements Serializable {
 
     @NotNull
     private String archivoArticulo = "";//nombre del archivo subido que corresponde al artículo
+    
+    @NotNull
+    private String archivoBibtex = "";
+    
     /*
     @ManyToMany(mappedBy = "articulosCollection")
     private Set<Persona> autoresCollection = new HashSet<>();
@@ -259,5 +263,12 @@ public class Articulo implements Serializable {
         this.listaInstFinanciamientos = listaInstFinanciamientos;
     }
 
-    
+    public String getArchivoBibtex() {
+        return archivoBibtex;
+    }
+
+    public void setArchivoBibtex(String archivoBibtex) {
+        this.archivoBibtex = archivoBibtex;
+    }
+   
 }

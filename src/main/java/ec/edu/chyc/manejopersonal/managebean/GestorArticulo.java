@@ -14,41 +14,44 @@ import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jbibtex.BibTeXDatabase;
+import org.jbibtex.BibTeXEntry;
+import org.jbibtex.BibTeXParser;
+import org.jbibtex.Key;
+import org.jbibtex.ParseException;
+import org.jbibtex.TokenMgrException;
+import org.jbibtex.Value;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -68,6 +71,7 @@ public class GestorArticulo implements Serializable {
     private List<Institucion> listaAgradecimientos = new ArrayList<>();
     private Articulo articulo;
     private String tamanoArchivo;
+    private String tamanoArchivoBibtex;
     private boolean modoModificar = false;
     private Long idPersonaArticuloGen = -1L;
     
@@ -183,6 +187,8 @@ public class GestorArticulo implements Serializable {
         RequestContext.getCurrentInstance().openDialog("dialogListaInstituciones", options, null);
     }
     
+    
+    
     public String corregirUrl(String url) {
         if (!url.contains("://")) {
             url = "http://" + url;
@@ -203,15 +209,29 @@ public class GestorArticulo implements Serializable {
         return null;
     }    
     
+    public String convertirListaInstitucion(List<Institucion> instituciones) {
+        String r = "";
+        for (Iterator<Institucion> iter = instituciones.iterator(); iter.hasNext();) {
+            Institucion inst = iter.next();
+            r += inst.getNombre() + (iter.hasNext() ? ", " : "");
+        }
+        return r;
+    }
+    
     public String convertirListaPersonas(Collection<PersonaArticulo> listaConvertir) {
         String r = "";
+        int c = 0;
         for (PersonaArticulo per : listaConvertir) {
-            r += String.format("%s %s, ", per.getPersona().getNombres(), per.getPersona().getApellidos());
+            r += String.format("%s %s", per.getPersona().getNombres(), per.getPersona().getApellidos());
+            if (c < listaConvertir.size() - 1) {
+                r += ", ";
+            }
+            c++;
         }
-        if (!r.isEmpty()) {
+        /*if (!r.isEmpty()) {
             r = r.substring(0, r.length() - 2);
-        }
-        
+        }*/
+
         return r;
     }
     
@@ -223,10 +243,20 @@ public class GestorArticulo implements Serializable {
     }
     public void fileUploadListener(FileUploadEvent event) {
         UploadedFile file = event.getFile();
-        if (articulo.getArchivoArticulo().isEmpty() && !modoModificar) {
-            //si la propiedad getArchivoArticulo() esta llena, significa que antes ya subió un archivo y ahora está subiendo uno nuevo para reemplazarlo
+        boolean isBibtex = event.getComponent().getAttributes().get("bibtex") != null;        
+
+        //nombre del archivo que ya se encuentra almacenado en las propiedades
+        String nombreArchivoGuardado;
+        if (isBibtex) {
+            nombreArchivoGuardado = articulo.getArchivoBibtex();
+        } else {
+            nombreArchivoGuardado = articulo.getArchivoArticulo();
+        }
+        
+        if (nombreArchivoGuardado.isEmpty() && !modoModificar) {
+            //si la propiedad esta llena, significa que antes ya se subió un archivo y ahora está subiendo uno nuevo para reemplazarlo
             // por lo tanto hay que eliminar el archivo anterior
-            Path pathArchivoAnterior = ServerUtils.getPathTemp().resolve(articulo.getArchivoArticulo()).normalize();
+            Path pathArchivoAnterior = ServerUtils.getPathTemp().resolve(nombreArchivoGuardado).normalize();
             File archivoEliminar = pathArchivoAnterior.toFile();
             //borrar el archivo anterior en caso de existir
             if (archivoEliminar.isFile()) {
@@ -234,19 +264,23 @@ public class GestorArticulo implements Serializable {
             }
         }
         if (file != null) {
-            String extension = FilenameUtils.getExtension(file.getFileName());
-            String nombreArchivo = ServerUtils.generateB64Uuid().replace("=", "") + (new Random()).nextInt(9999) + "." + extension;
-            nombreArchivo = ServerUtils.convertirNombreArchivo(nombreArchivo);
-            Path pathArchivo = ServerUtils.getPathTemp().resolve(nombreArchivo).normalize();
+            String extensionSubida = FilenameUtils.getExtension(file.getFileName());
+            String nombreArchivoSubido = ServerUtils.generarNombreValidoArchivo(extensionSubida);
+            Path pathArchivo = ServerUtils.getPathTemp().resolve(nombreArchivoSubido).normalize();
 
             File newFile = pathArchivo.toFile();
 
             try {
                 BeansUtils.subirArchivoPrimefaces(file, newFile);
 
-                articulo.setArchivoArticulo(nombreArchivo);
-
-                tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
+                if (isBibtex) {
+                    articulo.setArchivoBibtex(nombreArchivoSubido);
+                    tamanoArchivoBibtex = ServerUtils.humanReadableByteCount(file.getSize());
+                    leerBibtex(pathArchivo);
+                } else {
+                    articulo.setArchivoArticulo(nombreArchivoSubido);
+                    tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
+                }
             } catch (IOException ex) {
                 Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -255,6 +289,42 @@ public class GestorArticulo implements Serializable {
             System.err.println("Error al subir archivo");
         }
 
+    }
+    
+    public void leerBibtex(Path pathBibtex) {
+        try {
+            BibTeXParser bibtexParser = new BibTeXParser();
+            
+            BufferedReader br = new BufferedReader(new FileReader(pathBibtex.toFile()));
+            BibTeXDatabase database = bibtexParser.parse(br);
+            
+            Map<Key, BibTeXEntry> entryMap = database.getEntries();
+            
+            if (entryMap.size() > 0) {
+                BibTeXEntry firstEntry = null;
+                for (Map.Entry<Key, BibTeXEntry> entry : entryMap.entrySet()) {
+                    firstEntry = entry.getValue();
+                    break;
+                    //System.out.println(entry.getKey() + "/" + entry.getValue());
+                }
+
+                Collection<BibTeXEntry> entries = entryMap.values();
+                for (BibTeXEntry entry : entries) {
+                    Value value = entry.getField(BibTeXEntry.KEY_TITLE);
+                    if (value == null) {
+                        continue;
+                    }
+
+                    // Do something with the title value
+                }
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TokenMgrException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public String guardar() {
@@ -289,50 +359,42 @@ public class GestorArticulo implements Serializable {
         Collections.sort(listaPersonaArticulo, (left, right) -> left.getOrden() - right.getOrden());
     }
     
-    public String initModificarArticulo(Long id) {
-        articulo = articuloController.findArticulo(id);
-        //listaAutores = new ArrayList<>(articulo.getAutoresCollection());
-        listaPersonaArticulo = new ArrayList<>(articulo.getPersonasArticuloCollection());
-        ordenarListaPersonaArticulo(listaPersonaArticulo);
-        listaAgradecimientos = new ArrayList<>(articulo.getAgradecimientosCollection());
-        listaProyectos = new ArrayList<>(articulo.getProyectosCollection());
-        
-        idPersonaArticuloGen = -1L;
-        if (articulo.getArchivoArticulo() == null) {
-            articulo.setArchivoArticulo("");
-        }        
-        try {
-            Path pathArchivoSubido = ServerUtils.getPathArticulos().resolve(articulo.getArchivoArticulo());
-            if (Files.isRegularFile(pathArchivoSubido) && Files.exists(pathArchivoSubido)) {
-                Long size = Files.size(pathArchivoSubido);
-                tamanoArchivo = ServerUtils.humanReadableByteCount(size);
-            } else {
-                tamanoArchivo = "";
-            }
-            
-        } catch (IOException ex) {
-            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        modoModificar = true;
-        
-        GestorPersona.getInstance().actualizarListaPersonasConContrato();        
-        GestorInstitucion.getInstance().actualizarListaInstituciones();
-        GestorProyecto.getInstance().actualizarListaProyecto();
-        
-        return "manejoArticulo";
-    }
-    public String initCrearArticulo() {
+    public void inicializarManejoArticulo() {
         articulo = new Articulo();        
         listaPersonaArticulo.clear();
         listaAgradecimientos.clear();
         listaProyectos.clear();
         tamanoArchivo = "";
+        tamanoArchivoBibtex = "";
         modoModificar = false;
         idPersonaArticuloGen = -1L;
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
-        GestorProyecto.getInstance().actualizarListaProyecto();
+        GestorProyecto.getInstance().actualizarListaProyecto();        
+        
+    }
+    
+    public String initModificarArticulo(Long id) {
+        inicializarManejoArticulo();
+        articulo = articuloController.findArticulo(id);
+        
+        listaPersonaArticulo = new ArrayList<>(articulo.getPersonasArticuloCollection());
+        ordenarListaPersonaArticulo(listaPersonaArticulo);
+        listaAgradecimientos = new ArrayList<>(articulo.getAgradecimientosCollection());
+        listaProyectos = new ArrayList<>(articulo.getProyectosCollection());
+        
+        Path pathArchivoArticulo = ServerUtils.getPathArticulos().resolve(articulo.getArchivoArticulo());
+        tamanoArchivo = ServerUtils.tamanoArchivo(pathArchivoArticulo);
+        
+        Path pathArchivoBibtex = ServerUtils.getPathArticulos().resolve(articulo.getArchivoArticulo());
+        tamanoArchivoBibtex = ServerUtils.tamanoArchivo(pathArchivoBibtex);
+        
+        modoModificar = true;
+        
+        return "manejoArticulo";
+    }
+    public String initCrearArticulo() {
+        inicializarManejoArticulo();
         
         return "manejoArticulo";
     }
@@ -466,6 +528,14 @@ public class GestorArticulo implements Serializable {
 
     public void setModoModificar(boolean modoModificar) {
         this.modoModificar = modoModificar;
+    }
+
+    public String getTamanoArchivoBibtex() {
+        return tamanoArchivoBibtex;
+    }
+
+    public void setTamanoArchivoBibtex(String tamanoArchivoBibtex) {
+        this.tamanoArchivoBibtex = tamanoArchivoBibtex;
     }
     
 }

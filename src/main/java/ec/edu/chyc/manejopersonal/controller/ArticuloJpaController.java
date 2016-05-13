@@ -94,13 +94,23 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             }
 
             if (obj.getArchivoArticulo() != null && !obj.getArchivoArticulo().isEmpty()) {
-                //si se subió el archivo, copiar del directorio de temporales al original de artículos, después eliminar el archivo temporal
+                //si se subió el archivo, mover del directorio de temporales al original de artículos, después eliminar el archivo temporal
                 Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoArticulo());
                 Path destino = ServerUtils.getPathArticulos().resolve(obj.getArchivoArticulo());
 
                 Files.move(origen, destino, REPLACE_EXISTING);
                 //FileUtils.moveFile(origen, destino);
             }
+            
+            if (obj.getArchivoBibtex() != null && !obj.getArchivoBibtex().isEmpty()) {
+                //si se subió el archivo, mover del directorio de temporales al original de artículos, después eliminar el archivo temporal
+                Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoBibtex());
+                Path destino = ServerUtils.getPathArticulos().resolve(obj.getArchivoBibtex());
+
+                Files.move(origen, destino, REPLACE_EXISTING);
+                //FileUtils.moveFile(origen, destino);
+            }
+            
 
             //em.merge(obj);
             //em.persist(obj);
@@ -220,9 +230,14 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                 }
             }
              */
-            String archivoAntiguo = articuloAntiguo.getArchivoArticulo();
-            String archivoNuevo = obj.getArchivoArticulo();
-            ServerUtils.procesarAntiguoNuevoArchivo(archivoAntiguo, archivoNuevo, ServerUtils.getPathArticulos());
+            String archivoAntiguoArticulo = articuloAntiguo.getArchivoArticulo();
+            String archivoNuevoArticulo = obj.getArchivoArticulo();
+            ServerUtils.procesarAntiguoNuevoArchivo(archivoAntiguoArticulo, archivoNuevoArticulo, ServerUtils.getPathArticulos());
+            
+            String archivoAntiguoBibtex = articuloAntiguo.getArchivoBibtex();
+            String archivoNuevoBibtex = obj.getArchivoBibtex();
+            ServerUtils.procesarAntiguoNuevoArchivo(archivoAntiguoBibtex, archivoNuevoBibtex, ServerUtils.getPathArticulos());
+            
 
             em.merge(obj);
             //em.persist(obj);

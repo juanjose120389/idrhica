@@ -22,9 +22,36 @@
             .hide-column-names table thead tr {
                 display: none;
             }
+            table .ui-fileupload-files {
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+            .ui-fileupload-content {
+                border: none;
+            }
         </style>
         <p:panel header="#{gestorArticulo.modoModificar?'Modificar':'Nuevo'} Artículo">
             <h:panelGrid columns="3">
+                <p:outputLabel value="Archivo BibTeX"/>
+                <h:panelGroup layout="block">
+                    <p:fileUpload fileUploadListener="#{gestorArticulo.fileUploadListener}" 
+                                  mode="advanced"
+                                  update="spanTamanioArchivoBib" 
+                                  auto="true" 
+                                  sizeLimit="15728640" 
+                                  allowTypes="/(\.|\/)(bib|bibtex)$/" 
+                                  accept="*.bib|*.bibtex"
+                                  invalidFileMessage="Archivo no válido. Solo se permite .BIB o .BIBTEX" 
+                                  fileLimitMessage="Máximo 15MB" label="Elegir..."
+                                  >
+                        <f:attribute name="bibtex" value="true" />
+                    </p:fileUpload> 
+                    <h:panelGroup id="spanTamanioArchivoBib" styleClass="tamanoArchivo">
+                        <p:outputLabel id="lblTamanioArchivoBib" rendered="#{gestorArticulo.articulo.archivoBibtex != ''}" value="Tamaño del archivo subido: #{gestorArticulo.tamanoArchivoBibtex}"/>
+                    </h:panelGroup>
+                </h:panelGroup> 
+                <h:panelGroup layout="block"/>                 
+                
                 <p:outputLabel value="Título"/>
                 <h:panelGroup>
                     <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  
@@ -175,9 +202,8 @@
                                   invalidFileMessage="Archivo no válido. Solo se permite PDF y DOC." 
                                   fileLimitMessage="Máximo 15MB" label="Elegir..."
                                   /> 
-                    <br/>
-                    <h:panelGroup id="spanTamanioArchivo">
-                        <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorArticulo.articulo.archivoArticulo != null and gestorArticulo.articulo.archivoArticulo != ''}" value="Tamaño archivo: #{gestorArticulo.tamanoArchivo}"/>
+                    <h:panelGroup id="spanTamanioArchivo" styleClass="tamanoArchivo">
+                        <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorArticulo.articulo.archivoArticulo != null and gestorArticulo.articulo.archivoArticulo != ''}" value="Tamaño del archivo subido: #{gestorArticulo.tamanoArchivo}"/>
                     </h:panelGroup>
                 </h:panelGroup> 
                 <h:panelGroup layout="block"/> 

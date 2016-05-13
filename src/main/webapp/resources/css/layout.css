@@ -25,3 +25,12 @@ and open the template in the editor.
     content: " * ";
     color: red;    
 }
+.columnaOculta {
+    display: none; 
+    width: 1px !important; 
+    height: 0px !important;
+}
+
+.tamanoArchivo {
+    font-size: 0.9em;
+}

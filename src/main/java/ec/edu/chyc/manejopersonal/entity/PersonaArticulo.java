@@ -43,6 +43,10 @@ public class PersonaArticulo implements Serializable {
     @NotNull
     private Articulo articulo;    
     
+    @ManyToOne
+    @JoinColumn(name = "idFirma", referencedColumnName = "id")
+    private Firma firma;
+    
     @NotNull
     private Integer orden = 0;
 
@@ -101,6 +105,14 @@ public class PersonaArticulo implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.PersonaArticulo[ id=" + id + " ]";
+    }
+
+    public Firma getFirma() {
+        return firma;
+    }
+
+    public void setFirma(Firma firma) {
+        this.firma = firma;
     }
     
 }

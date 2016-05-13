@@ -10,6 +10,14 @@
             .ui-datatable table {
                 table-layout: auto;
             }
+            .lista > div {
+                background: none !important;
+                border: none !important;
+            }
+            .lista > div > dl {
+                margin-top: 1px;
+                margin-bottom: 1px;
+            }
         </style>
         <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
                      paginator="true" resizableColumns="true" liveResize="true"
@@ -57,7 +65,7 @@
                 <h:outputText value="#{articulo.tema}" />
             </p:column>
             
-            <p:column filterBy="#{articulo.listaInstFinanciamientos}" headerText="Financiamiento"
+            <p:column exportable="false" filterBy="#{articulo.listaInstFinanciamientos}" headerText="Financiamiento"
                       filterFunction="#{gestorArticulo.filtrarPorInstFinanciamiento}">
                 <f:facet name="filter">
                     <p:selectOneMenu onchange="PF('articulosTable').filter()" converter="institucionConverter">
@@ -65,10 +73,14 @@
                         <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="inst" itemLabel="#{inst.nombre}" itemValue="#{inst}"/>
                     </p:selectOneMenu>
                 </f:facet>
-                <ui:repeat value="#{articulo.listaInstFinanciamientos}" var="institucion">
-                    <p:outputLabel value="#{institucion.nombre}"/><br/>
-                </ui:repeat>
-            </p:column>            
+                <p:dataList styleClass="lista" emptyMessage="" value="#{articulo.listaInstFinanciamientos}" var="institucion" type="definition">
+                    #{institucion.nombre}
+                </p:dataList>
+
+            </p:column>
+            <p:column headerText="Financiamiento" exportable="true" styleClass="columnaOculta">
+                <p:outputLabel value="#{gestorArticulo.convertirListaInstitucion(articulo.listaInstFinanciamientos)}"/>
+            </p:column>
 
             <p:column headerText="Enlace" filterBy="#{articulo.enlace}" filterMatchMode="contains">
                 <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>
@@ -81,7 +93,7 @@
                 </ui:repeat>
             </p:column>
 
-            <p:column headerText="Autores" style="display: none; width: 1px !important; height: 0px !important;">
+            <p:column headerText="Autores" styleClass="columnaOculta">
                 <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.personasArticuloCollection)}" escape="false"/>
             </p:column> 
             <p:column exportable="false">
