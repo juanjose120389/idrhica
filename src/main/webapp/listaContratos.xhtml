@@ -54,6 +54,9 @@
             <p:column headerText="Administrador" filterBy="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" filterMatchMode="contains">
                 <h:outputText value="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" />
             </p:column>
+            <p:column headerText="Actividad" filterBy="#{contrato.actividadPrincipal}" filterMatchMode="contains">
+                <h:outputText value="#{contrato.actividadPrincipal}" />
+            </p:column>
 
             <p:column headerText="Tipo" filterBy="#{contrato.tipo}" filterMatchMode="contains">
                 <h:outputText value="#{label['contrato.tipo.' += contrato.tipo]}" />

@@ -58,9 +58,27 @@
             <p:column headerText="Observaciones" filterBy="#{tesis.observaciones}" filterMatchMode="contains">
                 <h:outputText value="#{tesis.observaciones}" />
             </p:column>
-            <p:column headerText="Autor" filterBy="#{tesis.autoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarPorAutor}">
+            <p:column headerText="Autores" filterBy="#{tesis.autoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarPorAutor}">
                 <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
                     <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
+                </ui:repeat>
+            </p:column>
+            
+           <p:column headerText="Proyecto" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
+                <ui:repeat value="#{tesis.proyectosCollection.toArray()}" var="proyecto">
+                    <p:outputLabel value="#{proyecto.titulo}"/><br />
+                </ui:repeat>
+            </p:column> 
+            
+            <p:column headerText="Co-Director" filterBy="#{tesis.codirectoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarCoDirector}">
+                <ui:repeat value="#{tesis.codirectoresCollection.toArray()}" var="codirector">
+                    <p:outputLabel value="#{codirector.nombres} #{codirector.apellidos}"/><br />
+                </ui:repeat>
+            </p:column>
+            
+                  <p:column headerText="Tutores" filterBy="#{tesis.tutoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarTutor}">
+                <ui:repeat value="#{tesis.tutoresCollection.toArray()}" var="tutor">
+                    <p:outputLabel value="#{tutor.nombres} #{tutor.apellidos}"/><br />
                 </ui:repeat>
             </p:column>
             <p:column exportable="false" headerText="Acta Aprobación" width="75">

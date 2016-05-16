@@ -133,6 +133,72 @@ public class GestorTesis implements Serializable {
           return false;
 
     }
+    
+        public boolean filtrarCoDirector(Object value, Object filter, Locale locale) {
+       String filterText = (filter == null) ? null : filter.toString().trim();
+        if(filterText == null||filterText.equals("")) {
+            return true;
+        }
+         
+        if(value == null) {
+            return false;
+        }
+       
+        Set<Persona> autores = (Set<Persona>)value;
+         
+        for (Persona per : autores) {
+            if (StringUtils.containsIgnoreCase(per.getNombres(), filterText) || StringUtils.containsIgnoreCase(per.getApellidos(), filterText)) {
+                return true;
+            }
+        }
+          return false;
+
+    }
+        
+         public boolean filtrarTutor(Object value, Object filter, Locale locale) {
+       String filterText = (filter == null) ? null : filter.toString().trim();
+        if(filterText == null||filterText.equals("")) {
+            return true;
+        }
+         
+        if(value == null) {
+            return false;
+        }
+       
+        Set<Persona> tutores = (Set<Persona>)value;
+         
+        for (Persona per : tutores) {
+            if (StringUtils.containsIgnoreCase(per.getNombres(), filterText) || StringUtils.containsIgnoreCase(per.getApellidos(), filterText)) {
+                return true;
+            }
+        }
+          return false;
+
+    }
+    
+    
+        public boolean filtrarProyecto(Object value, Object filter, Locale locale) {
+       String filterText = (filter == null) ? null : filter.toString().trim();
+        if(filterText == null||filterText.equals("")) {
+            return true;
+        }
+         
+        if(value == null) {
+            return false;
+        }
+       
+        Set<Proyecto> proyectos = (Set<Proyecto>)value;
+         
+        for (Proyecto pro : proyectos) {
+            if (StringUtils.containsIgnoreCase(pro.getTitulo(), filterText)) {
+                return true;
+            }
+        }
+          return false;
+
+    }
+    
+    
 
     public static GestorTesis getInstance() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
