@@ -52,6 +52,9 @@
             <p:column headerText="Director" filterBy="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" filterMatchMode="contains">
                 <h:outputText value="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" />
             </p:column>
+            <p:column headerText="Tutor" filterBy="#{pasantia.tutor.nombres} #{pasantia.tutor.apellidos}" filterMatchMode="contains">
+                <h:outputText value="#{pasantia.tutor.nombres} #{pasantia.tutor.apellidos}" />
+            </p:column>
 
             <p:column headerText="# Horas" width="70">
                 <h:outputText value="#{pasantia.numeroHoras}" />
