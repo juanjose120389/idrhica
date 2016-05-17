@@ -358,7 +358,8 @@ public class GestorPersona implements Serializable {
             } else {
                 personaController.create(personaGuardar);
             }
-            
+     
+            actualizarListado();
             return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
