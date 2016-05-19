@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+
+        <p:commandButton value="Regresar" immediate="true" action="#{gestorArticulo.initListarArticulos()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>        
+        <p:panel header="Artículo">
+            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Titulo"/>
+                <p:outputLabel value="#{gestorArticulo.articulo.nombre}"/>
+
+                <p:outputLabel value="Autor Principal" />
+                <p:outputLabel value="#{gestorArticulo.articulo.autorPrincipal.nombres} #{gestorArticulo.articulo.autorPrincipal.apellidos}"/>
+
+                <p:outputLabel value="Tema" />
+                <h:panelGroup layout="block">
+                    <p:outputLabel  value="#{gestorArticulo.articulo.tema}"/>
+                </h:panelGroup>
+                <p:outputLabel value="Revista"/>
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="#{gestorArticulo.articulo.revista}"/>
+                    <p:outputLabel value=" Meses"/>
+                </h:panelGroup>            
+                <p:outputLabel value="Factor de Impacto"/>
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="#{gestorArticulo.articulo.factorImpacto} "/>
+
+                </h:panelGroup>  
+
+
+                <p:outputLabel value="Fecha de Publicacion"/>
+                <p:outputLabel value="#{gestorArticulo.articulo.fechaPublicacion}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+                <p:outputLabel value="Autor Principal"/>
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="#{gestorArticulo.articulo.autorPrincipal.nombres} #{gestorArticulo.articulo.autorPrincipal.apellidos}"/>
+
+                </h:panelGroup>     
+
+                <p:outputLabel value="Resumen"/>
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="#{gestorArticulo.articulo.resumen}"/>
+
+                </h:panelGroup>   
+                <p:outputLabel value="Enlace"/>
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="#{gestorArticulo.articulo.enlace}"/>
+
+                </h:panelGroup>   
+                <p:outputLabel value="Tipo"/>
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="#{gestorArticulo.articulo.tipo} "/>
+
+                </h:panelGroup>   
+                <p:outputLabel value="Factor de Impacto"/>
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="#{gestorArticulo.articulo.factorImpacto} "/>
+
+                </h:panelGroup>  
+
+
+            </h:panelGrid>        
+
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorArticulo.listaPersonaArticulo}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}">
+                    <f:facet name="header">
+                        Autores
+                    </f:facet>
+                    <p:column headerText="Identificación" >
+                        <h:outputText value="#{personaArticulo.persona.identificacion}" />
+                    </p:column>
+                    <p:column headerText="Nombres" >
+                        <h:outputText value="#{personaArticulo.persona.nombres}" />
+                    </p:column>
+
+                    <p:column headerText="Apellidos" >
+                        <h:outputText value="#{personaArticulo.persona.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Correo" >
+                        <h:outputText value="#{personaArticulo.persona.correo}" />
+                    </p:column>
+                    <p:column headerText="Skype" >
+                        <h:outputText value="#{personaArticulo.persona.skype}" />
+                    </p:column>
+
+
+                </p:dataTable>
+            </h:panelGroup>        
+
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorArticulo.listaProyectos}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="proyectoArticulo" value="#{gestorArticulo.listaProyectos}">
+                    <f:facet name="header">
+                        Proyectos
+                    </f:facet>
+                    <p:column headerText="Título" >
+                        <h:outputText value="#{proyectoArticulo.titulo}" />
+                    </p:column>
+                    <p:column headerText="Resumen" >
+                        <h:outputText value="#{proyectoArticulo.resumen}" />
+                    </p:column>
+
+                    <p:column headerText="Director" >
+                        <h:outputText value="#{proyectoArticulo.director.nombres} #{proyectoArticulo.director.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Co-Director" >
+                        <h:outputText value="#{proyectoArticulo.codirector.nombres} #{proyectoArticulo.codirector.apellidos}" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup>        
+
+                <h:panelGroup layout="block" rendered="#{not empty gestorArticulo.listaAgradecimientos}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="agradecimientoArticulo" value="#{gestorArticulo.listaAgradecimientos}">
+                    <f:facet name="header">
+                        Agradecimientos
+                    </f:facet>
+                    <p:column headerText="Nombre" >
+                        <h:outputText value="#{agradecimientoArticulo.nombre}" />
+                    </p:column>
+                   
+
+                    
+
+                </p:dataTable>
+            </h:panelGroup>   
+
+
+
+
+
+
+
+
+
+
+
+        </p:panel>
+
+    </ui:define>
+</ui:composition>

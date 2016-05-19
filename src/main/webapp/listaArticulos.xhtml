@@ -111,6 +111,11 @@
             <p:column exportable="false" rendered="#{gestorUsuario.puedeEditar}">
                 <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}"/>
             </p:column>
+            <p:column exportable="false" width="80">
+                <p:commandLink value="Ver" action="#{gestorArticulo.initVerArticulo(articulo.id)}"/>
+                <p:outputLabel value=" "/>
+                
+            </p:column>    
 
         </p:dataTable>
     </ui:define>
