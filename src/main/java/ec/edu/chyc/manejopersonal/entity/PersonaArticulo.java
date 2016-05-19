@@ -22,10 +22,9 @@ import javax.validation.constraints.NotNull;
  * @author marcelocaj
  */
 @Entity
-/*@Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"idPersona", "idArticulo"})
-)*/
-
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"idArticulo", "idPersonaFirma"})
+)
 public class PersonaArticulo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +50,7 @@ public class PersonaArticulo implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idPersonaFirma", referencedColumnName = "id")
+    @NotNull
     private PersonaFirma personaFirma;    
     
     @NotNull
