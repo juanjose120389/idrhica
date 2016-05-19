@@ -29,6 +29,7 @@
             .ui-fileupload-content {
                 border: none;
             }
+
         </style>
         <p:panel header="#{gestorArticulo.modoModificar?'Modificar':'Nuevo'} Artículo" id="panelArticulo">
             <h:panelGrid columns="3">
@@ -47,8 +48,10 @@
                         <f:attribute name="bibtex" value="true" />
                     </p:fileUpload> 
                     <h:panelGroup id="spanTamanioArchivoBib" styleClass="tamanoArchivo">
-                        <p:outputLabel id="lblTamanioArchivoBib" rendered="#{gestorArticulo.articulo.archivoBibtex != ''}" value="Tamaño del archivo subido: #{gestorArticulo.tamanoArchivoBibtex}"/>
+                        <p:outputLabel id="lblTamanioArchivoBib" escape="false" rendered="#{gestorArticulo.articulo.archivoBibtex != ''}" value="Tamaño del archivo subido: #{gestorArticulo.tamanoArchivoBibtex}&lt;br/&gt;"/>
                     </h:panelGroup>
+                    <p:selectBooleanCheckbox id="chkSoloSubirBibtex" value="#{gestorArticulo.soloSubirBibtex}" itemLabel="Solo subir el BibTex y no llenar campos automáticamente." />
+                    <p:tooltip for="chkSoloSubirBibtex" escape="false" value="Si está activado, solo se guarda el archivo y mantiene los campos de abajo intactos. &lt;br/&gt;Si está desactivado, se llenará todos los campos de abajo que consten en el BibTeX." />
                 </h:panelGroup> 
                 <h:panelGroup layout="block"/>                 
                 

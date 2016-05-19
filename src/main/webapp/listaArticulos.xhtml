@@ -18,6 +18,9 @@
                 margin-top: 1px;
                 margin-bottom: 1px;
             }
+            .fa-download:before {
+                font-size: 1.3em;
+            }            
         </style>
         <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
                      paginator="true" resizableColumns="true" liveResize="true"
@@ -38,8 +41,8 @@
             <f:facet name="header">
                 Artículos
             </f:facet>
-            <p:column headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}">
-                <h:outputText value="#{articulo.personasArticuloCollection[0].persona.nombres} #{articulo.personasArticuloCollection[0].persona.apellidos}" />
+            <p:column headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].personaFirma.persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}">
+                <h:outputText value="#{articulo.personasArticuloCollection[0].personaFirma.firma.nombre}" />
             </p:column>           
 
             <p:column headerText="Título" filterBy="#{articulo.nombre}" style="max-width: 450px; min-width: 300px" filterMatchMode="contains">
@@ -109,14 +112,10 @@
             </p:column>
             
             <p:column exportable="false" rendered="#{gestorUsuario.puedeEditar}">
-                <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}"/>
-            </p:column>
-            <p:column exportable="false" width="80">
                 <p:commandLink value="Ver" action="#{gestorArticulo.initVerArticulo(articulo.id)}"/>
                 <p:outputLabel value=" "/>
-                
-            </p:column>    
-
+                <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}"/>
+            </p:column>
         </p:dataTable>
     </ui:define>
 </ui:composition>

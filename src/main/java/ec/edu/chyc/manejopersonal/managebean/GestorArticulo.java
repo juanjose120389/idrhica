@@ -84,6 +84,7 @@ public class GestorArticulo implements Serializable {
     private Long idPersonaArticuloGen = -1L;
     private Long idPersonaFirmaGen = -1L;
     private Long idFirmaGen = -1L;
+    private boolean soloSubirBibtex = false;
     
     public GestorArticulo() {
     }
@@ -403,7 +404,9 @@ public class GestorArticulo implements Serializable {
                 if (isBibtex) {
                     articulo.setArchivoBibtex(nombreArchivoSubido);
                     tamanoArchivoBibtex = ServerUtils.humanReadableByteCount(file.getSize());
-                    leerBibtex(pathArchivo);
+                    if (!soloSubirBibtex) {
+                        leerBibtex(pathArchivo);
+                    }
                 } else {
                     articulo.setArchivoArticulo(nombreArchivoSubido);
                     tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
@@ -576,6 +579,7 @@ public class GestorArticulo implements Serializable {
         listaProyectos.clear();
         tamanoArchivo = "";
         tamanoArchivoBibtex = "";
+        soloSubirBibtex = false;
         modoModificar = false;
         idPersonaArticuloGen = -1L;
         idPersonaFirmaGen = -1L;
@@ -588,7 +592,9 @@ public class GestorArticulo implements Serializable {
     public String initModificarArticulo(Long id) {
         inicializarManejoArticulo();
         articulo = articuloController.findArticulo(id);
-
+        if (articulo.getArchivoBibtex().isEmpty()) {
+            soloSubirBibtex = true;
+        }
         listaPersonaArticulo = new ArrayList<>(articulo.getPersonasArticuloCollection());
         ordenarListaPersonaArticulo(listaPersonaArticulo);
         listaAgradecimientos = new ArrayList<>(articulo.getAgradecimientosCollection());
@@ -758,6 +764,14 @@ public class GestorArticulo implements Serializable {
         modoModificar = false;
 
         return "verArticulo";
+    }
+
+    public boolean isSoloSubirBibtex() {
+        return soloSubirBibtex;
+    }
+
+    public void setSoloSubirBibtex(boolean soloSubirBibtex) {
+        this.soloSubirBibtex = soloSubirBibtex;
     }
 
 
