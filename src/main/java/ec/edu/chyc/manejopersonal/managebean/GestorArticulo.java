@@ -350,7 +350,7 @@ public class GestorArticulo implements Serializable {
         String r = "";
         int c = 0;
         for (PersonaArticulo per : listaConvertir) {
-            r += String.format("%s %s", per.getPersona().getNombres(), per.getPersona().getApellidos());
+            r += per.getPersonaFirma().getFirma().getNombre();
             if (c < listaConvertir.size() - 1) {
                 r += ", ";
             }

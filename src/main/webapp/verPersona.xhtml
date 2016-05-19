@@ -187,10 +187,15 @@
                 </p:column>
 
                 <p:column headerText="" exportable="false" width="40">
-                    <p:commandLink ajax="false" rendered="#{perarticulo.articulo.archivoArticulo != ''}" title="Descargar">
+                    <p:commandLink ajax="false" rendered="#{perarticulo.articulo.archivoArticulo != ''}" title="Descargar artículo">
                         <i class="fa fa-download"></i>
                         <p:fileDownload value="#{gestorArticulo.streamParaDescarga(perarticulo.articulo)}"/>
                     </p:commandLink>
+                    <p:commandLink ajax="false" rendered="#{perarticulo.articulo.archivoBibtex != ''}" title="Descargar bibtex">
+                        <p:graphicImage name="images/bibtex-icon.png" width="20"/>
+                        <p:fileDownload value="#{gestorArticulo.streamParaDescargaBibtex(perarticulo.articulo)}"/>
+                    </p:commandLink>                
+
                 </p:column>
 
 

@@ -55,9 +55,9 @@
 
 
             <p:column headerText="Revista" filterBy="#{articulo.revista}" filterMatchMode="contains" width="200">
-                <h:outputText style="white-space: pre-wrap;" value="#{articulo.revista}" />
+                <h:outputText style="white-space: pre-wrap; display: block" value="#{articulo.revista}" />
                 <h:panelGroup layout="block" rendered="#{articulo.factorImpacto != null}">
-                    <br/>
+                    <p:outputLabel value=" "/>
                     <h:outputText value="Factor Impacto: #{articulo.factorImpacto}" />
                 </h:panelGroup>
             </p:column>
@@ -65,7 +65,7 @@
             <p:column headerText="Tema" filterBy="#{articulo.tema}" filterMatchMode="contains">
                 <h:outputText value="#{articulo.tema}" />
             </p:column>
-            
+
             <p:column exportable="false" filterBy="#{articulo.listaInstFinanciamientos}" headerText="Financiamiento"
                       filterFunction="#{gestorArticulo.filtrarPorInstFinanciamiento}">
                 <f:facet name="filter">
@@ -90,12 +90,12 @@
 
             <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
                 <ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="perarticulo">
-                    
+
                     <p:outputLabel value="#{perarticulo.personaFirma.firma.nombre}"/><br/>
                 </ui:repeat>
             </p:column>
 
-            <p:column headerText="Autores" styleClass="columnaOculta">
+            <p:column headerText="Autores" styleClass="columnaOculta" exportable="true">
                 <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.personasArticuloCollection)}" escape="false"/>
             </p:column> 
             <p:column exportable="false">
@@ -108,7 +108,7 @@
                     <p:fileDownload value="#{gestorArticulo.streamParaDescargaBibtex(articulo)}"/>
                 </p:commandLink>                
             </p:column>
-            
+
             <p:column exportable="false" rendered="#{gestorUsuario.puedeEditar}">
                 <p:commandLink value="Ver" action="#{gestorArticulo.initVerArticulo(articulo.id)}"/>
                 <p:outputLabel value=" "/>
