@@ -49,10 +49,8 @@
                 <p:outputLabel style="font-weight: bold;white-space: pre-wrap;" value="#{articulo.nombre}" />
             </p:column>
 
-            <p:column headerText="Publicación" sortBy="#{articulo.fechaPublicacion}" width="100">
-                <h:outputText value="#{articulo.fechaPublicacion}">
-                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                </h:outputText>
+            <p:column headerText="Publicado" sortBy="#{articulo.anioPublicacion}" width="80">
+                <h:outputText value="#{articulo.anioPublicacion}"/>
             </p:column>
 
 
