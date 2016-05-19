@@ -65,9 +65,10 @@
                     <p:outputLabel value="Profesor: #{label['contrato.tipoProfesor.' += contrato.tipoProfesor]}"/>
                 </h:panelGroup>
             </p:column>
-            <p:column exportable="false" headerText="Documento" width="75">
-                <p:commandLink value="Descargar" ajax="false" rendered="#{contrato.archivoContrato != ''}">
-                    <p:fileDownload value="#{gestorContrato.streamParaDescarga(contrato)}" />
+            <p:column exportable="false" headerText="Doc." width="40">
+                <p:commandLink ajax="false" rendered="#{contrato.archivoContrato != ''}" title="Descargar contrato">
+                    <i class="fa fa-download"></i>
+                    <p:fileDownload value="#{gestorContrato.streamParaDescarga(contrato)}"/>
                 </p:commandLink>
             </p:column>            
             <p:column width="60" rendered="#{gestorUsuario.puedeEditar}" exportable="false">
