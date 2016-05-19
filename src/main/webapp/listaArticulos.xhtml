@@ -42,8 +42,8 @@
                 <h:outputText value="#{articulo.personasArticuloCollection[0].persona.nombres} #{articulo.personasArticuloCollection[0].persona.apellidos}" />
             </p:column>           
 
-            <p:column headerText="Título" filterBy="#{articulo.nombre}" filterMatchMode="contains">
-                <h:outputText style="font-weight: bold;" value="#{articulo.nombre}" />
+            <p:column headerText="Título" filterBy="#{articulo.nombre}" style="max-width: 450px; min-width: 300px" filterMatchMode="contains">
+                <p:outputLabel style="font-weight: bold;white-space: pre-wrap;" value="#{articulo.nombre}" />
             </p:column>
 
             <p:column headerText="Publicación" sortBy="#{articulo.fechaPublicacion}" width="100">
@@ -53,8 +53,8 @@
             </p:column>
 
 
-            <p:column headerText="Revista" filterBy="#{articulo.revista}" filterMatchMode="contains">
-                <h:outputText value="#{articulo.revista}" />
+            <p:column headerText="Revista" filterBy="#{articulo.revista}" filterMatchMode="contains" width="200">
+                <h:outputText style="white-space: pre-wrap;" value="#{articulo.revista}" />
                 <h:panelGroup layout="block" rendered="#{articulo.factorImpacto != null}">
                     <br/>
                     <h:outputText value="Factor Impacto: #{articulo.factorImpacto}" />
@@ -82,14 +82,15 @@
                 <p:outputLabel value="#{gestorArticulo.convertirListaInstitucion(articulo.listaInstFinanciamientos)}"/>
             </p:column>
 
-            <p:column headerText="Enlace" filterBy="#{articulo.enlace}" filterMatchMode="contains">
+            <p:column headerText="Enlace" filterBy="#{articulo.enlace}" filterMatchMode="contains" style="max-width: 150px">
                 <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>
             </p:column>
 
 
             <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
-                <ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="autor">
-                    <p:outputLabel value="#{autor.persona.nombres} #{autor.persona.apellidos}"/><br />
+                <ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="perarticulo">
+                    
+                    <p:outputLabel value="#{perarticulo.personaFirma.firma.nombre}"/><br/>
                 </ui:repeat>
             </p:column>
 
@@ -97,9 +98,14 @@
                 <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.personasArticuloCollection)}" escape="false"/>
             </p:column> 
             <p:column exportable="false">
-                <p:commandLink value="Descargar" ajax="false" rendered="#{articulo.archivoArticulo != null and articulo.archivoArticulo != ''}">
-                    <p:fileDownload value="#{gestorArticulo.streamParaDescarga(articulo)}" />
+                <p:commandLink ajax="false" rendered="#{articulo.archivoArticulo != ''}" title="Descargar artículo">
+                    <i class="fa fa-download"></i>
+                    <p:fileDownload value="#{gestorArticulo.streamParaDescarga(articulo)}"/>
                 </p:commandLink>
+                <p:commandLink ajax="false" rendered="#{articulo.archivoBibtex != ''}" title="Descargar bibtex">
+                    <p:graphicImage name="images/bibtex-icon.png" width="20"/>
+                    <p:fileDownload value="#{gestorArticulo.streamParaDescargaBibtex(articulo)}"/>
+                </p:commandLink>                
             </p:column>
             
             <p:column exportable="false" rendered="#{gestorUsuario.puedeEditar}">

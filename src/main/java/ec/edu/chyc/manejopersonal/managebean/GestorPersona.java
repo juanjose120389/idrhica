@@ -7,6 +7,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
@@ -19,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -174,7 +176,25 @@ public class GestorPersona implements Serializable {
     public void onCloseDlgUniversidad() {
         mostrarDlgUniversidad = false;
     }
-
+    
+    public boolean filtrarPorFirma(Object value, Object filter, Locale locale) {
+        String filterText = (filter == null) ? null : filter.toString().trim();
+        if(filterText == null||filterText.equals("")) {
+            return true;
+        }         
+        if(value == null) {
+            return false;
+        }
+        
+        Collection<PersonaFirma> autores = (Collection) value;
+        for (PersonaFirma per : autores) {
+            if (StringUtils.containsIgnoreCase(per.getFirma().getNombre(), filterText)) {
+                return true;
+            }
+        }        
+        return false;
+    }
+    
     public void quitarPersonaTitulo(PersonaTitulo personaTituloQuitar) {
         listaPersonaTitulos.remove(personaTituloQuitar);
     }
@@ -193,7 +213,7 @@ public class GestorPersona implements Serializable {
     
     public void cargarInformacionPersona(Long id, boolean infoCompleta) {
         if (infoCompleta) {
-            persona = personaController.findPersona(id, true, true, true, true, true);
+            persona = personaController.findPersona(id, true, true, true, true, true, true);
         } else {
             persona = personaController.findPersona(id);
         }

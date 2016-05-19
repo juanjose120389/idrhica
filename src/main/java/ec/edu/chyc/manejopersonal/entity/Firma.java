@@ -6,13 +6,17 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -28,9 +32,13 @@ public class Firma implements Serializable {
     
     private String nombre;
     
-    @ManyToMany(mappedBy = "firmasCollection")
-    private Set<Persona> personasCollection = new HashSet<>();
+    /*@ManyToMany(mappedBy = "firmasCollection")
+    private Set<Persona> personasCollection = new HashSet<>();*/
 
+    @OneToMany(mappedBy = "firma", fetch = FetchType.LAZY)
+    private Collection<PersonaFirma> personasFirmaCollection = new ArrayList<>();    
+    
+    
     public Long getId() {
         return id;
     }
@@ -72,12 +80,12 @@ public class Firma implements Serializable {
         this.nombre = nombre;
     }
 
-    public Set<Persona> getPersonasCollection() {
-        return personasCollection;
+    public Collection<PersonaFirma> getPersonasFirmaCollection() {
+        return personasFirmaCollection;
     }
 
-    public void setPersonasCollection(Set<Persona> personasCollection) {
-        this.personasCollection = personasCollection;
+    public void setPersonasFirmaCollection(Collection<PersonaFirma> personasFirmaCollection) {
+        this.personasFirmaCollection = personasFirmaCollection;
     }
-    
+
 }

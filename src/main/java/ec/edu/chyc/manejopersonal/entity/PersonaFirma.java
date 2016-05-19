@@ -6,14 +6,17 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -22,70 +25,35 @@ import javax.validation.constraints.NotNull;
  * @author marcelocaj
  */
 @Entity
-/*@Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"idPersona", "idArticulo"})
-)*/
-
-public class PersonaArticulo implements Serializable {
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"idPersona", "idFirma"})
+)
+public class PersonaFirma implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    /*/@ManyToOne
-    @JoinColumn(name = "idPersona", referencedColumnName = "id")
-    @NotNull*/
-    @Transient
-    private Persona persona;    
-    
-    @ManyToOne
-    @JoinColumn(name = "idArticulo", referencedColumnName = "id")
+
     @NotNull
-    private Articulo articulo;    
+    @ManyToOne
+    @JoinColumn(name = "idPersona", referencedColumnName = "id")    
+    private Persona persona;
     
-    /*@ManyToOne
-    @JoinColumn(name = "idFirma", referencedColumnName = "id")*/
-    @Transient
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "idFirma", referencedColumnName = "id")
     private Firma firma;
-
-    @ManyToOne
-    @JoinColumn(name = "idPersonaFirma", referencedColumnName = "id")
-    private PersonaFirma personaFirma;    
     
-    @NotNull
-    private Integer orden = 0;
-
+    @OneToMany(mappedBy = "personaFirma", fetch = FetchType.LAZY)
+    private Collection<PersonaArticulo> personasArticulosCollection = new ArrayList<>();    
+    
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
-
-    public Articulo getArticulo() {
-        return articulo;
-    }
-
-    public void setArticulo(Articulo articulo) {
-        this.articulo = articulo;
-    }
-
-    public Integer getOrden() {
-        return orden;
-    }
-
-    public void setOrden(Integer orden) {
-        this.orden = orden;
     }
 
     @Override
@@ -98,10 +66,10 @@ public class PersonaArticulo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PersonaArticulo)) {
+        if (!(object instanceof PersonaFirma)) {
             return false;
         }
-        PersonaArticulo other = (PersonaArticulo) object;
+        PersonaFirma other = (PersonaFirma) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -110,7 +78,15 @@ public class PersonaArticulo implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.edu.chyc.manejopersonal.entity.PersonaArticulo[ id=" + id + " ]";
+        return "ec.edu.chyc.manejopersonal.entity.PersonaFirma[ id=" + id + " ]";
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
     public Firma getFirma() {
@@ -121,12 +97,12 @@ public class PersonaArticulo implements Serializable {
         this.firma = firma;
     }
 
-    public PersonaFirma getPersonaFirma() {
-        return personaFirma;
+    public Collection<PersonaArticulo> getPersonasArticulosCollection() {
+        return personasArticulosCollection;
     }
 
-    public void setPersonaFirma(PersonaFirma personaFirma) {
-        this.personaFirma = personaFirma;
+    public void setPersonasArticulosCollection(Collection<PersonaArticulo> personasArticulosCollection) {
+        this.personasArticulosCollection = personasArticulosCollection;
     }
     
 }

@@ -6,8 +6,11 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Firma;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
+import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import java.util.ArrayList;
@@ -23,11 +26,93 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         setClassRef(Persona.class);
     }
 
+    public PersonaFirma findPersonaFirma(Long idPersona, Long idFirma){
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct pf from PersonaFirma pf where pf.persona.id=:idPersona and pf.firma.id=:idFirma");
+            q.setParameter("idPersona", idPersona);
+            q.setParameter("idFirma", idFirma);
+            
+            List<PersonaFirma> list = q.getResultList();
+            if (list != null && list.size() > 0) {
+                return list.get(0);
+            }
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public Firma findFirma(Long idFirma) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct f from Firma f left join fetch f.personasFirmaCollection where f.id=:id");
+            q.setParameter("id", idFirma);
+            
+            List<Firma> list = q.getResultList();
+            if (list != null && list.size() > 0) {
+                return list.get(0);
+            }
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public Persona obtenerPersonaVacia() {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct p from Persona p left join fetch p.personaFirmasCollection where p.id=1");            
+            List<Persona> list = q.getResultList();
+            if (list != null && list.size() > 0) {
+                Persona persona = list.get(0);
+                Hibernate.initialize(persona.getPersonaFirmasCollection());
+                
+                return persona;
+            }
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    
+    public PersonaFirma findPersonaFirma(Long idPersona, String firma){
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct pf from PersonaFirma pf where pf.persona.id=:idPersona and pf.firma.nombre=:firma");
+            q.setParameter("idPersona", idPersona);
+            q.setParameter("firma", firma);
+            
+            List<PersonaFirma> list = q.getResultList();
+            if (list != null && list.size() > 0) {
+                return list.get(0);
+            }
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+
+    
     public List<Persona> listPersonas() throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select p from Persona p");
+            Query q = em.createQuery("select distinct p from Persona p left join fetch p.personaFirmasCollection where p.identificacion <> ''");
             List<Persona> list = q.getResultList();
             return list;
         } finally {
@@ -50,6 +135,38 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             }
         }        
     }
+    
+    public List<Persona> findPersonaConFirma(List<String> firmasAutores) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct p from Persona p join fetch p.personaFirmasCollection pf where pf.firma.nombre in :firmas");
+            q.setParameter("firmas", firmasAutores);
+            List<Persona> list = q.getResultList();
+
+            return list;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public List<Firma> findFirmas(List<String> firmasAutores) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct f from Firma f left join fetch f.personasFirmaCollection where f.nombre in :firmas");
+            q.setParameter("firmas", firmasAutores);
+            List<Firma> list = q.getResultList();
+            return list;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }       
+    
     public Persona findPersona(Long id) {
         EntityManager em = null;
         try {
@@ -69,7 +186,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         }
     }    
 
-    public Persona findPersona(Long id, boolean incluirArticulos, boolean incluirContratos, boolean incluirTitulos, boolean incluirTesis, boolean incluirPasantias) {
+    public Persona findPersona(Long id, boolean incluirArticulos, boolean incluirContratos, boolean incluirTitulos, boolean incluirTesis, boolean incluirPasantias, boolean incluirFirmas) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -77,7 +194,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             String incluir = "";
             ArrayList<String> listaFetchs = new ArrayList<>();
             
-            int totalFetchs = 0;
+            /*int totalFetchs = 0;
             if (incluirContratos) {
                 listaFetchs.add(" left join fetch p.contratosCollection ");
                 totalFetchs++;
@@ -98,10 +215,15 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 listaFetchs.add(" left join fetch p.tesisCollection ");
                 totalFetchs++;                
             }
+            if (incluirFirmas) {
+                listaFetchs.add(" left join fetch p.personaFirmasCollection ");
+                totalFetchs++;                
+            }
+            
             
             if (listaFetchs.size() > 1) {
                 incluir = listaFetchs.get(0);
-            }
+            }*/
             
             TypedQuery<Persona> q = em.createQuery("select p from Persona p " + incluir + " where p.id=:id",Persona.class);            
             q.setParameter("id", id);
@@ -111,7 +233,14 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 Hibernate.initialize(p.getContratosCollection());
             }
             if (incluirArticulos) {
-                Hibernate.initialize(p.getPersonaArticulosCollection());
+                //Hibernate.initialize(p.getPersonaArticulosCollection());
+                //Hibernate.initialize(p.getPersonaArticulosCollection());
+                p.getListaPersonaArticulos().clear();
+                for (PersonaFirma perFirma : p.getPersonaFirmasCollection()) {                    
+                    for (PersonaArticulo perArticulo : perFirma.getPersonasArticulosCollection()) {
+                        p.getListaPersonaArticulos().add(perArticulo);
+                    }
+                }
             }
             if (incluirTitulos) {
                 Hibernate.initialize(p.getPersonaTitulosCollection());
@@ -121,6 +250,9 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             }
             if (incluirPasantias) {
                 Hibernate.initialize(p.getPasantiasCollection());
+            }
+            if (incluirFirmas) {
+                Hibernate.initialize(p.getPersonaFirmasCollection());
             }
             
             return p;

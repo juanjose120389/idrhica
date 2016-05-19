@@ -8,9 +8,11 @@ package ec.edu.chyc.manejopersonal.controller;
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
+import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
+import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.Serializable;
@@ -37,7 +39,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             em = getEntityManager();
             Query q = em.createQuery("select distinct a from Articulo a join fetch a.personasArticuloCollection");
             List<Articulo> list = q.getResultList();
-            for (Articulo articulo : list) {
+            for (Articulo articulo : list) {                
                 Collection<Proyecto> listProyectos = articulo.getProyectosCollection();
                 for (Proyecto proyecto : listProyectos) {
                     for (Financiamiento financiamiento : proyecto.getFinanciamientosCollection()) {
@@ -46,7 +48,12 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                         }
                     }
                 }
+                for (PersonaArticulo personaArticulo : articulo.getPersonasArticuloCollection()) {
+                    personaArticulo.setPersona(personaArticulo.getPersonaFirma().getPersona());
+                    personaArticulo.setFirma(personaArticulo.getPersonaFirma().getFirma());
+                }
             }
+            
             return list;
         } finally {
             if (em != null) {
@@ -54,7 +61,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             }
         }
     }
-
+    
     public void create(Articulo obj) throws Exception {
         EntityManager em = null;
 
@@ -79,12 +86,25 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             if (!obj.getPersonasArticuloCollection().isEmpty()) {
                 for (PersonaArticulo personaArticulo : obj.getPersonasArticuloCollection()) {
                     personaArticulo.setArticulo(obj);
+                    
+                    PersonaFirma personaFirma = personaArticulo.getPersonaFirma();
+                    Persona persona = personaFirma.getPersona();
+                    Firma firma = personaFirma.getFirma();
+                    
+                    if (firma.getId() == null || firma.getId() < 0) {
+                        firma.setId(null);
+                        em.persist(firma);
+                    }
+                    if (personaFirma.getId() == null || personaFirma.getId() < 0) {
+                        personaFirma.setId(null);
+                        em.persist(personaFirma);
+                    }
+                    /*
                     Persona persona = personaArticulo.getPersona();
-
                     if (persona.getId() < 0 || persona.getId() == null) {
                         persona.setId(null);
                         em.persist(persona);
-                    }
+                    }*/
 
                     if (personaArticulo.getId() == null || personaArticulo.getId() < 0) {
                         personaArticulo.setId(null);
@@ -94,18 +114,20 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             }
 
             if (obj.getArchivoArticulo() != null && !obj.getArchivoArticulo().isEmpty()) {
-                //si se subió el archivo, mover del directorio de temporales al original de artículos, después eliminar el archivo temporal
+                //si se subió el archivo, mover del directorio de temporales al original de artículos
                 Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoArticulo());
-                Path destino = ServerUtils.getPathArticulos().resolve(obj.getArchivoArticulo());
+                String nuevoNombre = "id" + obj.getId() + "_" + obj.getArchivoArticulo();
+                Path destino = ServerUtils.getPathArticulos().resolve(nuevoNombre);
 
                 Files.move(origen, destino, REPLACE_EXISTING);
                 //FileUtils.moveFile(origen, destino);
             }
             
             if (obj.getArchivoBibtex() != null && !obj.getArchivoBibtex().isEmpty()) {
-                //si se subió el archivo, mover del directorio de temporales al original de artículos, después eliminar el archivo temporal
+                //si se subió el archivo, mover del directorio de temporales al original de artículos
                 Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoBibtex());
-                Path destino = ServerUtils.getPathArticulos().resolve(obj.getArchivoBibtex());
+                String nuevoNombre = "id" + obj.getId() + "_" + obj.getArchivoBibtex();
+                Path destino = ServerUtils.getPathArticulos().resolve(nuevoNombre);
 
                 Files.move(origen, destino, REPLACE_EXISTING);
                 //FileUtils.moveFile(origen, destino);
@@ -155,7 +177,6 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             em.getTransaction().begin();
 
             Articulo articuloAntiguo = em.find(Articulo.class, obj.getId());
-
             
             Set<Proyecto> listaProyectos = obj.getProyectosCollection();
             Iterator<Proyecto> iterProyectoAnterior = articuloAntiguo.getProyectosCollection().iterator();
@@ -195,6 +216,20 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                 //quitar PersonaArticulo que no existan en el nuevo articulo editado
                 if (!obj.getPersonasArticuloCollection().contains(pa)) {
                     em.remove(pa);
+                }
+            }
+            for (PersonaArticulo perArt : obj.getPersonasArticuloCollection()) {
+                //agregar nuevas firmas que surjan en el artículo editado
+                PersonaFirma personaFirma = perArt.getPersonaFirma();
+                Firma firma = personaFirma.getFirma();
+                
+                if (firma.getId() == null || firma.getId() < 0) {
+                    firma.setId(null);
+                    em.persist(firma);
+                }
+                if (personaFirma.getId() == null || personaFirma.getId() < 0) {
+                    personaFirma.setId(null);
+                    em.persist(personaFirma);
                 }
             }
             

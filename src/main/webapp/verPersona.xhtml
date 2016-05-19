@@ -149,14 +149,14 @@
         </h:panelGroup>
 
 
-        <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.personaArticulosCollection}">
+        <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.listaPersonaArticulos}">
             <h:panelGroup layout="block" style="height: 20px"/>
 
-            <p:dataTable var="perarticulo" value="#{gestorPersona.persona.personaArticulosCollection}">
+            <p:dataTable var="perarticulo" value="#{gestorPersona.persona.listaPersonaArticulos}">
                 <f:facet name="header">
                     Artículos
                 </f:facet>
-                <p:column headerText="Título" width="500">
+                <p:column headerText="Título" width="400">
                     <h:outputText value="#{perarticulo.articulo.nombre}" />
                 </p:column>
                 <p:column headerText="Autor #" width="70">
@@ -165,6 +165,11 @@
                         <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
                     </h:panelGroup>
                 </p:column>
+                
+                <p:column headerText="Firma" width="150">
+                    <h:outputText value="#{perarticulo.personaFirma.firma.nombre}" />
+                </p:column>
+                
                 <p:column headerText="Tipo" width="100">
                     <h:outputText value="#{label['articulo.tipo.' += perarticulo.articulo.tipo]}" />
                 </p:column>                                
@@ -173,19 +178,18 @@
                     <h:outputText value="#{perarticulo.articulo.revista}" />
                 </p:column>                
 
-                <p:column headerText="Publicación" width="100">
-                    <h:outputText value="#{perarticulo.articulo.fechaPublicacion}" >
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>                        
+                <p:column headerText="Publicado" width="70">
+                    <h:outputText value="#{perarticulo.articulo.anioPublicacion}"/>
                 </p:column>                
 
                 <p:column headerText="Enlace">
                     <p:link value="#{perarticulo.articulo.enlace}" href="#{gestorArticulo.corregirUrl(perarticulo.articulo.enlace)}" target="_blank"/>
                 </p:column>
 
-                <p:column headerText="" exportable="false" width="150">
-                    <p:commandLink value="Descargar" ajax="false" rendered="#{perarticulo.articulo.archivoArticulo != ''}">
-                        <p:fileDownload value="#{gestorArticulo.streamParaDescarga(perarticulo.articulo)}" />
+                <p:column headerText="" exportable="false" width="40">
+                    <p:commandLink ajax="false" rendered="#{perarticulo.articulo.archivoArticulo != ''}" title="Descargar">
+                        <i class="fa fa-download"></i>
+                        <p:fileDownload value="#{gestorArticulo.streamParaDescarga(perarticulo.articulo)}"/>
                     </p:commandLink>
                 </p:column>
 
@@ -207,7 +211,7 @@
                     <h:outputText value="#{contrato.codigoContrato}" />
                 </p:column>                
 
-                <p:column headerText="Proyecto al que pertenece" width="500">
+                <p:column headerText="Proyecto al que pertenece" width="400">
                     <h:outputText value="#{contrato.proyecto.titulo}" />
                 </p:column>
 

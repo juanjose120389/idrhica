@@ -61,7 +61,7 @@
 
                 <p:outputLabel value="Tema"/>
                 <h:panelGroup>
-                    <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.tema}"/>  
+                    <p:inputText id="txtTema" value="#{gestorArticulo.articulo.tema}"/>  
                     <p:message for="txtTema"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/> 
@@ -74,13 +74,15 @@
                 <pe:inputNumber styleClass="numberInput" id="txtFactorImpacto" value="#{gestorArticulo.articulo.factorImpacto}" decimalPlaces="3"/>
                 <h:panelGroup layout="block"/>           
 
-                <p:outputLabel value="Fecha publicación"/>
-                <p:calendar pattern="dd/MM/yyyy" locale="es" value="#{gestorArticulo.articulo.fechaPublicacion}"/>  
-                <h:panelGroup layout="block"/> 
+                <p:outputLabel value="Año publicación"/>
+                <p:spinner size="6" max="2099" value="#{gestorArticulo.articulo.anioPublicacion}"/>
+                <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Autores"/>
                 <h:panelGroup layout="block" id="divAutores">
-                    <p:dataTable draggableRows="true" id="dtAutores" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}" rowKey="#{personaArticulo.id}">
+                    <p:dataTable emptyMessage="#{label.emptyMessage}" draggableRows="true" id="dtAutores" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" 
+                                 editable="true" editMode="cell"
+                                 rows="10" var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}" rowKey="#{personaArticulo.id}">
                         <p:ajax event="rowReorder" update="dtAutores" />
                         <p:column headerText="Autor #" width="70">
                             <h:outputText value="#{rowIndex+1}" />
@@ -88,7 +90,36 @@
                                 <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
                             </h:panelGroup>
                         </p:column>
-                        <p:column headerText="Identificación" width="200">
+                        
+                        <p:column headerText="Firma" width="200">
+                            <p:cellEditor>
+                                <f:facet name="input">
+                                    <h:panelGroup layout="block" rendered="#{personaArticulo.persona.listaFirmas.size() gt 1 and personaArticulo.persona.id != 1}">
+                                        <p:selectOneMenu style="width: 170px" id="cmbFirmas" value="#{personaArticulo.firma}" converter="firmaConverter"
+                                                         var="firma" filter="true" filterMatchMode="contains">
+                                            <f:selectItems value="#{personaArticulo.persona.listaFirmas}" var="f" itemLabel="#{f.nombre}" itemValue="#{t}" />
+                                            <p:column>
+                                                <p:outputLabel value="#{firma.nombre}"/>
+                                            </p:column>
+                                        </p:selectOneMenu>                                        
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" rendered="#{(personaArticulo.persona.listaFirmas.size() == 1 and personaArticulo.persona.id != 1) or (personaArticulo.firma.id gt 0 and personaArticulo.persona.id == 1)}">
+                                        <p:outputLabel style="margin-left: 10px" value="#{personaArticulo.firma.nombre}" />
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" rendered="#{personaArticulo.firma.id lt 0 and personaArticulo.persona.id == 1}">
+                                        <p:inputText style="width: 180px" value="#{personaArticulo.firma.nombre}"/>
+                                    </h:panelGroup>
+                                </f:facet>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{personaArticulo.firma.nombre}" />
+                                    <h:panelGroup layout="block" rendered="#{personaArticulo.persona.listaFirmas.size() gt 1 and personaArticulo.persona.id != 1}">
+                                        <br/><p:outputLabel style="font-size: 0.8em" value="(#{personaArticulo.persona.listaFirmas.size()} disponibles)"/>
+                                    </h:panelGroup>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Identificación" width="150">
                             <h:outputText value="#{personaArticulo.persona.identificacion}" />
                         </p:column>
                         <p:column headerText="Nombres">
@@ -96,11 +127,6 @@
                         </p:column>
                         <p:column headerText="Apellidos">
                             <h:outputText value="#{personaArticulo.persona.apellidos}" />
-                        </p:column>
-                        <p:column headerText="Fecha Nacimiento">
-                            <h:outputText value="#{personaArticulo.persona.fechaNacimiento}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
                         </p:column>
                         <p:column style="text-align: center" width="125">
                             <p:commandButton disabled="#{rowIndex == 0}" action="#{gestorArticulo.moverArriba(personaArticulo, rowIndex)}" update="dtAutores" process="@this" icon="fa fa-angle-up" title="Mover hacia arriba"/>                        
@@ -120,7 +146,7 @@
                 <p:outputLabel value="Proyectos"/>
                 <h:panelGroup layout="block" id="divProyectos">
                     <h:panelGroup layout="block" style="height: 15px"/>
-                    <p:dataTable id="dtProyectos" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorArticulo.listaProyectos}">
+                    <p:dataTable emptyMessage="#{label.emptyMessage}" id="dtProyectos" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorArticulo.listaProyectos}">
                         <p:column headerText="Título" width="450">
                             <h:outputText value="#{proyecto.titulo}"/>
                         </p:column>
@@ -149,7 +175,7 @@
                 <p:outputLabel value="Agradecimientos"/>
                 <h:panelGroup layout="block" id="divAgradecimientos">
                     <h:panelGroup layout="block" style="height: 15px"/>
-                    <p:dataTable id="dtAgradecimientos" style="width: 40%" paginator="true" paginatorAlwaysVisible="false" 
+                    <p:dataTable emptyMessage="#{label.emptyMessage}" id="dtAgradecimientos" style="width: 40%" paginator="true" paginatorAlwaysVisible="false" 
                                  rows="10" var="institucion" value="#{gestorArticulo.listaAgradecimientos}">
                         <p:column headerText="Institución">
                             <h:outputText value="#{institucion.nombre}"/>
@@ -171,7 +197,7 @@
 
 
                 <p:outputLabel value="Resumen"/>
-                <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.resumen}"/>  
+                <p:inputTextarea rows="5" value="#{gestorArticulo.articulo.resumen}"/>  
                 <h:panelGroup layout="block"/> 
 
 
@@ -185,10 +211,6 @@
                                    itemValue="#{tipo}" itemLabel="#{label['articulo.tipo.' += tipo]}" />                
                 </p:selectOneMenu>
                 <h:panelGroup layout="block"/> 
-
-                <p:outputLabel value="Referencia Bib"/>
-                <p:inputTextarea rows="3" value="#{gestorArticulo.articulo.referenciaBib}"/>  
-                <h:panelGroup layout="block"/>             
 
                 <p:outputLabel value="Artículo PDF"/>
                 <h:panelGroup layout="block">
