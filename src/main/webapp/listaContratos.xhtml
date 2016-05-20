@@ -26,16 +26,16 @@
             <f:facet name="header">
                 Contratos
             </f:facet>
-            <p:column headerText="Código Contrato" filterBy="#{contrato.codigoContrato}" filterMatchMode="contains">
+            <p:column headerText="Código Contrato" filterBy="#{contrato.codigoContrato}" filterMatchMode="contains" sortBy="#{contrato.codigoContrato}">
                 <h:outputText value="#{contrato.codigoContrato}" />
             </p:column>
 
-            <p:column headerText="Fecha Inicio" width="100">
+            <p:column headerText="Fecha Inicio" width="100" sortBy="#{contrato.fechaInicio}">
                 <h:outputText value="#{contrato.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Fecha Finalización" width="100">
+            <p:column headerText="Fecha Finalización" width="100" sortBy="#{contrato.fechaFin}">
                 <h:outputText value="#{contrato.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -43,22 +43,22 @@
 
 
 
-            <p:column headerText="Contratado" filterBy="#{contrato.persona.nombres} #{contrato.persona.apellidos}" filterMatchMode="contains">
+            <p:column headerText="Contratado" filterBy="#{contrato.persona.nombres} #{contrato.persona.apellidos}" filterMatchMode="contains" sortBy="#{contrato.persona.nombres}">
                 <h:outputText value="#{contrato.persona.nombres} #{contrato.persona.apellidos}" />
             </p:column>
 
 
-            <p:column headerText="Proyecto" filterBy="#{contrato.proyecto.titulo}" filterMatchMode="contains">
+            <p:column headerText="Proyecto" filterBy="#{contrato.proyecto.titulo}" filterMatchMode="contains" sortBy="#{contrato.proyecto.titulo}">
                 <h:outputText value="#{contrato.proyecto.titulo}" />
             </p:column>
-            <p:column headerText="Administrador" filterBy="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" filterMatchMode="contains">
+            <p:column headerText="Administrador" filterBy="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" filterMatchMode="contains" sortBy="#{contrato.administrador.nombres}">
                 <h:outputText value="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" />
             </p:column>
-            <p:column headerText="Actividad" filterBy="#{contrato.actividadPrincipal}" filterMatchMode="contains">
+            <p:column headerText="Actividad" filterBy="#{contrato.actividadPrincipal}" filterMatchMode="contains" sortBy="#{contrato.actividadPrincipal}">
                 <h:outputText value="#{contrato.actividadPrincipal}" />
             </p:column>
 
-            <p:column headerText="Tipo" filterBy="#{contrato.tipo}" filterMatchMode="contains">
+            <p:column headerText="Tipo" filterBy="#{contrato.tipo}" filterMatchMode="contains" sortBy="#{contrato.tipo}">
                 <h:outputText value="#{label['contrato.tipo.' += contrato.tipo]}" />
                 <h:panelGroup layout="block" rendered="#{contrato.tipoProfesor != null}">
                     <br/>

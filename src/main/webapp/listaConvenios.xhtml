@@ -30,31 +30,31 @@
             <f:facet name="header">
                 Convenios
             </f:facet>            
-            <p:column headerText="Título" sortBy="#{convenio.titulo}" filterBy="#{convenio.titulo}" filterMatchMode="contains">
+            <p:column headerText="Título" sortBy="#{convenio.titulo}" filterBy="#{convenio.titulo}" filterMatchMode="contains" >
                 <h:outputText value="#{convenio.titulo}" />
             </p:column>           
             
-            <p:column headerText="Institución" sortBy="#{convenio.institucion.nombre}" filterBy="#{convenio.institucion.nombre}" filterMatchMode="contains">
+            <p:column headerText="Institución" sortBy="#{convenio.institucion.nombre}" filterBy="#{convenio.institucion.nombre}" filterMatchMode="contains" >
                 <h:outputText value="#{convenio.institucion.nombre}" />
             </p:column>           
 
-            <p:column headerText="Proyecto" sortBy="#{convenio.proyecto.titulo}" filterBy="#{convenio.proyecto.titulo}" filterMatchMode="contains">
+            <p:column headerText="Proyecto" sortBy="#{convenio.proyecto.titulo}" filterBy="#{convenio.proyecto.titulo}" filterMatchMode="contains" >
                 <h:outputText value="#{convenio.proyecto.titulo}" />
             </p:column>   
             
-             <p:column headerText="Admnistrador" filterBy="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" filterMatchMode="contains">
+             <p:column headerText="Admnistrador" filterBy="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" filterMatchMode="contains" sortBy="#{convenio.administrador.nombres}">
                 <h:outputText value="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" />
             </p:column>
-            <p:column headerText="Objetivo" sortBy="#{convenio.objetivo}">
+            <p:column headerText="Objetivo" sortBy="#{convenio.objetivo}" >
                 <h:outputText value="#{convenio.objetivo}" />
             </p:column> 
 
-            <p:column headerText="Fecha Inicio" >
+            <p:column headerText="Fecha Inicio" sortBy="#{convenio.fechaInicio}" >
                 <h:outputText value="#{convenio.fechaInicio}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Fecha Finalización" >
+            <p:column headerText="Fecha Finalización" sortBy="#{convenio.fechaFin}">
                 <h:outputText value="#{convenio.fechaFin}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
