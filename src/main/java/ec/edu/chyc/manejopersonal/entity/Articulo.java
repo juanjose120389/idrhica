@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
@@ -27,6 +26,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -60,6 +60,8 @@ public class Articulo implements Serializable {
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaPublicacion;
+    
+    private Integer anioPublicacion;
 
     @ManyToOne
     @JoinColumn(name = "idAutorPrincipal", referencedColumnName = "id")
@@ -99,6 +101,7 @@ public class Articulo implements Serializable {
     private Set<Persona> autoresCollection = new HashSet<>();
     */
     @OneToMany(mappedBy = "articulo", fetch = FetchType.LAZY)
+    @OrderBy("orden ASC")
     private Collection<PersonaArticulo> personasArticuloCollection = new ArrayList<>();
     
     @ManyToMany(mappedBy = "articulosCollection")
@@ -269,6 +272,14 @@ public class Articulo implements Serializable {
 
     public void setArchivoBibtex(String archivoBibtex) {
         this.archivoBibtex = archivoBibtex;
+    }
+
+    public Integer getAnioPublicacion() {
+        return anioPublicacion;
+    }
+
+    public void setAnioPublicacion(Integer anioPublicacion) {
+        this.anioPublicacion = anioPublicacion;
     }
    
 }

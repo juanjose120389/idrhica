@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,8 +24,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -39,23 +40,34 @@ public class Persona implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombres;
-    private String apellidos;
-    private String identificacion;
+    
+    @NotNull
+    private String nombres = "";
+    
+    @NotNull    
+    private String apellidos = "";
+    
+    @NotNull
+    private String identificacion = "";
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaNacimiento;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaVinculacion;
-    private String correo;
-    private String celular;
-    private String skype;
-    @Column(length = 2)
-    private String genero; //M=Masculino, F=Femenino
-    private String direccion;
-    private Boolean activo;
+    
     @NotNull
-    private boolean externo = false;
-    private String firmas;
+    private String correo = "";
+    @NotNull
+    private String celular = "";
+    @NotNull
+    private String skype = "";
+    @NotNull
+    @Column(length = 2)
+    private String genero = "M"; //M=Masculino, F=Femenino
+    
+    @NotNull
+    private String direccion = "";
+    private Boolean activo;
 
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<Contrato> contratosCollection = new ArrayList<>();
@@ -76,9 +88,14 @@ public class Persona implements Serializable {
         @JoinColumn(name = "idArticulo", referencedColumnName = "id")})
     private Set<Articulo> articulosCollection = new HashSet();
   */  
-    @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
+    /*@OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     @OrderBy("orden ASC")
-    private Collection<PersonaArticulo> personaArticulosCollection = new ArrayList<>();    
+    */
+    @Transient
+    private List<PersonaArticulo> listaPersonaArticulos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
+    private Collection<PersonaFirma> personaFirmasCollection = new ArrayList<>();
     
     @ManyToMany
     @JoinTable(name = "personaTesis", joinColumns = {
@@ -96,17 +113,13 @@ public class Persona implements Serializable {
     @JoinTable(name = "tutorTesis", joinColumns = {
         @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idTesis", referencedColumnName = "id")})
-    private Set<Tesis> tesisComoTutorCollection = new HashSet();    
-    
-    @ManyToMany
-    @JoinTable(name = "personaFirma", joinColumns = {
-        @JoinColumn(name = "idPersona", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "idFirma", referencedColumnName = "id")})
-    private Set<Firma> firmasCollection = new HashSet();        
-    
+    private Set<Tesis> tesisComoTutorCollection = new HashSet();        
+   
     @OneToMany(mappedBy = "pasante", fetch = FetchType.LAZY)
     private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
-    
+
+    @Transient
+    private List<Firma> listaFirmas = new ArrayList<>();
 
     public Collection<Contrato> getContratosCollection() {
         return contratosCollection;
@@ -289,14 +302,6 @@ public class Persona implements Serializable {
         this.tesisComoTutorCollection = tesisComoTutorCollection;
     }
 
-    public Collection<PersonaArticulo> getPersonaArticulosCollection() {
-        return personaArticulosCollection;
-    }
-
-    public void setPersonaArticulosCollection(Collection<PersonaArticulo> personaArticulosCollection) {
-        this.personaArticulosCollection = personaArticulosCollection;
-    }
-
     public Collection<Convenio> getConveniosAdminCollection() {
         return conveniosAdminCollection;
     }
@@ -305,20 +310,28 @@ public class Persona implements Serializable {
         this.conveniosAdminCollection = conveniosAdminCollection;
     }
 
-    public boolean isExterno() {
-        return externo;
+    public Collection<PersonaFirma> getPersonaFirmasCollection() {
+        return personaFirmasCollection;
     }
 
-    public void setExterno(boolean externo) {
-        this.externo = externo;
+    public void setPersonaFirmasCollection(Collection<PersonaFirma> personaFirmasCollection) {
+        this.personaFirmasCollection = personaFirmasCollection;
     }
 
-    public Set<Firma> getFirmasCollection() {
-        return firmasCollection;
+    public List<Firma> getListaFirmas() {
+        return listaFirmas;
     }
 
-    public void setFirmasCollection(Set<Firma> firmasCollection) {
-        this.firmasCollection = firmasCollection;
+    public void setListaFirmas(List<Firma> listaFirmas) {
+        this.listaFirmas = listaFirmas;
+    }
+
+    public List<PersonaArticulo> getListaPersonaArticulos() {
+        return listaPersonaArticulos;
+    }
+
+    public void setListaPersonaArticulos(List<PersonaArticulo> listaPersonaArticulos) {
+        this.listaPersonaArticulos = listaPersonaArticulos;
     }
 
 }

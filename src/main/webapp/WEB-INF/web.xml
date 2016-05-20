@@ -39,5 +39,9 @@
     <mime-mapping> 
         <extension>woff2</extension> 
         <mime-type>application/x-font-woff2</mime-type> 
-    </mime-mapping>    
+    </mime-mapping>
+    <mime-mapping> 
+        <extension>bib</extension> 
+        <mime-type>application/x-bibtex</mime-type> 
+    </mime-mapping>      
 </web-app>

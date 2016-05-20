@@ -2,10 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
         <title>Personas</title>
+        <h:outputStylesheet library="css" name="layout.css"/>
+        <h:outputStylesheet library="css" name="screen.css"/>
+        
         <style type="text/css">
             .ui-widget {
                 font-size: 0.9em;
@@ -44,8 +48,14 @@
                 </f:facet>
                 <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                 
-                <p:column headerText="Identificación" filterBy="#{persona.identificacion}" filterMatchMode="contains">
+                <p:column headerText="Identificación" filterBy="#{persona.identificacion}" filterMatchMode="contains" width="100">
                     <h:outputText value="#{persona.identificacion}" />
+                </p:column>
+                
+                <p:column headerText="Firmas" filterBy="#{persona.personaFirmasCollection}" width="150" filterFunction="#{gestorPersona.filtrarPorFirma}">
+                    <ui:repeat value="#{persona.personaFirmasCollection}" var="personaFirma">
+                        <p:outputLabel value="#{personaFirma.firma.nombre}"/><br/>
+                    </ui:repeat>
                 </p:column>
                 
                 <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
@@ -56,13 +66,13 @@
                     <h:outputText value="#{persona.apellidos}" />
                 </p:column>
 
-                <p:column headerText="Estado" filterBy="#{persona.activo}" filterMatchMode="equals">
+                <p:column headerText="Estado" filterBy="#{persona.activo}" filterMatchMode="equals" width="80">
                     <f:facet name="filter">
-                        <p:selectOneButton onchange="PF('personasTable').filter()">
+                        <p:selectOneButton onchange="PF('personasTable').filter()" styleClass="buttonset">
                             <f:converter converterId="javax.faces.Boolean" />
-                            <f:selectItem itemLabel="Todos" itemValue="" />
-                            <f:selectItem itemLabel="Activo" itemValue="true" />
-                            <f:selectItem itemLabel="No Activo" itemValue="false" />
+                            <f:selectItem itemLabel="T" itemValue="" />
+                            <f:selectItem itemLabel="A" itemValue="true" />
+                            <f:selectItem itemLabel="I" itemValue="false" />
                         </p:selectOneButton>
                     </f:facet>            
                     <h:outputText value="#{persona.activo ? 'Activo' : 'No Activo'}" />

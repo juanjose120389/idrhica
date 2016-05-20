@@ -6,14 +6,18 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.ArticuloJpaController;
+import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Articulo.TipoArticulo;
+import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
+import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Usuario;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
+import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +28,9 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,8 +39,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -65,7 +71,8 @@ import org.primefaces.model.UploadedFile;
 public class GestorArticulo implements Serializable {
 
     private final ArticuloJpaController articuloController = new ArticuloJpaController();
-
+    private final PersonaJpaController personaController = new PersonaJpaController();
+    
     private List<Articulo> listaArticulos = new ArrayList<>();
     private List<PersonaArticulo> listaPersonaArticulo = new ArrayList<>();
     private List<Proyecto> listaProyectos = new ArrayList<>();
@@ -75,7 +82,10 @@ public class GestorArticulo implements Serializable {
     private String tamanoArchivoBibtex;
     private boolean modoModificar = false;
     private Long idPersonaArticuloGen = -1L;
-
+    private Long idPersonaFirmaGen = -1L;
+    private Long idFirmaGen = -1L;
+    private boolean soloSubirBibtex = false;
+    
     public GestorArticulo() {
     }
 
@@ -108,32 +118,136 @@ public class GestorArticulo implements Serializable {
         listaAgradecimientos.remove(institucionQuitar);
     }
 
+    /**
+     * Agrega la persona a la lista de autores solo si no existe
+     * @param per Persona a agregar
+     */
+    private void agregarNuevoAutor(Persona per, String firmaSel) {
+        boolean encontrado = false;
+        for (PersonaArticulo perart : listaPersonaArticulo) {
+            if (perart.getPersona().getId().equals(per.getId())) {
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            PersonaArticulo perArt = new PersonaArticulo();
+            perArt.setPersona(per);
+            per.getListaFirmas().clear();
+            int c = 0;
+            for (PersonaFirma perFirma : per.getPersonaFirmasCollection()) {
+                if (firmaSel == null) {
+                    if (c == 0) {
+                        perArt.setFirma(perFirma.getFirma());
+                    }
+                } else if (StringUtils.equalsIgnoreCase(perFirma.getFirma().getNombre(), firmaSel)) {
+                    perArt.setFirma(perFirma.getFirma());
+                }
+                per.getListaFirmas().add(perFirma.getFirma());
+                c++;
+            }
+
+            perArt.setId(idPersonaArticuloGen);
+            listaPersonaArticulo.add(perArt);
+            idPersonaArticuloGen--;
+        }
+    }
+    
+    private void agregarNuevaFirmaAVacio(Persona personaVacia, String nuevaFirma) {
+        boolean existeFirma = false;
+        for (PersonaFirma perFirma : personaVacia.getPersonaFirmasCollection()) {
+            if (StringUtils.equalsIgnoreCase(perFirma.getFirma().getNombre(),nuevaFirma)) {
+                existeFirma = true;
+                break;
+            }
+        }
+        if (!existeFirma) {
+            
+        }
+    }
+    
+    /**
+     * Agrega la firma de la persona vacía al listado de autores
+     * @param personaVacia Entidad que contiene la persona sin datos pero con firmas de desconocidos
+     * @param firma firma a agregarse
+     */
+    private boolean agregarFirmaSinAutor(Persona personaVacia, String strNuevaFirma) {
+        boolean encontrado = false;
+        for (PersonaArticulo perart : listaPersonaArticulo) {
+            //revisar si ya existe la persona y la firma en la lista de autores
+            if (perart.getPersona().getId().equals(personaVacia.getId()) && StringUtils.equalsIgnoreCase(perart.getFirma().getNombre(), strNuevaFirma) ) {
+                encontrado = true;
+                break;
+            }
+        }
+        if (!encontrado) {
+            PersonaFirma personaFirmaUsar = null;
+            for (PersonaFirma perFirma : personaVacia.getPersonaFirmasCollection()) {
+                //revisar si ya existe la firma que se va a ingresar en la lista de firmas de la personavacia
+                if (StringUtils.equalsIgnoreCase(perFirma.getFirma().getNombre(), strNuevaFirma)) {
+                    personaFirmaUsar = perFirma;
+                    break;
+                }
+            }
+            
+            if (personaFirmaUsar == null) {
+                //si la firma no pertenece a la personavacia es porque es una nueva firma no existente en la base de datos, 
+                // por lo tanto hay que crear una nueva firma para agregarla
+                Firma nuevaFirma = new Firma();
+                nuevaFirma.setNombre(strNuevaFirma);
+                nuevaFirma.setId(idFirmaGen);
+                
+                idFirmaGen--;
+                
+                PersonaFirma nuevaPersonaFirma = new PersonaFirma();
+                nuevaPersonaFirma.setFirma(nuevaFirma);
+                nuevaPersonaFirma.setId(idPersonaFirmaGen);
+                nuevaPersonaFirma.setPersona(personaVacia);    
+                
+                idPersonaFirmaGen--;
+                
+                personaFirmaUsar = nuevaPersonaFirma;
+            }            
+                                
+            PersonaArticulo perArt = new PersonaArticulo();
+            perArt.setPersona(personaVacia);
+            perArt.setFirma(personaFirmaUsar.getFirma());
+            perArt.setPersonaFirma(personaFirmaUsar);
+            perArt.setId(idPersonaArticuloGen);
+            
+            personaVacia.getPersonaFirmasCollection().add(personaFirmaUsar);
+            
+            listaPersonaArticulo.add(perArt);
+            
+            idPersonaArticuloGen--;            
+            
+            return true;
+        }
+        return false;
+    }
+   
     public void onPersonaChosen(SelectEvent event) {
         List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Selected", "Id:" + car.getId());
         if (listaPersonasSel != null) {
             for (Persona per : listaPersonasSel) {
-                boolean encontrado = false;
+                /*boolean encontrado = false;
                 for (PersonaArticulo perart : listaPersonaArticulo) {
                     if (perart.getPersona().getId().equals(per.getId())) {
                         encontrado = true;
                         break;
                     }
-                }
-                if (!encontrado) {
-                    PersonaArticulo perArt = new PersonaArticulo();
-                    perArt.setPersona(per);
-                    perArt.setId(idPersonaArticuloGen);
-                    listaPersonaArticulo.add(perArt);
-                    idPersonaArticuloGen--;
-                }
+                }*/
+                //if (!encontrado) {
+                agregarNuevoAutor(per, null);
+                //}
             }
 
             //listaAutores.addAll(listaPersonasSel);
             RequestContext.getCurrentInstance().update("formContenido:dtAutores");
         }
     }
-
     public void onInstitucionChosen(SelectEvent event) {
         List<Institucion> listaSel = (List<Institucion>) event.getObject();
         if (listaSel != null) {
@@ -145,7 +259,6 @@ public class GestorArticulo implements Serializable {
             RequestContext.getCurrentInstance().update("formContenido:dtAutores");
         }
     }
-
     public void onProyectoChosen(SelectEvent event) {
         List<Proyecto> listaProyectosSel = (List<Proyecto>) event.getObject();
         if (listaProyectosSel != null) {
@@ -158,6 +271,7 @@ public class GestorArticulo implements Serializable {
         }
     }
 
+    
     public void agregarAutor() {
         Map<String, Object> options = new HashMap<>();
         options.put("resizable", true);
@@ -168,7 +282,6 @@ public class GestorArticulo implements Serializable {
         GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
-
     public void agregarProyecto() {
         Map<String, Object> options = new HashMap<>();
         options.put("resizable", true);
@@ -191,6 +304,8 @@ public class GestorArticulo implements Serializable {
         RequestContext.getCurrentInstance().openDialog("dialogListaInstituciones", options, null);
     }
 
+    
+    
     public String corregirUrl(String url) {
         if (!url.contains("://")) {
             url = "http://" + url;
@@ -201,6 +316,17 @@ public class GestorArticulo implements Serializable {
         return url;
     }
 
+    public StreamedContent streamParaDescargaBibtex(Articulo articuloDescarga) {
+        String nombreArchivo = articuloDescarga.getArchivoBibtex();
+        try {
+            return BeansUtils.streamParaDescarga(ServerUtils.getPathArticulos().resolve(nombreArchivo), "bibtex_" + articuloDescarga.getNombre());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }    
+    
+    
     public StreamedContent streamParaDescarga(Articulo articuloDescarga) {
         String nombreArchivo = articuloDescarga.getArchivoArticulo();
         try {
@@ -224,7 +350,7 @@ public class GestorArticulo implements Serializable {
         String r = "";
         int c = 0;
         for (PersonaArticulo per : listaConvertir) {
-            r += String.format("%s %s", per.getPersona().getNombres(), per.getPersona().getApellidos());
+            r += per.getPersonaFirma().getFirma().getNombre();
             if (c < listaConvertir.size() - 1) {
                 r += ", ";
             }
@@ -243,7 +369,6 @@ public class GestorArticulo implements Serializable {
         ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorArticulo}", GestorArticulo.class);
         return (GestorArticulo) ex.getValue(context);
     }
-
     public void fileUploadListener(FileUploadEvent event) {
         UploadedFile file = event.getFile();
         boolean isBibtex = event.getComponent().getAttributes().get("bibtex") != null;
@@ -279,7 +404,9 @@ public class GestorArticulo implements Serializable {
                 if (isBibtex) {
                     articulo.setArchivoBibtex(nombreArchivoSubido);
                     tamanoArchivoBibtex = ServerUtils.humanReadableByteCount(file.getSize());
-                    leerBibtex(pathArchivo);
+                    if (!soloSubirBibtex) {
+                        leerBibtex(pathArchivo);
+                    }
                 } else {
                     articulo.setArchivoArticulo(nombreArchivoSubido);
                     tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
@@ -304,20 +431,81 @@ public class GestorArticulo implements Serializable {
             Map<Key, BibTeXEntry> entryMap = database.getEntries();
             BibTeXEntry firstEntry = null;
             for (Map.Entry<Key, BibTeXEntry> entry : entryMap.entrySet()) {
-                firstEntry = entry.getValue();
-                break;
+                if (firstEntry == null) {
+                    firstEntry = entry.getValue();
+                    break;
+                }
+                //break;
                 //System.out.println(entry.getKey() + "/" + entry.getValue());
             }
             if (firstEntry != null) {
                 Value valTitulo = firstEntry.getField(BibTeXEntry.KEY_TITLE);
                 Value valRevista = firstEntry.getField(BibTeXEntry.KEY_JOURNAL);
                 Value valPublicado = firstEntry.getField(BibTeXEntry.KEY_YEAR);
-
-                if (valTitulo != null) {
-                    articulo.setNombre(valTitulo.toUserString());
+                Value valAutores = firstEntry.getField(BibTeXEntry.KEY_AUTHOR);                
+                //Value valAutores = firstEntry.getField(BibTeXEntry.KEY_ADDRESS)
+                Key keyAbstract = new Key("abstract");
+                Value valAbstract = firstEntry.getField(keyAbstract);
+                
+                Key keyUrl = new Key("url");
+                Value valUrl = firstEntry.getField(keyUrl);
+                
+                if (firstEntry.getType().equals(BibTeXEntry.TYPE_ARTICLE)) {
+                    articulo.setTipo(TipoArticulo.SCOPUS);
+                } else if (firstEntry.getType().equals(BibTeXEntry.TYPE_BOOK)) {
+                    articulo.setTipo(TipoArticulo.LIBRO);
+                } else if (firstEntry.getType().equals(BibTeXEntry.TYPE_TECHREPORT)) {
+                    articulo.setTipo(TipoArticulo.NOTA_TECNICA);
+                } else if (firstEntry.getType().equals(BibTeXEntry.TYPE_MASTERSTHESIS)) {
+                    articulo.setTipo(TipoArticulo.TESIS);
+                }                
+                articulo.setNombre(BeansUtils.value2String(valTitulo));
+                articulo.setRevista(BeansUtils.value2String(valRevista));                
+                articulo.setResumen(BeansUtils.value2String(valAbstract));
+                articulo.setEnlace(BeansUtils.value2String(valUrl));
+                String strAutoresBibtex = BeansUtils.value2String(valAutores);
+                
+                if (valPublicado != null) {
+                    int anio = Integer.parseInt(valPublicado.toUserString());
+                    articulo.setAnioPublicacion(anio);
                 }
-                if (valRevista != null) {
-                    articulo.setRevista(valRevista.toUserString());
+                if (valAutores != null) {                    
+                    Persona personaVacia = personaController.obtenerPersonaVacia();
+                    String autores[] = strAutoresBibtex.split(" and ");
+                    Arrays.stream(autores).forEach(autor -> System.out.println("Autor: " + autor));
+                    List<String> firmasAutores = Arrays.asList(autores);
+                    try {
+                        //List<Firma> listaFirmasExistentes = personaController.findFirmas(firmasAutores);
+                        List<Persona> listaPersonasConFirmaExistentes = personaController.findPersonaConFirma(firmasAutores);
+                        
+                        for (String strFirmaBibtex : firmasAutores) {
+                            boolean encontrado = false;
+                            for (Persona per : listaPersonasConFirmaExistentes) {
+                                for (PersonaFirma perFirma : per.getPersonaFirmasCollection()) {
+                                    if (StringUtils.equalsIgnoreCase(perFirma.getFirma().getNombre(), strFirmaBibtex)) {
+                                        encontrado = true;
+                                        if (per.getId().equals(personaVacia.getId())) {
+                                            agregarFirmaSinAutor(personaVacia, strFirmaBibtex);
+                                        } else {
+                                            agregarNuevoAutor(per, strFirmaBibtex);
+                                        }
+                                        break;
+                                    }
+                                    
+                                }
+                            }
+                            
+                            if (!encontrado) {
+                                //cuando no se encontro la firma del bibtex en la base de datos, por lo tanto es una firma de 
+                                // un desconocido (persona externa al departamento)
+                                
+                                agregarFirmaSinAutor(personaVacia, strFirmaBibtex);
+                            }
+                        }
+                        
+                    } catch (Exception ex) {
+                        Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 //Value valTitulo = firstEntry.getField(BibTeXEntry.KEY_TITLE);
 
@@ -331,13 +519,18 @@ public class GestorArticulo implements Serializable {
                     // Do something with the title value
                 }*/
             }
-        } catch (ParseException ex) {
-            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TokenMgrException ex) {
-            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
+        } catch (ParseException | TokenMgrException | FileNotFoundException ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private boolean existeAutorEnLista(Persona autorComprobar) {
+        for (PersonaArticulo perArticulo : listaPersonaArticulo) {
+            if (Objects.equals(perArticulo.getPersona().getId(), autorComprobar.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String guardar() {
@@ -346,13 +539,20 @@ public class GestorArticulo implements Serializable {
         articulo.setProyectosCollection(new HashSet(listaProyectos));
         articulo.setAgradecimientosCollection(new HashSet(listaAgradecimientos));
         //articuloController.create(articulo);
-
-        try {
-            for (int c = 0; c < listaPersonaArticulo.size(); c++) {
-                //guardar el orden de acuerdo al orden de la lista
-                listaPersonaArticulo.get(c).setOrden(c + 1);
+        
+        for (PersonaArticulo perArticulo : articulo.getPersonasArticuloCollection()) {
+            if (perArticulo.getPersonaFirma() == null) {
+                PersonaFirma perFirma = personaController.findPersonaFirma(perArticulo.getPersona().getId(), perArticulo.getFirma().getId());
+                perArticulo.setPersonaFirma(perFirma);
             }
-
+        }
+        
+        try {            
+            for (int c=0;c<listaPersonaArticulo.size();c++) {
+                //guardar el orden de acuerdo al orden de la lista
+                listaPersonaArticulo.get(c).setOrden(c+1);
+            }
+            
             if (modoModificar) {
                 articuloController.edit(articulo);
             } else {
@@ -364,7 +564,6 @@ public class GestorArticulo implements Serializable {
             return "";
         }
     }
-
     public TipoArticulo[] getTiposArticulo() {
         return TipoArticulo.values();
     }
@@ -380,18 +579,22 @@ public class GestorArticulo implements Serializable {
         listaProyectos.clear();
         tamanoArchivo = "";
         tamanoArchivoBibtex = "";
+        soloSubirBibtex = false;
         modoModificar = false;
         idPersonaArticuloGen = -1L;
+        idPersonaFirmaGen = -1L;
+        idFirmaGen = -1L;
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
-        GestorProyecto.getInstance().actualizarListaProyecto();
-
+        GestorProyecto.getInstance().actualizarListaProyecto();        
     }
 
     public String initModificarArticulo(Long id) {
         inicializarManejoArticulo();
         articulo = articuloController.findArticulo(id);
-
+        if (articulo.getArchivoBibtex().isEmpty()) {
+            soloSubirBibtex = true;
+        }
         listaPersonaArticulo = new ArrayList<>(articulo.getPersonasArticuloCollection());
         ordenarListaPersonaArticulo(listaPersonaArticulo);
         listaAgradecimientos = new ArrayList<>(articulo.getAgradecimientosCollection());
@@ -399,15 +602,14 @@ public class GestorArticulo implements Serializable {
 
         Path pathArchivoArticulo = ServerUtils.getPathArticulos().resolve(articulo.getArchivoArticulo());
         tamanoArchivo = ServerUtils.tamanoArchivo(pathArchivoArticulo);
-
-        Path pathArchivoBibtex = ServerUtils.getPathArticulos().resolve(articulo.getArchivoArticulo());
+        
+        Path pathArchivoBibtex = ServerUtils.getPathArticulos().resolve(articulo.getArchivoBibtex());
         tamanoArchivoBibtex = ServerUtils.tamanoArchivo(pathArchivoBibtex);
 
         modoModificar = true;
 
         return "manejoArticulo";
     }
-
     public String initCrearArticulo() {
         inicializarManejoArticulo();
 
@@ -445,6 +647,7 @@ public class GestorArticulo implements Serializable {
         return false;*/
     }
 
+    
     public boolean filtrarPorAutores(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
         if (filterText == null || filterText.equals("")) {
@@ -487,6 +690,7 @@ public class GestorArticulo implements Serializable {
         return false;
     }
 
+    
     public List<Articulo> getListaArticulos() {
         return listaArticulos;
     }
@@ -560,6 +764,14 @@ public class GestorArticulo implements Serializable {
         modoModificar = false;
 
         return "verArticulo";
+    }
+
+    public boolean isSoloSubirBibtex() {
+        return soloSubirBibtex;
+    }
+
+    public void setSoloSubirBibtex(boolean soloSubirBibtex) {
+        this.soloSubirBibtex = soloSubirBibtex;
     }
 
 

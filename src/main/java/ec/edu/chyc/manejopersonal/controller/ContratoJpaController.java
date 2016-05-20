@@ -62,12 +62,11 @@ public class ContratoJpaController extends GenericJpaController<Contrato> implem
             
             
             if (!obj.getArchivoContrato().isEmpty()) {
-                //si se subió el archivo, copiar del directorio de temporales al original de artículos, después eliminar el archivo temporal
+                //si se subió el archivo, copiar del directorio de temporales al original destino, después eliminar el archivo temporal
                 Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoContrato());
                 Path destino = ServerUtils.getPathContratos().resolve(obj.getArchivoContrato());
 
                 Files.move(origen, destino, REPLACE_EXISTING);
-                //FileUtils.moveFile(origen, destino);
             }
             
             

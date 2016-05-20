@@ -14,10 +14,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
+import org.jbibtex.ParseException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -93,4 +95,53 @@ public class BeansUtils {
         Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
         return params.get(nombreParametro);
     }
+    
+    /**
+     * Devuelve true si el string contiene códigos latex
+     * @param latexString La cadena de texto a comprobarse
+     * @return true si contiene códigos latex, caso contrario false
+     */
+    public static boolean isLatexString(String latexString) {
+        return (latexString.indexOf('\\') > -1 || latexString.indexOf('{') > -1);
+    }
+    
+    /**
+     * Transforma códigos latex a string en caso de existir, caso contrario devuelve la misma cadena
+     * @param latexString Cadena de texto a transformar
+     * @return La cadena con todos los códigos transformados a texto plano
+     * @throws ParseException En caso de que no se pueda procesar algún código latex
+     */
+    public static String latexToString(String latexString) throws ParseException {
+        if (isLatexString(latexString)) {
+            // LaTeX string that needs to be translated to plain text string
+            
+            org.jbibtex.LaTeXParser latexParser = new org.jbibtex.LaTeXParser();
+
+            List<org.jbibtex.LaTeXObject> latexObjects = latexParser.parse(latexString);
+
+            org.jbibtex.LaTeXPrinter latexPrinter = new org.jbibtex.LaTeXPrinter();
+
+            String plainTextString = latexPrinter.print(latexObjects); 
+            return plainTextString;
+        } else {
+            return latexString;
+            // Plain text string
+        }
+    }
+    
+    /**
+     * Convierte org.jbibtex.Value a texto plano incluyendo una transformación de códigos latex a texto si es que tiene
+     * @param value valor a comprobar, puede ser nulo
+     * @return Si value es nulo, devuelve una cadena vacía, caso contrario si el valor de value contiene código latex, 
+     * devuelve su transformación de texto plano.
+     * @throws ParseException En caso de que no se pueda procesar algún código latex
+     */
+    public static String value2String(org.jbibtex.Value value) throws ParseException {
+        if (value != null) {
+            return latexToString(value.toUserString());
+        } else {
+            return "";
+        }
+    }
+    
 }

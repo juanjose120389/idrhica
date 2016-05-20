@@ -89,6 +89,7 @@ public class GestorContrato implements Serializable {
         tamanoArchivo = "";
         GestorProyecto.getInstance().actualizarListaProyecto();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
+        GestorPersona.getInstance().actualizarListado();
     }
     
     public String initModificarContrato(Long id) {

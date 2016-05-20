@@ -83,3 +83,7 @@ body {
 	padding:10px;
 	margin:0;
 }
+
+.ui-column-title {
+    font-weight: normal;
+}
