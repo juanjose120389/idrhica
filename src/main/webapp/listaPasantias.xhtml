@@ -25,38 +25,38 @@
             <f:facet name="header">
                 Pasantías
             </f:facet>
-            <p:column headerText="Tema" filterBy="#{pasantia.tema}" filterMatchMode="contains">
+            <p:column headerText="Tema" filterBy="#{pasantia.tema}" filterMatchMode="contains" sortBy="#{pasantia.tema}">
                 <h:outputText value="#{pasantia.tema}" />
             </p:column>
             
-            <p:column headerText="Pasante" filterBy="#{pasantia.pasante.nombres} #{pasantia.pasante.apellidos}" filterMatchMode="contains">
+            <p:column headerText="Pasante" filterBy="#{pasantia.pasante.nombres} #{pasantia.pasante.apellidos}" filterMatchMode="contains" sortBy="#{pasantia.pasante.nombres}">
                 <p:outputLabel value="#{pasantia.pasante.nombres} #{pasantia.pasante.apellidos}"/>
             </p:column>            
 
-            <p:column headerText="Fecha Inicio" width="100">
+            <p:column headerText="Fecha Inicio" width="100" sortBy="#{pasantia.fechaInicio}">
                 <h:outputText value="#{pasantia.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
 
-            <p:column headerText="Fecha Finalización" width="100">
+            <p:column headerText="Fecha Finalización" width="100" sortBy="#{pasantia.fechaFin}">
                 <h:outputText value="#{pasantia.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
 
-            <p:column headerText="Facultad" filterBy="#{pasantia.facultad}" filterMatchMode="contains" width="100">
+            <p:column headerText="Facultad" filterBy="#{pasantia.facultad}" filterMatchMode="contains" width="100" sortBy="#{pasantia.facultad}">
                 <h:outputText value="#{pasantia.facultad}" />
             </p:column>            
 
-            <p:column headerText="Director" filterBy="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" filterMatchMode="contains">
+            <p:column headerText="Director" filterBy="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" filterMatchMode="contains" sortBy="#{pasantia.coordinador.nombres}">
                 <h:outputText value="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" />
             </p:column>
-            <p:column headerText="Tutor" filterBy="#{pasantia.tutor.nombres} #{pasantia.tutor.apellidos}" filterMatchMode="contains">
+            <p:column headerText="Tutor" filterBy="#{pasantia.tutor.nombres} #{pasantia.tutor.apellidos}" filterMatchMode="contains" sortBy="#{pasantia.tutor.nombres}">
                 <h:outputText value="#{pasantia.tutor.nombres} #{pasantia.tutor.apellidos}" />
             </p:column>
 
-            <p:column headerText="# Horas" width="70">
+            <p:column headerText="# Horas" width="70" filterBy="#{pasantia.numeroHoras}" filterMatchMode="contains" sortBy="#{pasantia.numeroHoras}">
                 <h:outputText value="#{pasantia.numeroHoras}" />
             </p:column>
 
