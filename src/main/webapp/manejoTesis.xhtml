@@ -164,6 +164,9 @@
 
                 <p:outputLabel value="Facultad"/>
                 <p:inputText id="txtFacultad" value="#{gestorTesis.tesis.facultad}" /> 
+ 
+              
+
                 <h:panelGroup/>
 
                 <p:outputLabel value="Escuela"/>
@@ -203,13 +206,18 @@
                     <h:panelGroup id="spanTamanioArchivo">
                         <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorTesis.tesis.archivoActaAprobacion != ''}" value="Tamaño archivo: #{gestorTesis.tamanoArchivo}"/>
                     </h:panelGroup>
+                    
                 </h:panelGroup> 
-                <h:panelGroup layout="block"/> 
                 
-
+                <h:panelGroup layout="block"/> 
+                 
             </h:panelGrid>        
         </p:panel>
+        
         <h:panelGroup layout="block" style="height: 15px"/>
+       
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorTesis.guardar()}" icon="fa fa-save"/>
+   
     </ui:define>
+    
 </ui:composition>
