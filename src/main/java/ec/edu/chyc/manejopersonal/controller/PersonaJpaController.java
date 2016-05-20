@@ -15,9 +15,11 @@ import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 
 
@@ -44,6 +46,17 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 em.close();
             }
         }
+    }
+    
+    private Firma findFirma(EntityManager em, String strFirma) {
+        Query q = em.createQuery("select distinct f from Firma f where f.nombre=:nombre");
+        q.setParameter("nombre", strFirma);
+
+        List<Firma> list = q.getResultList();
+        if (list != null && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;        
     }
     
     public Firma findFirma(Long idFirma) {
@@ -303,27 +316,38 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 em.persist(pasante);
             }
   */          
-            if (persona.getPersonaTitulosCollection() != null) {
-                for (PersonaTitulo personaTitulo : persona.getPersonaTitulosCollection()) {
-                    personaTitulo.setPersona(persona);
-                    Titulo titulo = personaTitulo.getTitulo();
-                    if (titulo.getId() < 0 || titulo.getId() == null) {
-                        titulo.setId(null);
-                        em.persist(titulo);
-                    }
-
-                    if (personaTitulo.getUniversidad().getId() < 0 || personaTitulo.getUniversidad().getId() == null) {
-                        personaTitulo.getUniversidad().setId(null);                        
-                        em.persist(personaTitulo.getUniversidad());
-                    }
-                    
-                    if (personaTitulo.getId() == null || personaTitulo.getId() < 0) {
-                        personaTitulo.setId(null);
-                        em.persist(personaTitulo);
-                    }                    
-                    
+            for (PersonaTitulo personaTitulo : persona.getPersonaTitulosCollection()) {
+                personaTitulo.setPersona(persona);
+                Titulo titulo = personaTitulo.getTitulo();
+                if (titulo.getId() == null || titulo.getId() < 0) {
+                    titulo.setId(null);
+                    em.persist(titulo);
                 }
+
+                if (personaTitulo.getUniversidad().getId() == null || personaTitulo.getUniversidad().getId() < 0) {
+                    personaTitulo.getUniversidad().setId(null);
+                    em.persist(personaTitulo.getUniversidad());
+                }
+
+                if (personaTitulo.getId() == null || personaTitulo.getId() < 0) {
+                    personaTitulo.setId(null);
+                    em.persist(personaTitulo);
+                }
+
             }
+            /*for (PersonaFirma personaFirma : persona.getPersonaFirmasCollection()) {
+                personaFirma.setPersona(persona);
+                Firma firma = personaFirma.getFirma();                
+                if (firma.getId() == null || firma.getId() < 0) {
+                    firma.setId(null);
+                    em.persist(firma);
+                }
+                if (personaFirma.getId() == null || personaFirma.getId() < 0) {
+                    personaFirma.setId(null);
+                    em.persist(personaFirma);
+                }
+            }*/
+            guardarPersonaFirma(em, persona);
 
             em.getTransaction().commit();
         } finally {
@@ -340,6 +364,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             em.getTransaction().begin();
             
             Persona personaAntigua = em.find(Persona.class, persona.getId());
+            Hibernate.initialize(personaAntigua.getPersonaFirmasCollection());
             
             //quitar los personaTitulo que no existan en la nueva persona editada
             for (PersonaTitulo perTituloAntiguo : personaAntigua.getPersonaTitulosCollection()) {
@@ -358,6 +383,51 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 em.merge(perTitulo);
             }
             
+            for (PersonaFirma perFirmaAntiguo : personaAntigua.getPersonaFirmasCollection()) {
+                //revisar las firmas que estén en el antigua persona pero ya no en el nuevo editado,
+                // por lo tanto si ya no están en el nuevo editado, hay que borrar las relaciones PersonaFirma
+                // pero solo si no tiene PersonaArticulo relacionado (significaría que esa firma está actualmente 
+                // siendo usada en un artículo, por lo tanto no de debe borrar)
+                boolean firmaEnEditado = false;
+
+                //primero revisar si la firma que existia antes de la persona, existe en el nuevo editado
+                for (PersonaFirma perFirma : persona.getPersonaFirmasCollection()) {
+                    if (StringUtils.equalsIgnoreCase(perFirmaAntiguo.getFirma().getNombre(), perFirma.getFirma().getNombre())) {
+                        firmaEnEditado = true;
+                        break;
+                    }
+                }
+                if (!firmaEnEditado) {
+                    //si es que la firma de la persona sin editar ya no existe en la persona editada, quitar la relación PersonaFirma
+                    
+                    //primero verificar que la firma no sea usada en ninguna PersonaArticulo
+                    if (perFirmaAntiguo.getPersonasArticulosCollection().isEmpty()) {                            
+                        Firma firmaBorrar = null;                        
+                        if (perFirmaAntiguo.getFirma().getPersonasFirmaCollection().size() == 1) {
+                            //si la firma a borrar esta asignada a solo una persona (que sería la persona actual, variable: persona),
+                            // colocarla a la variable para borrarla
+                            //Siempre las firmas van a estar asignadas al menos a una persona, caso contrario deben ser borradas
+                            //Las firmas de personas desconocidas están ligadas a una persona: la persona con id=0
+                            firmaBorrar = perFirmaAntiguo.getFirma();
+                        }
+                        //borrar la relación PersonaFirma
+                        em.remove(perFirmaAntiguo);
+                        if (firmaBorrar != null) {
+                            //borrar la firma solo si estaba asignada a una sola persona
+                            firmaBorrar.getPersonasFirmaCollection().clear();
+                            em.remove(firmaBorrar);
+                        }
+                    }
+                }
+                /*
+                if (!persona.getPersonaFirmasCollection().contains(perFirmaAntiguo)) {
+                    if (perFirmaAntiguo.getPersonasArticulosCollection().isEmpty()) {
+                        em.remove(em);
+                    }
+                }*/
+            }
+            guardarPersonaFirma(em, persona);
+            
             em.merge(persona);
             em.getTransaction().commit();
         } finally {
@@ -366,6 +436,48 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             }
         }
 
+    }
+    
+    /**
+     * Guarda las nuevas firmas de la persona, integrando las relaciones PersonaFirma de acuerdo a si las
+     * firmas existen o no en la base de datos. 
+     * NO borra las firmas que ahora no estén y antes si estaban.
+     * NO deben existir firmas repetidas en la lista que se va a guardar.
+     * @param em EntityManager a usar, debe estar ya dentro de un EntityManager.begin();
+     * @param persona Persona del que se almacenará las firmas, NO debe tener firmas repetidas
+     */
+    private void guardarPersonaFirma(EntityManager em, Persona persona) {
+        for (PersonaFirma perFirma : persona.getPersonaFirmasCollection()) {
+            //Firma firmaExistente = findFirma(em, perFirma.getFirma().getNombre());
+            PersonaFirma perFirmaExistente = findPersonaFirma(persona.getId(), perFirma.getFirma().getNombre());
+            Firma firmaExistente = findFirma(em, perFirma.getFirma().getNombre());
+
+            if (firmaExistente != null) {
+                if (perFirmaExistente != null) {
+                    //significa que ya existe la firma en la db y también ya existe una relación entre la firma y la persona que se modifica
+                    // por lo tanto no hay que realizar modificación alguna
+                    //En caso de PersonaFirma tenga campos adicionales, aquí se los debería editar, mientras tanto sigue comentado el código
+                    //perFirma.setId(perFirmaExistente.getId());
+                    //em.merge(perfirma);
+                } else {
+                    //si la firma existe pero no hay relación entre la firma y la persona, entonces significa que la persona que se está editando
+                    // va a tener una firma que es usado por varias personas, por lo tanto hay que agrega una nueva PersonaFirma indicando 
+                    // la relación entre la persona que se está editanto y la firma que ya existe
+                    perFirma.setId(null);
+                    perFirma.setPersona(persona);
+                    perFirma.setFirma(firmaExistente);
+                    em.persist(perFirma);
+                }
+            } else {
+                //si no existe la firma, se debe crear tanto la PersonaFirma como la Firma, independientemente de los ids que tengan
+                perFirma.getFirma().setId(null);
+                em.persist(perFirma.getFirma());
+
+                perFirma.setId(null);
+                em.persist(perFirma);
+            }
+        }
+        
     }
     
     public void destroy(Long id) throws Exception {

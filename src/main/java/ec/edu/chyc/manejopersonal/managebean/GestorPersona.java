@@ -6,6 +6,7 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
+import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
@@ -22,8 +23,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -70,15 +73,14 @@ public class GestorPersona implements Serializable {
     
     private List<Universidad> listaUniversidadesAgregadas = new ArrayList<>();
     private List<Titulo> listaTitulosAgregados = new ArrayList<>();
+    private List<PersonaFirma> listaPersonaFirmas = new ArrayList<>();
     
     private long idTituloGenerado = -1;
     private long idUniversidadGenerada = -1;
     private long idTituloPersonaGenerado = -1;
+    private long idFirmaGen = -1L;
+    private long idPersonaFirmaGen = -1L;
     private PersonaTitulo tituloDePersona;
-    
-    private boolean esTesista = false;
-    private boolean esContratado = false;
-    private boolean esPasante = false;
     
     //private boolean modoModificar = false;
     private Modo modo;
@@ -194,6 +196,9 @@ public class GestorPersona implements Serializable {
         }        
         return false;
     }
+    public void quitarFirma(PersonaFirma firmaQuitar) {
+        listaPersonaFirmas.remove(firmaQuitar);
+    }
     
     public void quitarPersonaTitulo(PersonaTitulo personaTituloQuitar) {
         listaPersonaTitulos.remove(personaTituloQuitar);
@@ -210,38 +215,10 @@ public class GestorPersona implements Serializable {
         
         return false;
     }
-    
-    public void cargarInformacionPersona(Long id, boolean infoCompleta) {
-        if (infoCompleta) {
-            persona = personaController.findPersona(id, true, true, true, true, true, true);
-        } else {
-            persona = personaController.findPersona(id);
-        }
-        //modoModificar = true;
-        
-        
-        listaPersonaTitulos = new ArrayList<>(persona.getPersonaTitulosCollection());
-        esTesista = false;
-        esPasante = false;        
-
-        //BeanUtils.copyProperties(tesista, (Tesista) persona);
-    }
-    public String initVerPersona(Long id) {
-        cargarInformacionPersona(id, true);     
-        modo = Modo.VER;
-        return "verPersona";        
-    }
-    public String initModificarPersona(Long id) {
-        cargarInformacionPersona(id, false);     
-        modo = Modo.EDITAR;
-        return "manejoPersona";
-    }
-
-    public String initCrearPersona() {
+    public void inicializarManejoPersona() {
         persona = new Persona();
-        fechaActual = new Date();
+        fechaActual = new Date();        
         
-        //modoModificar = false;
         modo = Modo.AGREGAR;
         
         mostrarDlgTitulo = false;
@@ -250,16 +227,7 @@ public class GestorPersona implements Serializable {
         idTituloGenerado = -1;
         idUniversidadGenerada = -1;
         idTituloPersonaGenerado = -1;
-        
-        esTesista = false;
-        esPasante = false;
-        esContratado = false;
-        
-        LocalDate dtFechaNacDefault = LocalDateTime.now().toLocalDate();
-        dtFechaNacDefault = dtFechaNacDefault.minusYears(25);
-        
-        persona.setFechaVinculacion(fechaActual);
-        persona.setFechaNacimiento(FechaUtils.asDate(dtFechaNacDefault));
+        idFirmaGen = -1L;
         
         listaPersonaTitulos = new ArrayList<>();
         
@@ -267,8 +235,66 @@ public class GestorPersona implements Serializable {
         GestorGeneral.getInstance().actualizarListaTitulos();
         listaUniversidadesAgregadas.clear();
         listaTitulosAgregados.clear();
+        listaPersonaFirmas.clear();        
+    }
+    public void cargarInformacionPersona(Long id, boolean infoCompleta) {
+        if (infoCompleta) {
+            persona = personaController.findPersona(id, true, true, true, true, true, true);
+        } else {
+            persona = personaController.findPersona(id, false, false, true, false, false, true);
+        }
+        //modoModificar = true;
+        
+        listaPersonaFirmas.clear();
+        for (PersonaFirma personaFirma : persona.getPersonaFirmasCollection()) {
+            listaPersonaFirmas.add(personaFirma);
+        }
+        
+        listaPersonaTitulos = new ArrayList<>(persona.getPersonaTitulosCollection());
+
+        //BeanUtils.copyProperties(tesista, (Tesista) persona);
+    }
+    public String initVerPersona(Long id) {
+        inicializarManejoPersona();
+        cargarInformacionPersona(id, true);     
+        modo = Modo.VER;
+        return "verPersona";        
+    }
+    public String initModificarPersona(Long id) {
+        inicializarManejoPersona();
+        cargarInformacionPersona(id, false);     
+        modo = Modo.EDITAR;
+        return "manejoPersona";
+    }
+
+    public String initCrearPersona() {
+        inicializarManejoPersona();
+        
+        //modoModificar = false;
+        modo = Modo.AGREGAR;
+        
+        LocalDate dtFechaNacDefault = LocalDateTime.now().toLocalDate();
+        dtFechaNacDefault = dtFechaNacDefault.minusYears(25);
+        
+        persona.setFechaVinculacion(fechaActual);
+        persona.setFechaNacimiento(FechaUtils.asDate(dtFechaNacDefault));        
         
         return "manejoPersona";
+    }
+
+    public void agregarFirma() {
+        Firma nuevaFirma = new Firma();
+        nuevaFirma.setId(idFirmaGen);
+        nuevaFirma.setNombre("Apellido/s, Nombre/s.");
+        
+        PersonaFirma perFirma = new PersonaFirma();
+        perFirma.setId(idPersonaFirmaGen);
+        perFirma.setFirma(nuevaFirma);
+        
+        listaPersonaFirmas.add(perFirma);
+        
+        idFirmaGen--;
+        idPersonaFirmaGen--;
     }
     
     public String agregarTitulo() {
@@ -355,28 +381,34 @@ public class GestorPersona implements Serializable {
         return listResults;
     }
     
-    public void onCheckEsTesista() {
-        if (esTesista) {
-            esPasante = false;
-        }
-    }
-
-    public void onCheckEsPasante() {
-        if (esPasante) {
-            esTesista = false;
-        }
-    }
-    
     public String guardar() {
         try {            
-            Persona personaGuardar = persona;
             
-            personaGuardar.setPersonaTitulosCollection(listaPersonaTitulos);
+            persona.setPersonaTitulosCollection(listaPersonaTitulos);
+            persona.setPersonaFirmasCollection(listaPersonaFirmas);
+            
+            //un Set para revisar que no se repitan las firmas
+            Set<String> strFirmas = new HashSet<>();
+            for (PersonaFirma perFirma : listaPersonaFirmas) {
+                String strFirma = perFirma.getFirma().getNombre();
+                if (strFirma.trim().isEmpty()) {
+                    //si el texto de la firma es vacío, no es firma válida
+                    GestorMensajes.getInstance().mostrarMensajeError("Existen firmas vacías en la lista.");
+                    return "";
+                }                
+                strFirmas.add(strFirma);                
+            }
+            if (strFirmas.size() != listaPersonaFirmas.size()) {
+                //si el tamaño del Set (que se llena solo con firmas diferentes) es diferente al de firmas ingresadas
+                // indica que hay firmas repetidas
+                GestorMensajes.getInstance().mostrarMensajeError("Existen firmas repetidas en la lista.");
+                return "";
+            }
             
             if (modo == Modo.EDITAR) {
-                personaController.edit(personaGuardar);
+                personaController.edit(persona);
             } else {
-                personaController.create(personaGuardar);
+                personaController.create(persona);
             }
      
             actualizarListado();
@@ -457,30 +489,6 @@ public class GestorPersona implements Serializable {
         this.listaTitulosAgregados = listaTitulosAgregados;
     }
     
-    public boolean isEsTesista() {
-        return esTesista;
-    }
-    
-    public void setEsTesista(boolean esTesista) {
-        this.esTesista = esTesista;
-    }
-    
-    public boolean isEsContratado() {
-        return esContratado;
-    }
-    
-    public void setEsContratado(boolean esContratado) {
-        this.esContratado = esContratado;
-    }
-    
-    public boolean isEsPasante() {
-        return esPasante;
-    }
-    
-    public void setEsPasante(boolean esPasante) {
-        this.esPasante = esPasante;
-    }   
-    
     public boolean isMostrarDlgUniversidad() {
         return mostrarDlgUniversidad;
     }
@@ -523,5 +531,14 @@ public class GestorPersona implements Serializable {
 
     public boolean isModoModificar() {
         return modo == Modo.EDITAR;
+    }    
+
+    public List<PersonaFirma> getListaPersonaFirmas() {
+        return listaPersonaFirmas;
     }
+
+    public void setListaPersonaFirmas(List<PersonaFirma> listaPersonaFirmas) {
+        this.listaPersonaFirmas = listaPersonaFirmas;
+    }
+    
 }
