@@ -274,9 +274,8 @@ public class GestorPersona implements Serializable {
         modo = Modo.AGREGAR;
         
         LocalDate dtFechaNacDefault = LocalDateTime.now().toLocalDate();
-        dtFechaNacDefault = dtFechaNacDefault.minusYears(25);
+        dtFechaNacDefault = dtFechaNacDefault.minusYears(28).withDayOfYear(1);
         
-        persona.setFechaVinculacion(fechaActual);
         persona.setFechaNacimiento(FechaUtils.asDate(dtFechaNacDefault));        
         
         return "manejoPersona";
