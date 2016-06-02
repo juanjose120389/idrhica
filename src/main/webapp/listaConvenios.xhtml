@@ -12,7 +12,7 @@
             }
         </style>
         <p:dataTable widgetVar="conveniosTable" id="conveniosTable" var="convenio" value="#{gestorConvenio.listaConvenios}" rows="10"
-                     paginator="true" resizableColumns="true" liveResize="true"
+                     paginator="true"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                      >
             <f:facet name="{Exporters}">
@@ -39,7 +39,7 @@
             </p:column>           
 
             <p:column headerText="Proyecto" sortBy="#{convenio.proyecto.titulo}" filterBy="#{convenio.proyecto.titulo}" filterMatchMode="contains" >
-                <h:outputText value="#{convenio.proyecto.titulo}" />
+                <h:outputText value="#{gestorProyecto.acortarTitulo(convenio.proyecto)}" style="word-wrap: break-word;"/>
             </p:column>   
             
              <p:column headerText="Admnistrador" filterBy="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" filterMatchMode="contains" sortBy="#{convenio.administrador.nombres}">

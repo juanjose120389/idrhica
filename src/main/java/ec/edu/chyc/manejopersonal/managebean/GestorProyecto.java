@@ -20,6 +20,8 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -165,9 +167,33 @@ public class GestorProyecto implements Serializable {
 
         return "manejoProyecto";
     }
+    
+    public String acortarTitulo(Proyecto proyecto) {
+        final int maxLongitud = 80;
+        if (proyecto.getTitulo().length() > maxLongitud) {
+            return proyecto.getTitulo().substring(0, maxLongitud) + "...";
+        }
+        return proyecto.getTitulo();
+    }
 
     public String initListarProyectos() {
         actualizarListaProyecto();
+        for (Proyecto proy : listaProyecto) {
+            //para cada proyecto, calcular el numero de meses
+            if (proy.getFechaInicio() != null && (proy.getFechaFin() != null || proy.getFechaFinEnDocumento() != null)) {
+                LocalDateTime fechaInicio = FechaUtils.asLocalDateTime(proy.getFechaInicio());
+                LocalDateTime fechaFin;
+                
+                if (proy.getFechaFin() != null) {
+                    fechaFin = FechaUtils.asLocalDateTime(proy.getFechaFin());
+                } else {
+                    fechaFin = FechaUtils.asLocalDateTime(proy.getFechaFinEnDocumento());
+                }
+                
+                long meses = ChronoUnit.MONTHS.between(fechaInicio, fechaFin);
+                proy.setDuracion((int)meses);
+            }            
+        }
         return "listaProyecto";
     }
 

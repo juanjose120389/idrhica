@@ -48,6 +48,10 @@
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </h:panelGroup>
+                <h:panelGroup layout="block" style="font-size: 0.8em">
+                    <p:outputLabel value="Duración: #{proyecto.duracion} meses"/>
+                </h:panelGroup>
+                
             </p:column>
 
 
@@ -57,10 +61,6 @@
 
             <p:column headerText="Co-Director" filterBy="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" filterMatchMode="contains" sortBy="#{proyecto.codirector.nombres}">
                 <h:outputText value="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" />
-            </p:column>
-
-            <p:column headerText="Duración" width="70" sortBy="#{proyecto.duracion}">
-                <h:outputText value="#{proyecto.duracion}" />
             </p:column>
 
             <p:column headerText="Observaciones" filterBy="#{proyecto.observaciones}" filterMatchMode="contains" sortBy="#{proyecto.observaciones}">
