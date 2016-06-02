@@ -32,7 +32,9 @@
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </p:outputLabel>
 
-                <p:outputLabel value="Fecha de Finalización (Documento)"/>
+                <h:panelGroup layout="block" style="width: 150px">
+                    <p:outputLabel value="Fecha de Finalización (Documento)"/>
+                </h:panelGroup>
                 <p:outputLabel value="#{gestorProyecto.proyecto.fechaFinEnDocumento}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </p:outputLabel>
@@ -86,7 +88,7 @@
                     <p:column headerText="Persona contratada">
                         <h:outputText value="#{contrato.persona.nombres} #{contrato.persona.apellidos}" />
                     </p:column>
-                    
+
                     <p:column headerText="Adminisitrador del contrato">
                         <h:panelGroup layout="block" rendered="#{contrato.administrador != null}">
                             <h:outputText value="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" />

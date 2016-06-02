@@ -72,8 +72,8 @@ public class Proyecto implements Serializable {
     @Type(type = "text")    
     private String resumen;
     
-    @OneToMany(mappedBy = "proyecto")
-    private Collection<Contrato> contratosCollection = new ArrayList<>();           
+    //@OneToMany(mappedBy = "proyecto")
+    //private Collection<Contrato> contratosCollection = new ArrayList<>();           
 
     @OneToMany(mappedBy = "proyecto")
     private Collection<Convenio> conveniosCollection = new ArrayList<>();
@@ -96,6 +96,12 @@ public class Proyecto implements Serializable {
         @JoinColumn(name = "idArticulo", referencedColumnName = "id")})
     private Set<Articulo> articulosCollection = new HashSet();    
     
+    @ManyToMany
+    @JoinTable(name = "proyectoContrato", joinColumns = {
+        @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idContrato", referencedColumnName = "id")})
+    private Set<Contrato> contratosCollection = new HashSet();
+    
     public Long getId() {
         return id;
     }
@@ -104,11 +110,11 @@ public class Proyecto implements Serializable {
         this.id = id;
     }
 
-    public Collection<Contrato> getContratosCollection() {
+    public Set<Contrato> getContratosCollection() {
         return contratosCollection;
     }
 
-    public void setContratosCollection(Collection<Contrato> contratosCollection) {
+    public void setContratosCollection(Set<Contrato> contratosCollection) {
         this.contratosCollection = contratosCollection;
     }
 

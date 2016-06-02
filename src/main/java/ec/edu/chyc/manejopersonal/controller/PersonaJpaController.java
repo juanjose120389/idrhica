@@ -6,6 +6,7 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Contrato;
 import ec.edu.chyc.manejopersonal.entity.Firma;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Persona;
@@ -15,7 +16,6 @@ import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -243,7 +243,9 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             Persona p = q.getSingleResult();
             
             if (incluirContratos) {
-                Hibernate.initialize(p.getContratosCollection());
+                for (Contrato contrato : p.getContratosCollection()) {
+                    Hibernate.initialize(contrato.getProyectosCollection());
+                }
             }
             if (incluirArticulos) {
                 //Hibernate.initialize(p.getPersonaArticulosCollection());

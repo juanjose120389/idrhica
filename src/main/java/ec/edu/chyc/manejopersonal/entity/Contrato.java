@@ -7,6 +7,8 @@ package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,8 +16,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -59,9 +63,13 @@ public class Contrato implements Serializable {
     @JoinColumn(name = "idAdminContrato", referencedColumnName = "id")
     private Persona administrador;
 
-    @ManyToOne
-    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    private Proyecto proyecto;
+    /*@ManyToOne
+    @JoinColumn(name = "idProyecto", referencedColumnName = "id")*/
+    @Transient
+    private Proyecto proyecto = null;
+    
+    @ManyToMany(mappedBy = "contratosCollection")
+    private Set<Proyecto> proyectosCollection = new HashSet<>();
 
     private String cargo;
     private String actividadPrincipal;
@@ -216,6 +224,14 @@ public class Contrato implements Serializable {
 
     public void setCodigoContrato(String codigoContrato) {
         this.codigoContrato = codigoContrato;
+    }
+
+    public Set<Proyecto> getProyectosCollection() {
+        return proyectosCollection;
+    }
+
+    public void setProyectosCollection(Set<Proyecto> proyectosCollection) {
+        this.proyectosCollection = proyectosCollection;
     }
 
 }

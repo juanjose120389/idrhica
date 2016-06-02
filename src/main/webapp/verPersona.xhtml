@@ -217,7 +217,9 @@
                 </p:column>                
 
                 <p:column headerText="Proyecto al que pertenece" width="400">
-                    <h:outputText value="#{contrato.proyecto.titulo}" />
+                    <ui:repeat value="#{contrato.proyectosCollection.toArray()}" var="proyecto">
+                        <h:outputText value="#{proyecto.titulo}" /><br/>
+                    </ui:repeat>
                 </p:column>
 
                 <p:column headerText="Inicio Contrato" width="100">

@@ -12,6 +12,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.ContratoJpaController;
 import ec.edu.chyc.manejopersonal.entity.Contrato;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.File;
@@ -23,7 +24,10 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +36,9 @@ import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -47,6 +53,7 @@ public class GestorContrato implements Serializable {
     private final ContratoJpaController contratoController = new ContratoJpaController();
 
     private List<Contrato> listaContrato = new ArrayList<>();
+    private List<Proyecto> listaProyectos = new ArrayList<>();
     private Contrato contrato = new Contrato();
     private boolean modoModificar = false;
 
@@ -83,10 +90,35 @@ public class GestorContrato implements Serializable {
         }
         return null;
     } 
-    private void initializarManejoContrato() {
+    public void quitarProyecto(Proyecto proyectoQuitar) {
+        listaProyectos.remove(proyectoQuitar);
+    }    
+    public void agregarProyecto() {
+        Map<String, Object> options = new HashMap<>();
+        options.put("resizable", true);
+        options.put("draggable", true);
+        options.put("width", "75%");
+        options.put("modal", true);
+        options.put("contentWidth", "100%");
+        GestorDialogListaProyectos.getInstance().clearListaProyectosSel();
+        RequestContext.getCurrentInstance().openDialog("dialogListaProyectos", options, null);
+    }    
+    public void onProyectoChosen(SelectEvent event) {
+        List<Proyecto> listaProyectosSel = (List<Proyecto>) event.getObject();
+        if (listaProyectosSel != null) {
+            for (Proyecto proy : listaProyectosSel) {
+                if (!listaProyectos.contains(proy)) {
+                    listaProyectos.add(proy);
+                }
+            }
+            RequestContext.getCurrentInstance().update("formContenido:dtProyectos");
+        }
+    }    
+    private void inicializarManejoContrato() {
         contrato = new Contrato();
         esProfesor = false;
         tamanoArchivo = "";
+        listaProyectos.clear();
         GestorProyecto.getInstance().actualizarListaProyecto();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
         GestorPersona.getInstance().actualizarListado();
@@ -94,12 +126,19 @@ public class GestorContrato implements Serializable {
     
     public String initModificarContrato(Long id) {
         //contrato = contratoController.
-        initializarManejoContrato();
+        inicializarManejoContrato();
         
         contrato = contratoController.findContrato(id);
+        listaProyectos = new ArrayList(contrato.getProyectosCollection());
         
         if (contrato.getTipoProfesor() != null) {
             esProfesor = true;
+        }
+        
+        if (!esProfesor) {
+            //si no es profesor, asignar el unico proyecto relacionado al contrato, a la variable contrato.proyecto para poder obtener de una sola
+            Proyecto unicoProyecto = contrato.getProyectosCollection().stream().findFirst().get();
+            contrato.setProyecto(unicoProyecto);
         }
         modoModificar = true;
         try {
@@ -119,7 +158,7 @@ public class GestorContrato implements Serializable {
     }
     
     public String initCrearContrato() {
-        initializarManejoContrato();
+        inicializarManejoContrato();
         modoModificar = false;
         //actualizarListaContrato();
         return "manejoContratos";
@@ -133,7 +172,13 @@ public class GestorContrato implements Serializable {
     public String guardar() {
         if (!esProfesor) {
             contrato.setTipoProfesor(null);
-        }        
+            
+            //agregar a la lista de proyectos el único proyecto seleccionado
+            listaProyectos.clear();
+            listaProyectos.add(contrato.getProyecto());
+        }
+        
+        contrato.setProyectosCollection(new HashSet(listaProyectos));
         try {
             if (modoModificar) {
                 contratoController.edit(contrato);
@@ -234,5 +279,12 @@ public class GestorContrato implements Serializable {
     public void setTamanoArchivo(String tamanoArchivo) {
         this.tamanoArchivo = tamanoArchivo;
     }
-    
+
+    public List<Proyecto> getListaProyectos() {
+        return listaProyectos;
+    }
+
+    public void setListaProyectos(List<Proyecto> listaProyectos) {
+        this.listaProyectos = listaProyectos;
+    }    
 }
