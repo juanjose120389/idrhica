@@ -86,15 +86,21 @@
         <p:panel header="#{gestorPersona.modoModificar?'Modificar':'Nueva'} Persona">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
             <h:panelGrid columns="3" width="100%" columnClasses="labelscol,inputscol,tipscol">
-                <p:outputLabel value="Cédula/Pasaporte"/>
+                <p:outputLabel value="Cédula/Pasaporte">
+                    <span class="asterisk"/>
+                </p:outputLabel>
                 <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
                 <p:message for="txtIdentificacion"/>
 
-                <p:outputLabel value="Nombres"/>
+                <p:outputLabel value="Nombres">
+                    <span class="asterisk"/>
+                </p:outputLabel>
                 <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.nombres}" maxlength="255"/>  
                 <p:message for="txtNombres"/>
 
-                <p:outputLabel value="Apellidos"/>
+                <p:outputLabel value="Apellidos">
+                    <span class="asterisk"/>
+                </p:outputLabel>
                 <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.apellidos}" maxlength="255"/>  
                 <p:message for="txtApellidos"/>
 
