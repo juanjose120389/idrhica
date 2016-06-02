@@ -112,13 +112,8 @@
                     <h:panelGroup layout="block" style="height: 15px" rendered="#{gestorContrato.esProfesor}"/>
                     <p:dataTable rendered="#{gestorContrato.esProfesor}" emptyMessage="#{label.emptyMessage}" id="dtProyectos" paginator="true" rowIndexVar="rowIndex" 
                                  paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorContrato.listaProyectos}">
-                        <p:column headerText="Título" width="450">
+                        <p:column headerText="Título del proyecto" width="450">
                             <h:outputText value="#{proyecto.titulo}"/>
-                        </p:column>
-                        <p:column headerText="Fecha Inicio" width="150">
-                            <h:outputText value="#{proyecto.fechaInicio}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
                         </p:column>
                         <p:column style="text-align: center" width="60">
                             <p:commandButton id="cmdQuitarAutor" action="#{gestorContrato.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
