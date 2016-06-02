@@ -72,7 +72,7 @@
 
                 <p:outputLabel value="Duración"/>
                 <h:panelGroup layout="block">
-                    <p:spinner id="basic" value="#{gestorProyecto.proyecto.duracion}" />
+                    <p:spinner id="basic" value="#{gestorProyecto.proyecto.duracion}" min="1" />
 
                     <p:outputLabel value=" Meses"/>
                 </h:panelGroup>            
@@ -162,9 +162,11 @@
                 <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.observaciones}"/>  
                 <h:panelGroup layout="block"/> 
 
-            </h:panelGrid>        
+            </h:panelGrid>  
+            
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>
+        
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorProyecto.guardar()}" icon="fa fa-save"/>
 
     </ui:define>

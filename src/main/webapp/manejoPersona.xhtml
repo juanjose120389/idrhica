@@ -118,11 +118,13 @@
                 <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Celular"/>
-                <p:inputText value="#{gestorPersona.persona.celular}"/>  
+                <p:inputText  id="txtCelular" value="#{gestorPersona.persona.celular}" maxlength="10"/>  
                 <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Correo electrónico"/>
-                <p:inputText value="#{gestorPersona.persona.correo}"/>  
+                <p:inputText id="txtCorreo" value="#{gestorPersona.persona.correo}"> 
+                    <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                    </p:inputText> 
                 <h:panelGroup layout="block"/>            
 
                 <p:outputLabel value="Skype"/>
@@ -257,7 +259,13 @@
             <h:panelGroup layout="block" style="height: 20px"/>
             
 
-            <h:panelGroup layout="block" style="clear: both" id="checksTipoPersona"/>
+            <h:panelGroup layout="block" style="clear: both" id="checksTipoPersona">
+
+            </h:panelGroup>
+<pe:keyFilter for="txtNombres" regEx="/[A-Z áéíóú]/i"/>  
+<pe:keyFilter for="txtApellidos" regEx="/[A-Z áéíóú]/i"/> 
+<pe:keyFilter for="txtCelular" regEx="/[\d\-]/"/> 
+
 
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>
