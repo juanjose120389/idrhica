@@ -39,3 +39,7 @@ and open the template in the editor.
     padding-right: 0.5em !important;
     font-weight: normal;
 }
+
+.ui-selectonemenu-panel {
+    max-width: 550px;
+}

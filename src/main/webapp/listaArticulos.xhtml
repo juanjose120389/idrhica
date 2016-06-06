@@ -58,7 +58,7 @@
                 <h:outputText style="white-space: pre-wrap; display: block" value="#{articulo.revista}" />
                 <h:panelGroup layout="block" rendered="#{articulo.factorImpacto != null}">
                     <p:outputLabel value=" "/>
-                    <h:outputText value="Factor Impacto: #{articulo.factorImpacto}" />
+                    <h:outputText style="font-size: 0.8em" value="Factor Impacto: #{articulo.factorImpacto}" />
                 </h:panelGroup>
             </p:column>
 
@@ -75,7 +75,7 @@
                     </p:selectOneMenu>
                 </f:facet>
                 <p:dataList styleClass="lista" emptyMessage="" value="#{articulo.listaInstFinanciamientos}" var="institucion" type="definition">
-                    #{institucion.nombre}
+                    • #{institucion.nombre}
                 </p:dataList>
 
             </p:column>
@@ -90,8 +90,7 @@
 
             <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
                 <ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="perarticulo">
-
-                    <p:outputLabel value="#{perarticulo.personaFirma.firma.nombre}"/><br/>
+                    <p:outputLabel value="• #{perarticulo.personaFirma.firma.nombre}"/><br/>
                 </ui:repeat>
             </p:column>
 

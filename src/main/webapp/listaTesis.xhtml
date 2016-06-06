@@ -22,18 +22,18 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
-            
+
             <f:facet name="header">
                 Tesis
             </f:facet>
-            <p:column headerText="Título" filterBy="#{tesis.nombre}" filterMatchMode="contains" sortBy="#{tesis.nombre}">
+            <p:column headerText="Título" width="250" filterBy="#{tesis.nombre}" filterMatchMode="contains" sortBy="#{tesis.nombre}">
                 <h:outputText value="#{tesis.nombre}" />
             </p:column>
 
             <p:column headerText="Tipo" width="70" sortBy="#{tesis.tipo}">
                 <h:outputText value="#{label['tesis.tipo.' += tesis.tipo]}"/>
             </p:column>
-            
+
             <p:column headerText="Fecha de Inicio" width="100" sortBy="#{tesis.fechaInicio}">
                 <h:outputText value="#{tesis.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
@@ -51,36 +51,36 @@
                 <h:outputText value="#{tesis.facultad}" />
             </p:column>            
 
-            <p:column headerText="Director" filterBy="#{tesis.director.nombres} #{tesis.director.apellidos}" filterMatchMode="contains" sortBy="#{tesis.director.nombre}">
+            <p:column headerText="Director" width="150" filterBy="#{tesis.director.nombres} #{tesis.director.apellidos}" filterMatchMode="contains" sortBy="#{tesis.director.nombre}">
                 <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
             </p:column>
 
-            <p:column headerText="Observaciones" filterBy="#{tesis.observaciones}" filterMatchMode="contains" sortBy="#{tesis.observaciones}">
-                <h:outputText value="#{tesis.observaciones}" />
-            </p:column>
-            <p:column headerText="Autores" filterBy="#{tesis.autoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarPorAutor}">
+            <p:column headerText="Autores" width="150" filterBy="#{tesis.autoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarPorAutor}">
                 <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
-                    <p:outputLabel value="#{autor.apellidos} #{autor.nombres}"/><br />
+                    <p:outputLabel value="• #{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
             </p:column>
-            
-           <p:column headerText="Proyecto" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
+
+            <p:column headerText="Proyecto" width="150" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
                 <ui:repeat value="#{tesis.proyectosCollection.toArray()}" var="proyecto">
-                    <p:outputLabel value="#{proyecto.titulo}"/><br />
+                    <p:outputLabel value="#{gestorProyecto.acortarTitulo(proyecto)}"/><br />
                 </ui:repeat>
             </p:column> 
-            
-            <p:column headerText="Co-Director" filterBy="#{tesis.codirectoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarCoDirector}">
+
+            <p:column headerText="Co-Director" width="150" filterBy="#{tesis.codirectoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarCoDirector}">
                 <ui:repeat value="#{tesis.codirectoresCollection.toArray()}" var="codirector">
-                    <p:outputLabel value="#{codirector.nombres} #{codirector.apellidos}"/><br />
+                    <p:outputLabel value="• #{codirector.nombres} #{codirector.apellidos}"/><br />
                 </ui:repeat>
             </p:column>
-            
-                  <p:column headerText="Tutores" filterBy="#{tesis.tutoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarTutor}">
+
+            <p:column headerText="Tutores" width="150" filterBy="#{tesis.tutoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarTutor}">
                 <ui:repeat value="#{tesis.tutoresCollection.toArray()}" var="tutor">
-                    <p:outputLabel value="#{tutor.nombres} #{tutor.apellidos}"/><br />
+                    <p:outputLabel value="• #{tutor.nombres} #{tutor.apellidos}"/><br />
                 </ui:repeat>
             </p:column>
+            <p:column headerText="Observaciones" width="100" filterBy="#{tesis.observaciones}" filterMatchMode="contains" sortBy="#{tesis.observaciones}">
+                <h:outputText value="#{tesis.observaciones}" />
+            </p:column>            
             <p:column exportable="false" headerText="Acta Aprobación" width="75">
                 <p:commandLink value="Descargar" ajax="false" rendered="#{tesis.archivoActaAprobacion != ''}">
                     <p:fileDownload value="#{gestorTesis.streamParaDescarga(tesis)}" />

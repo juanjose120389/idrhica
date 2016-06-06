@@ -279,7 +279,7 @@ public class GestorArticulo implements Serializable {
         options.put("width", "75%");
         options.put("modal", true);
         options.put("contentWidth", "100%");
-        GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
+        GestorDialogListaPersonas.getInstance().prepararApertura();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
     public void agregarProyecto() {
@@ -586,7 +586,8 @@ public class GestorArticulo implements Serializable {
         idFirmaGen = -1L;
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
-        GestorProyecto.getInstance().actualizarListaProyecto();        
+        GestorProyecto.getInstance().actualizarListaProyecto();
+        GestorDialogListaPersonas.getInstance().resetearDialog();
     }
 
     public String initModificarArticulo(Long id) {

@@ -5,34 +5,54 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
+        <style>
+            .ui-inputfield.ui-inputtext,.ui-inputfield.ui-inputtextarea {
+                width: 300px;
+            }
+            .ui-messages-error, .ui-message-error {
+                display: inline-block;
+            }
+        </style>
         <p:panel header="#{gestorTesis.modoModificar?'Modificar':'Nueva'} Tesis">
             <h:panelGrid columns="3">
-                <p:outputLabel value="Título"/>
-                <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorTesis.tesis.nombre}"/>  
-                <p:message for="txtNombre"/>
+                <p:outputLabel value="Título">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <h:panelGroup layout="block">
+                    <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorTesis.tesis.nombre}"/>  
+                    <p:message for="txtNombre"/>
+                </h:panelGroup>
+                <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Tipo" />
-                <p:selectOneMenu value="#{gestorTesis.tesis.tipo}" style="width: 150px">
+                <p:selectOneMenu value="#{gestorTesis.tesis.tipo}" style="width: 300px">
                     <f:selectItems value="#{gestorTesis.tiposTesis}" var="tipo"
                                    itemValue="#{tipo}" itemLabel="#{label['tesis.tipo.' += tipo]}" />
                 </p:selectOneMenu>
                 <h:panelGroup layout="block"/>
 
-                <p:outputLabel value="Director" />
-                <p:selectOneMenu style="width: 150px" id="cmbPersona" value="#{gestorTesis.tesis.director}" converter="personaConverter"
-                                 var="per" filter="true" filterMatchMode="contains">
-                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+                <p:outputLabel value="Director" >
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <h:panelGroup layout="block">
+                    <p:selectOneMenu required="true" requiredMessage="#{label.required}" style="width: 300px" id="cmbDirector" value="#{gestorTesis.tesis.director}" converter="personaConverter"
+                                     var="per" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
-                    <p:column style="width:10%">
-                        <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
-                    </p:column>
-                </p:selectOneMenu>                                
+                        <p:column>
+                            <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                        </p:column>
+                    </p:selectOneMenu>                                
+                    <p:message for="cmbDirector"/>
+                </h:panelGroup>
                 <h:panelGroup layout="block"/>            
 
                 <p:outputLabel value="Co-directores"/>
                 <h:panelGroup layout="block" id="divCodirectores">
                     <h:panelGroup layout="block" style="height: 15px"/>
-                    <p:dataTable id="dtCodirectores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorTesis.listaCodirectores}" rowKey="#{persona.id}">
+                    <p:dataTable id="dtCodirectores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" 
+                                 value="#{gestorTesis.listaCodirectores}" rowKey="#{persona.id}" emptyMessage="#{label.emptyMessage}">
                         <p:column headerText="Identificación">
                             <h:outputText value="#{persona.identificacion}" />
                         </p:column>
@@ -41,11 +61,6 @@
                         </p:column>
                         <p:column headerText="Apellidos">
                             <h:outputText value="#{persona.apellidos}" />
-                        </p:column>
-                        <p:column headerText="Fecha Nacimiento" width="150">
-                            <h:outputText value="#{persona.fechaNacimiento}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
                         </p:column>
                         <p:column style="text-align: center" width="32">
                             <p:commandButton action="#{gestorTesis.quitarCodirector(persona)}" update="dtCodirectores" process="@this" partialSubmit="true"  icon="ui-icon-close" title="Eliminar"/>
@@ -63,7 +78,8 @@
                 <p:outputLabel value="Tutores"/>
                 <h:panelGroup layout="block" id="divTutores">
                     <h:panelGroup layout="block" style="height: 15px"/>
-                    <p:dataTable id="dtTutores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorTesis.listaTutores}" rowKey="#{persona.id}">
+                    <p:dataTable id="dtTutores" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" 
+                                 value="#{gestorTesis.listaTutores}" rowKey="#{persona.id}" emptyMessage="#{label.emptyMessage}">
                         <p:column headerText="Identificación">
                             <h:outputText value="#{persona.identificacion}" />
                         </p:column>
@@ -72,11 +88,6 @@
                         </p:column>
                         <p:column headerText="Apellidos">
                             <h:outputText value="#{persona.apellidos}" />
-                        </p:column>
-                        <p:column headerText="Fecha Nacimiento" width="150">
-                            <h:outputText value="#{persona.fechaNacimiento}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
                         </p:column>
                         <p:column style="text-align: center" width="32">
                             <p:commandButton action="#{gestorTesis.quitarTutor(persona)}" update="dtTutores" process="@this" partialSubmit="true"  icon="ui-icon-close" title="Eliminar"/>
@@ -94,7 +105,8 @@
                 <p:outputLabel value="Autores"/>
                 <h:panelGroup layout="block" id="divAutoresTesis">
                     <h:panelGroup layout="block" style="height: 15px"/>
-                    <p:dataTable id="dtAutoresTesis" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" value="#{gestorTesis.listaAutoresTesis}" rowKey="#{personaT.id}">
+                    <p:dataTable id="dtAutoresTesis" paginator="true" paginatorAlwaysVisible="false" rows="10" var="persona" 
+                                 value="#{gestorTesis.listaAutoresTesis}" rowKey="#{personaT.id}" emptyMessage="#{label.emptyMessage}">
                         <p:column headerText="Identificación">
                             <h:outputText value="#{persona.identificacion}" />
                         </p:column>
@@ -103,11 +115,6 @@
                         </p:column>
                         <p:column headerText="Apellidos">
                             <h:outputText value="#{persona.apellidos}" />
-                        </p:column>
-                        <p:column headerText="Fecha Nacimiento" width="150">
-                            <h:outputText value="#{persona.fechaNacimiento}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
                         </p:column>
                         <p:column style="text-align: center" width="32">
                             <p:commandButton action="#{gestorTesis.quitarAutor(persona)}" update="dtAutoresTesis" process="@this" partialSubmit="true"  icon="ui-icon-close" title="Eliminar"/>
@@ -125,11 +132,12 @@
                 <p:outputLabel value="Asociado a Proyectos"/>
                 <h:panelGroup layout="block" id="divProyectos">
                     <h:panelGroup layout="block" style="height: 15px"/>
-                    <p:dataTable id="dtProyectos" paginator="true" paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorTesis.listaProyectos}">
-                        <p:column headerText="Título" width="450">
+                    <p:dataTable id="dtProyectos" paginator="true" paginatorAlwaysVisible="false" rows="10" var="proyecto" 
+                                 value="#{gestorTesis.listaProyectos}" emptyMessage="#{label.emptyMessage}">
+                        <p:column headerText="Título">
                             <h:outputText value="#{proyecto.titulo}"/>
                         </p:column>
-                        <p:column headerText="Director">
+                        <p:column headerText="Director" width="300">
                             <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
                         </p:column>
                         <p:column headerText="Fecha Finalización" width="150">
@@ -150,9 +158,9 @@
                     <h:panelGroup layout="block" style="height: 15px"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/> 
-                
+
                 <p:outputLabel value="Universidad"/>
-                <p:selectOneMenu id="cmbUniversidad" style="width: 170px" styleClass="cmbUniversidad" value="#{gestorTesis.tesis.universidad}" converter="universidadConverter"
+                <p:selectOneMenu id="cmbUniversidad" style="width: 300px" styleClass="cmbUniversidad" value="#{gestorTesis.tesis.universidad}" converter="universidadConverter"
                                  var="uni" filter="true" filterMatchMode="contains">
                     <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
 
@@ -164,8 +172,8 @@
 
                 <p:outputLabel value="Facultad"/>
                 <p:inputText id="txtFacultad" value="#{gestorTesis.tesis.facultad}" /> 
- 
-              
+
+
 
                 <h:panelGroup/>
 
@@ -188,8 +196,8 @@
                 <p:outputLabel value="Observaciones"/>
                 <p:inputTextarea rows="2"  id="txtObservaciones"  value="#{gestorTesis.tesis.observaciones}" /> 
                 <p:message for="txtObservaciones" />
-                
-                
+
+
                 <p:outputLabel value="Acta aprobación PDF"/>
                 <h:panelGroup layout="block">
                     <p:fileUpload fileUploadListener="#{gestorTesis.fileUploadListener}" 
@@ -206,18 +214,18 @@
                     <h:panelGroup id="spanTamanioArchivo">
                         <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorTesis.tesis.archivoActaAprobacion != ''}" value="Tamaño archivo: #{gestorTesis.tamanoArchivo}"/>
                     </h:panelGroup>
-                    
+
                 </h:panelGroup> 
-                
+
                 <h:panelGroup layout="block"/> 
-                 
+
             </h:panelGrid>        
         </p:panel>
-        
+
         <h:panelGroup layout="block" style="height: 15px"/>
-       
+
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorTesis.guardar()}" icon="fa fa-save"/>
-   
+
     </ui:define>
-    
+
 </ui:composition>

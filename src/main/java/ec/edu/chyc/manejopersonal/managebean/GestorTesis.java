@@ -101,6 +101,10 @@ public class GestorTesis implements Serializable {
         GestorProyecto.getInstance().actualizarListaProyecto();
         listaAutoresTesis.clear();
         listaProyectos.clear();
+        listaCodirectores.clear();
+        listaTutores.clear();
+        
+        GestorDialogListaPersonas.getInstance().resetearDialog();
 
         tamanoArchivo = "";
     }
@@ -278,7 +282,7 @@ public class GestorTesis implements Serializable {
         options.put("width", "75%");
         options.put("modal", true);
         options.put("contentWidth", "100%");
-        GestorDialogListaPersonas.getInstance().clearListaPersonasSel();
+        GestorDialogListaPersonas.getInstance().prepararApertura();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
 

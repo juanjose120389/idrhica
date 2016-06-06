@@ -62,17 +62,22 @@
                 <h:panelGroup/>
 
 
-                <p:outputLabel value="Persona"/>
-                <p:selectOneMenu style="width: 300px" id="cmbPersona2" value="#{gestorContrato.contrato.persona}" converter="personaConverter"
-                                 var="uni" filter="true" filterMatchMode="contains">
-                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
+                <p:outputLabel value="Persona">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <h:panelGroup layout="block">
+                    <p:selectOneMenu required="true" requiredMessage="#{label.required}" style="width: 300px" id="cmbPersona2" value="#{gestorContrato.contrato.persona}" converter="personaConverter"
+                                     var="uni" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
 
-                    <p:column style="width:10%">
-                        <p:outputLabel value="#{uni.nombres} #{uni.apellidos}"/>
-                    </p:column>
-                </p:selectOneMenu>
-                <h:panelGroup layout="block"/>
+                        <p:column>
+                            <p:outputLabel value="#{uni.nombres} #{uni.apellidos}"/>
+                        </p:column>
+                    </p:selectOneMenu>
+                    <p:message for="cmbPersona2"/>
+                </h:panelGroup>
+                <h:panelGroup/>
 
                 <h:panelGroup layout="block" style="width: 120px">
                     <p:outputLabel value="Administrador del Contrato" />
@@ -85,8 +90,8 @@
                     <p:column style="width:10%">
                         <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                     </p:column>
-                </p:selectOneMenu>                                
-                <h:panelGroup layout="block"/>
+                </p:selectOneMenu>
+                <p:message for="cmbPersona"/>
 
                 <h:panelGroup layout="block" id="divLblProyecto">
                     <p:outputLabel value="Proyecto" rendered="#{!gestorContrato.esProfesor}"/>

@@ -75,18 +75,42 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
             em.persist(obj);
             
             for (Persona perAutor : obj.getAutoresCollection()) {
-                Persona perAutorAttached = em.find(Persona.class, perAutor.getId());
-                perAutorAttached.getTesisCollection().add(obj);
+
+                if (perAutor.getId() == null || perAutor.getId() < 0) {
+                    perAutor.setId(null);
+                    em.persist(perAutor);
+                    perAutor.getTesisCollection().add(obj);
+                } else {
+                    Persona perAutorAttached = em.find(Persona.class, perAutor.getId());
+                    perAutorAttached.getTesisCollection().add(obj);                    
+                }
             }
             
             for (Persona perCodirector : obj.getCodirectoresCollection()) {
-                Persona perCodirectorAttached = em.find(Persona.class, perCodirector.getId());
-                perCodirectorAttached.getTesisComoCodirectorCollection().add(obj);
+
+                
+                if (perCodirector.getId() == null || perCodirector.getId() < 0) {
+                    perCodirector.setId(null);
+                    em.persist(perCodirector);
+                    perCodirector.getTesisComoCodirectorCollection().add(obj);                    
+                } else {
+                    Persona perCodirectorAttached = em.find(Persona.class, perCodirector.getId());
+                    perCodirectorAttached.getTesisComoCodirectorCollection().add(obj);                    
+                }
+                
             }
             
             for (Persona perTutor : obj.getTutoresCollection()) {
-                Persona perTutorAttached = em.find(Persona.class, perTutor.getId());
-                perTutorAttached.getTesisComoTutorCollection().add(obj);
+                
+                if (perTutor.getId() == null || perTutor.getId() < 0) {
+                    perTutor.setId(null);
+                    em.persist(perTutor);
+                    perTutor.getTesisComoTutorCollection().add(obj);
+                } else {
+                    Persona perTutorAttached = em.find(Persona.class, perTutor.getId());
+                    perTutorAttached.getTesisComoTutorCollection().add(obj);
+                    
+                }
             }            
             
             for (Proyecto proy : obj.getProyectosCollection()) {

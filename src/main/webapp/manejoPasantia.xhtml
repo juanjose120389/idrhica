@@ -7,27 +7,32 @@
     <ui:define name="body">
         <p:panel header="#{gestorPasantia.modoModificar?'Modificar':'Nueva'} Pasantía">
             <h:panelGrid columns="3">
-                <p:outputLabel value="Tema"/>
-                <p:inputText id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.tema}"/>  
+                <p:outputLabel value="Tema">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <p:inputText style="width: 300px" id="txtTema" requiredMessage="Requerido" required="true" value="#{gestorPasantia.pasantia.tema}"/>  
                 <p:message for="txtTema"/>
 
                 <p:outputLabel value="# Horas"/>
                 <p:spinner min="1" size="9" id="spinHoras" required="true" requiredMessage="Requerido" value="#{gestorPasantia.pasantia.numeroHoras}"/>
                 <p:message for="spinHoras" />
 
-                <p:outputLabel value="Director/Profesor" />
-                <p:selectOneMenu id="cmbPersona" style="width: 170px" value="#{gestorPasantia.pasantia.coordinador}" converter="personaConverter"
-                                 var="per" filter="true" filterMatchMode="contains">
+                <p:outputLabel value="Director/Profesor" >
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <p:selectOneMenu id="cmbPersona" style="width: 300px" value="#{gestorPasantia.pasantia.coordinador}" converter="personaConverter"
+                                 var="per" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{label.required}">
+                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
                     <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
                     <p:column>
                         <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                     </p:column>
                 </p:selectOneMenu>                                
-                <h:panelGroup layout="block"/>
+                <p:message for="cmbPersona"/>
 
                 <p:outputLabel value="Tutor" />
-                <p:selectOneMenu style="width: 170px" value="#{gestorPasantia.pasantia.tutor}" converter="personaConverter"
+                <p:selectOneMenu style="width: 300px" value="#{gestorPasantia.pasantia.tutor}" converter="personaConverter"
                                  var="per" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="Ninguno" itemValue="" />
                     <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
@@ -39,19 +44,22 @@
                 <h:panelGroup layout="block"/>
 
 
-                <p:outputLabel value="Pasante"/>
-                <p:selectOneMenu id="cmbPersona2" style="width: 170px" value="#{gestorPasantia.pasantia.pasante}" converter="personaConverter"
+                <p:outputLabel value="Pasante">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <p:selectOneMenu id="cmbPersona2" required="true" requiredMessage="#{label.required}" style="width: 300px" value="#{gestorPasantia.pasantia.pasante}" converter="personaConverter"
                                  var="uni" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
                     <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
 
                     <p:column>
                         <p:outputLabel value="#{uni.nombres} #{uni.apellidos}"/>
                     </p:column>
                 </p:selectOneMenu>
-                <h:panelGroup layout="block"/>
+                <p:message for="cmbPersona2"/>
 
                 <p:outputLabel value="Proyecto" />
-                <p:selectOneMenu style="width: 170px" value="#{gestorPasantia.pasantia.proyecto}" converter="proyectoConverter"
+                <p:selectOneMenu style="width: 300px" value="#{gestorPasantia.pasantia.proyecto}" converter="proyectoConverter"
                                  var="proy" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="Ninguno" itemValue="" />
                     <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u" itemLabel="#{u.titulo}" itemValue="#{u}" />
@@ -62,8 +70,9 @@
                 <h:panelGroup layout="block"/>            
 
                 <p:outputLabel value="Universidad"/>
-                <p:selectOneMenu id="cmbUniversidad" style="width: 170px" styleClass="cmbUniversidad" value="#{gestorPasantia.pasantia.universidad}" converter="universidadConverter"
+                <p:selectOneMenu id="cmbUniversidad" style="width: 300px" styleClass="cmbUniversidad" value="#{gestorPasantia.pasantia.universidad}" converter="universidadConverter"
                                  var="uni" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
                     <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
 
                     <p:column>

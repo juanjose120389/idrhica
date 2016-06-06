@@ -13,6 +13,9 @@
             .ui-messages-error, .ui-message-error {
                 display: inline-block;
             }            
+            .ui-inputfield.ui-inputtext,.ui-inputfield.ui-inputtextarea {
+                width: 300px;
+            }            
         </style>
 
         <h:panelGroup layout="block" id="divDialogs">
@@ -48,22 +51,22 @@
                 <h:panelGroup/>                
 
                 <p:outputLabel value="Director" />
-                <p:selectOneMenu style="width: 140px" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
+                <p:selectOneMenu style="width: 300px" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
                                  var="per" filter="true" filterMatchMode="contains">
-                    <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
-                    <p:column style="width:10%">
+                    <p:column>
                         <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                     </p:column>
                 </p:selectOneMenu>  
                 <h:panelGroup layout="block"/>
                 <p:outputLabel value="Co-Director" />
-                <p:selectOneMenu style="width: 140px" id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="personaConverter"
+                <p:selectOneMenu style="width: 300px" id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="personaConverter"
                                  var="per2" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="Ninguno" itemValue="" />
-                    <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
+                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
 
-                    <p:column style="width:10%">
+                    <p:column>
                         <p:outputLabel value="#{per2.nombres} #{per2.apellidos}"/>
                     </p:column>
                 </p:selectOneMenu>  

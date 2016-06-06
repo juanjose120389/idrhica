@@ -39,7 +39,8 @@
             </p:column>           
 
             <p:column headerText="Proyecto" sortBy="#{convenio.proyecto.titulo}" filterBy="#{convenio.proyecto.titulo}" filterMatchMode="contains" >
-                <h:outputText value="#{gestorProyecto.acortarTitulo(convenio.proyecto)}" style="word-wrap: break-word;"/>
+                <h:outputText id="lblTituloProy" value="#{gestorProyecto.acortarTitulo(convenio.proyecto)}" style="word-wrap: break-word;"/>
+                <p:tooltip for="lblTituloProy" style="width: 400px; word-wrap: break-word;" value="#{convenio.proyecto.titulo}" />                    
             </p:column>   
             
              <p:column headerText="Admnistrador" filterBy="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" filterMatchMode="contains" sortBy="#{convenio.administrador.nombres}">
