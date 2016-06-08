@@ -49,8 +49,12 @@ public class GestorGeneral implements Serializable {
         actualizarListaUniversidades();
         actualizarListaTitulos();
     }
+    
+    /**
+     * Cerrar sesión cuando pase el tiempo establecido (por defecto 30 minutos)
+     */
     public void onIdle() {
-        
+        GestorUsuario.getInstance().logout();
     }
     public void mantenerSesion() {
         
