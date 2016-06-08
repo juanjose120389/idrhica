@@ -25,6 +25,12 @@ and open the template in the editor.
         </style>
     </h:head>
     <h:body>
+        <h:form id="formIdle">
+            <p:idleMonitor timeout="30001">
+                <p:ajax event="idle" listener="#{gestorGeneral.onIdle()}" update=":formContenido :formMenu"/>
+                <p:ajax event="active" listener="#{gestorGeneral.mantenerSesion()}" />
+            </p:idleMonitor>            
+        </h:form>
         <div id="header">
             <!-- HEADER -->
         </div>

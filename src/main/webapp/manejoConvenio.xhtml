@@ -27,7 +27,9 @@
                 <p:inputTextarea rows="2" id="txtObjetivo" value="#{gestorConvenio.convenio.objetivo}"/>
                 <p:message for="txtObjetivo"/>
 
-                <p:outputLabel value="Institución"/>
+                <p:outputLabel value="Institución">
+                    <span class="asterisk"/>
+                </p:outputLabel>
                 <p:selectOneMenu id="cmbInstitucion" style="width: 300px" value="#{gestorConvenio.convenio.institucion}" converter="institucionConverter"
                                  var="inst" filter="true" filterMatchMode="contains">
                     <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="ins" itemLabel="#{ins.nombre}" itemValue="#{ins}" />
@@ -46,20 +48,24 @@
                 <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaFin}"/>  
                 <h:panelGroup layout="block"/>
 
-                <p:outputLabel value="Proyecto" />
+                <p:outputLabel value="Proyecto">
+                    <span class="asterisk"/>
+                </p:outputLabel>
                 <p:selectOneMenu id="cmbProyecto" style="width: 300px" value="#{gestorConvenio.convenio.proyecto}" converter="proyectoConverter"
-                                 var="per2" filter="true" filterMatchMode="contains">
+                                 var="per2" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{label.required}">
+                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
                     <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
 
                     <p:column>
                         <p:outputLabel value="#{per2.titulo}"/>
                     </p:column>
                 </p:selectOneMenu>                                
-                <h:panelGroup layout="block"/>
+                <p:message for="cmbProyecto"/>
 
                 <p:outputLabel value="Administrador" />
                 <p:selectOneMenu style="width: 300px" id="cmbAdmin" value="#{gestorConvenio.convenio.administrador}" converter="personaConverter"
                                  var="per" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
                     <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
                     <p:column>

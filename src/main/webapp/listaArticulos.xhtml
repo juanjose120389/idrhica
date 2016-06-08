@@ -23,7 +23,7 @@
             }            
         </style>
         <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
-                     paginator="true" resizableColumns="true" liveResize="true"
+                     paginator="true" resizableColumns="true" liveResize="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                      >
             <f:facet name="{Exporters}">

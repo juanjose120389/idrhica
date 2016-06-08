@@ -13,7 +13,7 @@
             .ui-messages-error, .ui-message-error {
                 display: inline-block;
             }            
-            .ui-inputfield.ui-inputtext,.ui-inputfield.ui-inputtextarea {
+            td > .ui-inputfield.ui-inputtext,td > .ui-inputfield.ui-inputtextarea {
                 width: 300px;
             }            
         </style>
@@ -50,16 +50,22 @@
                 </h:panelGroup>
                 <h:panelGroup/>                
 
-                <p:outputLabel value="Director" />
-                <p:selectOneMenu style="width: 300px" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
-                                 var="per" filter="true" filterMatchMode="contains">
-                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
-
-                    <p:column>
-                        <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
-                    </p:column>
-                </p:selectOneMenu>  
+                <p:outputLabel value="Director" >
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <h:panelGroup layout="block">
+                    <p:selectOneMenu style="width: 300px" required="true" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
+                                     var="per" filter="true" filterMatchMode="contains" requiredMessage="#{label.required}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />                        
+                        <p:column>
+                            <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                        </p:column>
+                    </p:selectOneMenu>  
+                    <p:message for="cmbDirector"/>
+                </h:panelGroup>
                 <h:panelGroup layout="block"/>
+                
                 <p:outputLabel value="Co-Director" />
                 <p:selectOneMenu style="width: 300px" id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="personaConverter"
                                  var="per2" filter="true" filterMatchMode="contains">
@@ -71,15 +77,6 @@
                     </p:column>
                 </p:selectOneMenu>  
                 <h:panelGroup layout="block"/>
-
-
-                <p:outputLabel value="Duración"/>
-                <h:panelGroup layout="block">
-                    <p:spinner id="basic" value="#{gestorProyecto.proyecto.duracion}" min="1" />
-
-                    <p:outputLabel value=" Meses"/>
-                </h:panelGroup>            
-                <h:panelGroup/> 
 
                 <p:outputLabel value="Fecha de Inicio">
                     <span class="asterisk"/>
@@ -166,10 +163,10 @@
                 <h:panelGroup layout="block"/> 
 
             </h:panelGrid>  
-            
+
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>
-        
+
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorProyecto.guardar()}" icon="fa fa-save"/>
 
     </ui:define>

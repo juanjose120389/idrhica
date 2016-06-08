@@ -49,6 +49,12 @@ public class GestorGeneral implements Serializable {
         actualizarListaUniversidades();
         actualizarListaTitulos();
     }
+    public void onIdle() {
+        
+    }
+    public void mantenerSesion() {
+        
+    }
     
     public String regresarPaginaPrincipal() {
         return "index";

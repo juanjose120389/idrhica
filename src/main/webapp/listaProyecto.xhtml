@@ -41,29 +41,29 @@
                 <h:outputText value="#{proyecto.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
-                <h:panelGroup rendered="#{!proyecto.fechaFin.equals(proyecto.fechaFinEnDocumento)}">
+                <h:panelGroup rendered="#{!proyecto.fechaFin.equals(proyecto.fechaFinEnDocumento) and proyecto.fechaFinEnDocumento != null}">
                     <br/>
                     <h:outputText style="font-size: 0.8em" value="Fecha original: "/>
                     <h:outputText style="font-size: 0.8em" value="#{proyecto.fechaFinEnDocumento}">
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </h:panelGroup>
-                <h:panelGroup layout="block" style="font-size: 0.8em">
+                <h:panelGroup layout="block" style="font-size: 0.8em" rendered="#{proyecto.fechaFinEnDocumento != null}">
                     <p:outputLabel value="Duración: #{proyecto.duracion} meses"/>
                 </h:panelGroup>
                 
             </p:column>
 
 
-            <p:column headerText="Director" filterBy="#{proyecto.director.nombres} #{proyecto.director.apellidos}" filterMatchMode="contains" sortBy="#{proyecto.director.nombres}">
+            <p:column headerText="Director" width="150" filterBy="#{proyecto.director.nombres} #{proyecto.director.apellidos}" filterMatchMode="contains" sortBy="#{proyecto.director.nombres}">
                 <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
             </p:column>
 
-            <p:column headerText="Co-Director" filterBy="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" filterMatchMode="contains" sortBy="#{proyecto.codirector.nombres}">
+            <p:column headerText="Co-Director" width="150" filterBy="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" filterMatchMode="contains" sortBy="#{proyecto.codirector.nombres}">
                 <h:outputText value="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" />
             </p:column>
 
-            <p:column headerText="Observaciones" filterBy="#{proyecto.observaciones}" filterMatchMode="contains" sortBy="#{proyecto.observaciones}">
+            <p:column headerText="Observaciones" width="200" filterBy="#{proyecto.observaciones}" filterMatchMode="contains" sortBy="#{proyecto.observaciones}">
                 <h:outputText value="#{proyecto.observaciones}" />
             </p:column>
             <p:column exportable="false" width="80">

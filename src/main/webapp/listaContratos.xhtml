@@ -7,7 +7,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
         <p:dataTable widgetVar="contratoTable" id="contratoTable" var="contrato" value="#{gestorContrato.listaContrato}" rows="10"
-                     paginator="true"
+                     paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}   {Exporters}"
                      >
 

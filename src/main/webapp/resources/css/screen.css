@@ -62,15 +62,15 @@ body {
 	background:#fff;		/* right column background colour */
 }
 .leftmenu .colleft {
-	right:87%;			/* right column width */
+	right:88%;			/* right column width */
 	/*background:#f4f4f4;*/	/* left column background colour */
 }
 .leftmenu .col1 {
-	width:85%;			/* right column content width */
+	width:86%;			/* right column content width */
 	left:100%;			/* 100% plus left column left padding */
 }
 .leftmenu .col2 {
-	width:11%;			/* left column content width (column width minus left and right padding) */
+	width:10%;			/* left column content width (column width minus left and right padding) */
 	left:3%;			/* (right column left and right padding) plus (left column left padding) */
 }
 /* Footer styles */

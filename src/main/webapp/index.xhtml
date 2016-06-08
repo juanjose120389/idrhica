@@ -58,7 +58,7 @@
                     </p:selectOneButton>
 
                 </f:facet>            
-                <h:outputText value="#{persona.activo ? 'Activo' : 'Inactivo'}" />
+                <h:outputText value="#{persona.activo == true ? 'Activo' : persona.activo == false ? 'Inactivo' : 'Externo'}" />
             </p:column>
 
             <p:column headerText="Correo" filterBy="#{persona.correo}" filterMatchMode="contains">
@@ -69,7 +69,7 @@
                 <h:outputText value="#{persona.skype}" />
             </p:column>            
 
-            <p:column width="200">
+            <p:column width="90">
                 <f:facet name="header">
                     Cumpleaños
                     <h:panelGroup layout="block" style="display: block;  width: 100%; margin: auto;" rendered="false">

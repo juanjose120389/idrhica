@@ -7,7 +7,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
         <p:dataTable widgetVar="pasantiaTable" id="pasantiaTable" var="pasantia" value="#{gestorPasantia.listaPasantias}" rows="10"
-                     paginator="true"
+                     paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                      >
             <f:facet name="{Exporters}">

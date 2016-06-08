@@ -99,6 +99,7 @@ public class GestorTesis implements Serializable {
         tesis = new Tesis();
         GestorContrato.getInstance().actualizarListaContrato();
         GestorProyecto.getInstance().actualizarListaProyecto();
+        GestorGeneral.getInstance().actualizarListaUniversidades();
         listaAutoresTesis.clear();
         listaProyectos.clear();
         listaCodirectores.clear();
