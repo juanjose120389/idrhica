@@ -13,10 +13,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.TreeTableColumn;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.CellEditEvent;
 
 /**
  *
@@ -46,8 +46,8 @@ public class GestorTesista implements Serializable {
         } catch (Exception ex) {
             Logger.getLogger(GestorTesista.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
-    public void onCellEdit(TreeTableColumn.CellEditEvent event) {
+    }
+    public void onCellEdit(CellEditEvent event) {
         Object oldValue = event.getOldValue();
         Object newValue = event.getNewValue();
          
