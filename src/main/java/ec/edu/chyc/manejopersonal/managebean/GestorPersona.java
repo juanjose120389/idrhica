@@ -71,7 +71,7 @@ public class GestorPersona implements Serializable {
     private Universidad universidad = null;
     private Titulo titulo = null;
     
-    private List<Universidad> listaUniversidadesAgregadas = new ArrayList<>();
+    //private List<Universidad> listaUniversidadesAgregadas = new ArrayList<>();
     private List<Titulo> listaTitulosAgregados = new ArrayList<>();
     private List<PersonaFirma> listaPersonaFirmas = new ArrayList<>();
     
@@ -139,7 +139,7 @@ public class GestorPersona implements Serializable {
 
     public String guardarUniversidad() {
         universidad.setId(idUniversidadGenerada);
-        listaUniversidadesAgregadas.add(universidad);
+        GestorGeneral.getInstance().getListaUniversidadesAgregadas().add(universidad);
         tituloDePersona.setUniversidad(universidad);
         universidad = new Universidad();
         
@@ -234,7 +234,7 @@ public class GestorPersona implements Serializable {
         GestorGeneral.getInstance().actualizarListaUniversidades();
         GestorGeneral.getInstance().actualizarListaTitulos();
         GestorGeneral.getInstance().getListaUniversidadesAgregadas().clear();
-        listaUniversidadesAgregadas.clear();
+        //listaUniversidadesAgregadas.clear();
         listaTitulosAgregados.clear();
         listaPersonaFirmas.clear();        
     }
@@ -356,7 +356,7 @@ public class GestorPersona implements Serializable {
                 listResults.add(uni);
             }
         }
-        for (Universidad uni : listaUniversidadesAgregadas) {
+        for (Universidad uni : GestorGeneral.getInstance().getListaUniversidadesAgregadas()) {
             if (StringUtils.containsIgnoreCase(uni.getNombre(), query)) {
                 listResults.add(uni);
             }
@@ -455,14 +455,6 @@ public class GestorPersona implements Serializable {
     
     public void setUniversidad(Universidad universidad) {
         this.universidad = universidad;
-    }
-    
-    public List<Universidad> getListaUniversidadesAgregadas() {
-        return listaUniversidadesAgregadas;
-    }
-    
-    public void setListaUniversidadesAgregadas(List<Universidad> listaUniversidadesAgregadas) {
-        this.listaUniversidadesAgregadas = listaUniversidadesAgregadas;
     }
     
     public List<PersonaTitulo> getListaPersonaTitulos() {

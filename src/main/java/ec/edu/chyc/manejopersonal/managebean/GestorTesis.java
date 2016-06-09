@@ -112,7 +112,6 @@ public class GestorTesis implements Serializable {
         
         GestorDialogListaPersonas.getInstance().resetearDialog();
         GestorGeneral.getInstance().getListaUniversidadesAgregadas().clear();
-        GestorPersona.getInstance().getListaUniversidadesAgregadas().clear();
 
         tamanoArchivo = "";
     }

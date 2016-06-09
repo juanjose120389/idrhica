@@ -35,11 +35,11 @@ public class UniversidadConverter implements Converter {
         for (Universidad uni : GestorGeneral.getInstance().getListaUniversidadesAgregadas()) {
             if (uni.getId() == id) 
                 return uni;            
-        }        
+        }        /*
         for (Universidad uni : GestorPersona.getInstance().getListaUniversidadesAgregadas()) {
             if (uni.getId() == id) 
                 return uni;            
-        }
+        }*/
         
         Universidad obj = new Universidad();
         obj.setId(id);

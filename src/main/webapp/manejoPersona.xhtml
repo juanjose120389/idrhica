@@ -202,7 +202,7 @@
 
                                     <p:selectOneMenu id="cmbUniversidad" styleClass="cmbUniversidad" value="#{personaTitulo.universidad}" converter="universidadConverter"
                                                      var="uni" filter="true" filterMatchMode="contains">
-                                        <f:selectItems value="#{gestorPersona.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+                                        <f:selectItems value="#{gestorGeneral.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
                                         <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
 
                                         <p:column>
@@ -271,9 +271,10 @@
             <h:panelGroup layout="block" style="clear: both" id="checksTipoPersona">
 
             </h:panelGroup>
-<pe:keyFilter for="txtNombres" regEx="/[A-Z áéíóú]/i"/>  
-<pe:keyFilter for="txtApellidos" regEx="/[A-Z áéíóú]/i"/> 
-<pe:keyFilter for="txtCelular" regEx="/[\d\-]/"/> 
+            
+            <pe:keyFilter for="txtNombres" regEx="/[A-Z áéíóú]/i" preventPaste="false"/>  
+<pe:keyFilter for="txtApellidos" regEx="/[A-Z áéíóú]/i" preventPaste="false"/> 
+<pe:keyFilter for="txtCelular" regEx="/[\d\-]/" preventPaste="false"/> 
 
 
         </p:panel>
