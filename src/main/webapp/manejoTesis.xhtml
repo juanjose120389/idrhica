@@ -12,8 +12,36 @@
             .ui-messages-error, .ui-message-error {
                 display: inline-block;
             }
+            .linkDropdown {
+                margin-left: 15px;
+            }            
         </style>
-        <p:panel header="#{gestorTesis.modoModificar?'Modificar':'Nueva'} Tesis">
+        <h:panelGroup layout="block" id="divDialogs">
+            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" resizable="false" modal="true" width="400">
+                <h:panelGroup layout="block" id="divDlgUniversidad">
+                    <h:panelGrid id="panelCamposUniversidad" columns="3">
+                        <p:outputLabel value="Nombre"/>
+                        <p:inputText style="width: 100%" id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorTesis.universidad.nombre}"/>
+                        <p:message for="txtNombreUniversidad"/>                                
+
+                        <p:outputLabel value="País"/>
+                        <p:inputText style="width: 100%" id="txtPaisUniversidad" value="#{gestorTesis.universidad.pais}"/>
+                        <p:message for="txtPaisUniversidad"/>
+
+                        <p:outputLabel value="Ciudad"/>
+                        <p:inputText style="width: 100%" id="txtCiudadUniversidad" value="#{gestorTesis.universidad.ciudad}"/>
+                        <p:message for="txtCiudadUniversidad"/>
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" process="divDlgUniversidad" update="divDlgUniversidad cmbUniversidad" action="#{gestorTesis.guardarUniversidad()}"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
+                    </h:panelGrid>            
+                </h:panelGroup>
+            </p:dialog>  
+        </h:panelGroup>        
+        <p:panel header="#{gestorTesis.modoModificar?'Modificar':'Nueva'} Tesis" id="panelTesis">
+            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
             <h:panelGrid columns="3">
                 <p:outputLabel value="Título">
                     <span class="asterisk"/>
@@ -160,14 +188,19 @@
                 <h:panelGroup layout="block"/> 
 
                 <p:outputLabel value="Universidad"/>
-                <p:selectOneMenu id="cmbUniversidad" style="width: 300px" styleClass="cmbUniversidad" value="#{gestorTesis.tesis.universidad}" converter="universidadConverter"
-                                 var="uni" filter="true" filterMatchMode="contains">
-                    <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+                <h:panelGroup layout="block">
+                    <p:selectOneMenu id="cmbUniversidad" style="width: 300px" styleClass="cmbUniversidad" value="#{gestorTesis.tesis.universidad}" converter="universidadConverter"
+                                     var="uni" filter="true" filterMatchMode="contains">                        
+                        <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+                        <f:selectItems value="#{gestorGeneral.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
 
-                    <p:column>
-                        <p:outputLabel value="#{uni.nombre}"/>
-                    </p:column>
-                </p:selectOneMenu>
+                        <p:column>
+                            <p:outputLabel value="#{uni.nombre}"/>
+                        </p:column>
+                    </p:selectOneMenu>
+
+                    <p:commandLink value="Nueva universidad" styleClass="linkDropdown" process="@this" action="#{gestorTesis.abrirUniversidadDialog()}" oncomplete="PF('dlgUniversidad').show()"/>
+                </h:panelGroup>
                 <h:panelGroup/>
 
                 <p:outputLabel value="Facultad"/>
@@ -224,7 +257,7 @@
 
         <h:panelGroup layout="block" style="height: 15px"/>
 
-        <p:commandButton value="Guardar" update="formContenido" action="#{gestorTesis.guardar()}" icon="fa fa-save"/>
+        <p:commandButton value="Guardar" update="formContenido" process="panelTesis @this" action="#{gestorTesis.guardar()}" icon="fa fa-save"/>
 
     </ui:define>
 

@@ -72,6 +72,14 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            
+            if (obj.getUniversidad() != null) {
+                if (obj.getUniversidad().getId() == null || obj.getUniversidad().getId() < 0) {
+                    obj.getUniversidad().setId(null);
+                    em.persist(obj.getUniversidad());
+                }
+            }            
+            
             em.persist(obj);
             
             for (Persona perAutor : obj.getAutoresCollection()) {
@@ -142,6 +150,13 @@ public class TesisJpaController extends GenericJpaController<Tesis> implements S
             em.getTransaction().begin();
             
             Tesis tesisAntigua = em.find(Tesis.class,tesis.getId());
+            
+            if (tesis.getUniversidad() != null) {
+                if (tesis.getUniversidad().getId() == null || tesis.getUniversidad().getId() < 0) {
+                    tesis.getUniversidad().setId(null);
+                    em.persist(tesis.getUniversidad());
+                }
+            }            
             
             Set<Proyecto> listaProyectos = tesis.getProyectosCollection();
             Iterator<Proyecto> iterProyectosAnteriores = tesisAntigua.getProyectosCollection().iterator();

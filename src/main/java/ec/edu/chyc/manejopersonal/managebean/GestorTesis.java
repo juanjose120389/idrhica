@@ -6,12 +6,13 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.TesisJpaController;
-import ec.edu.chyc.manejopersonal.entity.Institucion;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
 import ec.edu.chyc.manejopersonal.entity.Tesis.TipoTesis;
+import ec.edu.chyc.manejopersonal.entity.Universidad;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
+import static ec.edu.chyc.manejopersonal.managebean.util.BeansUtils.ejecutarJS;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,6 +58,8 @@ public class GestorTesis implements Serializable {
     private List<Proyecto> listaProyectos = new ArrayList<>();
     private List<Persona> listaCodirectores = new ArrayList<>();
     private List<Persona> listaTutores = new ArrayList<>();
+    private Universidad universidad = null;
+    private long idUniversidadGen = -1L;
 
     private boolean modoModificar = false;
     private String tamanoArchivo = "";
@@ -105,7 +108,11 @@ public class GestorTesis implements Serializable {
         listaCodirectores.clear();
         listaTutores.clear();
         
+        idUniversidadGen= -1L;
+        
         GestorDialogListaPersonas.getInstance().resetearDialog();
+        GestorGeneral.getInstance().getListaUniversidadesAgregadas().clear();
+        GestorPersona.getInstance().getListaUniversidadesAgregadas().clear();
 
         tamanoArchivo = "";
     }
@@ -286,6 +293,24 @@ public class GestorTesis implements Serializable {
         GestorDialogListaPersonas.getInstance().prepararApertura();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
+    
+    public void abrirUniversidadDialog() {
+        universidad = new Universidad();
+        RequestContext.getCurrentInstance().update("formContenido:divDialogs");
+        //ejecutarJS("PF('dlgUniversidad').show()");        
+    }
+    public String guardarUniversidad() {
+        universidad.setId(idUniversidadGen);
+        tesis.setUniversidad(universidad);
+        GestorGeneral.getInstance().getListaUniversidadesAgregadas().add(universidad);
+        //listaUniversidadesAgregadas.add(universidad);
+        
+        universidad = new Universidad();
+        
+        idUniversidadGen--;
+        ejecutarJS("PF('dlgUniversidad').hide()");
+        return "";
+    }
 
     public String convertirListaPersonas(List<Persona> listaConvertir) {
         String r = "";
@@ -371,11 +396,16 @@ public class GestorTesis implements Serializable {
         return TipoTesis.values();
     }
 
-    public String guardar() {
+    public String guardar() {       
         tesis.setAutoresCollection(new HashSet(listaAutoresTesis));
         tesis.setProyectosCollection(new HashSet(listaProyectos));
         tesis.setCodirectoresCollection(new HashSet(listaCodirectores));
         tesis.setTutoresCollection(new HashSet(listaTutores));
+        
+        if (tesis.getAutoresCollection().isEmpty()) {
+            GestorMensajes.getInstance().mostrarMensajeWarn("Por favor, agregar autores a la tesis.");
+            return "";        
+        }        
 
         try {
             if (modoModificar) {
@@ -452,6 +482,14 @@ public class GestorTesis implements Serializable {
 
     public void setTamanoArchivo(String tamanoArchivo) {
         this.tamanoArchivo = tamanoArchivo;
+    }
+
+    public Universidad getUniversidad() {
+        return universidad;
+    }
+
+    public void setUniversidad(Universidad universidad) {
+        this.universidad = universidad;
     }
 
 }

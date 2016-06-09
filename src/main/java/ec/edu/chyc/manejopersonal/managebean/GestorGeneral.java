@@ -12,6 +12,7 @@ import ec.edu.chyc.manejopersonal.entity.Universidad;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,10 +28,12 @@ import javax.faces.context.FacesContext;
 @Named(value = "gestorGeneral")
 @SessionScoped
 public class GestorGeneral implements Serializable {
-    private List<Universidad> listaUniversidades = null;
+    private List<Universidad> listaUniversidades = new ArrayList<>();
     private List<Titulo> listaTitulos = null;
     private final UniversidadJpaController universidadController = new UniversidadJpaController();
     private final TituloJpaController tituloController = new TituloJpaController();
+    
+    private List<Universidad> listaUniversidadesAgregadas = new ArrayList<>();
 
     public static GestorGeneral getInstance()
     {
@@ -96,6 +99,14 @@ public class GestorGeneral implements Serializable {
 
     public void setListaTitulos(List<Titulo> listaTitulos) {
         this.listaTitulos = listaTitulos;
+    }
+
+    public List<Universidad> getListaUniversidadesAgregadas() {
+        return listaUniversidadesAgregadas;
+    }
+
+    public void setListaUniversidadesAgregadas(List<Universidad> listaUniversidadesAgregadas) {
+        this.listaUniversidadesAgregadas = listaUniversidadesAgregadas;
     }
     
 }

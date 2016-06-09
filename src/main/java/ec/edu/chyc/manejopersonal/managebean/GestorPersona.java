@@ -233,6 +233,7 @@ public class GestorPersona implements Serializable {
         
         GestorGeneral.getInstance().actualizarListaUniversidades();
         GestorGeneral.getInstance().actualizarListaTitulos();
+        GestorGeneral.getInstance().getListaUniversidadesAgregadas().clear();
         listaUniversidadesAgregadas.clear();
         listaTitulosAgregados.clear();
         listaPersonaFirmas.clear();        
