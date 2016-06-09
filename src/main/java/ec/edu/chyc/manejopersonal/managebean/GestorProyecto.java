@@ -44,7 +44,7 @@ public class GestorProyecto implements Serializable {
     private Proyecto proyecto;
     private List<Proyecto> listaProyecto = new ArrayList<>();
     private List<Financiamiento> listaFinanciamientos = new ArrayList<>();
-    private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
+    //private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
     private Long idFinanciamientoGen = -1L;
     private Long idInstitucionGen = -1L;
     
@@ -84,7 +84,7 @@ public class GestorProyecto implements Serializable {
         institucion.setId(idInstitucionGen);
         financiamientoActual.setInstitucion(institucion);
         idInstitucionGen--;
-        listaInstitucionesAgregadas.add(institucion);
+        GestorInstitucion.getInstance().getListaInstitucionesAgregadas().add(institucion);
         
         institucion = new Institucion();
         mostrarDlgInstitucion = false;
@@ -151,6 +151,7 @@ public class GestorProyecto implements Serializable {
         GestorContrato.getInstance().actualizarListaContrato();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
+        GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
 
         institucion = null;
         mostrarDlgInstitucion = false;
@@ -158,7 +159,7 @@ public class GestorProyecto implements Serializable {
         hayExtensionFinalizacion = false;
         
         listaFinanciamientos.clear();
-        listaInstitucionesAgregadas.clear();        
+        GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
     }
 
     public String initCrearProyecto() {
@@ -231,7 +232,7 @@ public class GestorProyecto implements Serializable {
                 proyectoController.create(proyecto);
             }
             
-            listaInstitucionesAgregadas.clear();
+            GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
             return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
@@ -245,14 +246,6 @@ public class GestorProyecto implements Serializable {
 
     public void setListaFinanciamientos(List<Financiamiento> listaFinanciamientos) {
         this.listaFinanciamientos = listaFinanciamientos;
-    }
-
-    public List<Institucion> getListaInstitucionesAgregadas() {
-        return listaInstitucionesAgregadas;
-    }
-
-    public void setListaInstitucionesAgregadas(List<Institucion> listaInstitucionesAgregadas) {
-        this.listaInstitucionesAgregadas = listaInstitucionesAgregadas;
     }
 
     public boolean isMostrarDlgInstitucion() {

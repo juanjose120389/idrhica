@@ -12,9 +12,29 @@
             .ui-calendar > .ui-inputfield {
                 width: 100px;
             }
-
+            .linkDropdown {
+                margin-left: 15px;
+            }
         </style>
-        <p:panel header="#{gestorConvenio.modoModificar?'Modificar':'Nuevo'} Convenio">
+        <h:panelGroup layout="block" id="divDialogs">
+            <p:dialog id="dlgInstitucion" header="Institución" widgetVar="dlgInstitucion" focus="txtNombreInstitucion"
+                      resizable="false" modal="true" width="400">
+                <h:panelGroup layout="block" id="divDlgInstitucion">
+                    <h:panelGrid id="panelCamposInst" columns="3" width="100%">
+                        <p:outputLabel value="Nombre"/>
+                        <p:inputText style="width: 99%" id="txtNombreInstitucion" required="true" requiredMessage="#{label.required}" value="#{gestorConvenio.institucion.nombre}"/>
+                        <p:message for="txtNombreInstitucion"/>                                
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" process="dlgInstitucion" update="divDlgInstitucion formContenido:cmbInstitucion" action="#{gestorConvenio.guardarInstitucion()}"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dlgInstitucion').hide();"/>
+                    </h:panelGrid>            
+                </h:panelGroup>
+            </p:dialog>  
+        </h:panelGroup>        
+
+
+        <p:panel header="#{gestorConvenio.modoModificar?'Modificar':'Nuevo'} Convenio" id="panelConvenio">
             <p:messages id="messages" showDetail="true" globalOnly="true" autoUpdate="true" closable="true" />
             <h:panelGrid columns="3">            
                 <p:outputLabel value="Título">
@@ -30,14 +50,18 @@
                 <p:outputLabel value="Institución">
                     <span class="asterisk"/>
                 </p:outputLabel>
-                <p:selectOneMenu id="cmbInstitucion" style="width: 300px" value="#{gestorConvenio.convenio.institucion}" converter="institucionConverter"
-                                 var="inst" filter="true" filterMatchMode="contains">
-                    <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="ins" itemLabel="#{ins.nombre}" itemValue="#{ins}" />
+                <h:panelGroup layout="block">
+                    <p:selectOneMenu id="cmbInstitucion" style="width: 300px" value="#{gestorConvenio.convenio.institucion}" converter="institucionConverter"
+                                     var="inst" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="ins" itemLabel="#{ins.nombre}" itemValue="#{ins}" />
+                        <f:selectItems value="#{gestorInstitucion.listaInstitucionesAgregadas}" var="ins" itemLabel="#{ins.nombre}" itemValue="#{ins}" />
 
-                    <p:column>
-                        <p:outputLabel value="#{inst.nombre}"/>
-                    </p:column>
-                </p:selectOneMenu>
+                        <p:column>
+                            <p:outputLabel value="#{inst.nombre}"/>
+                        </p:column>
+                    </p:selectOneMenu>                    
+                    <p:commandLink value="Nueva Institución" styleClass="linkDropdown" process="@this" action="#{gestorConvenio.abrirNuevaInstitucionDlg()}" oncomplete="PF('dlgInstitucion').show()"/>
+                </h:panelGroup>
                 <h:panelGroup/>
 
                 <p:outputLabel value="Fecha de Inicio"/>
@@ -81,6 +105,6 @@
             </h:panelGrid>        
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>
-        <p:commandButton value="Guardar" update="formContenido" action="#{gestorConvenio.guardar()}" icon="fa fa-save"/>
+        <p:commandButton value="Guardar" update="panelConvenio" process="panelConvenio @this" action="#{gestorConvenio.guardar()}" icon="fa fa-save"/>
     </ui:define>
 </ui:composition>

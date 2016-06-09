@@ -26,6 +26,9 @@ public class GestorInstitucion implements Serializable {
     
     private final InstitucionJpaController institucionController = new InstitucionJpaController();
     private List<Institucion> listaInstituciones = new ArrayList<>();
+
+    private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
+    private Long idInstitucionGen = -1L;
     
     public GestorInstitucion() {
     }
@@ -55,6 +58,14 @@ public class GestorInstitucion implements Serializable {
 
     public void setListaInstituciones(List<Institucion> listaInstituciones) {
         this.listaInstituciones = listaInstituciones;
+    }
+
+    public List<Institucion> getListaInstitucionesAgregadas() {
+        return listaInstitucionesAgregadas;
+    }
+
+    public void setListaInstitucionesAgregadas(List<Institucion> listaInstitucionesAgregadas) {
+        this.listaInstitucionesAgregadas = listaInstitucionesAgregadas;
     }
     
 }

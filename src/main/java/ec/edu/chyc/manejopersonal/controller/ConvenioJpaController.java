@@ -39,7 +39,15 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            
+            if (convenio.getInstitucion() != null) {
+                if (convenio.getInstitucion().getId() == null || convenio.getInstitucion().getId() < 0) {
+                    convenio.getInstitucion().setId(null);
+                    em.persist(convenio.getInstitucion());
+                }
+            }
             em.persist(convenio);
+            
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -53,6 +61,12 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            if (convenio.getInstitucion() != null) {
+                if (convenio.getInstitucion().getId() == null || convenio.getInstitucion().getId() < 0) {
+                    convenio.getInstitucion().setId(null);
+                    em.persist(convenio.getInstitucion());
+                }
+            }            
             em.merge(convenio);
             em.getTransaction().commit();
         } finally {

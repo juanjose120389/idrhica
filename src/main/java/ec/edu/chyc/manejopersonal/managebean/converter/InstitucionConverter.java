@@ -35,11 +35,10 @@ public class InstitucionConverter implements Converter {
             if (inst.getId() == id) 
                 return inst;
         }        
-        for (Institucion inst : GestorProyecto.getInstance().getListaInstitucionesAgregadas()) {
+        for (Institucion inst : GestorInstitucion.getInstance().getListaInstitucionesAgregadas()) {
             if (inst.getId() == id) 
                 return inst;            
-        }
-        
+        }        
         return null;
     }
  

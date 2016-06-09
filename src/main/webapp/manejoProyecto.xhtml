@@ -123,7 +123,7 @@
                                     <h:panelGroup id="divAccionesInstitucion" layout="block">
                                         <p:selectOneMenu id="cmbInstitucion" style="width: 200px" value="#{financiamiento.institucion}" converter="institucionConverter"
                                                          var="institucion" filter="true" filterMatchMode="contains">
-                                            <f:selectItems value="#{gestorProyecto.listaInstitucionesAgregadas}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                                            <f:selectItems value="#{gestorInstitucion.listaInstitucionesAgregadas}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
                                             <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
 
                                             <p:column>
