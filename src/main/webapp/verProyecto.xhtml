@@ -21,8 +21,8 @@
                 <h:panelGroup layout="block">
                     <p:outputLabel rendered="#{gestorProyecto.proyecto.codirector != null}" value="#{gestorProyecto.proyecto.codirector.nombres} #{gestorProyecto.proyecto.codirector.apellidos}"/>
                 </h:panelGroup>
-                <p:outputLabel value="Duración"/>
-                <h:panelGroup layout="block">
+                <p:outputLabel value="Duración" rendered="#{gestorProyecto.proyecto.duracion != null}"/>
+                <h:panelGroup layout="block" rendered="#{gestorProyecto.proyecto.duracion != null}">
                     <p:outputLabel value="#{gestorProyecto.proyecto.duracion}"/>
                     <p:outputLabel value=" Meses"/>
                 </h:panelGroup>            

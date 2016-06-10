@@ -137,6 +137,8 @@ public class GestorProyecto implements Serializable {
         proyecto = proyectoController.findProyecto(id, true, true, true, true, true);
         listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
         
+        colocarDuracion(proyecto);
+
         modoModificar = false;
 
         return "verProyecto";
@@ -196,23 +198,29 @@ public class GestorProyecto implements Serializable {
         return proyecto.getTitulo();
     }
 
+    public void colocarDuracion(Proyecto proy) {
+        if (proy.getFechaInicio() != null && (proy.getFechaFin() != null || proy.getFechaFinEnDocumento() != null)) {
+            LocalDateTime fechaInicio = FechaUtils.asLocalDateTime(proy.getFechaInicio());
+            LocalDateTime fechaFin;
+
+            if (proy.getFechaFin() != null) {
+                fechaFin = FechaUtils.asLocalDateTime(proy.getFechaFin());
+            } else {
+                fechaFin = FechaUtils.asLocalDateTime(proy.getFechaFinEnDocumento());
+            }
+
+            long meses = ChronoUnit.MONTHS.between(fechaInicio, fechaFin);
+            proy.setDuracion((int) meses);
+        } else {
+            proy.setDuracion(null);
+        }
+    }
+    
     public String initListarProyectos() {
         actualizarListaProyecto();
         for (Proyecto proy : listaProyecto) {
             //para cada proyecto, calcular el numero de meses
-            if (proy.getFechaInicio() != null && (proy.getFechaFin() != null || proy.getFechaFinEnDocumento() != null)) {
-                LocalDateTime fechaInicio = FechaUtils.asLocalDateTime(proy.getFechaInicio());
-                LocalDateTime fechaFin;
-                
-                if (proy.getFechaFin() != null) {
-                    fechaFin = FechaUtils.asLocalDateTime(proy.getFechaFin());
-                } else {
-                    fechaFin = FechaUtils.asLocalDateTime(proy.getFechaFinEnDocumento());
-                }
-                
-                long meses = ChronoUnit.MONTHS.between(fechaInicio, fechaFin);
-                proy.setDuracion((int)meses);
-            }            
+            colocarDuracion(proy);
         }
         return "listaProyecto";
     }
