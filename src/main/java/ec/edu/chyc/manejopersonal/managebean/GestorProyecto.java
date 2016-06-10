@@ -13,6 +13,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.ProyectoJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
+import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.FechaUtils;
@@ -23,7 +24,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -31,6 +34,7 @@ import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -90,7 +94,10 @@ public class GestorProyecto implements Serializable {
         mostrarDlgInstitucion = false;
         BeansUtils.ejecutarJS("PF('dlgInstitucion').hide()");
     }
-    
+    public void onPersonaNuevaChosen(SelectEvent event) {
+        List<Persona> listaResultao = (List<Persona>) event.getObject();
+        //agregarPersonaALista(listaPersonasSel, listaCodirectores);
+    }    
     
     public void onCloseDlgInstitucion() {
         mostrarDlgInstitucion = false;
@@ -147,6 +154,7 @@ public class GestorProyecto implements Serializable {
     }
     
     private void inicializarManejoProyecto() {
+        GestorDialogListaPersonas.getInstance().resetearDialog();
         proyecto = new Proyecto();
         GestorContrato.getInstance().actualizarListaContrato();
         GestorPersona.getInstance().actualizarListaPersonasConContrato();
@@ -167,6 +175,17 @@ public class GestorProyecto implements Serializable {
         modoModificar = false;
 
         return "manejoProyecto";
+    }
+    
+    public void abrirDialogNuevaPersona() {
+        Map<String, Object> options = new HashMap<>();
+        options.put("resizable", true);
+        options.put("draggable", true);
+        options.put("width", "75%");
+        options.put("modal", true);
+        options.put("contentWidth", "100%");
+        GestorDialogListaPersonas.getInstance().prepararApertura();
+        RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
     
     public String acortarTitulo(Proyecto proyecto) {

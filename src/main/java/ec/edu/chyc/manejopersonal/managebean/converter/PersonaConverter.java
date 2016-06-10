@@ -19,14 +19,14 @@ public class PersonaConverter implements Converter {
  
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        Long id;
+        long id;
         try {
             id = Long.valueOf(value);
         } catch (NumberFormatException ex) {
             return null;
         }
 
-        List<Persona> list = GestorPersona.getInstance().getListaPersonas();
+        List<Persona> list = GestorPersona.getInstance().getListaPersonasConExternos();
        // List<Contratado> list = GestorContratado.getInstance().getListaContratados();
         for (Persona per : list) {
             if (per.getId() == id) 

@@ -32,6 +32,7 @@ public class GestorDialogListaPersonas implements Serializable {
     private Persona personaSel = null;
     private Persona nuevaPersona = null;
     private long idGenPersona = -1L;
+    private boolean soloNuevaPersona = false;
     /**
      * Creates a new instance of GestorDialogListaPersonas
      */
@@ -49,8 +50,9 @@ public class GestorDialogListaPersonas implements Serializable {
      * Vacía cualquier rastro de personas agregadas nuevas y usa el listado de personas que está en GestorPersona
      */    
     public void resetearDialog() {
+        soloNuevaPersona = false;
         idGenPersona = -1L;
-        listaPersonas = new ArrayList<>(GestorPersona.getInstance().getListaPersonas());
+        listaPersonas = new ArrayList<>(GestorPersona.getInstance().getListaPersonasConExternos());
         //listaPersonasNuevas.clear();
         prepararApertura();
     }
@@ -130,6 +132,14 @@ public class GestorDialogListaPersonas implements Serializable {
 
     public void setListaPersonas(List<Persona> listaPersonas) {
         this.listaPersonas = listaPersonas;
+    }
+
+    public boolean isSoloNuevaPersona() {
+        return soloNuevaPersona;
+    }
+
+    public void setSoloNuevaPersona(boolean soloNuevaPersona) {
+        this.soloNuevaPersona = soloNuevaPersona;
     }
         
 }

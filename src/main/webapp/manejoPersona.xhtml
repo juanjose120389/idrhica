@@ -31,11 +31,16 @@
                 width: 100px;
             }
             .inputscol {
-
                 /*width:100%;*/
             }
             .tipscol {
                 width: 100px;
+            }
+            .inputEnDlg {
+                width: 100%;
+            }
+            .ui-messages-error, .ui-message-error {
+                display: inline-block;
             }
         </style>
         <h:panelGroup layout="block" id="divDialogs">
@@ -43,16 +48,18 @@
                 <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgUniversidad()}" />
                 <h:panelGroup layout="block" id="divDlgUniversidad">
                     <h:panelGrid id="panelCamposUniversidad" columns="3">
-                        <p:outputLabel value="Nombre"/>
-                        <p:inputText id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.nombre}"/>
+                        <p:outputLabel value="Nombre">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <p:inputText styleClass="inputEnDlg" id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.nombre}"/>
                         <p:message for="txtNombreUniversidad"/>                                
 
                         <p:outputLabel value="País"/>
-                        <p:inputText id="txtPaisUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.pais}"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtPaisUniversidad" value="#{gestorPersona.universidad.pais}"/>
                         <p:message for="txtPaisUniversidad"/>
 
                         <p:outputLabel value="Ciudad"/>
-                        <p:inputText id="txtCiudadUniversidad" value="#{gestorPersona.universidad.ciudad}"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtCiudadUniversidad" value="#{gestorPersona.universidad.ciudad}"/>
                         <p:message for="txtCiudadUniversidad"/>
 
                     </h:panelGrid>
@@ -68,7 +75,7 @@
                 <h:panelGroup id="divDlgTitulo" layout="block">
                     <h:panelGrid id="panelCamposTitulo" columns="3">
                         <p:outputLabel value="Nombre"/>
-                        <p:inputText id="txtNombreTitulo" required="true" requiredMessage="Requerido" value="#{gestorPersona.titulo.nombre}"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtNombreTitulo" required="true" requiredMessage="Requerido" value="#{gestorPersona.titulo.nombre}"/>
                         <p:message for="txtNombreTitulo"/>
 
                         <p:outputLabel value="Nivel"/>
@@ -91,21 +98,29 @@
                         <span class="asterisk"/>
                     </p:outputLabel>
                 </h:panelGroup>
-                <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
-                <p:message for="txtIdentificacion"/>
+                <h:panelGroup>
+                    <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
+                    <p:message for="txtIdentificacion"/>
+                </h:panelGroup>
+                <h:panelGroup/>
 
                 <p:outputLabel value="Nombres">
                     <span class="asterisk"/>
                 </p:outputLabel>
-                <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.nombres}" maxlength="255"/>  
-                <p:message for="txtNombres"/>
+                <h:panelGroup>
+                    <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.nombres}" maxlength="255"/>  
+                    <p:message for="txtNombres"/>
+                </h:panelGroup>
+                <h:panelGroup/>
 
                 <p:outputLabel value="Apellidos">
                     <span class="asterisk"/>
                 </p:outputLabel>
-                <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.apellidos}" maxlength="255"/>  
-                <p:message for="txtApellidos"/>
-
+                <h:panelGroup>
+                    <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.apellidos}" maxlength="255"/>  
+                    <p:message for="txtApellidos"/>
+                </h:panelGroup>
+                <h:panelGroup/>
 
                 <p:outputLabel value="Dirección"/>
                 <p:inputTextarea rows="2" value="#{gestorPersona.persona.direccion}" maxlength="1024"/>  
@@ -130,10 +145,13 @@
                 <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Correo electrónico"/>
-                <p:inputText id="txtCorreo" value="#{gestorPersona.persona.correo}"> 
-                    <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                <h:panelGroup>
+                    <p:inputText id="txtCorreo" value="#{gestorPersona.persona.correo}" validatorMessage="Correo inválido"> 
+                        <f:validateRegex pattern="([\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z])?" />
                     </p:inputText> 
-                <h:panelGroup layout="block"/>            
+                    <p:message for="txtCorreo"/>
+                </h:panelGroup>
+                <h:panelGroup/>
 
                 <p:outputLabel value="Skype"/>
                 <p:inputText value="#{gestorPersona.persona.skype}"/>  
@@ -157,124 +175,131 @@
                 <h:panelGroup layout="block"/> 
                 <h:panelGroup layout="block" style="width: 100%"/> 
                 <h:panelGroup layout="block"/>             
+
+
+
+
+
+                <p:outputLabel value="Títulos"/>
+                <h:panelGroup layout="block" id="divTitulos">
+                    <h:panelGroup layout="block" style="height: 20px"/>
+                    <p:dataTable id="dtTitulos" emptyMessage="#{label.emptyMessage}" rowKey="#{personaTitulo.id}" var="personaTitulo" value="#{gestorPersona.listaPersonaTitulos}" 
+                                 editable="true" editMode="cell" widgetVar="cellTitulos">
+
+                        <p:ajax event="cellEdit" listener="#{gestorPersona.onCellEdit}"  />
+
+                        <p:column headerText="Título" width="500">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{personaTitulo.titulo.nombre}" />
+                                </f:facet>
+                                <f:facet name="input">
+
+                                    <h:panelGroup id="divAccionesTitulos" layout="block">
+                                        <p:selectOneMenu rendered="#{not empty gestorGeneral.listaTitulos and not empty gestorPersona.listaTitulosAgregados}" id="cmbTitulo" styleClass="cmbTitulo" value="#{personaTitulo.titulo}" converter="tituloConverter"
+                                                         var="titulo" filter="true" filterMatchMode="contains">
+                                            <f:selectItems value="#{gestorPersona.listaTitulosAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                                            <f:selectItems value="#{gestorGeneral.listaTitulos}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+
+                                            <p:column>
+                                                <p:outputLabel value="#{titulo.nombre}"/>
+                                            </p:column>
+                                        </p:selectOneMenu>                                
+
+                                        <p:commandLink value="Nuevo título" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirTituloDialog(personaTitulo)}" />
+                                    </h:panelGroup>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Universidad">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{personaTitulo.universidad.nombre}" /></f:facet>
+                                <f:facet name="input">
+
+                                    <h:panelGroup id="divAccionesUniversidad" layout="block">
+
+                                        <p:selectOneMenu id="cmbUniversidad" styleClass="cmbUniversidad" value="#{personaTitulo.universidad}" converter="universidadConverter"
+                                                         var="uni" filter="true" filterMatchMode="contains">
+                                            <f:selectItems value="#{gestorGeneral.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+                                            <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
+
+                                            <p:column>
+                                                <p:outputLabel value="#{uni.nombre}"/>
+                                            </p:column>
+                                        </p:selectOneMenu>                                
+
+                                        <p:commandLink value="Nueva universidad" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirUniversidadDialog(personaTitulo)}" />
+                                    </h:panelGroup>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Año" width="65">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{personaTitulo.anio}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:spinner max="2099" value="#{personaTitulo.anio}" size="5"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="text-align: center" width="32" >
+                            <p:commandButton action="#{gestorPersona.quitarPersonaTitulo(personaTitulo)}" update="dtTitulos" partialSubmit="true" process="@this" icon="ui-icon-close" title="Eliminar"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <h:panelGroup layout="block" style="padding-top: 5px" >
+                        <p:commandButton value="Agregar" partialSubmit="true" process="divTitulos"  action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>            
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup layout="block"/> 
+
+
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="Firmas"/>
+                    <h:panelGroup id="helpFirmas" style="margin-left: 5px" styleClass="fa fa-question-circle"/>
+                    <p:tooltip id="toolTipFade" for="helpFirmas" value="Debe indicarse el nombre exactamente como aparece en los artículos publicados. Por ejemplo: Pérez, J." />
+                </h:panelGroup>                
+                <h:panelGroup layout="block" id="divFirmas">
+                    <h:panelGroup layout="block" style="height: 15px"/>
+
+                    <p:dataTable emptyMessage="#{label.emptyMessage}" id="dtFirmas" style="width: 40%" paginator="true" paginatorAlwaysVisible="false" 
+                                 editable="true" editMode="cell" rows="10" var="personafirma" value="#{gestorPersona.listaPersonaFirmas}">
+                        <p:column headerText="Firmas usadas en artículos">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{personafirma.firma.nombre}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText style="width: 90%" value="#{personafirma.firma.nombre}"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="text-align: center" width="60">
+                            <p:commandButton id="cmdQuitarFirma" action="#{gestorPersona.quitarFirma(personafirma)}" update="dtFirmas" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                        </p:column>                    
+                    </p:dataTable>
+
+                    <h:panelGroup layout="block" style="padding-top: 5px" >
+                        <p:commandButton value="Agregar" partialSubmit="true" process="divFirmas"  action="#{gestorPersona.agregarFirma()}" update="divFirmas"/> 
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block" style="height: 15px"/>
+                </h:panelGroup>
             </h:panelGrid>
-
-
-
-            <h:panelGroup layout="block" style="height: 20px"/>
-            <p:outputLabel value="Títulos"/>
-            <h:panelGroup layout="block" id="divTitulos">
-                <p:dataTable id="dtTitulos" emptyMessage="#{label.emptyMessage}" rowKey="#{personaTitulo.id}" var="personaTitulo" value="#{gestorPersona.listaPersonaTitulos}" 
-                             editable="true" editMode="cell" widgetVar="cellTitulos">
-
-                    <p:ajax event="cellEdit" listener="#{gestorPersona.onCellEdit}"  />
-
-                    <p:column headerText="Título" width="500">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{personaTitulo.titulo.nombre}" />
-                            </f:facet>
-                            <f:facet name="input">
-
-                                <h:panelGroup id="divAccionesTitulos" layout="block">
-                                    <p:selectOneMenu id="cmbTitulo" styleClass="cmbTitulo" value="#{personaTitulo.titulo}" converter="tituloConverter"
-                                                     var="titulo" filter="true" filterMatchMode="contains">
-                                        <f:selectItems value="#{gestorPersona.listaTitulosAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-                                        <f:selectItems value="#{gestorGeneral.listaTitulos}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-
-                                        <p:column>
-                                            <p:outputLabel value="#{titulo.nombre}"/>
-                                        </p:column>
-                                    </p:selectOneMenu>                                
-
-                                    <p:commandLink value="Nuevo título" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirTituloDialog(personaTitulo)}" />
-                                </h:panelGroup>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-
-                    <p:column headerText="Universidad">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{personaTitulo.universidad.nombre}" /></f:facet>
-                            <f:facet name="input">
-
-                                <h:panelGroup id="divAccionesUniversidad" layout="block">
-
-                                    <p:selectOneMenu id="cmbUniversidad" styleClass="cmbUniversidad" value="#{personaTitulo.universidad}" converter="universidadConverter"
-                                                     var="uni" filter="true" filterMatchMode="contains">
-                                        <f:selectItems value="#{gestorGeneral.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
-                                        <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
-
-                                        <p:column>
-                                            <p:outputLabel value="#{uni.nombre}"/>
-                                        </p:column>
-                                    </p:selectOneMenu>                                
-
-                                    <p:commandLink value="Nueva universidad" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirUniversidadDialog(personaTitulo)}" />
-                                </h:panelGroup>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    <p:column headerText="Año" width="150">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{personaTitulo.anio}" /></f:facet>
-                            <f:facet name="input">
-                                <p:spinner max="2099" value="#{personaTitulo.anio}" size="5"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-
-                    <p:column style="text-align: center" width="32" >
-                        <p:commandButton action="#{gestorPersona.quitarPersonaTitulo(personaTitulo)}" update="dtTitulos" partialSubmit="true" process="@this" icon="ui-icon-close" title="Eliminar"/>
-                    </p:column>
-
-                </p:dataTable>
-                <h:panelGroup layout="block" style="padding-top: 5px" >
-                    <p:commandButton value="Agregar" partialSubmit="true" process="divTitulos"  action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>            
-                </h:panelGroup>
-            </h:panelGroup>
-            
-            
-            
-            <h:panelGroup layout="block" id="divFirmas">
-                <h:panelGroup layout="block" style="height: 15px"/>
-                <p:outputLabel value="Firmas"/>
-                <p:dataTable emptyMessage="#{label.emptyMessage}" id="dtFirmas" style="width: 40%" paginator="true" paginatorAlwaysVisible="false" 
-                             editable="true" editMode="cell" rows="10" var="personafirma" value="#{gestorPersona.listaPersonaFirmas}">
-                    <p:column headerText="Firmas usadas en artículos">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{personafirma.firma.nombre}"/>
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText style="width: 90%" value="#{personafirma.firma.nombre}"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    <p:column style="text-align: center" width="60">
-                        <p:commandButton id="cmdQuitarFirma" action="#{gestorPersona.quitarFirma(personafirma)}" update="dtFirmas" process="@this" icon="fa fa-remove" title="Eliminar"/>
-                    </p:column>                    
-                </p:dataTable>
-
-                <h:panelGroup layout="block" style="padding-top: 5px" >
-                    <p:commandButton value="Agregar" partialSubmit="true" process="divFirmas"  action="#{gestorPersona.agregarFirma()}" update="divFirmas"/> 
-                </h:panelGroup>
-
-                <h:panelGroup layout="block" style="height: 15px"/>
-            </h:panelGroup>
             <h:panelGroup layout="block"/> 
 
 
             <h:panelGroup layout="block" style="height: 20px"/>
-            
+
 
             <h:panelGroup layout="block" style="clear: both" id="checksTipoPersona">
 
             </h:panelGroup>
-            
+
             <pe:keyFilter for="txtNombres" regEx="/[A-Z áéíóú]/i" preventPaste="false"/>  
-<pe:keyFilter for="txtApellidos" regEx="/[A-Z áéíóú]/i" preventPaste="false"/> 
-<pe:keyFilter for="txtCelular" regEx="/[\d\-]/" preventPaste="false"/> 
+            <pe:keyFilter for="txtApellidos" regEx="/[A-Z áéíóú]/i" preventPaste="false"/> 
+            <pe:keyFilter for="txtCelular" regEx="/[\d\-]/" preventPaste="false"/> 
 
 
         </p:panel>

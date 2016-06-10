@@ -125,7 +125,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select distinct p from Persona p left join fetch p.personaFirmasCollection where p.identificacion <> ''");
+            Query q = em.createQuery("select distinct p from Persona p left join fetch p.personaFirmasCollection where p.activo is not null");
             List<Persona> list = q.getResultList();
             return list;
         } finally {
@@ -134,6 +134,20 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             }
         }        
     }
+    
+    public List<Persona> listTodasPersonas() throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct p from Persona p left join fetch p.personaFirmasCollection where p.id<>1");
+            List<Persona> list = q.getResultList();
+            return list;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }        
+    }    
     
     public List<Persona> listPersonasConContrato() throws Exception {
         EntityManager em = null;

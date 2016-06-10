@@ -57,20 +57,24 @@
                     <p:selectOneMenu style="width: 300px" required="true" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
                                      var="per" filter="true" filterMatchMode="contains" requiredMessage="#{label.required}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />                        
+                        <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />                        
                         <p:column>
                             <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                         </p:column>
-                    </p:selectOneMenu>  
+                    </p:selectOneMenu>
+                    <p:commandLink rendered="false" value="Nuevo" styleClass="linkDropdown" process="@this" action="#{gestorProyecto.abrirDialogNuevaPersona()}">
+                        <p:ajax event="dialogReturn" listener="#{gestorProyecto.onPersonaNuevaChosen}" update="cmbDirector"/>
+                    </p:commandLink>
+                    
                     <p:message for="cmbDirector"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/>
-                
+
                 <p:outputLabel value="Co-Director" />
                 <p:selectOneMenu style="width: 300px" id="cmbCoDirector" value="#{gestorProyecto.proyecto.codirector}" converter="personaConverter"
                                  var="per2" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="Ninguno" itemValue="" />
-                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
+                    <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" var="u2" itemLabel="#{u2.nombres} #{u2.apellidos}" itemValue="#{u2}" />
 
                     <p:column>
                         <p:outputLabel value="#{per2.nombres} #{per2.apellidos}"/>

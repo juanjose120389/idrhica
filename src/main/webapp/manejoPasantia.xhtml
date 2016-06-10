@@ -23,7 +23,7 @@
                 <p:selectOneMenu id="cmbPersona" style="width: 300px" value="#{gestorPasantia.pasantia.coordinador}" converter="personaConverter"
                                  var="per" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{label.required}">
                     <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+                    <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
                     <p:column>
                         <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>

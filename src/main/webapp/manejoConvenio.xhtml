@@ -90,7 +90,7 @@
                 <p:selectOneMenu style="width: 300px" id="cmbAdmin" value="#{gestorConvenio.convenio.administrador}" converter="personaConverter"
                                  var="per" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+                    <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
                     <p:column>
                         <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>

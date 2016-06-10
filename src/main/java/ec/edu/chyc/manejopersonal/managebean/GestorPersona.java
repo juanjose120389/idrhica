@@ -65,8 +65,10 @@ public class GestorPersona implements Serializable {
     
     private List<PersonaTitulo> listaPersonaTitulos = null;
     
-    private List<Persona> listaPersonas = null;
+    private List<Persona> listaPersonas = new ArrayList<>();
     private List<Persona> listaPersonasConContrato = new ArrayList<>();
+    private List<Persona> listaPersonasConExternos = new ArrayList<>();
+    private List<Persona> listaPersonasAgregadas = new ArrayList<>();
     
     private Universidad universidad = null;
     private Titulo titulo = null;
@@ -94,20 +96,15 @@ public class GestorPersona implements Serializable {
 
     @PostConstruct
     public void init() {
-        try {
+        actualizarListado();
+        /*try {
             listaPersonas = personaController.listPersonas();
         } catch (Exception ex) {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         universidad = new Universidad();
         titulo = new Titulo();
     }    
-
-    public String abrir() {
-        
-        ejecutarJS("PF('dlgUniversidad').show()");
-        return "";
-    }
 
     public void abrirTituloDialog(PersonaTitulo tituloDePersona) {
         this.tituloDePersona = tituloDePersona;
@@ -325,7 +322,14 @@ public class GestorPersona implements Serializable {
     
     public String actualizarListado() {
         try {
-            listaPersonas = personaController.listPersonas();            
+            listaPersonasConExternos = personaController.listTodasPersonas();
+            listaPersonas.clear();
+            for (Persona per : listaPersonasConExternos) {
+                if (per.getActivo() != null) {
+                    listaPersonas.add(per);
+                }
+            }
+            //listaPersonas = personaController.listPersonas();            
         } catch (Exception ex) {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -531,6 +535,22 @@ public class GestorPersona implements Serializable {
 
     public void setListaPersonaFirmas(List<PersonaFirma> listaPersonaFirmas) {
         this.listaPersonaFirmas = listaPersonaFirmas;
+    }
+
+    public List<Persona> getListaPersonasConExternos() {
+        return listaPersonasConExternos;
+    }
+
+    public void setListaPersonasConExternos(List<Persona> listaPersonasConExternos) {
+        this.listaPersonasConExternos = listaPersonasConExternos;
+    }
+
+    public List<Persona> getListaPersonasAgregadas() {
+        return listaPersonasAgregadas;
+    }
+
+    public void setListaPersonasAgregadas(List<Persona> listaPersonasAgregadas) {
+        this.listaPersonasAgregadas = listaPersonasAgregadas;
     }
     
 }
