@@ -99,11 +99,15 @@
                         <p:inputText id="txtIdentificacionNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.identificacion}"/>
                         <p:message for="txtIdentificacionNuevo"/>
                         
-                        <p:outputLabel value="Nombres"/>
+                        <p:outputLabel value="Nombres">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
                         <p:inputText id="txtNombresNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.nombres}" required="true" requiredMessage="#{label.required}"/>
                         <p:message for="txtNombresNuevo"/>
                         
-                        <p:outputLabel value="Apellidos"/>
+                        <p:outputLabel value="Apellidos">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
                         <p:inputText id="txtApellidosNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.apellidos}" required="true" requiredMessage="#{label.required}"/>
                         <p:message for="txtApellidosNuevo"/>
                         
