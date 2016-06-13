@@ -8,6 +8,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
 import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
@@ -366,6 +367,18 @@ public class GestorPersona implements Serializable {
             }
         }
         return listResults;
+    }
+    public String convertirListaPersonas(Collection<Persona> listaConvertir) {
+        String r = "";
+        int c = 0;
+        for (Persona per : listaConvertir) {
+            r += per.getNombres() + " " + per.getApellidos();
+            if (c < listaConvertir.size() - 1) {
+                r += ", ";
+            }
+            c++;
+        }
+        return r;
     }
 
     public List<Titulo> completarTitulo(String query) {

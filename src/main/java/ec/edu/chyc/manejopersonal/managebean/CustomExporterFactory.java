@@ -82,7 +82,7 @@ public class CustomExporterFactory implements ExporterFactory {
                     break;
 
                 case XLSX:
-                    exporter = new ExcelExporter();
+                    exporter = new ExcelCustomExporter();
                     break;
 
                 default: {

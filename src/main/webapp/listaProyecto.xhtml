@@ -15,7 +15,7 @@
                 <h:panelGroup layout="block" styleClass="exportButtons">
                     <h:commandLink>
                         <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
-                        <p:dataExporter type="xls" target="proyectoTable" fileName="proyecto" />
+                        <pe:exporter type="xlsx" target="proyectoTable" fileName="proyecto" />
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
@@ -27,10 +27,16 @@
                 Proyectos
             </f:facet>
             <p:column headerText="Título" filterBy="#{proyecto.titulo}" filterMatchMode="contains" sortBy="#{proyecto.titulo}">
+                <f:facet name="header">  
+                    <h:outputText value="Título"/>  
+                </f:facet>                  
                 <h:outputText value="#{proyecto.titulo}" />
             </p:column>
 
             <p:column headerText="Fecha de Inicio" width="100" sortBy="#{proyecto.fechaInicio}">
+                <f:facet name="header">  
+                    <h:outputText value="Fecha Inicio"/>  
+                </f:facet>
                 <h:outputText value="#{proyecto.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -38,6 +44,9 @@
 
 
             <p:column headerText="Fecha de Finalización" width="150" sortBy="#{proyecto.fechaFin}"> 
+                <f:facet name="header">  
+                    <h:outputText value="Fecha de Finalización"/>  
+                </f:facet>                
                 <h:outputText value="#{proyecto.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -51,19 +60,28 @@
                 <h:panelGroup layout="block" style="font-size: 0.8em" rendered="#{proyecto.fechaFinEnDocumento != null}">
                     <p:outputLabel value="Duración: #{proyecto.duracion} meses"/>
                 </h:panelGroup>
-                
+
             </p:column>
 
 
             <p:column headerText="Director" width="150" filterBy="#{proyecto.director.nombres} #{proyecto.director.apellidos}" filterMatchMode="contains" sortBy="#{proyecto.director.nombres}">
+                <f:facet name="header">  
+                    <h:outputText value="Director"/>  
+                </f:facet>
                 <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
             </p:column>
 
             <p:column headerText="Co-Director" width="150" filterBy="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" filterMatchMode="contains" sortBy="#{proyecto.codirector.nombres}">
+                <f:facet name="header">  
+                    <h:outputText value="Co-Director"/>  
+                </f:facet>                
                 <h:outputText value="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" />
             </p:column>
 
             <p:column headerText="Observaciones" width="200" filterBy="#{proyecto.observaciones}" filterMatchMode="contains" sortBy="#{proyecto.observaciones}">
+                <f:facet name="header">  
+                    <h:outputText value="Observaciones"/>  
+                </f:facet>
                 <h:outputText value="#{proyecto.observaciones}" />
             </p:column>
             <p:column exportable="false" width="80">

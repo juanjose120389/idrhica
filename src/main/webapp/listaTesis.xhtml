@@ -14,7 +14,7 @@
                 <h:panelGroup layout="block" styleClass="exportButtons">
                     <h:commandLink>
                         <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
-                        <p:dataExporter type="xls" target="tesisTable" fileName="tesis" />
+                        <pe:exporter type="xlsx" target="tesisTable" fileName="tesis" />
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
@@ -54,30 +54,44 @@
             <p:column headerText="Director" width="150" filterBy="#{tesis.director.nombres} #{tesis.director.apellidos}" filterMatchMode="contains" sortBy="#{tesis.director.nombre}">
                 <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
             </p:column>
-
-            <p:column headerText="Autores" width="150" filterBy="#{tesis.autoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarPorAutor}">
+            
+            <p:column headerText="Autores" styleClass="columnaOculta" exportable="true">
+                <p:outputLabel value="#{gestorPersona.convertirListaPersonas(tesis.autoresCollection)}" escape="false"/>
+            </p:column>
+            <p:column exportable="false" headerText="Autores" width="150" filterBy="#{tesis.autoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarPorAutor}">
                 <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
                     <p:outputLabel value="• #{autor.apellidos} #{autor.nombres}"/><br />
                 </ui:repeat>
             </p:column>
 
-            <p:column headerText="Proyecto" width="150" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
+            <p:column exportable="false" headerText="Proyectos" width="150" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
                 <ui:repeat value="#{tesis.proyectosCollection.toArray()}" var="proyecto">
                     <p:outputLabel value="#{gestorProyecto.acortarTitulo(proyecto)}"/><br />
                 </ui:repeat>
             </p:column> 
+            <p:column headerText="Proyectos" styleClass="columnaOculta" exportable="true">
+                <p:outputLabel value="#{gestorPersona.convertirListaPersonas(tesis.autoresCollection)}" escape="false"/>
+            </p:column>
 
-            <p:column headerText="Co-Director" width="150" filterBy="#{tesis.codirectoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarCoDirector}">
+            <p:column exportable="false" headerText="Co-Directores" width="150" filterBy="#{tesis.codirectoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarCoDirector}">
                 <ui:repeat value="#{tesis.codirectoresCollection.toArray()}" var="codirector">
                     <p:outputLabel value="• #{codirector.nombres} #{codirector.apellidos}"/><br />
                 </ui:repeat>
             </p:column>
+            <p:column headerText="Co-Directores" styleClass="columnaOculta" exportable="true">
+                <p:outputLabel value="#{gestorPersona.convertirListaPersonas(tesis.codirectoresCollection)}" escape="false"/>
+            </p:column>
 
-            <p:column headerText="Tutores" width="150" filterBy="#{tesis.tutoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarTutor}">
+            <p:column exportable="false" headerText="Tutores" width="150" filterBy="#{tesis.tutoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarTutor}">
                 <ui:repeat value="#{tesis.tutoresCollection.toArray()}" var="tutor">
                     <p:outputLabel value="• #{tutor.nombres} #{tutor.apellidos}"/><br />
                 </ui:repeat>
             </p:column>
+            <p:column headerText="Tutores" styleClass="columnaOculta" exportable="true">
+                <p:outputLabel value="#{gestorPersona.convertirListaPersonas(tesis.tutoresCollection)}" escape="false"/>
+            </p:column>            
+            
+            
             <p:column headerText="Observaciones" width="100" filterBy="#{tesis.observaciones}" filterMatchMode="contains" sortBy="#{tesis.observaciones}">
                 <h:outputText value="#{tesis.observaciones}" />
             </p:column>            
