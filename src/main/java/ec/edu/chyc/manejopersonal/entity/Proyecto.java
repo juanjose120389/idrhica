@@ -23,6 +23,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Type;
 
 /**
@@ -47,6 +49,7 @@ public class Proyecto implements Serializable {
     @JoinColumn(name = "idCodirector", referencedColumnName = "id")    
     private Persona codirector;
 
+    @Transient
     private Integer duracion;
 
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -65,12 +68,14 @@ public class Proyecto implements Serializable {
     @Lob
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")    
-    private String observaciones;
+    @NotNull
+    private String observaciones = "";
     
     @Lob
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")    
-    private String resumen;
+    @NotNull
+    private String resumen = "";
     
     //@OneToMany(mappedBy = "proyecto")
     //private Collection<Contrato> contratosCollection = new ArrayList<>();           
