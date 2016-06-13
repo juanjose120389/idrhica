@@ -15,7 +15,7 @@
             } */           
         </style>
         <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
-                     paginator="true"
+                     paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                      >
             <f:facet name="header">
