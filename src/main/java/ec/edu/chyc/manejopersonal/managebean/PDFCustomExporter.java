@@ -102,7 +102,8 @@ public class PDFCustomExporter extends PDFExporter {
                     String valChild = exportValue(context, childComponent);
 
                     if (valChild != null && !valChild.isEmpty()) {
-                        value += valChild + "\n \n";
+                        valChild = valChild.replace("<br/>", " ");
+                        value += valChild + "\n";
                     }
                 }
             }

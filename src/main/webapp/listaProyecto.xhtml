@@ -50,17 +50,17 @@
                 <h:outputText value="#{proyecto.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
-                <h:panelGroup rendered="#{!proyecto.fechaFin.equals(proyecto.fechaFinEnDocumento) and proyecto.fechaFinEnDocumento != null}">
+                <h:panelGroup style="font-size: 0.8em" rendered="#{!proyecto.fechaFin.equals(proyecto.fechaFinEnDocumento) and proyecto.fechaFinEnDocumento != null}">
                     <br/>
-                    <h:outputText style="font-size: 0.8em" value="Fecha original: "/>
-                    <h:outputText style="font-size: 0.8em" value="#{proyecto.fechaFinEnDocumento}">
+                    <h:outputText value="Fecha original: "/>
+                    <h:outputText value="#{proyecto.fechaFinEnDocumento}">
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
+                </h:panelGroup>                
+                <h:panelGroup rendered="#{proyecto.fechaFin != null}">
+                    <br/>
+                    <p:outputLabel style="font-size: 0.8em" value="Duración: #{proyecto.duracion} meses"/>                
                 </h:panelGroup>
-                <h:panelGroup layout="block" style="font-size: 0.8em" rendered="#{proyecto.fechaFinEnDocumento != null}">
-                    <p:outputLabel value="Duración: #{proyecto.duracion} meses"/>
-                </h:panelGroup>
-
             </p:column>
 
 
