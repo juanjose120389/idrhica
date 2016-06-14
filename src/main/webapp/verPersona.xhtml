@@ -53,7 +53,7 @@
             </p:outputLabel>           
 
             <p:outputLabel value="Estado"/>
-            <p:outputLabel value="#{gestorPersona.persona.activo?'Activo':'No Activo'}"/>
+            <p:outputLabel value="#{gestorPersona.persona.activo == true?'Activo': gestorPersona.persona.activo == false? 'No Activo' : 'Contacto externo'}"/>
         </h:panelGrid>
 
         <h:panelGroup layout="block" rendered="#{not empty gestorPersona.listaPersonaTitulos}">

@@ -14,13 +14,19 @@
                 width: 100px;
             } */           
         </style>
-        <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="10"
+        <p:tabView activeIndex="#{gestorPersona.tabActivo}">
+            <p:ajax event="tabChange" listener="#{gestorPersona.onTabChange}" update="formContenido"/>
+            <p:tab title="Personal Departamento" id="tabPersonal">
+
+            </p:tab>
+            <p:tab title="Contactos externos" id="tabExterno">
+                
+            </p:tab>
+        </p:tabView> 
+        <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonasSel}" rows="10"
                      paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                      >
-            <f:facet name="header">
-                Personal en el Departamento
-            </f:facet>
             <f:facet name="{Exporters}">
                 <h:panelGroup layout="block" styleClass="exportButtons">
                     <h:commandLink>

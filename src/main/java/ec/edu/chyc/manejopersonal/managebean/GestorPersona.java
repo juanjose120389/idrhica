@@ -8,7 +8,6 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Persona;
-import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
 import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
@@ -37,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.TabChangeEvent;
 
 /**
  *
@@ -70,6 +70,10 @@ public class GestorPersona implements Serializable {
     private List<Persona> listaPersonasConContrato = new ArrayList<>();
     private List<Persona> listaPersonasConExternos = new ArrayList<>();
     private List<Persona> listaPersonasAgregadas = new ArrayList<>();
+    private List<Persona> listaPersonasSoloExternos = new ArrayList();
+    private List<Persona> listaPersonasSel = new ArrayList();
+    
+    private int tabActivo = 0;
     
     private Universidad universidad = null;
     private Titulo titulo = null;
@@ -105,6 +109,7 @@ public class GestorPersona implements Serializable {
         }*/
         universidad = new Universidad();
         titulo = new Titulo();
+        tabActivo = 0;
     }    
 
     public void abrirTituloDialog(PersonaTitulo tituloDePersona) {
@@ -321,15 +326,32 @@ public class GestorPersona implements Serializable {
         return "";
     }
     
+    public void onTabChange(TabChangeEvent event) {
+        String id = event.getTab().getId();
+        if (id.equals("tabPersonal")) {
+            tabActivo = 0;
+            listaPersonasSel = listaPersonas;
+        } else {
+            tabActivo = 1;
+            listaPersonasSel = listaPersonasSoloExternos;
+        }
+        //FacesMessage msg = new FacesMessage("Tab Changed", "Active Tab: " + event.getTab().getTitle());
+        //FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
     public String actualizarListado() {
         try {
             listaPersonasConExternos = personaController.listTodasPersonas();
             listaPersonas.clear();
+            listaPersonasSoloExternos.clear();
             for (Persona per : listaPersonasConExternos) {
                 if (per.getActivo() != null) {
                     listaPersonas.add(per);
+                } else {
+                    listaPersonasSoloExternos.add(per);
                 }
             }
+            listaPersonasSel = listaPersonas;
             //listaPersonas = personaController.listPersonas();            
         } catch (Exception ex) {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
@@ -564,6 +586,30 @@ public class GestorPersona implements Serializable {
 
     public void setListaPersonasAgregadas(List<Persona> listaPersonasAgregadas) {
         this.listaPersonasAgregadas = listaPersonasAgregadas;
+    }
+
+    public List<Persona> getListaPersonasSel() {
+        return listaPersonasSel;
+    }
+
+    public void setListaPersonasSel(List<Persona> listaPersonasSel) {
+        this.listaPersonasSel = listaPersonasSel;
+    }
+
+    public List<Persona> getListaPersonasSoloExternos() {
+        return listaPersonasSoloExternos;
+    }
+
+    public void setListaPersonasSoloExternos(List<Persona> listaPersonasSoloExternos) {
+        this.listaPersonasSoloExternos = listaPersonasSoloExternos;
+    }
+
+    public int getTabActivo() {
+        return tabActivo;
+    }
+
+    public void setTabActivo(int tabActivo) {
+        this.tabActivo = tabActivo;
     }
     
 }
