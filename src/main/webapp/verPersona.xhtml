@@ -47,8 +47,8 @@
             <p:outputLabel value="Skype"/>
             <p:outputLabel value="#{gestorPersona.persona.skype}"/>  
 
-            <p:outputLabel value="Fecha vinculacion"/>
-            <p:outputLabel value="#{gestorPersona.persona.fechaVinculacion}">
+            <p:outputLabel value="Fecha vinculacion" rendered="#{gestorPersona.persona.activo != null}"/>
+            <p:outputLabel value="#{gestorPersona.persona.fechaVinculacion}" rendered="#{gestorPersona.persona.activo != null}">
                 <f:convertDateTime pattern="dd/MM/yyyy" />
             </p:outputLabel>           
 
