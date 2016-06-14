@@ -66,7 +66,7 @@
 
             <p:column exportable="false" headerText="Proyectos" width="150" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
                 <ui:repeat value="#{tesis.proyectosCollection.toArray()}" var="proyecto">
-                    <p:outputLabel value="#{gestorProyecto.acortarTitulo(proyecto)}"/><br />
+                    <p:outputLabel value="• #{gestorProyecto.acortarTitulo(proyecto)}"/><br />
                 </ui:repeat>
             </p:column> 
             <p:column headerText="Proyectos" styleClass="columnaOculta" exportable="true">
