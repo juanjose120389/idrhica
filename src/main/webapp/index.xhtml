@@ -23,9 +23,10 @@
                 
             </p:tab>
         </p:tabView> 
-        <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonasSel}" rows="10"
+        <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonasSel}" rows="15"
                      paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                     rowsPerPageTemplate="10,15,20,40"
                      >
             <f:facet name="{Exporters}">
                 <h:panelGroup layout="block" styleClass="exportButtons">

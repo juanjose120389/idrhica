@@ -24,7 +24,8 @@
         </style>
         <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
                      paginator="true" resizableColumns="true" liveResize="true" emptyMessage="#{label.emptyMessage}"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                     rowsPerPageTemplate="10,15,20,40"
                      >
             <f:facet name="{Exporters}">
                 <h:panelGroup layout="block" styleClass="exportButtons">
