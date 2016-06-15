@@ -31,30 +31,35 @@ and open the template in the editor.
                 <p:ajax event="active" listener="#{gestorGeneral.mantenerSesion()}" />
             </p:idleMonitor>
         </h:form>
-        <div id="header">
-            <!-- HEADER -->
-        </div>
-        <div class="colmask leftmenu">
-            <div class="colleft">
-                <div class="col1">
-                    <!-- Column 1 start -->
-                    <h:form id="formContenido">
-                        <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
-                        <ui:insert name="mensaje"/>
-                        <ui:insert name="body"/>
-                    </h:form>
+        <div id="wrapper">
+            <div id="header">
+                <!-- HEADER -->
+                <p:graphicImage name="images/logo_universidad-01.png" style="vertical-align: middle; padding: 5px;"/>            
+                <p:outputLabel style="font-size: 1.8em; margin-left: 20px;" value="Departamento de Recursos Hídricos y Ciencias Ambientales"/>
+            </div>
+            <div class="colmask leftmenu">
+                <div class="colleft">
+                    <div class="col1">
+                        <!-- Column 1 start -->
+                        <h:form id="formContenido">
+                            <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
+                            <ui:insert name="mensaje"/>
+                            <ui:insert name="body"/>
+                        </h:form>
 
 
-                    <!-- Column 1 end -->
+                        <!-- Column 1 end -->
+                    </div>
+                    <div class="col2">
+                        <!-- Column 2 start -->
+                        <h:form id="formMenu">
+                            <ui:include src="./menu.xhtml"/>
+                        </h:form>
+
+                        <!-- Column 2 end -->
+                    </div>
                 </div>
-                <div class="col2">
-                    <!-- Column 2 start -->
-                    <h:form id="formMenu">
-                        <ui:include src="./menu.xhtml"/>
-                    </h:form>
-
-                    <!-- Column 2 end -->
-                </div>
+                <div class="push"></div>
             </div>
         </div>
         <div id="footer">

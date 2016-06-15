@@ -139,7 +139,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select distinct p from Persona p left join fetch p.personaFirmasCollection where p.id<>1");
+            Query q = em.createQuery("select distinct p from Persona p left join fetch p.personaFirmasCollection where p.id<>1 order by p.activo desc, p.apellidos asc ");
             List<Persona> list = q.getResultList();
             return list;
         } finally {

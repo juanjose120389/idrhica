@@ -5,9 +5,29 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:panelGrid columns="2">
-        <h:outputLabel value=""/>
-        <h:outputLabel value=""/>
-    </h:panelGrid>
-    
+    <style>
+        .linkExterno a:link, .linkExterno:visited, .linkExterno:link {
+            color: white;
+        }
+        .ui-clock {
+            background: none;
+            border: none;
+            color: white;
+        }
+        #footerContent {
+            padding: 5px;
+        }
+    </style>
+    <h:panelGroup layout="block" id="footerContent">
+        <h:panelGroup layout="block" styleClass="ui-outputlabel ui-widget" style="float: left;">
+
+            Universidad de Cuenca - Campus Balzay - Av. Victor Albornoz y Puente de los Cerezos - Casilla Postal: 01.01.168 - 
+            Telf.: (593-7) 4051000 Ext. 4497 - <p:link href="http://bit.ly/campusBalzay" styleClass="linkExterno" target="_blank" value="Página oficial"/>
+
+        </h:panelGroup>
+        <h:panelGroup layout="block" style="float: right">
+            <p:clock class="clock" pattern="HH:mm:ss" mode="server" />
+        </h:panelGroup>
+    </h:panelGroup>
+
 </ui:composition>

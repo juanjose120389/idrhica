@@ -33,13 +33,18 @@ body {
 	padding:6px 15px !important;
 	text-align:right;
 }
+#wrapper {
+    min-height: 100%;
+}
 /* column container */
-.colmask {
+.colmask {    
 	position:relative;	/* This fixes the IE7 overflow hidden bug */
 	clear:both;
 	float:left;
 	width:100%;			/* width of whole page */
 	overflow:hidden;		/* This chops off any overhanging divs */
+        height: auto;
+        
 }
 /* common column settings */
 .colright,
@@ -59,7 +64,7 @@ body {
 }
 /* 2 Column (left menu) settings */
 .leftmenu {
-	background:#fff;		/* right column background colour */
+	/*background:#fff;*/		/* right column background colour */
 }
 .leftmenu .colleft {
 	right:88%;			/* right column width */
@@ -73,17 +78,25 @@ body {
 	width:10%;			/* left column content width (column width minus left and right padding) */
 	left:3%;			/* (right column left and right padding) plus (left column left padding) */
 }
+.footer, .push {
+	height: 30px; /* .push must be the same height as .footer */
+        clear: both;
+}
 /* Footer styles */
 #footer {
 	clear:both;
 	float:left;
 	width:100%;
+        background: #003580 none repeat scroll 0 0; 
+        color: white;
+        font-size: 0.9em;
 }
 #footer p {
 	padding:10px;
-	margin:0;
+	margin-top:-30px;
 }
 
-.ui-column-title {
-    font-weight: normal;
-}
+
+html, body, #wrapper { height: 100%; }
+#wrapper { height: auto; min-height: 100%; }
+#footer { clear: both; position: relative; z-index: 10; height: 2.5em; margin-top: -2.5em; }

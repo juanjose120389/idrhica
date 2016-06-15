@@ -8,9 +8,9 @@
 
         <p:commandButton value="Regresar" immediate="true" action="#{gestorProyecto.initListarProyectos()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
-        <p:panel header="Proyecto">
+        <p:panel header="Ficha del proyecto">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
-            <h:panelGrid columns="2">
+            <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
                 <p:outputLabel value="Titulo"/>
                 <p:outputLabel value="#{gestorProyecto.proyecto.titulo}"/>
 
