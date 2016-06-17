@@ -83,19 +83,19 @@
                 <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Fecha de Inicio">
-                    <span class="asterisk"/>
+                    
                 </p:outputLabel>
                 <h:panelGroup layout="block">
-                    <p:calendar id="calFechaInicio" required="true" requiredMessage="#{label.required}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>
+                    <p:calendar id="calFechaInicio" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>
                     <p:message for="calFechaInicio"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Fecha de Finalización (Documento)">
-                    <span class="asterisk"/>
+                    
                 </p:outputLabel>
                 <h:panelGroup layout="block">
-                    <p:calendar id="calFechaFinDoc" required="true" requiredMessage="#{label.required}" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFinEnDocumento}"/>  
+                    <p:calendar id="calFechaFinDoc" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFinEnDocumento}"/>  
                     <p:message for="calFechaFinDoc"/>
                 </h:panelGroup>
                 <h:panelGroup/>

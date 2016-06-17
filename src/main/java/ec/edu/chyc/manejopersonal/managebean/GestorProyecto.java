@@ -151,7 +151,13 @@ public class GestorProyecto implements Serializable {
         listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
         modoModificar = true;
         
-        hayExtensionFinalizacion = !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin());
+        if (proyecto.getFechaFinEnDocumento() != null && !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin())) {
+            hayExtensionFinalizacion = true;
+        } else {
+            hayExtensionFinalizacion = false;
+        }
+        
+        //hayExtensionFinalizacion = !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin());
         
         return "manejoProyecto";
     }
@@ -247,23 +253,25 @@ public class GestorProyecto implements Serializable {
         this.listaProyecto = listaProyecto;
     }
 
-    public String guardar() {
-        LocalDate fechaInicio = FechaUtils.asLocalDate(proyecto.getFechaInicio());
-        LocalDate fechaFinDoc = FechaUtils.asLocalDate(proyecto.getFechaFinEnDocumento());
-        
+    public String guardar() {        
         proyecto.setFinanciamientosCollection(listaFinanciamientos);
         if (!hayExtensionFinalizacion) {
             proyecto.setFechaFin(proyecto.getFechaFinEnDocumento());
         }
-        LocalDate fechaFin = FechaUtils.asLocalDate(proyecto.getFechaFin());
         
-        if (fechaFinDoc.isBefore(fechaInicio) || fechaFin.isBefore(fechaInicio)) {
-            GestorMensajes.getInstance().mostrarMensajeWarn("La fecha de finalización del proyecto no puede ser menor al inicio del mismo.");
-            return "";
-        }
-        if (fechaFin.isBefore(fechaFinDoc)) {
-            GestorMensajes.getInstance().mostrarMensajeWarn("La fecha extendida de finalización del proyecto no puede ser menor a la fecha original de finalización.");
-            return "";
+        if (proyecto.getFechaInicio() != null && proyecto.getFechaFinEnDocumento() != null) {
+            LocalDate fechaInicio = FechaUtils.asLocalDate(proyecto.getFechaInicio());
+            LocalDate fechaFinDoc = FechaUtils.asLocalDate(proyecto.getFechaFinEnDocumento());
+            LocalDate fechaFin = FechaUtils.asLocalDate(proyecto.getFechaFin());
+        
+            if (fechaFinDoc.isBefore(fechaInicio) || fechaFin.isBefore(fechaInicio)) {
+                GestorMensajes.getInstance().mostrarMensajeWarn("La fecha de finalización del proyecto no puede ser menor al inicio del mismo.");
+                return "";
+            }
+            if (fechaFin.isBefore(fechaFinDoc)) {
+                GestorMensajes.getInstance().mostrarMensajeWarn("La fecha extendida de finalización del proyecto no puede ser menor a la fecha original de finalización.");
+                return "";
+            }
         }
         
         try {
