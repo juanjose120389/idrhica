@@ -6,7 +6,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
 
-        <p:commandButton value="Regresar" immediate="true" action="#{gestorArticulo.initListarArticulos()}"/>
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorArticulo.initListarArticulos()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Artículo">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
