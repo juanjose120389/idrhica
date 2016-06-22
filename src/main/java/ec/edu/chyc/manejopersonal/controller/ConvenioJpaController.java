@@ -54,7 +54,7 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
             if (!convenio.getArchivoConvenio().isEmpty()) {
                 //si se subió el archivo, copiar del directorio de temporales al original destino, después eliminar el archivo temporal
                 Path origen = ServerUtils.getPathTemp().resolve(convenio.getArchivoConvenio());
-                Path destino = ServerUtils.getPathContratos().resolve(convenio.getArchivoConvenio());
+                Path destino = ServerUtils.getPathConvenios().resolve(convenio.getArchivoConvenio());
 
                 Files.move(origen, destino, REPLACE_EXISTING);
             }            

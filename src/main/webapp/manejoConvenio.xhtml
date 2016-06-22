@@ -44,7 +44,7 @@
                 <p:message for="txtTitulo"/>
 
                 <p:outputLabel value="Objetivo"/>
-                <p:inputTextarea rows="2" id="txtObjetivo" value="#{gestorConvenio.convenio.objetivo}"/>
+                <p:inputTextarea rows="3" id="txtObjetivo" value="#{gestorConvenio.convenio.objetivo}"/>
                 <p:message for="txtObjetivo"/>
 
                 <p:outputLabel value="Institución">
@@ -101,6 +101,26 @@
                 <p:outputLabel value="Observaciones"/>
                 <p:inputTextarea rows="3" value="#{gestorConvenio.convenio.observaciones}"/>
                 <h:panelGroup layout="block"/>
+                
+                <p:outputLabel value="Convenio PDF"/>
+                <h:panelGroup layout="block">
+                    <p:fileUpload fileUploadListener="#{gestorConvenio.fileUploadListener}" 
+                                  mode="advanced"
+                                  update="spanTamanioArchivo" 
+                                  auto="true" 
+                                  sizeLimit="15728640" 
+                                  allowTypes="/(\.|\/)(pdf|docx?)$/" 
+                                  accept="*.pdf|*.doc|*.docx"
+                                  invalidFileMessage="Archivo no válido. Solo se permite PDF y DOC." 
+                                  fileLimitMessage="Máximo 15MB" label="Elegir..."
+                                  /> 
+                    <br/>
+                    <h:panelGroup id="spanTamanioArchivo">
+                        <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorConvenio.convenio.archivoConvenio != ''}" value="Tamaño archivo: #{gestorConvenio.tamanoArchivo}"/>
+                    </h:panelGroup>
+
+                </h:panelGroup> 
+                
 
             </h:panelGrid>        
         </p:panel>

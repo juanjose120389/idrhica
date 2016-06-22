@@ -138,7 +138,8 @@ public class GestorConvenio implements Serializable {
             } else {
                 convenioController.create(convenio);
             }
-            return "index";
+            return initListarConvenios();
+            //return "listaConvenios";
         } catch (Exception ex) {
             Logger.getLogger(GestorConvenio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -239,6 +240,14 @@ public class GestorConvenio implements Serializable {
 
     public void setInstitucion(Institucion institucion) {
         this.institucion = institucion;
+    }
+
+    public String getTamanoArchivo() {
+        return tamanoArchivo;
+    }
+
+    public void setTamanoArchivo(String tamanoArchivo) {
+        this.tamanoArchivo = tamanoArchivo;
     }
     
 }

@@ -62,7 +62,11 @@
                 </h:outputText>
             </p:column>    
             
-
+            <p:column exportable="false" headerText="PDF" width="75">
+                <p:commandLink value="Descargar" ajax="false" rendered="#{convenio.archivoConvenio != ''}">
+                    <p:fileDownload value="#{gestorConvenio.streamParaDescarga(convenio)}" />
+                </p:commandLink>
+            </p:column>
             
             <p:column width="70" rendered="#{gestorUsuario.puedeEditar}" exportable="false">
                 <p:commandLink value="Editar" action="#{gestorConvenio.initModificarConvenio(convenio.id)}"/>
