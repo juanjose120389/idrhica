@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorTesis.initListarTesis()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>        
+        <p:panel header="Ficha de la Tesis">
+            <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
+                <p:outputLabel value="Titulo"/>
+                <p:outputLabel value="#{gestorTesis.tesis.nombre}"/>
+
+                <p:outputLabel value="Director" />
+                <p:outputLabel value="#{gestorTesis.tesis.director.nombres} #{gestorTesis.tesis.director.apellidos}"/>
+
+                <p:outputLabel value="Fecha de Inicio"/>
+                <p:outputLabel value="#{gestorTesis.tesis.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <h:panelGroup layout="block" style="width: 150px">
+                    <p:outputLabel value="Fecha de Finalización"/>
+                </h:panelGroup>
+                <p:outputLabel value="#{gestorTesis.tesis.fechaFin}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <p:outputLabel value="Universidad" />
+                <p:outputLabel value="#{gestorTesis.tesis.universidad.nombre}"/>
+
+                <p:outputLabel value="Facultad" />
+                <p:outputLabel value="#{gestorTesis.tesis.facultad}"/>
+
+                <p:outputLabel value="Escuela" />
+                <p:outputLabel value="#{gestorTesis.tesis.escuela}"/>                
+
+                <p:outputLabel value="Resumen"/>
+                <p:outputLabel value="#{gestorTesis.tesis.resumen}"/>  
+
+                <p:outputLabel value="Observaciones"/>
+                <p:outputLabel value="#{gestorTesis.tesis.observaciones}"/>  
+
+                <p:outputLabel value="Acta de aprobación" rendered="#{gestorTesis.tesis.archivoActaAprobacion != ''}"/>
+                <p:commandLink value="Descargar" ajax="false" rendered="#{gestorTesis.tesis.archivoActaAprobacion != ''}">
+                    <p:fileDownload value="#{gestorTesis.streamParaDescarga(gestorTesis.tesis)}" />
+                </p:commandLink>
+                
+            </h:panelGrid>        
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorTesis.tesis.autoresCollection.toArray()}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="autor" value="#{gestorTesis.tesis.autoresCollection.toArray()}">
+                    <f:facet name="header">
+                        Autores
+                    </f:facet>
+                    <p:column headerText="Identificación" width="100">
+                        <h:outputText value="#{autor.identificacion}" />
+                    </p:column>
+                    
+                    <p:column headerText="Nombres" width="150">
+                        <h:outputText value="#{autor.nombres}" />
+                    </p:column>
+
+                    <p:column headerText="Apellidos" width="250">
+                        <h:outputText value="#{autor.apellidos}" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>   
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorTesis.tesis.codirectoresCollection.toArray()}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="codirector" value="#{gestorTesis.tesis.codirectoresCollection.toArray()}">
+                    <f:facet name="header">
+                        Co-directores
+                    </f:facet>
+                    <p:column headerText="Nombres" width="500">
+                        <h:outputText value="#{codirector.nombres}" />
+                    </p:column>
+
+                    <p:column headerText="Apellidos">
+                        <h:outputText value="#{codirector.apellidos}" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup>        
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorTesis.tesis.tutoresCollection.toArray()}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="tutor" value="#{gestorTesis.tesis.tutoresCollection.toArray()}">
+                    <f:facet name="header">
+                        Tutores
+                    </f:facet>
+                    <p:column headerText="Nombres" width="500">
+                        <h:outputText value="#{header.nombres}" />
+                    </p:column>
+
+                    <p:column headerText="Apellidos">
+                        <h:outputText value="#{header.apellidos}" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup>        
+
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorTesis.tesis.proyectosCollection.toArray()}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="proyecto" value="#{gestorTesis.tesis.proyectosCollection.toArray()}">
+                    <f:facet name="header">
+                        Proyectos vinculados
+                    </f:facet>
+                    <p:column headerText="Nombre proyecto" width="150">
+                        <h:outputText value="#{proyecto.titulo}" />
+                    </p:column>
+
+                    <p:column headerText="Director" width="250">
+                        <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>   
+
+        </p:panel>
+
+    </ui:define>
+</ui:composition>

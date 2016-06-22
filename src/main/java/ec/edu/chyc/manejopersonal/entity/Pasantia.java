@@ -9,13 +9,17 @@ import java.io.Serializable;
 
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -57,6 +61,12 @@ public class Pasantia implements Serializable {
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;    
+    
+    @Lob
+    @Column(columnDefinition = "TEXT default ''")
+    @Type(type = "text")
+    @NotNull
+    private String resumen = "";
     
     @ManyToOne
     @JoinColumn(name = "idUniversidad", referencedColumnName = "id")   
@@ -197,4 +207,11 @@ public class Pasantia implements Serializable {
         this.tutor = tutor;
     }
 
+    public String getResumen() {
+        return resumen;
+    }
+
+    public void setResumen(String resumen) {
+        this.resumen = resumen;
+    }
 }

@@ -49,20 +49,20 @@
             <p:column headerText="Facultad" filterBy="#{pasantia.facultad}" filterMatchMode="contains" width="100" sortBy="#{pasantia.facultad}">
                 <h:outputText value="#{pasantia.facultad}" />
             </p:column>            
+            
+            <p:column headerText="Escuela" filterBy="#{pasantia.escuela}" filterMatchMode="contains" width="100" sortBy="#{pasantia.escuela}">
+                <h:outputText value="#{pasantia.escuela}" />
+            </p:column>            
+            
 
             <p:column headerText="Director" filterBy="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" filterMatchMode="contains" sortBy="#{pasantia.coordinador.nombres}">
                 <h:outputText value="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" />
             </p:column>
-            <p:column headerText="Tutor" filterBy="#{pasantia.tutor.nombres} #{pasantia.tutor.apellidos}" filterMatchMode="contains" sortBy="#{pasantia.tutor.nombres}">
-                <h:outputText value="#{pasantia.tutor.nombres} #{pasantia.tutor.apellidos}" />
-            </p:column>
 
-            <p:column headerText="# Horas" width="70" filterBy="#{pasantia.numeroHoras}" filterMatchMode="contains" sortBy="#{pasantia.numeroHoras}">
-                <h:outputText value="#{pasantia.numeroHoras}" />
-            </p:column>
-
-            <p:column exportable="false" width="60" rendered="#{gestorUsuario.puedeEditar}">
-                <p:commandLink value="Editar" action="#{gestorPasantia.initModificarPasantia(pasantia.id)}"/>
+            <p:column exportable="false" width="90">
+                <p:commandLink value="Ver" action="#{gestorPasantia.initVerPasantia(pasantia.id)}"/>
+                <p:outputLabel value=" "/>
+                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPasantia.initModificarPasantia(pasantia.id)}"/>
             </p:column>            
         </p:dataTable>   
 

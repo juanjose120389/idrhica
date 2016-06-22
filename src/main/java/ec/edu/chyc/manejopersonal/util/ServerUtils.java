@@ -53,6 +53,15 @@ public class ServerUtils {
     }
 
     /**
+     * 
+     * @return Path donde se almacenan los convenios
+     */
+    public static Path getPathConvenios() {
+        return getDocRootPath().resolve("convenios");
+    }
+    
+    
+    /**
      * *
      * Devuelve el path para archivos temporales
      *

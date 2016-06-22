@@ -72,16 +72,20 @@ public class GestorTesis implements Serializable {
 
     }
 
-    public String initModificarTesis(Long id) {
+    public String initVerTesis(Long id) {
         inicializarManejoTesis();
-
+        
+        cargarDatosTesis(id);
+        
+        return "verTesis";
+    }
+    
+    private void cargarDatosTesis(Long id) {
         tesis = tesisController.findTesis(id);
         listaProyectos = new ArrayList<>(tesis.getProyectosCollection());
         listaCodirectores = new ArrayList<>(tesis.getCodirectoresCollection());
         listaTutores = new ArrayList<>(tesis.getTutoresCollection());
         listaAutoresTesis = new ArrayList<>(tesis.getAutoresCollection());
-
-        modoModificar = true;
 
         try {
             Path pathArchivoSubido = ServerUtils.getPathActasAprobacionTesis().resolve(tesis.getArchivoActaAprobacion());
@@ -94,6 +98,16 @@ public class GestorTesis implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+    }
+    
+    public String initModificarTesis(Long id) {
+        inicializarManejoTesis();
+
+        cargarDatosTesis(id);
+        
+        modoModificar = true;
+
 
         return "manejoTesis";
     }

@@ -43,6 +43,13 @@ public class GestorPasantia implements Serializable {
         actualizarListado();
         return "listaPasantias";
     }
+    
+    public String initVerPasantia(Long id) {
+        inicializarManejoPasantia();
+        pasantia = pasantiaController.findEntity(id);
+        
+        return "verPasantia";
+    }
 
     public String initModificarPasantia(Long id) {
         inicializarManejoPasantia();

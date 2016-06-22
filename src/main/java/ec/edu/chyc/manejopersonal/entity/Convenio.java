@@ -6,8 +6,6 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Type;
 
 /**
@@ -38,9 +36,13 @@ public class Convenio implements Serializable {
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")        
+    private String objetivo = "";
     
-    private String objetivo;
-    private String titulo;    
+    private String titulo;
     
     @Lob
     @Column(columnDefinition = "TEXT")
@@ -61,6 +63,9 @@ public class Convenio implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idInstitucion", referencedColumnName = "id")    
     private Institucion institucion;        
+    
+    @NotNull
+    private String archivoConvenio = "";
 
     public Long getId() {
         return id;
@@ -165,6 +170,14 @@ public class Convenio implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Convenio[ id=" + id + " ]";
+    }
+
+    public String getArchivoConvenio() {
+        return archivoConvenio;
+    }
+
+    public void setArchivoConvenio(String archivoConvenio) {
+        this.archivoConvenio = archivoConvenio;
     }
     
 }

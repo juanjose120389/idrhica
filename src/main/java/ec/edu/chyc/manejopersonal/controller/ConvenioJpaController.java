@@ -8,6 +8,10 @@ package ec.edu.chyc.manejopersonal.controller;
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Convenio;
+import ec.edu.chyc.manejopersonal.util.ServerUtils;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -46,6 +50,15 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
                     em.persist(convenio.getInstitucion());
                 }
             }
+            
+            if (!convenio.getArchivoConvenio().isEmpty()) {
+                //si se subió el archivo, copiar del directorio de temporales al original destino, después eliminar el archivo temporal
+                Path origen = ServerUtils.getPathTemp().resolve(convenio.getArchivoConvenio());
+                Path destino = ServerUtils.getPathContratos().resolve(convenio.getArchivoConvenio());
+
+                Files.move(origen, destino, REPLACE_EXISTING);
+            }            
+            
             em.persist(convenio);
             
             em.getTransaction().commit();
@@ -58,15 +71,25 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
 
     public void edit(Convenio convenio) throws Exception {
         EntityManager em = null;
-        try {
+        try {            
+            
             em = getEntityManager();
             em.getTransaction().begin();
+            
+            Convenio convenioAntiguo = em.find(Convenio.class, convenio.getId());
+            
             if (convenio.getInstitucion() != null) {
                 if (convenio.getInstitucion().getId() == null || convenio.getInstitucion().getId() < 0) {
                     convenio.getInstitucion().setId(null);
                     em.persist(convenio.getInstitucion());
                 }
-            }            
+            }
+            
+            String archivoAntiguo = convenioAntiguo.getArchivoConvenio();
+            String archivoNuevo = convenio.getArchivoConvenio();
+            
+            ServerUtils.procesarAntiguoNuevoArchivo(archivoAntiguo, archivoNuevo, ServerUtils.getPathConvenios());
+            
             em.merge(convenio);
             em.getTransaction().commit();
         } finally {

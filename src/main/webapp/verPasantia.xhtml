@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorPasantia.initListarPasantias()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>        
+        <p:panel header="Ficha de Pasantía">
+            <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
+                <p:outputLabel value="Titulo"/>
+                <p:outputLabel value="#{gestorPasantia.pasantia.tema}"/>
+
+                <p:outputLabel value="Pasante"/>
+                <p:outputLabel value="#{gestorPasantia.pasantia.pasante.nombres} #{gestorPasantia.pasantia.pasante.apellidos}"/>
+
+                <p:outputLabel value="Número de horas"/>
+                <p:outputLabel value="#{gestorPasantia.pasantia.numeroHoras}"/>
+                
+                <p:outputLabel value="Coordinador" />
+                <p:outputLabel value="#{gestorPasantia.pasantia.coordinador.nombres} #{gestorPasantia.pasantia.coordinador.apellidos}"/>
+
+                <p:outputLabel value="Fecha de Inicio"/>
+                <p:outputLabel value="#{gestorPasantia.pasantia.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <p:outputLabel value="Fecha de Finalización"/>
+                <p:outputLabel value="#{gestorPasantia.pasantia.fechaFin}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <p:outputLabel value="Universidad" />
+                <p:outputLabel value="#{gestorPasantia.pasantia.universidad.nombre}"/>
+
+                <p:outputLabel value="Facultad" />
+                <p:outputLabel value="#{gestorPasantia.pasantia.facultad}"/>
+
+                <p:outputLabel value="Escuela" />
+                <p:outputLabel value="#{gestorPasantia.pasantia.escuela}"/>
+                
+                <p:outputLabel rendered="#{gestorPasantia.pasantia.proyecto != null}" value="Proyecto vinculado" />
+                <p:outputLabel rendered="#{gestorPasantia.pasantia.proyecto != null}" value="#{gestorPasantia.pasantia.proyecto.titulo}"/>                
+
+                <p:outputLabel value="Resumen" />
+                <p:outputLabel value="#{gestorPasantia.pasantia.resumen}"/>
+            </h:panelGrid>        
+
+        </p:panel>
+
+    </ui:define>
+</ui:composition>
