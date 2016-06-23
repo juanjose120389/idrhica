@@ -37,7 +37,7 @@
                 </ui:repeat>
             </p:column>
             
-            <p:column headerText="Título" width="250" filterBy="#{tesis.nombre}" filterMatchMode="contains" sortBy="#{tesis.nombre}">
+            <p:column headerText="Título" width="300" filterBy="#{tesis.nombre}" filterMatchMode="contains" sortBy="#{tesis.nombre}">
                 <h:outputText value="#{tesis.nombre}" />
             </p:column>
 
@@ -76,15 +76,14 @@
                 <h:outputText value="#{tesis.escuela}" />
             </p:column>            
 
-            <p:column exportable="false" headerText="Proyectos" width="150" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
+            <p:column exportable="false" headerText="Proyectos" width="200" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
                 <ui:repeat value="#{tesis.proyectosCollection.toArray()}" var="proyecto">
                     <p:outputLabel value="• #{gestorProyecto.acortarTitulo(proyecto)}"/><br />
                 </ui:repeat>
             </p:column> 
 
-
             <p:column headerText="Proyectos" styleClass="columnaOculta" exportable="true">
-                <p:outputLabel value="#{gestorPersona.convertirListaPersonas(tesis.autoresCollection)}" escape="false"/>
+                <p:outputLabel value="#{gestorProyecto.convertirListaProyectos(tesis.proyectosCollection)}" escape="false"/>
             </p:column>
             
             
