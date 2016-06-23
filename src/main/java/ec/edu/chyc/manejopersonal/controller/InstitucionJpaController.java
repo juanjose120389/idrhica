@@ -6,11 +6,13 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Convenio;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.hibernate.Hibernate;
 
 
 public class InstitucionJpaController extends GenericJpaController<Institucion> implements Serializable {
@@ -18,11 +20,33 @@ public class InstitucionJpaController extends GenericJpaController<Institucion> 
         setClassRef(Institucion.class);
     }
 
+    public Institucion findInstitucion(Long id) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct i from Institucion i left join fetch i.financiamientosCollection where i.id=:id");
+            q.setParameter("id", id);
+            Institucion institucion = (Institucion)q.getSingleResult();
+            
+            if (!institucion.getConveniosCollection().isEmpty()) {
+                for (Convenio convenio : institucion.getConveniosCollection()) {
+                    Hibernate.initialize(convenio.getProyectosCollection());
+                }
+            }
+            //Hibernate.initialize(institucion.getConveniosCollection());            
+            return institucion;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
     public List<Institucion> listInstituciones() throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select i from Institucion i");
+            Query q = em.createQuery("select i from Institucion i order by i.nombre asc");
             List<Institucion> list = q.getResultList();
             return list;
         } finally {

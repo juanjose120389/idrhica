@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  *
@@ -30,6 +31,9 @@ public class Institucion implements Serializable {
     private Long id;
     
     private String nombre;
+    
+    @Transient
+    private Double totalFinanciamientos;    
     
     @ManyToMany(mappedBy = "agradecimientosCollection")
     private Set<Articulo> articulosCollection = new HashSet<>();
@@ -103,6 +107,14 @@ public class Institucion implements Serializable {
     @Override
     public String toString() {
         return "ec.edu.chyc.manejopersonal.entity.Institucion[ id=" + id + " ]";
+    }
+
+    public Double getTotalFinanciamientos() {
+        return totalFinanciamientos;
+    }
+
+    public void setTotalFinanciamientos(Double totalFinanciamientos) {
+        this.totalFinanciamientos = totalFinanciamientos;
     }
     
 }

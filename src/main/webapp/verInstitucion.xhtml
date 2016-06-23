@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorInstitucion.initListarInstituciones()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>        
+        <p:panel header="Ficha de institución">
+            <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
+                <p:outputLabel value="Nombre:"/>
+                <p:outputLabel value="#{gestorInstitucion.institucion.nombre}"/>
+            </h:panelGrid>
+
+            <h:panelGroup layout="block" rendered="#{empty gestorInstitucion.institucion.financiamientosCollection and empty gestorInstitucion.institucion.conveniosCollection}">
+                <h:panelGroup layout="block" style="height: 20px"/>
+                <p:panel>
+                    <p:outputLabel style="color: gray" value="• Sin registro de proyectos financiados"/>
+                    <br/>
+                    <p:outputLabel style="color: gray" value="• Sin convenios registrados"/>
+                </p:panel>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorInstitucion.institucion.financiamientosCollection}">
+                <h:panelGroup layout="block" style="height: 20px"/>
+                <p:dataTable var="financiamiento" value="#{gestorInstitucion.institucion.financiamientosCollection}" rowIndexVar="rowIndex">
+                    <f:facet name="header">
+                        Proyectos financiados
+                    </f:facet>
+
+                    <p:column headerText="#" style="text-align: right" width="20">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+
+                    <p:column headerText="Título" sortBy="#{financiamiento.proyecto.titulo}">
+                        <h:outputText value="#{financiamiento.proyecto.titulo}" />
+                    </p:column>
+
+                    <p:column headerText="Monto" width="100" style="text-align: right" rendered="#{gestorUsuario.puedeVerMasInfo}" sortBy="#{financiamiento.monto}">
+                        <h:outputText value="#{financiamiento.monto}">
+                            <f:convertNumber type="currency" currencySymbol="$" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:columnGroup type="footer" rendered="#{gestorUsuario.puedeVerMasInfo}">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:right" footerText="Total:" />
+                            <p:column style="text-align: right">
+                                <f:facet name="footer">
+                                    <h:outputText value="#{gestorInstitucion.institucion.totalFinanciamientos}">
+                                        <f:convertNumber type="currency" currencySymbol="$" />
+                                    </h:outputText>
+                                </f:facet>                                                                
+                            </p:column>
+
+                        </p:row>
+                    </p:columnGroup>
+
+                </p:dataTable>
+            </h:panelGroup>   
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorInstitucion.institucion.conveniosCollection}">
+                <h:panelGroup layout="block" style="height: 20px"/>
+                <p:dataTable var="convenio" value="#{gestorInstitucion.institucion.conveniosCollection}" rowIndexVar="rowIndex">
+                    <f:facet name="header">
+                        Convenios con la institución
+                    </f:facet>
+
+                    <p:column headerText="#" style="text-align: right" width="20">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>                    
+
+                    <p:column headerText="Título del convenio" width="300" sortBy="#{convenio.titulo}">
+                        <h:outputText value="#{convenio.titulo}" />
+                    </p:column>
+
+                    <p:column headerText="Proyectos vinculados" width="300" >
+                        <ui:repeat value="#{convenio.proyectosCollection.toArray()}" var="proyecto">
+                            <p:outputLabel value="• #{gestorProyecto.acortarTitulo(proyecto)}"/><br />
+                        </ui:repeat>
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGroup>   
+
+
+        </p:panel>
+
+    </ui:define>
+</ui:composition>

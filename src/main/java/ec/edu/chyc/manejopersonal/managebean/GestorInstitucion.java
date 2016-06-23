@@ -6,6 +6,7 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.InstitucionJpaController;
+import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -26,9 +27,11 @@ public class GestorInstitucion implements Serializable {
     
     private final InstitucionJpaController institucionController = new InstitucionJpaController();
     private List<Institucion> listaInstituciones = new ArrayList<>();
+    
+    private Institucion institucion = null;
 
     private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
-    private Long idInstitucionGen = -1L;
+    //private Long idInstitucionGen = -1L;
     
     public GestorInstitucion() {
     }
@@ -36,6 +39,38 @@ public class GestorInstitucion implements Serializable {
     @PostConstruct
     public void init() {        
     }
+    
+    public String initListarInstituciones() {
+        actualizarListaInstituciones();
+
+        // listaAutores.clear();
+        return "listaInstituciones";
+    }
+
+    private void inicializarManejoInstitucion() {
+        institucion = null;
+        
+        actualizarListaInstituciones();
+        listaInstitucionesAgregadas.clear();
+    }
+    
+    private void cargarDatosInstitucion(Long id){
+        institucion = institucionController.findInstitucion(id);
+        
+        Double total = 0.0;
+        for (Financiamiento financiamiento : institucion.getFinanciamientosCollection()) {
+            total += financiamiento.getMonto();
+        }        
+        institucion.setTotalFinanciamientos(total);
+    }
+    
+    public String initVerInstitucion(Long id) {
+        inicializarManejoInstitucion();
+        
+        cargarDatosInstitucion(id);
+        
+        return "verInstitucion";
+    }    
     
     public void actualizarListaInstituciones() {
         try {
@@ -66,6 +101,14 @@ public class GestorInstitucion implements Serializable {
 
     public void setListaInstitucionesAgregadas(List<Institucion> listaInstitucionesAgregadas) {
         this.listaInstitucionesAgregadas = listaInstitucionesAgregadas;
+    }
+
+    public Institucion getInstitucion() {
+        return institucion;
+    }
+
+    public void setInstitucion(Institucion institucion) {
+        this.institucion = institucion;
     }
     
 }

@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
+                template="./template.xhtml">
+    <ui:define name="body">
+        <style >
+            .ui-datatable table {
+                table-layout: auto;
+            }
+        </style>
+        <p:dataTable widgetVar="institucionesTable" id="conveniosTable" var="institucion" value="#{gestorInstitucion.listaInstituciones}" rows="10"
+                     paginator="true" emptyMessage="#{label.emptyMessage}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                     rowsPerPageTemplate="10,15,20,40"
+                     >
+            <f:facet name="{Exporters}">
+                <h:panelGroup layout="block" styleClass="exportButtons">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                        <p:dataExporter type="xls" target="institucionesTable" fileName="instituciones" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                        <pe:exporter type="pdf" target="institucionesTable" fileName="instituciones" encoding="iso-8859-1"/>
+                    </h:commandLink>
+                </h:panelGroup>                    
+            </f:facet>
+            <f:facet name="header">
+                Instituciones
+            </f:facet>            
+            <p:column headerText="Nombre" sortBy="#{institucion.nombre}" filterBy="#{institucion.nombre}" filterMatchMode="contains" >
+                <h:outputText value="#{institucion.nombre}" />
+            </p:column>
+
+            <p:column width="90" exportable="false">
+                <p:commandLink value="Detalles" action="#{gestorInstitucion.initVerInstitucion(institucion.id)}"/>
+            </p:column>
+        </p:dataTable>
+    </ui:define>
+</ui:composition>
