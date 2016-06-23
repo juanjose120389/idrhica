@@ -38,6 +38,7 @@
                                  id="personasTable" var="persona" value="#{gestorDialogListaPersonas.listaPersonas}" rows="10"
                                  paginatorAlwaysVisible="false" paginator="true"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,15,20,40"
                                  >
                         <f:facet name="{Exporters}">
                             <h:panelGroup layout="block" styleClass="exportButtons">
@@ -83,7 +84,7 @@
                             <h:outputText value="#{persona.activo ? 'Activo' : 'No Activo'}" />
                         </p:column>
 
-                        <p:column headerText="Correo">
+                        <p:column headerText="Correo" width="100">
                             <h:outputText value="#{persona.correo}" />
                         </p:column>
 

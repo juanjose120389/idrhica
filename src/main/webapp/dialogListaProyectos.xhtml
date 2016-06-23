@@ -29,6 +29,7 @@
             <p:dataTable widgetVar="proyectosTable" id="proyectosTable" var="proyecto" rowKey="#{proyecto.id}" resizableColumns="false" selection="#{gestorDialogListaProyectos.listaProyectosSel}" value="#{gestorProyecto.listaProyecto}" rows="10"
                          paginatorAlwaysVisible="false" paginator="true"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,20,40"
                          >
                 <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
@@ -37,7 +38,7 @@
                     <h:outputText value="#{proyecto.titulo}" />
                 </p:column>
 
-                <p:column headerText="Director">
+                <p:column headerText="Director" width="150">
                     <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
                 </p:column>
 
@@ -45,7 +46,7 @@
                     <h:outputText value="#{proyecto.fechaInicio}">
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
-                </p:column>                
+                </p:column>
 
                 <f:facet name="footer">
                     <p:commandButton value="Aceptar" action="#{gestorDialogListaProyectos.aceptarSeleccion()}"/>
