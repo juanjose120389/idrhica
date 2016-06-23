@@ -48,7 +48,7 @@
                 <p:outputLabel value="#{gestorProyecto.proyecto.resumen}"/>  
 
                 <p:outputLabel value="Observaciones"/>
-                <p:outputLabel value="#{gestorProyecto.proyecto.observaciones}"/>  
+                <p:outputLabel value="#{gestorProyecto.proyecto.observaciones}" styleClass="lineaMultiple"/>  
 
             </h:panelGrid>        
 
@@ -110,7 +110,7 @@
                     <f:facet name="header">
                         Convenios
                     </f:facet>
-                    <p:column headerText="Título" width="300">
+                    <p:column headerText="Título" width="350">
                         <h:outputText value="#{convenio.titulo}" />
                     </p:column>
 
