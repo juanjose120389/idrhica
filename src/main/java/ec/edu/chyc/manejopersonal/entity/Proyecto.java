@@ -80,6 +80,8 @@ public class Proyecto implements Serializable {
     //@OneToMany(mappedBy = "proyecto")
     //private Collection<Contrato> contratosCollection = new ArrayList<>();           
 
+    @Transient
+    private Double totalFinanciamientos;        
     
     @ManyToMany
     @JoinTable(name = "proyectoConvenio", joinColumns = {
@@ -266,5 +268,12 @@ public class Proyecto implements Serializable {
     public void setConveniosCollection(Set<Convenio> conveniosCollection) {
         this.conveniosCollection = conveniosCollection;
     }
-    
+
+    public Double getTotalFinanciamientos() {
+        return totalFinanciamientos;
+    }
+
+    public void setTotalFinanciamientos(Double totalFinanciamientos) {
+        this.totalFinanciamientos = totalFinanciamientos;
+    }    
 }

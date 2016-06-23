@@ -59,14 +59,29 @@
                     <f:facet name="header">
                         Financiamiento del Proyecto
                     </f:facet>
-                    <p:column headerText="Institución" width="500">
+                    <p:column headerText="Institución" >
                         <h:outputText value="#{financiamiento.institucion.nombre}" />
                     </p:column>
 
-                    <p:column headerText="Monto" rendered="#{gestorUsuario.puedeVerMasInfo}">
-                        <h:outputText value="#{financiamiento.monto}" />
+                    <p:column headerText="Monto" width="150" rendered="#{gestorUsuario.puedeVerMasInfo}" style="text-align: right">
+                        <h:outputText value="#{financiamiento.monto}" >
+                            <f:convertNumber type="currency" currencySymbol="$" />
+                        </h:outputText>
                     </p:column>
 
+                    <p:columnGroup type="footer" rendered="#{gestorUsuario.puedeVerMasInfo}">
+                        <p:row>
+                            <p:column colspan="1" style="text-align:right" footerText="Total:" />
+                            <p:column style="text-align: right">
+                                <f:facet name="footer">
+                                    <h:outputText value="#{gestorProyecto.proyecto.totalFinanciamientos}">
+                                        <f:convertNumber type="currency" currencySymbol="$" />
+                                    </h:outputText>
+                                </f:facet>                                                                
+                            </p:column>
+
+                        </p:row>
+                    </p:columnGroup>                    
                 </p:dataTable>
             </h:panelGroup>        
 

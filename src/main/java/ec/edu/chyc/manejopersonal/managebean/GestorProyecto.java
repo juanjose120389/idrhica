@@ -138,6 +138,12 @@ public class GestorProyecto implements Serializable {
         proyecto = proyectoController.findProyecto(id, true, true, true, true, true);
         listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
         
+        Double total = 0.0;
+        for (Financiamiento financiamiento : proyecto.getFinanciamientosCollection()) {
+            total += financiamiento.getMonto();
+        }
+        proyecto.setTotalFinanciamientos(total);
+        
         colocarDuracion(proyecto);
 
         modoModificar = false;
