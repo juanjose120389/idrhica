@@ -8,6 +8,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.ConvenioJpaController;
 import ec.edu.chyc.manejopersonal.entity.Convenio;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
@@ -21,7 +22,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -32,6 +36,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -45,6 +50,7 @@ public class GestorConvenio implements Serializable {
     private final ConvenioJpaController convenioController = new ConvenioJpaController();
     private Convenio convenio;
     private List<Convenio> listaConvenios = new ArrayList<>();
+    private List<Proyecto> listaProyectos = new ArrayList<>();
     private boolean modoModificar;
     private Institucion institucion;
     private long idInstitucionGen = -1L;
@@ -61,6 +67,7 @@ public class GestorConvenio implements Serializable {
     public void inicializarManejoConvenio() {
         GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
         listaConvenios.clear();
+        listaProyectos.clear();
         convenio = new Convenio();
         modoModificar = false;
         tamanoArchivo = "";
@@ -68,6 +75,14 @@ public class GestorConvenio implements Serializable {
         GestorProyecto.getInstance().actualizarListaProyecto();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
         GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
+    }
+    
+    public String initVerConvenio(Long id) {
+        inicializarManejoConvenio();
+        
+        cargarDatosConvenio(id);
+        
+        return "verConvenio";
     }
     
     public String initCrearConvenio() {
@@ -93,8 +108,19 @@ public class GestorConvenio implements Serializable {
     }
     public String initModificarConvenio(Long id) {
         inicializarManejoConvenio();
-        convenio = convenioController.findEntity(id);
+        
+        cargarDatosConvenio(id);
+        
         modoModificar = true;
+        
+        
+        return "manejoConvenio";
+    }
+    
+    private void cargarDatosConvenio(Long id) {
+        convenio = convenioController.findConvenio(id);
+        
+        listaProyectos = new ArrayList(convenio.getProyectosCollection());
         
         try {
             Path pathArchivoSubido = ServerUtils.getPathConvenios().resolve(convenio.getArchivoConvenio());
@@ -107,9 +133,9 @@ public class GestorConvenio implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return "manejoConvenio";
+
     }
+    
     public static GestorConvenio getInstance()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -119,6 +145,14 @@ public class GestorConvenio implements Serializable {
     }    
     
     public String guardar() {
+        
+        convenio.setProyectosCollection(new HashSet(listaProyectos));
+        
+        if (convenio.getProyectosCollection().isEmpty()) {
+            GestorMensajes.getInstance().mostrarMensajeWarn("Por favor, agregar proyectos al convenio.");
+            return "";
+        }
+        
         if (convenio.getFechaInicio() != null && convenio.getFechaFin() != null) {
             LocalDate dtInicio = FechaUtils.asLocalDate(convenio.getFechaInicio());
             LocalDate dtFin = FechaUtils.asLocalDate(convenio.getFechaFin());
@@ -146,6 +180,33 @@ public class GestorConvenio implements Serializable {
         
         return "";
     }
+    
+    public void agregarProyecto() {
+        Map<String, Object> options = new HashMap<>();
+        options.put("resizable", true);
+        options.put("draggable", true);
+        options.put("width", "75%");
+        options.put("modal", true);
+        options.put("contentWidth", "100%");
+        GestorDialogListaProyectos.getInstance().clearListaProyectosSel();
+        RequestContext.getCurrentInstance().openDialog("dialogListaProyectos", options, null);
+    }
+
+    public void quitarProyecto(Proyecto proyectoQuitar) {
+        listaProyectos.remove(proyectoQuitar);
+    }
+    
+    public void onProyectoChosen(SelectEvent event) {
+        List<Proyecto> listaProyectosSel = (List<Proyecto>) event.getObject();
+        if (listaProyectosSel != null) {
+            for (Proyecto proy : listaProyectosSel) {
+                if (!listaProyectos.contains(proy)) {
+                    listaProyectos.add(proy);
+                }
+            }
+        }
+    }
+    
     public void guardarInstitucion() {
         institucion.setId(idInstitucionGen);
         idInstitucionGen--;
@@ -248,6 +309,14 @@ public class GestorConvenio implements Serializable {
 
     public void setTamanoArchivo(String tamanoArchivo) {
         this.tamanoArchivo = tamanoArchivo;
+    }
+
+    public List<Proyecto> getListaProyectos() {
+        return listaProyectos;
+    }
+
+    public void setListaProyectos(List<Proyecto> listaProyectos) {
+        this.listaProyectos = listaProyectos;
     }
     
 }

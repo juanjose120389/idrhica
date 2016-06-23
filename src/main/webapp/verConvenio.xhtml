@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+    <ui:define name="body">
+
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorConvenio.initListarConvenios()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>        
+        <p:panel header="Ficha del Convenio">
+            <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
+                <p:outputLabel value="Titulo"/>
+                <p:outputLabel value="#{gestorConvenio.convenio.titulo}"/>
+
+                <p:outputLabel value="Objetivo" />
+                <p:outputLabel value="#{gestorConvenio.convenio.objetivo}" styleClass="lineaMultiple"/>
+
+                <p:outputLabel value="Fecha de Inicio"/>
+                <p:outputLabel value="#{gestorConvenio.convenio.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <p:outputLabel value="Fecha de Finalización"/>
+                <p:outputLabel value="#{gestorConvenio.convenio.fechaFin}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <p:outputLabel value="Institución"/>
+                <h:panelGroup>
+                    <p:outputLabel value="#{gestorConvenio.convenio.institucion.nombre}" rendered="#{gestorConvenio.convenio.institucion != null}"/>  
+                </h:panelGroup>
+
+                <p:outputLabel value="Administrador" />
+                <h:panelGroup>
+                    <p:outputLabel value="#{gestorConvenio.convenio.administrador.nombres} #{gestorConvenio.convenio.administrador.apellidos}" rendered="#{gestorConvenio.convenio.administrador != null}"/>
+                </h:panelGroup>
+
+                <p:outputLabel value="Observaciones"/>
+                <p:outputLabel value="#{gestorConvenio.convenio.observaciones}" styleClass="lineaMultiple"/>
+
+                <p:outputLabel value="Convenio PDF" rendered="#{gestorConvenio.convenio.archivoConvenio != ''}"/>
+                <p:commandLink value="Descargar" ajax="false" rendered="#{gestorConvenio.convenio.archivoConvenio != ''}">
+                    <p:fileDownload value="#{gestorConvenio.streamParaDescarga(gestorConvenio.convenio)}" />
+                </p:commandLink>
+            </h:panelGrid>        
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorConvenio.convenio.proyectosCollection.toArray()}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="proyecto" value="#{gestorConvenio.convenio.proyectosCollection.toArray()}">
+                    <f:facet name="header">
+                        Proyectos pertenecientes al convenio
+                    </f:facet>
+                    <p:column headerText="Título">
+                        <h:outputText value="#{proyecto.titulo}" />
+                    </p:column>
+
+                    <p:column headerText="Director" width="200">
+                        <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>   
+
+        </p:panel>
+
+    </ui:define>
+</ui:composition>

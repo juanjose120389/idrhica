@@ -80,8 +80,15 @@ public class Proyecto implements Serializable {
     //@OneToMany(mappedBy = "proyecto")
     //private Collection<Contrato> contratosCollection = new ArrayList<>();           
 
-    @OneToMany(mappedBy = "proyecto")
-    private Collection<Convenio> conveniosCollection = new ArrayList<>();
+    
+    @ManyToMany
+    @JoinTable(name = "proyectoConvenio", joinColumns = {
+        @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idConvenio", referencedColumnName = "id")})
+    private Set<Convenio> conveniosCollection = new HashSet();
+    
+    /*@OneToMany(mappedBy = "proyecto")
+    private Collection<Convenio> conveniosCollection = new ArrayList<>();*/
 
     @OneToMany(mappedBy = "proyecto")
     private Collection<Pasantia> pasantiasCollection = new ArrayList<>();
@@ -105,7 +112,7 @@ public class Proyecto implements Serializable {
     @JoinTable(name = "proyectoContrato", joinColumns = {
         @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idContrato", referencedColumnName = "id")})
-    private Set<Contrato> contratosCollection = new HashSet();
+    private Set<Contrato> contratosCollection = new HashSet();   
     
     public Long getId() {
         return id;
@@ -133,14 +140,6 @@ public class Proyecto implements Serializable {
 
     public Persona getCodirector() {
         return codirector;
-    }
-
-    public Collection<Convenio> getConveniosCollection() {
-        return conveniosCollection;
-    }
-
-    public void setConveniosCollection(Collection<Convenio> conveniosCollection) {
-        this.conveniosCollection = conveniosCollection;
     }
 
     public void setCodirector(Persona codirector) {
@@ -258,6 +257,14 @@ public class Proyecto implements Serializable {
 
     public void setFechaFinEnDocumento(Date fechaFinEnDocumento) {
         this.fechaFinEnDocumento = fechaFinEnDocumento;
+    }
+
+    public Set<Convenio> getConveniosCollection() {
+        return conveniosCollection;
+    }
+
+    public void setConveniosCollection(Set<Convenio> conveniosCollection) {
+        this.conveniosCollection = conveniosCollection;
     }
     
 }

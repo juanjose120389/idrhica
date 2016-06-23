@@ -7,6 +7,8 @@ package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +16,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Type;
@@ -42,16 +46,20 @@ public class Convenio implements Serializable {
     @Type(type = "text")        
     private String objetivo = "";
     
-    private String titulo;
+    private String titulo = "";
     
     @Lob
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")    
     private String observaciones;
     
-    @ManyToOne
+    @ManyToMany(mappedBy = "conveniosCollection")
+    @OrderBy("titulo ASC")
+    private Set<Proyecto> proyectosCollection = new HashSet<>();    
+    
+    /*@ManyToOne
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")    
-    private Proyecto proyecto;
+    private Proyecto proyecto;*/
     
     /*@OneToMany(mappedBy = "convenio")
     private Collection<Articulo> articulosCollection = new ArrayList<>();*/
@@ -105,14 +113,6 @@ public class Convenio implements Serializable {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
-    }
-
-    public Proyecto getProyecto() {
-        return proyecto;
-    }
-
-    public void setProyecto(Proyecto proyecto) {
-        this.proyecto = proyecto;
     }
 
     public String getObjetivo() {
@@ -178,6 +178,14 @@ public class Convenio implements Serializable {
 
     public void setArchivoConvenio(String archivoConvenio) {
         this.archivoConvenio = archivoConvenio;
+    }
+
+    public Set<Proyecto> getProyectosCollection() {
+        return proyectosCollection;
+    }
+
+    public void setProyectosCollection(Set<Proyecto> proyectosCollection) {
+        this.proyectosCollection = proyectosCollection;
     }
     
 }

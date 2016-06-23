@@ -31,26 +31,29 @@
             <f:facet name="header">
                 Convenios
             </f:facet>            
-            <p:column headerText="Título" sortBy="#{convenio.titulo}" filterBy="#{convenio.titulo}" filterMatchMode="contains" >
+            <p:column headerText="Título" sortBy="#{convenio.titulo}" width="250" filterBy="#{convenio.titulo}" filterMatchMode="contains" >
                 <h:outputText value="#{convenio.titulo}" />
-            </p:column>           
+            </p:column>
             
             <p:column headerText="Institución" sortBy="#{convenio.institucion.nombre}" filterBy="#{convenio.institucion.nombre}" filterMatchMode="contains" >
                 <h:outputText value="#{convenio.institucion.nombre}" />
-            </p:column>           
+            </p:column>
+            
+            <p:column exportable="false" headerText="Proyectos" width="300" filterBy="#{convenio.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
+                <ui:repeat value="#{convenio.proyectosCollection.toArray()}" var="proyecto">
+                    <p:outputLabel value="• #{gestorProyecto.acortarTitulo(proyecto)}"/><br />
+                    
+                </ui:repeat>
+            </p:column>
 
-            <p:column headerText="Proyecto" sortBy="#{convenio.proyecto.titulo}" filterBy="#{convenio.proyecto.titulo}" filterMatchMode="contains" >
-                <h:outputText id="lblTituloProy" value="#{gestorProyecto.acortarTitulo(convenio.proyecto)}" style="word-wrap: break-word;"/>
-                <p:tooltip for="lblTituloProy" style="width: 400px; word-wrap: break-word;" value="#{convenio.proyecto.titulo}" />                    
-            </p:column>   
+            <p:column headerText="Proyectos" styleClass="columnaOculta" exportable="true">
+                <p:outputLabel value="#{gestorProyecto.convertirListaProyectos(convenio.proyectosCollection)}" escape="false"/>
+            </p:column>            
             
              <p:column headerText="Admnistrador" filterBy="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" filterMatchMode="contains" sortBy="#{convenio.administrador.nombres}">
                 <h:outputText value="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" />
             </p:column>
-            <p:column headerText="Objetivo" sortBy="#{convenio.objetivo}" >
-                <h:outputText value="#{convenio.objetivo}" />
-            </p:column> 
-
+            
             <p:column headerText="Fecha Inicio" sortBy="#{convenio.fechaInicio}" >
                 <h:outputText value="#{convenio.fechaInicio}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
@@ -62,17 +65,18 @@
                 </h:outputText>
             </p:column>    
             
-            <p:column exportable="false" headerText="PDF" width="75">
-                <p:commandLink value="Descargar" ajax="false" rendered="#{convenio.archivoConvenio != ''}">
+            <p:column exportable="false" headerText="PDF" width="40">
+                <p:commandLink ajax="false" rendered="#{convenio.archivoConvenio != ''}" title="Descargar convenio">
+                    <i class="fa fa-download"></i>
                     <p:fileDownload value="#{gestorConvenio.streamParaDescarga(convenio)}" />
                 </p:commandLink>
             </p:column>
             
-            <p:column width="70" rendered="#{gestorUsuario.puedeEditar}" exportable="false">
-                <p:commandLink value="Editar" action="#{gestorConvenio.initModificarConvenio(convenio.id)}"/>
+            <p:column width="90" exportable="false">
+                <p:commandLink value="Ver" action="#{gestorConvenio.initVerConvenio(convenio.id)}"/>
+                <p:outputLabel value=" "/>
+                <p:commandLink value="Editar" action="#{gestorConvenio.initModificarConvenio(convenio.id)}" rendered="#{gestorUsuario.puedeEditar}"/>
             </p:column>
-
-
         </p:dataTable>
     </ui:define>
 </ui:composition>

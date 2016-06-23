@@ -35,8 +35,8 @@
 
 
         <p:panel header="#{gestorConvenio.modoModificar?'Modificar':'Nuevo'} Convenio" id="panelConvenio">
-            <p:messages id="messages" showDetail="true" globalOnly="true" autoUpdate="true" closable="true" />
-            <h:panelGrid columns="3">            
+            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
+            <h:panelGrid columns="3">
                 <p:outputLabel value="Título">
                     <span class="asterisk"/>
                 </p:outputLabel>
@@ -72,20 +72,6 @@
                 <p:calendar pattern="dd/MM/yyyy" value="#{gestorConvenio.convenio.fechaFin}"/>  
                 <h:panelGroup layout="block"/>
 
-                <p:outputLabel value="Proyecto">
-                    <span class="asterisk"/>
-                </p:outputLabel>
-                <p:selectOneMenu id="cmbProyecto" style="width: 300px" value="#{gestorConvenio.convenio.proyecto}" converter="proyectoConverter"
-                                 var="per2" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{label.required}">
-                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                    <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
-
-                    <p:column>
-                        <p:outputLabel value="#{per2.titulo}"/>
-                    </p:column>
-                </p:selectOneMenu>                                
-                <p:message for="cmbProyecto"/>
-
                 <p:outputLabel value="Administrador" />
                 <p:selectOneMenu style="width: 300px" id="cmbAdmin" value="#{gestorConvenio.convenio.administrador}" converter="personaConverter"
                                  var="per" filter="true" filterMatchMode="contains">
@@ -97,11 +83,38 @@
                     </p:column>
                 </p:selectOneMenu>                
                 <h:panelGroup layout="block"/>
+                
+                <p:outputLabel value="Asociado a Proyectos">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <h:panelGroup layout="block" id="divProyectos">
+                    <h:panelGroup layout="block" style="height: 15px"/>
+                    <p:dataTable id="dtProyectos" paginator="true" paginatorAlwaysVisible="false" rows="10" var="proyecto" 
+                                 value="#{gestorConvenio.listaProyectos}" emptyMessage="#{label.emptyMessage}">
+                        <p:column headerText="Título">
+                            <h:outputText value="#{proyecto.titulo}"/>
+                        </p:column>
+                        <p:column headerText="Director" width="300">
+                            <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
+                        </p:column>
+                        <p:column style="text-align: center" width="60">
+                            <p:commandButton id="cmdQuitarElem" action="#{gestorConvenio.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <h:panelGroup layout="block">
+                        <p:commandButton value="Agregar" action="#{gestorConvenio.agregarProyecto()}" process="@parent">
+                            <p:ajax event="dialogReturn" listener="#{gestorConvenio.onProyectoChosen}" update="dtProyectos"/>
+                        </p:commandButton>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" style="height: 15px"/>
+                </h:panelGroup>
+                <h:panelGroup layout="block"/>                
 
                 <p:outputLabel value="Observaciones"/>
                 <p:inputTextarea rows="3" value="#{gestorConvenio.convenio.observaciones}"/>
                 <h:panelGroup layout="block"/>
-                
+
                 <p:outputLabel value="Convenio PDF"/>
                 <h:panelGroup layout="block">
                     <p:fileUpload fileUploadListener="#{gestorConvenio.fileUploadListener}" 
@@ -120,8 +133,7 @@
                     </h:panelGroup>
 
                 </h:panelGroup> 
-                
-
+                <h:panelGroup layout="block"/>
             </h:panelGrid>        
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>

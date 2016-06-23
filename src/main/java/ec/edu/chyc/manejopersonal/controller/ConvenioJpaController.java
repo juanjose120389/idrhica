@@ -8,11 +8,14 @@ package ec.edu.chyc.manejopersonal.controller;
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Convenio;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -22,11 +25,28 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
         setClassRef(Convenio.class);
     }
 
+    public Convenio findConvenio(Long id) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct c from Convenio c left join fetch c.proyectosCollection where c.id=:id");
+            q.setParameter("id", id);
+            Convenio convenio = (Convenio)q.getSingleResult();            
+            
+            return convenio;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    
     public List<Convenio> listConvenio() throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select c from Convenio c");
+            Query q = em.createQuery("select distinct c from Convenio c left join fetch c.proyectosCollection order by c.fechaFin desc");
             List<Convenio> list = q.getResultList();
             return list;
         } finally {
@@ -37,29 +57,36 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
     }
     
     
-    public void create(Convenio convenio) throws Exception {
+    public void create(Convenio obj) throws Exception {
         EntityManager em = null;
 
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             
-            if (convenio.getInstitucion() != null) {
-                if (convenio.getInstitucion().getId() == null || convenio.getInstitucion().getId() < 0) {
-                    convenio.getInstitucion().setId(null);
-                    em.persist(convenio.getInstitucion());
+            if (obj.getInstitucion() != null) {
+                if (obj.getInstitucion().getId() == null || obj.getInstitucion().getId() < 0) {
+                    obj.getInstitucion().setId(null);
+                    em.persist(obj.getInstitucion());
                 }
             }
             
-            if (!convenio.getArchivoConvenio().isEmpty()) {
+            em.persist(obj);
+            
+
+            //guardar la relación proyecto - convenio
+            for (Proyecto proy : obj.getProyectosCollection()) {
+                Proyecto proyAttached = em.find(Proyecto.class, proy.getId());
+                proyAttached.getConveniosCollection().add(obj);
+            }
+            
+            if (!obj.getArchivoConvenio().isEmpty()) {
                 //si se subió el archivo, copiar del directorio de temporales al original destino, después eliminar el archivo temporal
-                Path origen = ServerUtils.getPathTemp().resolve(convenio.getArchivoConvenio());
-                Path destino = ServerUtils.getPathConvenios().resolve(convenio.getArchivoConvenio());
+                Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoConvenio());
+                Path destino = ServerUtils.getPathConvenios().resolve(obj.getArchivoConvenio());
 
                 Files.move(origen, destino, REPLACE_EXISTING);
             }            
-            
-            em.persist(convenio);
             
             em.getTransaction().commit();
         } finally {
@@ -84,6 +111,25 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
                     em.persist(convenio.getInstitucion());
                 }
             }
+            
+            Set<Proyecto> listaProyectos = convenio.getProyectosCollection();
+            Iterator<Proyecto> iterProyectosAnteriores = convenioAntiguo.getProyectosCollection().iterator();
+            while (iterProyectosAnteriores.hasNext()) {
+                //quitar los proyectos que ya no estan en el convenio editado
+                Proyecto proy = iterProyectosAnteriores.next();
+                if (!listaProyectos.contains(proy)) {
+                    iterProyectosAnteriores.remove();
+                    proy.getConveniosCollection().remove(convenio);
+                }
+            }
+            for (Proyecto proy : listaProyectos) {
+                //agregar proyectos que han sido agregados en el convenio editado
+                if (!convenioAntiguo.getProyectosCollection().contains(proy)){
+                    Proyecto proyExistenteAttached = em.find(Proyecto.class, proy.getId());
+                    proyExistenteAttached.getConveniosCollection().add(convenio);
+                }
+            }
+            
             
             String archivoAntiguo = convenioAntiguo.getArchivoConvenio();
             String archivoNuevo = convenio.getArchivoConvenio();
