@@ -20,13 +20,13 @@
 
             </p:tab>
             <p:tab title="Contactos externos" id="tabExterno">
-                
+
             </p:tab>
         </p:tabView> 
         <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonasSel}" rows="15"
                      paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                     rowsPerPageTemplate="10,15,20,40"
+                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
                      >
             <f:facet name="{Exporters}">
                 <h:panelGroup layout="block" styleClass="exportButtons">
@@ -42,6 +42,11 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
+            <p:column headerText="#" width="20">
+                <h:panelGroup style="text-align: right" layout="block">
+                    <h:outputText value="#{rowIndex+1}"/>
+                </h:panelGroup>
+            </p:column>
             <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
                 <h:outputText value="#{persona.nombres}" />
             </p:column>
