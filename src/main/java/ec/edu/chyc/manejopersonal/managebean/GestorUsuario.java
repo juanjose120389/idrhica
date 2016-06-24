@@ -10,11 +10,12 @@ import ec.edu.chyc.manejopersonal.entity.Usuario;
 import ec.edu.chyc.manejopersonal.entity.Usuario.TipoUsuario;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
@@ -34,20 +35,30 @@ public class GestorUsuario implements Serializable {
     private int intentosIncorrectos = 0;
     private boolean bloquearLogin = false;
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
     public static GestorUsuario getInstance() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELContext context = facesContext.getELContext();
         ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorUsuario}", GestorUsuario.class);
         return (GestorUsuario) ex.getValue(context);
     }
+    /**
+     * 
+     * @return true Si el usuario puede agregar datos
+     */
     public boolean isPuedeAgregar() {
         return (logeado && usuarioActual.getTipo() == TipoUsuario.ADMIN);
     }
+    /**
+     * 
+     * @return true Si el usuario puede editar datos
+     */
     public boolean isPuedeEditar() {
         return (logeado && usuarioActual.getTipo() == TipoUsuario.ADMIN);
     }
+    /**
+     * 
+     * @return true Si el usuario puede ver información privilegiada
+     */
     public boolean isPuedeVerMasInfo(){
         if (logeado) {
             return (usuarioActual.getTipo() == TipoUsuario.ADMIN || usuarioActual.getTipo() == TipoUsuario.VISOR);
@@ -55,6 +66,9 @@ public class GestorUsuario implements Serializable {
         return false;
     }
     
+    /**
+     * Cuando el tiempo de bloqueo de login se cumplió, desbloquear login
+     */
     public void pollComplete() {
         //BeansUtils.ejecutarJS("PF('pollEnable').stop();");
         bloquearLogin = false;
@@ -62,6 +76,7 @@ public class GestorUsuario implements Serializable {
     
     public String login() {
         if (!usuario.isEmpty() && !password.isEmpty() && !bloquearLogin) {
+            //antes de enviar el password, se lo codifica ya que en la base de datos está el password codificado
             String encPassword = ServerUtils.sha256(password);
 
             Usuario user = usuarioController.login(usuario, encPassword);
@@ -71,7 +86,7 @@ public class GestorUsuario implements Serializable {
                 intentosIncorrectos = 0;
             } else {
                 intentosIncorrectos++;
-                if (intentosIncorrectos >= 3) {
+                if (intentosIncorrectos >= 3) {//3 o más intentos incorrectos, bloquear login
                     bloquearLogin = true;
                     BeansUtils.ejecutarJS("PF('pollEnable').start();");                    
                 }
@@ -79,13 +94,31 @@ public class GestorUsuario implements Serializable {
         }
         return "";
     }
-    public String logout() {
+
+    public void logout() {
+        String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+
+        //todas las páginas manejo deben ser accesibles solo cuando se inicia sesión, 
+        // por lo tanto si se encuentra en esas páginas, redireccionar a home
+        boolean redirHome = false;
+        if (viewId.startsWith("/manejo")) {
+            redirHome = true;
+        }
+        
         usuarioActual = null;
         logeado = false;
         usuario = "";
         password = "";
         intentosIncorrectos = 0;
-        return "";
+
+        if (redirHome) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("./");
+            } catch (IOException ex) {
+                Logger.getLogger(GestorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
     
     public GestorUsuario() {
