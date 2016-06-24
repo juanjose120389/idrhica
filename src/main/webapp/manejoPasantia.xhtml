@@ -83,11 +83,11 @@
 
 
                 <p:outputLabel value="Facultad"/>
-                <p:inputText id="txtFacultad" value="#{gestorPasantia.pasantia.facultad}" /> 
+                <p:inputText id="txtFacultad" style="width: 300px" value="#{gestorPasantia.pasantia.facultad}" /> 
                 <h:panelGroup/>
 
                 <p:outputLabel value="Escuela"/>
-                <p:inputText id="txtEscuela" value="#{gestorPasantia.pasantia.escuela}" />
+                <p:inputText id="txtEscuela" style="width: 300px" value="#{gestorPasantia.pasantia.escuela}" />
                 <h:panelGroup/>            
 
                 <p:outputLabel value="Fecha de inicio"/>
@@ -96,6 +96,10 @@
 
                 <p:outputLabel value="Fecha de finalización"/>
                 <p:calendar pattern="dd/MM/yyyy" size="11" value="#{gestorPasantia.pasantia.fechaFin}"/>  
+                <h:panelGroup layout="block"/>
+                
+                <p:outputLabel value="Resumen"/>
+                <p:inputTextarea style="width: 300px" value="#{gestorPasantia.pasantia.resumen}" rows="3"/>
                 <h:panelGroup layout="block"/>
             </h:panelGrid>
         </p:panel>
