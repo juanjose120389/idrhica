@@ -46,7 +46,7 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select distinct c from Convenio c left join fetch c.proyectosCollection order by c.fechaFin desc");
+            Query q = em.createQuery("select distinct c from Convenio c left join fetch c.proyectosCollection order by c.fechaFin desc, c.titulo asc");
             List<Convenio> list = q.getResultList();
             return list;
         } finally {

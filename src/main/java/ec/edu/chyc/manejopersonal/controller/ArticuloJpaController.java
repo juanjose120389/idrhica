@@ -37,7 +37,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select distinct a from Articulo a join fetch a.personasArticuloCollection");
+            Query q = em.createQuery("select distinct a from Articulo a join fetch a.personasArticuloCollection order by a.anioPublicacion desc, a.nombre asc");
             List<Articulo> list = q.getResultList();
             for (Articulo articulo : list) {                
                 Collection<Proyecto> listProyectos = articulo.getProyectosCollection();

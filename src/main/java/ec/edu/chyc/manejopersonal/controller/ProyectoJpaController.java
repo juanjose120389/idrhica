@@ -24,7 +24,7 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select distinct p from Proyecto p left join fetch p.financiamientosCollection order by p.fechaFin desc");
+            Query q = em.createQuery("select distinct p from Proyecto p left join fetch p.financiamientosCollection order by p.fechaFin desc, p.titulo asc");
             List<Proyecto> list = q.getResultList();
             return list;
         } finally {
