@@ -81,6 +81,18 @@
                         </ui:repeat>
                     </p:column>
 
+                    <p:column headerText="Fecha Inicio" width="100" >
+                        <h:outputText value="#{convenio.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Fecha Fin" width="100" >
+                        <h:outputText value="#{convenio.fechaFin}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    
+
                 </p:dataTable>
             </h:panelGroup>   
 
