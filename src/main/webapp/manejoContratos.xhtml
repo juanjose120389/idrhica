@@ -85,7 +85,7 @@
                 <p:selectOneMenu style="width: 300px" id="cmbPersona" value="#{gestorContrato.contrato.administrador}" converter="personaConverter"
                                  var="per" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                    <f:selectItems value="#{gestorPersona.listaPersonasConContrato}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+                    <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
 
                     <p:column style="width:10%">
                         <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
