@@ -10,7 +10,7 @@
             .contentCheckbox {
                 margin-left: 20px;                
             }
-            
+
         </style>
         <p:commandLink value="Regresar" immediate="true" action="#{gestorGeneral.regresarPaginaPrincipal()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>                
@@ -28,10 +28,15 @@
                 <p:outputLabel value="Dirección"/>
                 <p:outputLabel value="#{gestorPersona.persona.direccion}" />  
 
-                <p:outputLabel value="Fecha nacimiento"/>
-                <p:outputLabel value="#{gestorPersona.persona.fechaNacimiento}">
+                <p:outputLabel value="Fecha nacimiento" rendered="#{gestorUsuario.puedeVerMasInfo}"/>
+                <p:outputLabel value="#{gestorPersona.persona.fechaNacimiento}" rendered="#{gestorUsuario.puedeVerMasInfo}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </p:outputLabel>
+
+                <p:outputLabel value="Cumpleaños" rendered="#{!gestorUsuario.puedeVerMasInfo}"/>
+                <h:outputText value="#{gestorPersona.persona.fechaNacimiento}" rendered="#{!gestorUsuario.puedeVerMasInfo}">
+                    <f:convertDateTime pattern="dd MMMM" locale="es_EC" />
+                </h:outputText>                
 
                 <p:outputLabel value="Género"/>
                 <p:outputLabel value="#{gestorPersona.persona.genero == 'M'?'Masculino':'Femenino'}"/>
@@ -39,13 +44,15 @@
                 <p:outputLabel value="Celular"/>
                 <p:outputLabel value="#{gestorPersona.persona.celular}"/>  
 
-                <p:outputLabel value="Correo electrónico"/>
+                <h:panelGroup layout="block" style="width: 145px">
+                    <p:outputLabel value="Correo electrónico"/>
+                </h:panelGroup>
                 <p:outputLabel value="#{gestorPersona.persona.correo}"/>  
 
                 <p:outputLabel value="Skype"/>
                 <p:outputLabel value="#{gestorPersona.persona.skype}"/>  
 
-                <p:outputLabel value="Fecha vinculacion" rendered="#{gestorPersona.persona.activo != null}"/>
+                <p:outputLabel value="Fecha vinculación" rendered="#{gestorPersona.persona.activo != null}"/>
                 <p:outputLabel value="#{gestorPersona.persona.fechaVinculacion}" rendered="#{gestorPersona.persona.activo != null}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </p:outputLabel>           
@@ -76,8 +83,6 @@
                 </p:dataTable>
 
             </h:panelGroup>
-
-            <h:panelGroup layout="block" style="height: 20px"/>
 
             <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.pasantiasCollection}">
                 <h:panelGroup layout="block" style="height: 20px"/>
