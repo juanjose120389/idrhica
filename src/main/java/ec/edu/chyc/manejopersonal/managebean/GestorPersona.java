@@ -67,7 +67,6 @@ public class GestorPersona implements Serializable {
     private List<PersonaTitulo> listaPersonaTitulos = null;
     
     private List<Persona> listaPersonas = new ArrayList<>();
-    private List<Persona> listaPersonasConContrato = new ArrayList<>();
     private List<Persona> listaPersonasConExternos = new ArrayList<>();
     private List<Persona> listaPersonasAgregadas = new ArrayList<>();
     private List<Persona> listaPersonasSoloExternos = new ArrayList();
@@ -264,6 +263,13 @@ public class GestorPersona implements Serializable {
         modo = Modo.VER;
         return "verPersona";        
     }
+
+    public String initListarPersonas() {
+        inicializarManejoPersona();
+        actualizarListado();
+        return "index";
+    }
+    
     public String initModificarPersona(Long id) {
         inicializarManejoPersona();
         cargarInformacionPersona(id, false);     
@@ -357,14 +363,6 @@ public class GestorPersona implements Serializable {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
-    }
-    
-    public void actualizarListaPersonasConContrato() {
-        try {
-            listaPersonasConContrato = personaController.listPersonasConContrato();
-        } catch (Exception ex) {
-            Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     public static GestorPersona getInstance() {
@@ -536,14 +534,6 @@ public class GestorPersona implements Serializable {
         this.mostrarDlgTitulo = mostrarDlgTitulo;
     }
     
-    public List<Persona> getListaPersonasConContrato() {
-        return listaPersonasConContrato;
-    }
-    
-    public void setListaPersonasConContrato(List<Persona> listaPersonasConContrato) {
-        this.listaPersonasConContrato = listaPersonasConContrato;
-    }
-
     public Date getFiltroFechaInicio() {
         return filtroFechaInicio;
     }

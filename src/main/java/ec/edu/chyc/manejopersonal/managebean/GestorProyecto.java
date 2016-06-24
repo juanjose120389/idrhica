@@ -172,7 +172,7 @@ public class GestorProyecto implements Serializable {
         GestorDialogListaPersonas.getInstance().resetearDialog();
         proyecto = new Proyecto();
         GestorContrato.getInstance().actualizarListaContrato();
-        GestorPersona.getInstance().actualizarListaPersonasConContrato();
+        GestorPersona.getInstance().actualizarListado();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
         GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
 
