@@ -60,11 +60,11 @@
                         <h:outputText value="#{autor.identificacion}" />
                     </p:column>
                     
-                    <p:column headerText="Nombres" width="150">
+                    <p:column headerText="Nombres" width="400">
                         <h:outputText value="#{autor.nombres}" />
                     </p:column>
 
-                    <p:column headerText="Apellidos" width="250">
+                    <p:column headerText="Apellidos">
                         <h:outputText value="#{autor.apellidos}" />
                     </p:column>
                 </p:dataTable>
@@ -76,7 +76,12 @@
                     <f:facet name="header">
                         Co-directores
                     </f:facet>
-                    <p:column headerText="Nombres" width="500">
+                    
+                    <p:column headerText="Identificación" width="100">
+                        <h:outputText value="#{codirector.identificacion}" />
+                    </p:column>
+                    
+                    <p:column headerText="Nombres" width="400">
                         <h:outputText value="#{codirector.nombres}" />
                     </p:column>
 
@@ -93,12 +98,16 @@
                     <f:facet name="header">
                         Tutores
                     </f:facet>
-                    <p:column headerText="Nombres" width="500">
-                        <h:outputText value="#{header.nombres}" />
+                    <p:column headerText="Identificación" width="100">
+                        <h:outputText value="#{tutor.identificacion}" />
+                    </p:column>
+                    
+                    <p:column headerText="Nombres" width="400">
+                        <h:outputText value="#{tutor.nombres}" />
                     </p:column>
 
                     <p:column headerText="Apellidos">
-                        <h:outputText value="#{header.apellidos}" />
+                        <h:outputText value="#{tutor.apellidos}" />
                     </p:column>
 
                 </p:dataTable>
