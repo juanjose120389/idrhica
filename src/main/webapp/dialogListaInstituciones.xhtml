@@ -30,9 +30,13 @@
                          selection="#{gestorDialogListaInstituciones.listaSeleccionados}" value="#{gestorInstitucion.listaInstituciones}" rows="10"
                          paginatorAlwaysVisible="false" paginator="true"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="10,15,20,40"
+                         rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
                          >
                 <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                    <h:outputText value="#{rowIndex+1}"/>
+                </p:column>                
 
                 <p:column headerText="Institución" filterBy="#{institucion.nombre}" filterMatchMode="contains" sortBy="#{institucion.nombre}">
                     <h:outputText value="#{institucion.nombre}" />

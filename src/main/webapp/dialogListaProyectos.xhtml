@@ -29,10 +29,13 @@
             <p:dataTable widgetVar="proyectosTable" id="proyectosTable" var="proyecto" rowKey="#{proyecto.id}" resizableColumns="false" selection="#{gestorDialogListaProyectos.listaProyectosSel}" value="#{gestorProyecto.listaProyecto}" rows="10"
                          paginatorAlwaysVisible="false" paginator="true"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15,20,40"
+                         rowsPerPageTemplate="5,10,15,20,40" rowIndexVar="rowIndex"
                          >
                 <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
+                <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                    <h:outputText value="#{rowIndex+1}"/>
+                </p:column>
 
                 <p:column headerText="Título" width="400" filterBy="#{proyecto.titulo}" filterMatchMode="contains" sortBy="#{proyecto.titulo}">
                     <h:outputText value="#{proyecto.titulo}" />

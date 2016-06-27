@@ -38,7 +38,7 @@
                                  id="personasTable" var="persona" value="#{gestorDialogListaPersonas.listaPersonas}" rows="10"
                                  paginatorAlwaysVisible="false" paginator="true"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="10,15,20,40"
+                                 rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
                                  >
                         <f:facet name="{Exporters}">
                             <h:panelGroup layout="block" styleClass="exportButtons">
@@ -54,6 +54,10 @@
                         </f:facet>
                         <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
+                        <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
+
                         <p:column headerText="Identificación" filterBy="#{persona.identificacion}" filterMatchMode="contains" width="100">
                             <h:outputText value="#{persona.identificacion}" />
                         </p:column>
@@ -64,11 +68,11 @@
                             </ui:repeat>
                         </p:column>
 
-                        <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
+                        <p:column headerText="Nombres" filterBy="#{persona.nombres}" width="150" filterMatchMode="contains" sortBy="#{persona.nombres}">
                             <h:outputText value="#{persona.nombres}" />
                         </p:column>
 
-                        <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains" sortBy="#{persona.apellidos}">
+                        <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" width="150" filterMatchMode="contains" sortBy="#{persona.apellidos}">
                             <h:outputText value="#{persona.apellidos}" />
                         </p:column>
 
@@ -99,19 +103,19 @@
                         <p:outputLabel value="Identificación"/>
                         <p:inputText id="txtIdentificacionNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.identificacion}"/>
                         <p:message for="txtIdentificacionNuevo"/>
-                        
+
                         <p:outputLabel value="Nombres">
                             <span class="asterisk"/>
                         </p:outputLabel>
                         <p:inputText id="txtNombresNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.nombres}" required="true" requiredMessage="#{label.required}"/>
                         <p:message for="txtNombresNuevo"/>
-                        
+
                         <p:outputLabel value="Apellidos">
                             <span class="asterisk"/>
                         </p:outputLabel>
                         <p:inputText id="txtApellidosNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.apellidos}" required="true" requiredMessage="#{label.required}"/>
                         <p:message for="txtApellidosNuevo"/>
-                        
+
                         <p:outputLabel value="Género"/>
                         <p:selectOneMenu value="#{gestorDialogListaPersonas.nuevaPersona.genero}"
                                          required="true" style="width: 150px"
@@ -121,11 +125,11 @@
                             <f:selectItem itemLabel="Femenino" itemValue="F"/>
                         </p:selectOneMenu>                        
                         <p:message for="cboGeneroNuevo"/>
-                        
+
                         <p:outputLabel value="Celular"/>
                         <p:inputText id="txtCelularNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.celular}"/>
                         <p:message for="txtCelularNuevo"/>
-                        
+
                         <p:outputLabel value="E-mail"/>
                         <p:inputText id="txtEmailNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.correo}"/>
                         <p:message for="txtEmailNuevo"/>
