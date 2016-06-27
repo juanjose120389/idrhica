@@ -25,6 +25,7 @@ import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,8 +145,30 @@ public class GestorArticulo implements Serializable {
                 per.getListaFirmas().add(perFirma.getFirma());
                 c++;
             }
-
+            
             perArt.setId(idPersonaArticuloGen);
+
+            if (firmaSel == null && perArt.getFirma() == null) {
+                
+                Firma firmaNueva = new Firma();
+                firmaNueva.setId(idFirmaGen);
+                firmaNueva.setNombre(per.getApellidos() + ", " + per.getNombres());
+            
+                PersonaFirma perFirmaNuevo = new PersonaFirma();
+                perFirmaNuevo.setId(idPersonaFirmaGen);
+                perFirmaNuevo.setPersona(per);
+                perFirmaNuevo.setFirma(firmaNueva);
+                
+                perArt.setPersonaFirma(perFirmaNuevo);
+                perArt.setPersona(per);
+                perArt.setFirma(firmaNueva);
+                
+                per.getListaFirmas().add(perFirmaNuevo.getFirma());
+                
+                idPersonaFirmaGen--;
+                idFirmaGen--;
+            }
+            
             listaPersonaArticulo.add(perArt);
             idPersonaArticuloGen--;
         }
@@ -418,12 +441,39 @@ public class GestorArticulo implements Serializable {
 
     }
 
+    /**
+     * Lee el bibtex en un String, quitando los saltos de línea
+     * @param pathBibtex Path del archivo a leer
+     * @return String que contiene todo el bibtex sin saltos de línea
+     * @throws FileNotFoundException En caso de no encontrar el archivo 
+     */
+    private String unirStringBibtex(Path pathBibtex) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader(pathBibtex.toFile()));
+        StringBuilder stringBuf = new StringBuilder();
+        String linea;
+        try {
+            while ((linea = br.readLine()) != null) {
+                stringBuf.append(linea).append(" ");
+            }
+            return stringBuf.toString();
+        } catch (IOException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
+        return "";
+    }
+
+    /**
+     * Lee el archivo bibtex y llena los campos del artículo según exista en el bibtex
+     * @param pathBibtex Ruta del archivo bibtex
+     */    
     public void leerBibtex(Path pathBibtex) {
         try {
             BibTeXParser bibtexParser = new BibTeXParser();
 
-            BufferedReader br = new BufferedReader(new FileReader(pathBibtex.toFile()));
-            BibTeXDatabase database = bibtexParser.parse(br);
+            StringReader stringReader = new StringReader(unirStringBibtex(pathBibtex));
+            
+            BibTeXDatabase database = bibtexParser.parse(stringReader);
 
             Map<Key, BibTeXEntry> entryMap = database.getEntries();
             BibTeXEntry firstEntry = null;
@@ -473,17 +523,18 @@ public class GestorArticulo implements Serializable {
                     List<String> firmasAutores = Arrays.asList(autores);
                     try {
                         //List<Firma> listaFirmasExistentes = personaController.findFirmas(firmasAutores);
+                        //buscar personas que lleven las firmas indicadas en el bibtex
                         List<Persona> listaPersonasConFirmaExistentes = personaController.findPersonaConFirma(firmasAutores);
                         
                         for (String strFirmaBibtex : firmasAutores) {
-                            boolean encontrado = false;
+                            boolean encontrado = false;//valdrá true al encontrar la persona que tenga la firma que está en el bibtex
                             for (Persona per : listaPersonasConFirmaExistentes) {
                                 for (PersonaFirma perFirma : per.getPersonaFirmasCollection()) {
                                     if (StringUtils.equalsIgnoreCase(perFirma.getFirma().getNombre(), strFirmaBibtex)) {
                                         encontrado = true;
-                                        if (per.getId().equals(personaVacia.getId())) {
+                                        if (per.getId().equals(personaVacia.getId())) {//si la firma pertenece al id=1 (general), agregar sin colocar datos de autor
                                             agregarFirmaSinAutor(personaVacia, strFirmaBibtex);
-                                        } else {
+                                        } else { //agregar los datos del autor
                                             agregarNuevoAutor(per, strFirmaBibtex);
                                         }
                                         break;
@@ -538,7 +589,7 @@ public class GestorArticulo implements Serializable {
         //articuloController.create(articulo);
         
         for (PersonaArticulo perArticulo : articulo.getPersonasArticuloCollection()) {
-            if (perArticulo.getPersonaFirma() == null) {
+            if (perArticulo.getPersonaFirma() == null || !perArticulo.getFirma().getId().equals(perArticulo.getPersonaFirma().getFirma().getId())) {
                 PersonaFirma perFirma = personaController.findPersonaFirma(perArticulo.getPersona().getId(), perArticulo.getFirma().getId());
                 perArticulo.setPersonaFirma(perFirma);
             }
@@ -555,7 +606,7 @@ public class GestorArticulo implements Serializable {
             } else {
                 articuloController.create(articulo);
             }
-            return "index";
+            return initListarArticulos();// "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
             return "";
@@ -565,6 +616,10 @@ public class GestorArticulo implements Serializable {
         return TipoArticulo.values();
     }
 
+    /**
+     * Ordena la lista de PersonaArticulo de acuerdo al atributo orden, orden ascendente
+     * @param listaPersonaArticulo Lista de PersonaArticulo
+     */
     private void ordenarListaPersonaArticulo(List<PersonaArticulo> listaPersonaArticulo) {
         Collections.sort(listaPersonaArticulo, (left, right) -> left.getOrden() - right.getOrden());
     }
@@ -594,6 +649,22 @@ public class GestorArticulo implements Serializable {
             soloSubirBibtex = true;
         }
         listaPersonaArticulo = new ArrayList<>(articulo.getPersonasArticuloCollection());
+        
+        //llenar cada ítem de autor con su lista de firmas
+        for (PersonaArticulo perArt : listaPersonaArticulo) {
+            Persona perDeArticulo = perArt.getPersonaFirma().getPersona();
+            //cargar datos del autor incluyendo todas sus firmas
+            Persona personaDetalle = personaController.findPersona(perDeArticulo.getId(), PersonaJpaController.Incluir.INC_FIRMAS.value());
+            //Persona personaDetalle = personaController.findPersona(perDeArticulo.getId(), false, false, false, false, false, true);
+            
+            //agregar todas las firmas a la lista
+            perDeArticulo.getListaFirmas().clear();
+            for (PersonaFirma perFirma : personaDetalle.getPersonaFirmasCollection()) {
+                perDeArticulo.getListaFirmas().add(perFirma.getFirma());
+            }
+            perArt.setFirma(perArt.getPersonaFirma().getFirma());
+            perArt.setPersona(perDeArticulo);            
+        }
         ordenarListaPersonaArticulo(listaPersonaArticulo);
         listaAgradecimientos = new ArrayList<>(articulo.getAgradecimientosCollection());
         listaProyectos = new ArrayList<>(articulo.getProyectosCollection());

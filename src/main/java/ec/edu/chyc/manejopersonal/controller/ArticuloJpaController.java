@@ -152,7 +152,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select a from Articulo a join fetch a.personasArticuloCollection where a.id = :id", Articulo.class);
+            Query q = em.createQuery("select a from Articulo a left join fetch a.personasArticuloCollection where a.id = :id", Articulo.class);
             q.setParameter("id", id);
             Articulo articulo = (Articulo) q.getSingleResult();
             if (incluirProyectos) {
@@ -161,6 +161,10 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             if (incluirAgradecimientos) {
                 Hibernate.initialize(articulo.getAgradecimientosCollection());
             }
+            for (PersonaArticulo perArticulo : articulo.getPersonasArticuloCollection()) {//cargar todas las firmas incluidas en el artículo
+                Hibernate.initialize(perArticulo.getPersonaFirma());
+            }
+            
             return articulo;
         } finally {
             if (em != null) {
