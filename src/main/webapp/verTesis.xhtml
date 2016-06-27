@@ -47,20 +47,24 @@
                 <p:commandLink value="Descargar" ajax="false" rendered="#{gestorTesis.tesis.archivoActaAprobacion != ''}">
                     <p:fileDownload value="#{gestorTesis.streamParaDescarga(gestorTesis.tesis)}" />
                 </p:commandLink>
-                
+
             </h:panelGrid>        
 
             <h:panelGroup layout="block" rendered="#{not empty gestorTesis.tesis.autoresCollection.toArray()}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="autor" value="#{gestorTesis.tesis.autoresCollection.toArray()}">
+                <p:dataTable var="autor" value="#{gestorTesis.tesis.autoresCollection.toArray()}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Autores
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+
                     <p:column headerText="Identificación" width="100">
                         <h:outputText value="#{autor.identificacion}" />
                     </p:column>
-                    
-                    <p:column headerText="Nombres" width="400">
+
+                    <p:column headerText="Nombres">
                         <h:outputText value="#{autor.nombres}" />
                     </p:column>
 
@@ -72,16 +76,19 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorTesis.tesis.codirectoresCollection.toArray()}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="codirector" value="#{gestorTesis.tesis.codirectoresCollection.toArray()}">
+                <p:dataTable var="codirector" value="#{gestorTesis.tesis.codirectoresCollection.toArray()}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Co-directores
                     </f:facet>
-                    
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+
                     <p:column headerText="Identificación" width="100">
                         <h:outputText value="#{codirector.identificacion}" />
                     </p:column>
-                    
-                    <p:column headerText="Nombres" width="400">
+
+                    <p:column headerText="Nombres" >
                         <h:outputText value="#{codirector.nombres}" />
                     </p:column>
 
@@ -94,15 +101,20 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorTesis.tesis.tutoresCollection.toArray()}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="tutor" value="#{gestorTesis.tesis.tutoresCollection.toArray()}">
+                <p:dataTable var="tutor" value="#{gestorTesis.tesis.tutoresCollection.toArray()}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Tutores
                     </f:facet>
+                    
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    
                     <p:column headerText="Identificación" width="100">
                         <h:outputText value="#{tutor.identificacion}" />
                     </p:column>
-                    
-                    <p:column headerText="Nombres" width="400">
+
+                    <p:column headerText="Nombres">
                         <h:outputText value="#{tutor.nombres}" />
                     </p:column>
 
@@ -116,15 +128,20 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorTesis.tesis.proyectosCollection.toArray()}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="proyecto" value="#{gestorTesis.tesis.proyectosCollection.toArray()}">
+                <p:dataTable var="proyecto" value="#{gestorTesis.tesis.proyectosCollection.toArray()}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Proyectos vinculados
                     </f:facet>
-                    <p:column headerText="Nombre proyecto" width="150">
+                    
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Nombre proyecto" width="300">
                         <h:outputText value="#{proyecto.titulo}" />
                     </p:column>
 
-                    <p:column headerText="Director" width="250">
+                    <p:column headerText="Director" width="200">
                         <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
                     </p:column>
                 </p:dataTable>
