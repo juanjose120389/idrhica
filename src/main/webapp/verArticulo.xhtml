@@ -10,59 +10,35 @@
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Artículo">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
-            <h:panelGrid columns="2">
+            <h:panelGrid columns="2" columnClasses="labelscol2,inputscol">
                 <p:outputLabel value="Titulo"/>
                 <p:outputLabel value="#{gestorArticulo.articulo.nombre}"/>
 
                 <p:outputLabel value="Autor Principal" />
-                <p:outputLabel value="#{gestorArticulo.articulo.autorPrincipal.nombres} #{gestorArticulo.articulo.autorPrincipal.apellidos}"/>
+                <p:outputLabel value="#{gestorArticulo.articulo.personasArticuloCollection[0].personaFirma.firma.nombre}"/>
 
                 <p:outputLabel value="Tema" />
-                <h:panelGroup layout="block">
-                    <p:outputLabel  value="#{gestorArticulo.articulo.tema}"/>
-                </h:panelGroup>
+                <p:outputLabel  value="#{gestorArticulo.articulo.tema}"/>
+
+
                 <p:outputLabel value="Revista"/>
-                <h:panelGroup layout="block">
-                    <p:outputLabel value="#{gestorArticulo.articulo.revista}"/>
-                    <p:outputLabel value=" Meses"/>
-                </h:panelGroup>            
+                <p:outputLabel value="#{gestorArticulo.articulo.revista}"/>
+
                 <p:outputLabel value="Factor de Impacto"/>
-                <h:panelGroup layout="block">
-                    <p:outputLabel value="#{gestorArticulo.articulo.factorImpacto} "/>
-
-                </h:panelGroup>  
+                <p:outputLabel value="#{gestorArticulo.articulo.factorImpacto} "/>
 
 
-                <p:outputLabel value="Fecha de Publicacion"/>
-                <p:outputLabel value="#{gestorArticulo.articulo.fechaPublicacion}">
-                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                </p:outputLabel>
-                <p:outputLabel value="Autor Principal"/>
-                <h:panelGroup layout="block">
-                    <p:outputLabel value="#{gestorArticulo.articulo.autorPrincipal.nombres} #{gestorArticulo.articulo.autorPrincipal.apellidos}"/>
+                <p:outputLabel value="Año de Publicacion"/>
+                <p:outputLabel value="#{gestorArticulo.articulo.anioPublicacion}"/>
 
-                </h:panelGroup>     
+                <p:outputLabel value="Resumen"/>                
+                <p:outputLabel value="#{gestorArticulo.articulo.resumen}"/>
 
-                <p:outputLabel value="Resumen"/>
-                <h:panelGroup layout="block">
-                    <p:outputLabel value="#{gestorArticulo.articulo.resumen}"/>
-
-                </h:panelGroup>   
                 <p:outputLabel value="Enlace"/>
-                <h:panelGroup layout="block">
-                    <p:outputLabel value="#{gestorArticulo.articulo.enlace}"/>
+                <p:link value="#{gestorArticulo.articulo.enlace}" href="#{gestorArticulo.corregirUrl(gestorArticulo.articulo.enlace)}" target="_blank"/>
 
-                </h:panelGroup>   
                 <p:outputLabel value="Tipo"/>
-                <h:panelGroup layout="block">
-                    <p:outputLabel value="#{gestorArticulo.articulo.tipo} "/>
-
-                </h:panelGroup>   
-                <p:outputLabel value="Factor de Impacto"/>
-                <h:panelGroup layout="block">
-                    <p:outputLabel value="#{gestorArticulo.articulo.factorImpacto} "/>
-
-                </h:panelGroup>  
+                <p:outputLabel value="#{gestorArticulo.articulo.tipo} "/>
 
 
             </h:panelGrid>        
@@ -70,10 +46,22 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorArticulo.listaPersonaArticulo}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}">
+                <p:dataTable var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Autores
                     </f:facet>
+                    
+                    <p:column headerText="Autor #" width="70">
+                        <h:outputText value="#{rowIndex+1}" />
+                        <h:panelGroup rendered="#{rowIndex == 0}">
+                            <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column headerText="Firma" width="150">
+                        <h:outputText value="#{personaArticulo.personaFirma.firma.nombre}" />
+                    </p:column>
+
                     <p:column headerText="Identificación" >
                         <h:outputText value="#{personaArticulo.personaFirma.persona.identificacion}" />
                     </p:column>
@@ -84,13 +72,6 @@
                     <p:column headerText="Apellidos" >
                         <h:outputText value="#{personaArticulo.personaFirma.persona.apellidos}" />
                     </p:column>
-                    <p:column headerText="Correo" >
-                        <h:outputText value="#{personaArticulo.personaFirma.persona.correo}" />
-                    </p:column>
-                    <p:column headerText="Skype" >
-                        <h:outputText value="#{personaArticulo.personaFirma.persona.skype}" />
-                    </p:column>
-
 
                 </p:dataTable>
             </h:panelGroup>        
@@ -98,28 +79,29 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorArticulo.listaProyectos}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="proyectoArticulo" value="#{gestorArticulo.listaProyectos}">
+                <p:dataTable var="proyectoArticulo" value="#{gestorArticulo.listaProyectos}" rowIndexVar="rowIndex">
                     <f:facet name="header">
-                        Proyectos
+                        Proyectos vinculados
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+
                     <p:column headerText="Título" >
                         <h:outputText value="#{proyectoArticulo.titulo}" />
                     </p:column>
-                    <p:column headerText="Resumen" >
-                        <h:outputText value="#{proyectoArticulo.resumen}" />
-                    </p:column>
 
-                    <p:column headerText="Director" >
+                    <p:column headerText="Director" width="200">
                         <h:outputText value="#{proyectoArticulo.director.nombres} #{proyectoArticulo.director.apellidos}" />
                     </p:column>
-                    <p:column headerText="Co-Director" >
+                    <p:column headerText="Co-Director" width="200">
                         <h:outputText value="#{proyectoArticulo.codirector.nombres} #{proyectoArticulo.codirector.apellidos}" />
                     </p:column>
 
                 </p:dataTable>
             </h:panelGroup>        
 
-                <h:panelGroup layout="block" rendered="#{not empty gestorArticulo.listaAgradecimientos}">
+            <h:panelGroup layout="block" rendered="#{not empty gestorArticulo.listaAgradecimientos}">
                 <h:panelGroup layout="block" style="height: 15px"/>
                 <p:dataTable var="agradecimientoArticulo" value="#{gestorArticulo.listaAgradecimientos}">
                     <f:facet name="header">
@@ -128,9 +110,9 @@
                     <p:column headerText="Nombre" >
                         <h:outputText value="#{agradecimientoArticulo.nombre}" />
                     </p:column>
-                   
 
-                    
+
+
 
                 </p:dataTable>
             </h:panelGroup>   
