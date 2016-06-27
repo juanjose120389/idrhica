@@ -61,12 +61,33 @@
                 <p:outputLabel value="#{gestorPersona.persona.activo == true?'Activo': gestorPersona.persona.activo == false? 'No Activo' : 'Contacto externo'}"/>
             </h:panelGrid>
 
+            <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.personaFirmasCollection}">
+                <h:panelGroup layout="block" style="height: 20px"/>
+
+                <p:dataTable var="personaFirma" value="#{gestorPersona.persona.personaFirmasCollection}" rowIndexVar="rowIndex">
+                    <f:facet name="header">
+                        Firmas científicas registradas
+                    </f:facet>
+
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+
+                    <p:column headerText="Firma" width="400">
+                        <h:outputText value="#{personaFirma.firma.nombre}" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>                
+
             <h:panelGroup layout="block" rendered="#{not empty gestorPersona.listaPersonaTitulos}">
                 <h:panelGroup layout="block" style="height: 20px"/>
-                <p:dataTable id="dtTitulos" rowKey="#{personaTitulo.id}" var="personaTitulo" value="#{gestorPersona.listaPersonaTitulos}">
+                <p:dataTable id="dtTitulos" rowKey="#{personaTitulo.id}" var="personaTitulo" value="#{gestorPersona.listaPersonaTitulos}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Títulos
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
 
                     <p:column headerText="Título" width="500">
                         <h:outputText value="#{personaTitulo.titulo.nombre}" />
@@ -87,10 +108,13 @@
             <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.pasantiasCollection}">
                 <h:panelGroup layout="block" style="height: 20px"/>
 
-                <p:dataTable rendered="#{not empty gestorPersona.persona.pasantiasCollection}" var="pasantia" value="#{gestorPersona.persona.pasantiasCollection}">
+                <p:dataTable var="pasantia" value="#{gestorPersona.persona.pasantiasCollection}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Pasantías
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>                    
                     <p:column headerText="Tema" width="500">
                         <h:outputText value="#{pasantia.tema}" />
                     </p:column>
@@ -122,10 +146,13 @@
             <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.tesisCollection}">
                 <h:panelGroup layout="block" style="height: 20px"/>
 
-                <p:dataTable var="tesis" value="#{gestorPersona.persona.tesisCollection}">
+                <p:dataTable var="tesis" value="#{gestorPersona.persona.tesisCollection}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Tesis
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
                     <p:column headerText="Título" width="500">
                         <h:outputText value="#{tesis.nombre}" />
 
@@ -155,10 +182,13 @@
             <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.listaPersonaArticulos}">
                 <h:panelGroup layout="block" style="height: 20px"/>
 
-                <p:dataTable var="perarticulo" value="#{gestorPersona.persona.listaPersonaArticulos}">
+                <p:dataTable var="perarticulo" value="#{gestorPersona.persona.listaPersonaArticulos}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Artículos
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>                    
                     <p:column headerText="Título" width="400">
                         <h:outputText value="#{perarticulo.articulo.nombre}" />
                     </p:column>
@@ -210,11 +240,15 @@
             <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.contratosCollection}">
                 <h:panelGroup layout="block" style="height: 20px"/>
 
-                <p:dataTable var="contrato" value="#{gestorPersona.persona.contratosCollection}">
+                <p:dataTable var="contrato" value="#{gestorPersona.persona.contratosCollection}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Contratos
                     </f:facet>
 
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    
                     <p:column headerText="# Contrato" width="80">
                         <h:outputText value="#{contrato.codigoContrato}" />
                     </p:column>                
