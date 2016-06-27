@@ -418,7 +418,7 @@ public class GestorPersona implements Serializable {
         }
         return listResults;
     }
-    
+        
     public String guardar() {
         try {            
             
@@ -434,7 +434,7 @@ public class GestorPersona implements Serializable {
                     GestorMensajes.getInstance().mostrarMensajeError("Existen firmas vacías en la lista.");
                     return "";
                 }                
-                strFirmas.add(strFirma);                
+                strFirmas.add(strFirma.toLowerCase());
             }
             if (strFirmas.size() != listaPersonaFirmas.size()) {
                 //si el tamaño del Set (que se llena solo con firmas diferentes) es diferente al de firmas ingresadas

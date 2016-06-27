@@ -17,11 +17,10 @@ and open the template in the editor.
 }
 
 .labelscol2 {
-    font-weight: bold;
-    width: 100px;
+    width: 135px;
 }
 .labelscol {
-    font-weight: bold;    
+    font-weight: bold;
 }
 .inputscol {
     padding-left: 15px;
