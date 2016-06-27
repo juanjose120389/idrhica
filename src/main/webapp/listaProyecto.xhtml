@@ -9,7 +9,7 @@
         <p:dataTable widgetVar="proyectoTable" id="proyectoTable" var="proyecto" value="#{gestorProyecto.listaProyecto}" rows="10"
                      paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                     rowsPerPageTemplate="10,15,20,40"
+                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
                      >
 
             <f:facet name="{Exporters}">
@@ -27,6 +27,11 @@
             <f:facet name="header">
                 Proyectos
             </f:facet>
+            
+            <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>            
+            
             <p:column headerText="Título" width="250" filterBy="#{proyecto.titulo}" filterMatchMode="contains" sortBy="#{proyecto.titulo}">
                 <f:facet name="header">  
                     <h:outputText value="Título"/>  

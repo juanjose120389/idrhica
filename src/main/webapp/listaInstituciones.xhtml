@@ -14,7 +14,7 @@
         <p:dataTable widgetVar="institucionesTable" id="conveniosTable" var="institucion" value="#{gestorInstitucion.listaInstituciones}" rows="10"
                      paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                     rowsPerPageTemplate="10,15,20,40"
+                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
                      >
             <f:facet name="{Exporters}">
                 <h:panelGroup layout="block" styleClass="exportButtons">
@@ -31,6 +31,11 @@
             <f:facet name="header">
                 Instituciones
             </f:facet>            
+            
+            <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>
+            
             <p:column headerText="Nombre" sortBy="#{institucion.nombre}" filterBy="#{institucion.nombre}" filterMatchMode="contains" >
                 <h:outputText value="#{institucion.nombre}" />
             </p:column>

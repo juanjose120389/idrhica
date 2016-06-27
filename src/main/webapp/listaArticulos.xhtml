@@ -25,7 +25,7 @@
         <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
                      paginator="true" resizableColumns="true" liveResize="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                     rowsPerPageTemplate="10,15,20,40"
+                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
                      >
             <f:facet name="{Exporters}">
                 <h:panelGroup layout="block" styleClass="exportButtons">
@@ -42,7 +42,12 @@
             <f:facet name="header">
                 Artículos
             </f:facet>
-            <p:column headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].personaFirma.persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}">
+            
+            <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>
+            
+            <p:column headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].personaFirma.persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}" width="150">
                 <h:outputText value="#{articulo.personasArticuloCollection[0].personaFirma.firma.nombre}" />
             </p:column>           
 
@@ -109,7 +114,7 @@
                 </p:commandLink>                
             </p:column>
 
-            <p:column exportable="false" rendered="#{gestorUsuario.puedeEditar}">
+            <p:column exportable="false">
                 <p:commandLink value="Ver" action="#{gestorArticulo.initVerArticulo(articulo.id)}"/>
                 <p:outputLabel value=" "/>
                 <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}"/>

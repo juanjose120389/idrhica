@@ -42,10 +42,8 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
-            <p:column headerText="#" width="20">
-                <h:panelGroup style="text-align: right" layout="block">
-                    <h:outputText value="#{rowIndex+1}"/>
-                </h:panelGroup>
+            <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                <h:outputText value="#{rowIndex+1}"/>
             </p:column>
             <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
                 <h:outputText value="#{persona.nombres}" />
