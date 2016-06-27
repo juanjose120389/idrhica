@@ -426,7 +426,8 @@ public class GestorTesis implements Serializable {
             } else {
                 tesisController.create(tesis);
             }
-            return "index";
+            return initListarTesis();
+            //return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorTesis.class.getName()).log(Level.SEVERE, null, ex);
         }

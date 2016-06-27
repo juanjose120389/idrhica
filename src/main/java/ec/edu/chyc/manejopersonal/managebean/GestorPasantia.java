@@ -94,7 +94,9 @@ public class GestorPasantia implements Serializable {
             } else {
                 pasantiaController.create(pasantia);
             }
-            return "index";
+            
+            return initListarPasantias();
+            //return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorPasantia.class.getName()).log(Level.SEVERE, null, ex);
         }

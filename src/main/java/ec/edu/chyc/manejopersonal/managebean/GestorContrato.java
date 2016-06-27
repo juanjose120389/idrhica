@@ -184,7 +184,8 @@ public class GestorContrato implements Serializable {
             } else {
                 contratoController.create(contrato);
             }
-            return "index";
+            return initListarContratos();
+            //return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
         }

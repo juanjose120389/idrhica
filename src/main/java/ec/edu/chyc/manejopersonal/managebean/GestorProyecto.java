@@ -288,7 +288,8 @@ public class GestorProyecto implements Serializable {
             }
             
             GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
-            return "index";
+            return initListarProyectos();
+            //return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
         }
