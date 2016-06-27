@@ -95,7 +95,7 @@ public class GestorUsuario implements Serializable {
         return "";
     }
 
-    public void logout() {
+    public String logout() {
         String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 
         //todas las páginas manejo deben ser accesibles solo cuando se inicia sesión, 
@@ -118,7 +118,7 @@ public class GestorUsuario implements Serializable {
                 Logger.getLogger(GestorUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        return redirHome ? "index" : "";
     }
     
     public GestorUsuario() {
