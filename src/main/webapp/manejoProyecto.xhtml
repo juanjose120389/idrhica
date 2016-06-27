@@ -115,7 +115,8 @@
 
                 <p:outputLabel value="Financiamiento"/>
                 <h:panelGroup layout="block" id="divFinanciamientos">
-                    <p:dataTable id="dtFinanciamientos" rowKey="#{financiamiento.id}" var="financiamiento" value="#{gestorProyecto.listaFinanciamientos}" editable="true" editMode="cell" widgetVar="cellTitulos">
+                    <p:dataTable id="dtFinanciamientos" rowKey="#{financiamiento.id}" var="financiamiento"  emptyMessage="#{label.emptyMessage}"
+                                 value="#{gestorProyecto.listaFinanciamientos}" editable="true" editMode="cell" widgetVar="cellTitulos">
 
                         <p:column headerText="Institución" width="500">
                             <p:cellEditor>
