@@ -55,10 +55,14 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorProyecto.listaFinanciamientos}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="financiamiento" value="#{gestorProyecto.listaFinanciamientos}">
+                <p:dataTable var="financiamiento" value="#{gestorProyecto.listaFinanciamientos}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Financiamiento del Proyecto
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    
                     <p:column headerText="Institución" >
                         <h:outputText value="#{financiamiento.institucion.nombre}" />
                     </p:column>
@@ -88,10 +92,14 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorProyecto.proyecto.contratosCollection}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="contrato" value="#{gestorProyecto.proyecto.contratosCollection}">
+                <p:dataTable var="contrato" value="#{gestorProyecto.proyecto.contratosCollection}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Contratos del proyecto
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    
                     <p:column headerText="Cargo" width="150">
                         <h:outputText value="#{contrato.cargo}" />
                     </p:column>
@@ -121,10 +129,15 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorProyecto.proyecto.conveniosCollection}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="convenio" value="#{gestorProyecto.proyecto.conveniosCollection}">
+                <p:dataTable var="convenio" value="#{gestorProyecto.proyecto.conveniosCollection}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Convenios
                     </f:facet>
+                    
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    
                     <p:column headerText="Título" width="350">
                         <h:outputText value="#{convenio.titulo}" />
                     </p:column>
@@ -151,10 +164,13 @@
             <h:panelGroup layout="block" rendered="#{not empty gestorProyecto.proyecto.articulosCollection}">
                 <h:panelGroup layout="block" style="height: 15px"/>
 
-                <p:dataTable var="articulo" value="#{gestorProyecto.proyecto.articulosCollection}">
+                <p:dataTable var="articulo" value="#{gestorProyecto.proyecto.articulosCollection}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Artículos relacionados
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
 
                     <p:column headerText="Título" width="500">
                         <h:outputText value="#{articulo.nombre}" />
@@ -190,10 +206,13 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorProyecto.proyecto.tesisCollection}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="tesis" value="#{gestorProyecto.proyecto.tesisCollection}">
+                <p:dataTable var="tesis" value="#{gestorProyecto.proyecto.tesisCollection}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Tesis relacionadas
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
 
                     <p:column headerText="Título" width="500">
                         <h:outputText value="#{tesis.nombre}" />
@@ -225,10 +244,13 @@
 
             <h:panelGroup rendered="#{not empty gestorProyecto.proyecto.pasantiasCollection}" layout="block">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="pasantia" value="#{gestorProyecto.proyecto.pasantiasCollection}">
+                <p:dataTable var="pasantia" value="#{gestorProyecto.proyecto.pasantiasCollection}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Pasantías relacionadas
                     </f:facet>
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
 
                     <p:column headerText="Tema" width="500">
                         <h:outputText value="#{pasantia.tema}" />

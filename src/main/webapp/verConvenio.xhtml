@@ -47,10 +47,15 @@
 
             <h:panelGroup layout="block" rendered="#{not empty gestorConvenio.convenio.proyectosCollection.toArray()}">
                 <h:panelGroup layout="block" style="height: 15px"/>
-                <p:dataTable var="proyecto" value="#{gestorConvenio.convenio.proyectosCollection.toArray()}">
+                <p:dataTable var="proyecto" value="#{gestorConvenio.convenio.proyectosCollection.toArray()}" rowIndexVar="rowIndex">
                     <f:facet name="header">
                         Proyectos pertenecientes al convenio
                     </f:facet>
+                    
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+                    
                     <p:column headerText="Título">
                         <h:outputText value="#{proyecto.titulo}" />
                     </p:column>
