@@ -28,15 +28,10 @@
                 <p:outputLabel value="Dirección"/>
                 <p:outputLabel value="#{gestorPersona.persona.direccion}" />  
 
-                <p:outputLabel value="Fecha nacimiento" rendered="#{gestorUsuario.puedeVerMasInfo}"/>
-                <p:outputLabel value="#{gestorPersona.persona.fechaNacimiento}" rendered="#{gestorUsuario.puedeVerMasInfo}">
+                <p:outputLabel value="Fecha de Nacimiento"/>
+                <p:outputLabel value="#{gestorPersona.persona.fechaNacimiento}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </p:outputLabel>
-
-                <p:outputLabel value="Cumpleaños" rendered="#{!gestorUsuario.puedeVerMasInfo}"/>
-                <h:outputText value="#{gestorPersona.persona.fechaNacimiento}" rendered="#{!gestorUsuario.puedeVerMasInfo}">
-                    <f:convertDateTime pattern="dd MMMM" locale="es_EC" />
-                </h:outputText>                
 
                 <p:outputLabel value="Género"/>
                 <p:outputLabel value="#{gestorPersona.persona.genero == 'M'?'Masculino':'Femenino'}"/>
