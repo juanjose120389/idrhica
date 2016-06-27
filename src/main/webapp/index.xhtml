@@ -75,13 +75,9 @@
                 <h:outputText value="#{persona.correo}" />
             </p:column>
 
-            <p:column headerText="Skype" width="200" filterBy="#{persona.skype}" filterMatchMode="contains">
-                <h:outputText value="#{persona.skype}" />
-            </p:column>            
-
             <p:column width="90">
                 <f:facet name="header">
-                    Cumpleaños
+                    Fecha de Nacimiento
                     <h:panelGroup layout="block" style="display: block;  width: 100%; margin: auto;" rendered="false">
                         <p:calendar pattern="dd/MM" id="firstDate" styleClass="calendarFilter" value="#{gestorPersona.filtroFechaInicio}">
                             <p:ajax event="dateSelect" process="@this" onsuccess="PF('personasTable').filter()" listener="#{gestorPersona.onDateSelectFilter}" />
@@ -96,7 +92,7 @@
                     <h:inputText id="txtFiltroFecha" style="display: none;"/>
                 </f:facet>
                 <h:outputText value="#{persona.fechaNacimiento}">
-                    <f:convertDateTime pattern="dd MMMM" locale="es_EC" />
+                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_EC" />
                 </h:outputText>
 
 
