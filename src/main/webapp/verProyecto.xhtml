@@ -7,13 +7,13 @@
     <ui:define name="body">
 
         <p:commandLink value="Regresar" immediate="true" action="#{gestorProyecto.initListarProyectos()}"/>
-        <p:outputLabel value=" | "/>
-        <i class="fa fa-print"></i>
-        <p:outputLabel value=" "/>
+        <i class="fa fa-print" style="margin-left: 20px; margin-right: 5px;"></i>
         <p:commandLink value="Versión para imprimir" immediate="true"  ajax="false" target="_blank" action="#{gestorProyecto.initImprimirProyecto()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>
-        
-        <ui:include src="./fichaProyecto.xhtml"/>
+
+        <p:panel header="Ficha del proyecto">
+            <ui:include src="./fichaProyecto.xhtml"/>
+        </p:panel>
 
     </ui:define>
 </ui:composition>
