@@ -132,6 +132,13 @@ public class GestorProyecto implements Serializable {
     public void cargarInformacionProyecto(Long id) {
         proyecto = proyectoController.findEntity(id);
     }
+    
+    public String initImprimirProyecto() {
+        if (proyecto == null || proyecto.getId() == null || proyecto.getId() < 0) {
+            return "";
+        }
+        return "imprimirProyecto?faces-redirect=true";
+    }
 
     public String initVerProyecto(Long id) {
         inicializarManejoProyecto();
