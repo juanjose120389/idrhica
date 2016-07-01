@@ -98,7 +98,7 @@ public class PDFCustomExporter extends PDFExporter {
         if (component instanceof UIPanel) {
             
             for (UIComponent childComponent : component.getChildren()) {
-                if (component.isRendered()) {
+                if (childComponent.isRendered()) {
                     String valChild = exportValue(context, childComponent);
 
                     if (valChild != null && !valChild.isEmpty()) {
@@ -182,105 +182,6 @@ public class PDFCustomExporter extends PDFExporter {
         }
     }
 
-    protected PdfPTable exportPDFTable(FacesContext context, DataTable table, boolean pageOnly, boolean selectionOnly, String encoding, boolean subTable) {
-        if (!("-".equalsIgnoreCase(encoding))) {
-            createCustomFonts(encoding);
-        }
-        int columnsCount = getColumnsCount(table);
-        PdfPTable pdfTable = null;
-        if (subTable) {
-            int subTableCount = table.getRowCount();
-            SubTable subtable = table.getSubTable();
-            int subTableColumnsCount = getColumnsCount(subtable);
-            pdfTable = new PdfPTable(subTableColumnsCount);
-
-            if (table.getHeader() != null) {
-                tableFacet(context, pdfTable, table, subTableColumnsCount, "header");
-            }
-
-            tableColumnGroup(pdfTable, table, "header");
-
-            int i = 0;
-            while (subTableCount > 0) {
-
-                subTableCount--;
-                table.setRowIndex(i);
-                i++;
-                subtable = table.getSubTable();
-
-                if (subtable.getHeader() != null) {
-                    tableFacet(context, pdfTable, subtable, subTableColumnsCount, "header");
-                }
-
-                if (hasHeaderColumn(subtable)) {
-                    addColumnFacets(subtable, pdfTable, ColumnType.HEADER);
-                }
-
-                if (pageOnly) {
-                    exportPageOnly(context, table, pdfTable);
-                } else if (selectionOnly) {
-                    exportSelectionOnly(context, table, pdfTable);
-                } else {
-                    subTableExportAll(context, subtable, pdfTable);
-                }
-
-                if (hasFooterColumn(subtable)) {
-
-                    addColumnFacets(subtable, pdfTable, ColumnType.FOOTER);
-                }
-
-                if (subtable.getFooter() != null) {
-                    tableFacet(context, pdfTable, subtable, subTableColumnsCount, "footer");
-                }
-
-                subtable.setRowIndex(-1);
-            }
-
-            tableColumnGroup(pdfTable, table, "footer");
-
-            if (table.hasFooterColumn()) {
-                tableFacet(context, pdfTable, table, subTableColumnsCount, "footer");
-            }
-
-            return pdfTable;
-        } else {
-
-            if (columnsCount == 0) {
-                return null;
-            }
-
-            pdfTable = new PdfPTable(columnsCount);
-
-            if (table.getHeader() != null) {
-                tableFacet(context, pdfTable, table, columnsCount, "header");
-            }
-
-            if (hasHeaderColumn(table)) {
-                addColumnFacets(table, pdfTable, ColumnType.HEADER);
-            }
-            if (pageOnly) {
-                exportPageOnly(context, table, pdfTable);
-            } else if (selectionOnly) {
-                exportSelectionOnly(context, table, pdfTable);
-            } else {
-                exportAll(context, table, pdfTable);
-            }
-
-            if (table.hasFooterColumn()) {
-                addColumnFacets(table, pdfTable, ColumnType.FOOTER);
-            }
-            if (table.getFooter() != null) {
-
-                tableFacet(context, pdfTable, table, columnsCount, "footer");
-            }
-
-            table.setRowIndex(-1);
-
-            return pdfTable;
-        }
-
-    }
-
     protected PdfPTable exportPDFTable(FacesContext context, DataList list, boolean pageOnly, String encoding) {
 
         if (!("-".equalsIgnoreCase(encoding))) {
@@ -328,125 +229,6 @@ public class PDFCustomExporter extends PDFExporter {
         }
 
         return pdfTable;
-    }
-
-    protected void exportPageOnly(FacesContext context, DataTable table, PdfPTable pdfTable) {
-        int first = table.getFirst();
-        int rowsToExport = first + table.getRows();
-
-        tableColumnGroup(pdfTable, table, "header");
-
-        for (int rowIndex = first; rowIndex < rowsToExport; rowIndex++) {
-            exportRow(table, pdfTable, rowIndex);
-        }
-
-        tableColumnGroup(pdfTable, table, "footer");
-    }
-
-    protected String exportPageOnly(int first, DataList list, int rowsToExport, StringBuilder input) {
-        String output = "";
-        for (int rowIndex = first; rowIndex < rowsToExport; rowIndex++) {
-            output = addColumnValues(list, input);
-        }
-        return output;
-
-    }
-
-    protected void exportSelectionOnly(FacesContext context, DataTable table, PdfPTable pdfTable) {
-        Object selection = table.getSelection();
-        String var = table.getVar();
-
-        if (selection != null) {
-            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-
-            if (selection.getClass().isArray()) {
-                int size = Array.getLength(selection);
-
-                for (int i = 0; i < size; i++) {
-                    requestMap.put(var, Array.get(selection, i));
-
-                    exportCells(table, pdfTable);
-                }
-            } else {
-                requestMap.put(var, selection);
-
-                exportCells(table, pdfTable);
-            }
-        }
-    }
-
-    protected void exportAll(FacesContext context, DataTable table, PdfPTable pdfTable) {
-        int first = table.getFirst();
-        int rowCount = table.getRowCount();
-        int rows = table.getRows();
-        boolean lazy = table.isLazy();
-
-        if (lazy) {
-            if (rowCount > 0) {
-                table.setFirst(0);
-                table.setRows(rowCount);
-                table.clearLazyCache();
-                table.loadLazyData();
-            }
-
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-                exportRow(table, pdfTable, rowIndex);
-            }
-
-            //restore
-            table.setFirst(first);
-            table.setRowIndex(-1);
-            table.clearLazyCache();
-            table.loadLazyData();
-        } else {
-            tableColumnGroup(pdfTable, table, "header");
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-                exportRow(table, pdfTable, rowIndex);
-            }
-            tableColumnGroup(pdfTable, table, "footer");
-            //restore
-            table.setFirst(first);
-        }
-
-    }
-
-    protected void subTableExportAll(FacesContext context, SubTable table, PdfPTable pdfTable) {
-        int first = table.getFirst();
-        int rowCount = table.getRowCount();
-        int rows = table.getRows();
-        boolean lazy = false;
-
-        if (lazy) {
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-                if (rowIndex % rows == 0) {
-                    table.setFirst(rowIndex);
-                }
-            }
-
-            //restore
-            table.setFirst(first);
-
-        } else {
-            tableColumnGroup(pdfTable, table, "header");
-
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-                subTableExportRow(table, pdfTable, rowIndex);
-            }
-
-            tableColumnGroup(pdfTable, table, "footer");
-            //restore
-            table.setFirst(first);
-        }
-    }
-
-    protected String exportAll(DataList list, int rowCount, StringBuilder input) {
-        String output = "";
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-            list.setRowIndex(rowIndex);
-            output = addColumnValues(list, input);
-        }
-
-        return output;
     }
 
     protected void tableFacet(FacesContext context, PdfPTable pdfTable, DataTable table, int columnCount, String facetType) {
@@ -675,16 +457,6 @@ public class PDFCustomExporter extends PDFExporter {
         }
     }
 
-    protected void subTableExportRow(SubTable table, PdfPTable pdfTable, int rowIndex) {
-        table.setRowIndex(rowIndex);
-
-        if (!table.isRowAvailable()) {
-            return;
-        }
-
-        subTableExportCells(table, pdfTable);
-    }
-
     protected void exportCells(DataTable table, PdfPTable pdfTable) {
         for (UIColumn col : table.getColumns()) {
 
@@ -832,60 +604,6 @@ public class PDFCustomExporter extends PDFExporter {
             cell = addColumnAlignments(component, cell);
         }
         pdfTable.addCell(cell);
-    }
-
-    protected void addColumnValue(PdfPTable pdfTable, List<UIComponent> components, Font font, String columnType) {
-        StringBuilder builder = new StringBuilder();
-
-        for (UIComponent component : components) {
-            if (component.isRendered()) {
-                String value = exportValue(FacesContext.getCurrentInstance(), component);
-
-                if (value != null) {
-                    builder.append(value);
-                }
-            }
-        }
-        PdfPCell cell = new PdfPCell(new Paragraph(builder.toString(), font));
-        for (UIComponent component : components) {
-            cell = addColumnAlignments(component, cell);
-        }
-        if (columnType.equalsIgnoreCase("header")) {
-            for (UIComponent component : components) {
-                cell = addFacetAlignments(component, cell);
-            }
-        }
-        pdfTable.addCell(cell);
-    }
-
-    protected PdfPCell addColumnAlignments(UIComponent component, PdfPCell cell) {
-        if (component instanceof HtmlOutputText) {
-            HtmlOutputText output = (HtmlOutputText) component;
-            if (output.getStyle() != null && output.getStyle().contains("left")) {
-                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-            }
-            if (output.getStyle() != null && output.getStyle().contains("right")) {
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            }
-            if (output.getStyle() != null && output.getStyle().contains("center")) {
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            }
-        }
-        return cell;
-    }
-
-    protected PdfPCell addFacetAlignments(UIComponent component, PdfPCell cell) {
-        if (component instanceof HtmlOutputText) {
-            HtmlOutputText output = (HtmlOutputText) component;
-            if (output.getStyle() != null && output.getStyle().contains("left")) {
-                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-            } else if (output.getStyle() != null && output.getStyle().contains("right")) {
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            } else {
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            }
-        }
-        return cell;
     }
 
     public void customFormat(String facetBackground, String facetFontSize, String facetFontColor, String facetFontStyle, String fontName, String cellFontSize, String cellFontColor, String cellFontStyle, String datasetPadding, String orientation) {

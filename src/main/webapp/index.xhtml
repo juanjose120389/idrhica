@@ -32,7 +32,7 @@
                 <h:panelGroup layout="block" styleClass="exportButtons">
                     <h:commandLink>
                         <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
-                        <pe:exporter type="xls" target="personasTable" fileName="personas" />                                               
+                        <pe:exporter skipComponents="org.primefaces.component.tooltip.Tooltip" type="xlsx" target="personasTable" fileName="personas" />                                               
                     </h:commandLink>
                     <h:commandLink>
                         <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
@@ -46,16 +46,23 @@
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>
             <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
+                <f:facet name="header">  
+                    Nombres
+                </f:facet>                
                 <h:outputText value="#{persona.nombres}" />
             </p:column>
 
             <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains" sortBy="#{persona.apellidos}">
+                <f:facet name="header">  
+                    Apellidos
+                </f:facet>                
+                
                 <h:outputText value="#{persona.apellidos}" />
             </p:column>
 
             <p:column width="90" filterBy="#{persona.activo}" filterMatchMode="exact">
                 <f:facet name="header">
-                    <h:outputLabel id="lblEstado" value="Estado"/>
+                    <p:outputLabel id="lblEstado" value="Estado"/>
 
                     <p:tooltip id="tipEstado" for="lblEstado" value="T=Todos, A=Activos, I=Inactivos" />                    
                 </f:facet>
@@ -72,6 +79,10 @@
             </p:column>
 
             <p:column headerText="Correo" filterBy="#{persona.correo}" filterMatchMode="contains">
+                <f:facet name="header">  
+                    Correo
+                </f:facet>                
+                
                 <h:outputText value="#{persona.correo}" />
             </p:column>
 

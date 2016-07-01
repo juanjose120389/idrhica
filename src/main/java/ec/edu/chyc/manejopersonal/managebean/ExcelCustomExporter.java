@@ -20,53 +20,22 @@ package ec.edu.chyc.manejopersonal.managebean;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import javax.faces.component.html.HtmlOutputText;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.PrintSetup;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.primefaces.component.rowexpansion.RowExpansion;
-import org.primefaces.component.api.DynamicColumn;
-import org.primefaces.component.api.UIColumn;
-import org.primefaces.component.column.Column;
-import org.primefaces.component.columngroup.ColumnGroup;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.datalist.DataList;
 import org.primefaces.component.subtable.SubTable;
-import org.primefaces.util.Constants;
-import org.primefaces.expression.SearchExpressionFacade;
-
-import javax.el.MethodExpression;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlCommandLink;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.component.UIPanel;
 
-import java.awt.Color;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.Integer;
-import java.lang.String;
-import java.lang.reflect.Array;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.Iterator;
 import javax.faces.component.html.HtmlPanelGroup;
 import org.primefaces.extensions.component.exporter.ExcelExporter;
 
@@ -77,8 +46,36 @@ import org.primefaces.extensions.component.exporter.ExcelExporter;
  * @since 0.7.0
  */
 public class ExcelCustomExporter extends ExcelExporter {
+    @Override
+    protected void addColumnValue(Row row, UIComponent component, String type) {
+        int cellIndex = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
+        Cell cell = row.createCell(cellIndex);
+        
+        String value = "";
+        if (component != null && component instanceof UIPanel) {
+            
+            for (UIComponent childComponent : component.getChildren()) {
+                if (childComponent.isRendered()) {
+                    String valChild = exportValue(FacesContext.getCurrentInstance(), childComponent);
+                    
+                    if (valChild != null && !valChild.isEmpty()) {
+                        valChild = valChild.replace("<br/>", " ");
+                        value += valChild + "\n";
+                    }
+                }
+            }
+        } else {
+            value = component == null ? "" : exportValue(FacesContext.getCurrentInstance(), component);
+        }        
+        
+        cell.setCellValue(new XSSFRichTextString(value));
+        if (type.equalsIgnoreCase("facet")) {
+            addFacetAlignments(component,cell);
+        } else {
+            addColumnAlignments(component, cell);
+        }
 
-
+    }
     @Override
     protected void addColumnValue(Row row, List<UIComponent> components, String type) {
         int cellIndex = row.getLastCellNum() == -1 ? 0 : row.getLastCellNum();
@@ -98,7 +95,7 @@ public class ExcelCustomExporter extends ExcelExporter {
                                 builder.append(valChild).append("\n");
                             }
                         }
-                    }                    
+                    }
                 } else {
                     String value = exportValue(context, component);
 
@@ -113,14 +110,14 @@ public class ExcelCustomExporter extends ExcelExporter {
 
         if (type.equalsIgnoreCase("facet")) {
             for (UIComponent component : components) {
-            addFacetAlignments(component,cell);
+                addFacetAlignments(component, cell);
             }
         } else {
             for (UIComponent component : components) {
-             addColumnAlignments(component, cell);
+                addColumnAlignments(component, cell);
             }
         }
 
     }
-}
 
+}
