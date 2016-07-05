@@ -228,8 +228,10 @@
                 <p:outputLabel value=" #{tesis.facultad}"/>
                 <p:outputLabel value=" #{tesis.escuela}"/>
             </p:column>
-            <p:column headerText="Observaciones">
-                <h:outputText value="#{tesis.observaciones}" />
+            <p:column headerText="Autores">
+                <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
+                    <p:outputLabel value="• #{autor.nombres} #{autor.apellidos}"/><br />
+                </ui:repeat>
             </p:column>
 
         </p:dataTable>

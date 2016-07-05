@@ -9,6 +9,7 @@ import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
+import ec.edu.chyc.manejopersonal.entity.Tesis;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -56,6 +57,9 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             }
             if (cargarTesis){
                 Hibernate.initialize(p.getTesisCollection());
+                for (Tesis tesis : p.getTesisCollection()) {
+                    Hibernate.initialize(tesis.getAutoresCollection());
+                }
             }
             if (cargarPasantias) {
                 Hibernate.initialize(p.getPasantiasCollection());

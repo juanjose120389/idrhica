@@ -23,7 +23,7 @@
             }            
         </style>
         <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
-                     paginator="true" resizableColumns="true" liveResize="true" emptyMessage="#{label.emptyMessage}"
+                     paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                      rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
                      >
@@ -42,11 +42,11 @@
             <f:facet name="header">
                 Artículos
             </f:facet>
-            
+
             <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>
-            
+
             <p:column headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].personaFirma.persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}" width="150">
                 <h:outputText value="#{articulo.personasArticuloCollection[0].personaFirma.firma.nombre}" />
             </p:column>           
@@ -68,17 +68,18 @@
                 </h:panelGroup>
             </p:column>
 
-            <p:column headerText="Tema" filterBy="#{articulo.tema}" filterMatchMode="contains">
+            <p:column headerText="Tema" filterBy="#{articulo.tema}" filterMatchMode="contains" width="100">
                 <h:outputText value="#{articulo.tema}" />
             </p:column>
 
-            <p:column exportable="false" filterBy="#{articulo.listaInstFinanciamientos}" headerText="Financiamiento"
+            <p:column exportable="false" filterBy="#{articulo.listaInstFinanciamientos}" headerText="Financiamiento" width="150"
                       filterFunction="#{gestorArticulo.filtrarPorInstFinanciamiento}">
                 <f:facet name="filter">
-                    <p:selectOneMenu onchange="PF('articulosTable').filter()" converter="institucionConverter">
+                    <p:selectOneMenu id="cmdInstitFinan" style="width: 150px" onchange="PF('articulosTable').filter()" converter="institucionConverter">
                         <f:selectItem itemLabel="Seleccionar" itemValue="#{null}" noSelectionOption="true" />
                         <f:selectItems value="#{gestorInstitucion.listaInstituciones}" var="inst" itemLabel="#{inst.nombre}" itemValue="#{inst}"/>
                     </p:selectOneMenu>
+
                 </f:facet>
                 <p:dataList styleClass="lista" emptyMessage="" value="#{articulo.listaInstFinanciamientos}" var="institucion" type="definition">
                     • #{institucion.nombre}
