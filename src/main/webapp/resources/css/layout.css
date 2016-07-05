@@ -20,6 +20,7 @@ and open the template in the editor.
     width: 135px;
 }
 .labelscol {
+    vertical-align: top;
     font-weight: bold;
 }
 .inputscol {
