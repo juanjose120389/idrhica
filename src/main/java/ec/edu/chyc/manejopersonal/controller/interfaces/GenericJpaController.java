@@ -56,13 +56,16 @@ public class GenericJpaController<T> implements Serializable {
             int resultInt = result.intValue();
             return resultInt;
         } finally {
-            em.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
 
     public T findEntity(Object id) {
-        EntityManager em = getEntityManager();
+        EntityManager em = null;
         try {
+            em = getEntityManager();
             em.getTransaction().begin();
             T result = (T) em.find(classRef, id);
             em.getTransaction().commit();
@@ -75,8 +78,9 @@ public class GenericJpaController<T> implements Serializable {
     }
 
     protected List<T> findEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
+        EntityManager em = null;
         try {
+            em = getEntityManager();
             em.getTransaction().begin();
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(classRef));
@@ -89,7 +93,9 @@ public class GenericJpaController<T> implements Serializable {
             em.getTransaction().commit();
             return list;
         } finally {
-            em.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
     
