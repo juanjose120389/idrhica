@@ -63,5 +63,9 @@
     <mime-mapping> 
         <extension>bib</extension> 
         <mime-type>application/x-bibtex</mime-type> 
-    </mime-mapping>      
+    </mime-mapping>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/index.jsf</location>
+    </error-page>    
 </web-app>
