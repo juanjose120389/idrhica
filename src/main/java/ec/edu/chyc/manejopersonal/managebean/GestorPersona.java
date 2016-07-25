@@ -245,7 +245,7 @@ public class GestorPersona implements Serializable {
             persona = personaController.findPersona(id, PersonaJpaController.Incluir.INC_TODOS.value());
         } else {
             //persona = personaController.findPersona(id, false, false, true, false, false, true);
-            persona = personaController.findPersona(id, PersonaJpaController.Incluir.INC_TITULOS.value());
+            persona = personaController.findPersona(id, PersonaJpaController.Incluir.INC_TITULOS.value() | PersonaJpaController.Incluir.INC_FIRMAS.value());
         }
         //modoModificar = true;
         
