@@ -80,6 +80,10 @@
                     <p:column headerText="Título">
                         <h:outputText value="#{articulo.nombre}" />
                     </p:column>
+                    
+                    <p:column headerText="Revista" width="200">
+                        <h:outputText value="#{articulo.revista}" />
+                    </p:column>                    
 
                     <p:column headerText="Año" width="200">
                         <h:outputText value="#{articulo.anioPublicacion}" />
@@ -102,6 +106,12 @@
                         <h:outputText value="#{tesis.nombre}" />
                     </p:column>
 
+                    <p:column headerText="Autores" width="200">
+                        <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
+                            <p:outputLabel value="• #{autor.nombres} #{autor.apellidos}"/><br/>
+                        </ui:repeat>
+                    </p:column>
+                    
                     <p:column headerText="Director" width="200">
                         <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
                     </p:column>
