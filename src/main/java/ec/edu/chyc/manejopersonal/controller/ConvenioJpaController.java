@@ -41,12 +41,15 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
                     if (!convenio.getListaArticulos().contains(articulo)) {
                         convenio.getListaArticulos().add(articulo);
                     }
+                    
                 }
                 for (Tesis tesis : proyecto.getTesisCollection()) {
                     if (!convenio.getListaTesis().contains(tesis)) {
                         convenio.getListaTesis().add(tesis);
                     }
+                    Hibernate.initialize(tesis.getAutoresCollection());
                 }
+                
                 //Hibernate.initialize(proyecto.getArticulosCollection());
                 //Hibernate.initialize(proyecto.getTesisCollection());
             }
