@@ -6,8 +6,10 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +22,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Type;
 
@@ -56,6 +59,12 @@ public class Convenio implements Serializable {
     @ManyToMany(mappedBy = "conveniosCollection")
     @OrderBy("titulo ASC")
     private Set<Proyecto> proyectosCollection = new HashSet<>();    
+    
+    @Transient
+    private List<Articulo> listaArticulos = new ArrayList<>();
+    
+    @Transient
+    private List<Tesis> listaTesis = new ArrayList<>();
     
     /*@ManyToOne
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")    
@@ -186,6 +195,22 @@ public class Convenio implements Serializable {
 
     public void setProyectosCollection(Set<Proyecto> proyectosCollection) {
         this.proyectosCollection = proyectosCollection;
+    }
+
+    public List<Articulo> getListaArticulos() {
+        return listaArticulos;
+    }
+
+    public void setListaArticulos(List<Articulo> listaArticulos) {
+        this.listaArticulos = listaArticulos;
+    }
+
+    public List<Tesis> getListaTesis() {
+        return listaTesis;
+    }
+
+    public void setListaTesis(List<Tesis> listaTesis) {
+        this.listaTesis = listaTesis;
     }
     
 }

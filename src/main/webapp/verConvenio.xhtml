@@ -51,17 +51,59 @@
                     <f:facet name="header">
                         Proyectos pertenecientes al convenio
                     </f:facet>
-                    
+
                     <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                         <h:outputText value="#{rowIndex+1}"/>
                     </p:column>
-                    
+
                     <p:column headerText="Título">
                         <h:outputText value="#{proyecto.titulo}" />
                     </p:column>
 
                     <p:column headerText="Director" width="200">
                         <h:outputText value="#{proyecto.director.nombres} #{proyecto.director.apellidos}" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>   
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorConvenio.convenio.listaArticulos}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="articulo" value="#{gestorConvenio.convenio.listaArticulos}" rowIndexVar="rowIndex">
+                    <f:facet name="header">
+                        Artículos resultantes
+                    </f:facet>
+
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+
+                    <p:column headerText="Título">
+                        <h:outputText value="#{articulo.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Año" width="200">
+                        <h:outputText value="#{articulo.anioPublicacion}" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>   
+
+            <h:panelGroup layout="block" rendered="#{not empty gestorConvenio.convenio.listaTesis}">
+                <h:panelGroup layout="block" style="height: 15px"/>
+                <p:dataTable var="tesis" value="#{gestorConvenio.convenio.listaTesis}" rowIndexVar="rowIndex">
+                    <f:facet name="header">
+                        Tesis resultantes
+                    </f:facet>
+
+                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+
+                    <p:column headerText="Título">
+                        <h:outputText value="#{tesis.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Director" width="200">
+                        <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
                     </p:column>
                 </p:dataTable>
             </h:panelGroup>   

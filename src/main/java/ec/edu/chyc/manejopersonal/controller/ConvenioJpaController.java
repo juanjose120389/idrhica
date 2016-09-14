@@ -6,9 +6,11 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Articulo;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Convenio;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
+import ec.edu.chyc.manejopersonal.entity.Tesis;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.hibernate.Hibernate;
 
 
 public class ConvenioJpaController extends GenericJpaController<Convenio> implements Serializable {
@@ -31,7 +34,22 @@ public class ConvenioJpaController extends GenericJpaController<Convenio> implem
             em = getEntityManager();
             Query q = em.createQuery("select distinct c from Convenio c left join fetch c.proyectosCollection where c.id=:id");
             q.setParameter("id", id);
-            Convenio convenio = (Convenio)q.getSingleResult();            
+            Convenio convenio = (Convenio)q.getSingleResult();
+            
+            for (Proyecto proyecto : convenio.getProyectosCollection()) {
+                for (Articulo articulo : proyecto.getArticulosCollection()) {
+                    if (!convenio.getListaArticulos().contains(articulo)) {
+                        convenio.getListaArticulos().add(articulo);
+                    }
+                }
+                for (Tesis tesis : proyecto.getTesisCollection()) {
+                    if (!convenio.getListaTesis().contains(tesis)) {
+                        convenio.getListaTesis().add(tesis);
+                    }
+                }
+                //Hibernate.initialize(proyecto.getArticulosCollection());
+                //Hibernate.initialize(proyecto.getTesisCollection());
+            }
             
             return convenio;
         } finally {
