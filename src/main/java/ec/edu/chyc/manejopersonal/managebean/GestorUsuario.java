@@ -75,7 +75,7 @@ public class GestorUsuario implements Serializable {
     }
     
     public String login() {
-        if (!usuario.isEmpty() && !password.isEmpty() && !bloquearLogin) {
+        if (!usuario.isEmpty() && !password.isEmpty()) {
             //antes de enviar el password, se lo codifica ya que en la base de datos está el password codificado
             String encPassword = ServerUtils.sha256(password);
 

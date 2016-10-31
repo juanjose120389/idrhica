@@ -37,8 +37,7 @@
             <p:inputText id="txtUser" value="#{gestorUsuario.usuario}" size="12" maxlength="50"/>
             <p:outputLabel value="Contraseña"/>
             <p:password id="txtPass" widgetVar="pass" value="#{gestorUsuario.password}" size="12" maxlength="255"/>
-            <p:commandButton value="Login" disabled="#{gestorUsuario.bloquearLogin}" action="#{gestorUsuario.login()}" update="formMenu formContenido"/>
-            <p:poll interval="60" autoStart="false" update="formMenu formContenido" oncomplete="PF('pollEnable').stop()" widgetVar="pollEnable" listener="#{gestorUsuario.pollComplete()}"/>
+            <p:commandButton value="Login" action="#{gestorUsuario.login()}" update="formMenu formContenido"/>
         </h:panelGrid>
     </p:panel>   
 </ui:composition>
