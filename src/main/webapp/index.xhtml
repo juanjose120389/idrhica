@@ -78,7 +78,7 @@
                 <h:outputText value="#{persona.activo == true ? 'Activo' : persona.activo == false ? 'Inactivo' : 'Externo'}" />
             </p:column>
 
-            <p:column headerText="Correo" filterBy="#{persona.correo}" filterMatchMode="contains">
+            <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="Correo" filterBy="#{persona.correo}" filterMatchMode="contains">
                 <f:facet name="header">  
                     Correo
                 </f:facet>                
@@ -86,7 +86,7 @@
                 <h:outputText value="#{persona.correo}" />
             </p:column>
 
-            <p:column width="90">
+            <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" width="90">
                 <f:facet name="header">
                     Fecha de Nacimiento
                     <h:panelGroup layout="block" style="display: block;  width: 100%; margin: auto;" rendered="false">
@@ -109,7 +109,7 @@
 
             </p:column>
 
-            <p:column headerText="" exportable="false">
+            <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="" exportable="false">
                 <p:commandLink value="Ver" action="#{gestorPersona.initVerPersona(persona.id)}"/>
                 <p:outputLabel value=" "/>
                 <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
