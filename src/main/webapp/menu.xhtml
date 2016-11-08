@@ -9,7 +9,7 @@
         <p:submenu label="Listado">
             <p:menuitem value="Personal" action="#{gestorGeneral.regresarPaginaPrincipal()}" icon="fa fa-list" update="formContenido"/>
             <p:menuitem value="Proyectos" action="#{gestorProyecto.initListarProyectos()}" icon="fa fa-list" update="formContenido"/>
-            <p:menuitem value="Contratos" action="#{gestorContrato.initListarContratos()}" icon="fa fa-list" update="formContenido"/>
+            <p:menuitem value="Contratos" rendered="#{gestorUsuario.puedeVerMasInfo}" action="#{gestorContrato.initListarContratos()}" icon="fa fa-list" update="formContenido"/>
             <p:menuitem value="Artículos" action="#{gestorArticulo.initListarArticulos()}" icon="fa fa-list" update="formContenido"/>
             <p:menuitem value="Convenios" action="#{gestorConvenio.initListarConvenios()}" icon="fa fa-list" update="formContenido"/>
             <p:menuitem value="Tesis" action="#{gestorTesis.initListarTesis()}" icon="fa fa-list" update="formContenido"/>
