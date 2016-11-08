@@ -146,6 +146,12 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
                 if (finan.getId() == null || finan.getId() < 0) {
                     finan.setId(null);                    
                 }
+                if (finan.getInstitucion().getId() == null || finan.getInstitucion().getId() < 0) {
+                    //si el codigo de la institucion es negativa o nula, es una institucion nueva
+                    finan.getInstitucion().setId(null);
+                    em.persist(finan.getInstitucion());
+                }
+                
                 em.merge(finan);
             }
             
