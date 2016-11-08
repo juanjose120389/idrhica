@@ -8,12 +8,21 @@
         <p:outputLabel value="Titulo"/>
         <p:outputLabel value="#{gestorProyecto.proyecto.titulo}"/>
 
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.codigoExterno}" value="Código externo" />
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.codigoExterno}" value="#{gestorProyecto.proyecto.codigoExterno}"/>
+
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.codigoInterno}" value="Código interno" />
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.codigoInterno}" value="#{gestorProyecto.proyecto.codigoInterno}"/>
+        
         <p:outputLabel value="Director" />
         <p:outputLabel value="#{gestorProyecto.proyecto.director.nombres} #{gestorProyecto.proyecto.director.apellidos}"/>
+        
+        <p:outputLabel rendered="#{gestorProyecto.proyecto.lugar != null}" value="Lugar" />
+        <p:outputLabel rendered="#{gestorProyecto.proyecto.lugar != nul}" value="#{gestorProyecto.proyecto.lugar.nombre}"/>        
 
-        <p:outputLabel value="Co-Director" />
-        <h:panelGroup layout="block">
-            <p:outputLabel rendered="#{gestorProyecto.proyecto.codirector != null}" value="#{gestorProyecto.proyecto.codirector.nombres} #{gestorProyecto.proyecto.codirector.apellidos}"/>
+        <p:outputLabel rendered="#{gestorProyecto.proyecto.codirector != null}" value="Co-Director" />
+        <h:panelGroup rendered="#{gestorProyecto.proyecto.codirector != null}" layout="block">
+            <p:outputLabel value="#{gestorProyecto.proyecto.codirector.nombres} #{gestorProyecto.proyecto.codirector.apellidos}"/>
         </h:panelGroup>
         <p:outputLabel value="Duración" rendered="#{gestorProyecto.proyecto.duracion != null}"/>
         <h:panelGroup layout="block" rendered="#{gestorProyecto.proyecto.duracion != null}">

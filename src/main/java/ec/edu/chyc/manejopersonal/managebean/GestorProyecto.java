@@ -13,6 +13,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.ProyectoJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
+import ec.edu.chyc.manejopersonal.entity.Lugar;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
@@ -50,16 +51,22 @@ public class GestorProyecto implements Serializable {
     private List<Proyecto> listaProyecto = new ArrayList<>();
     private List<Financiamiento> listaFinanciamientos = new ArrayList<>();
     //private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
+    private List<Lugar> listaLugares = new ArrayList<>();
+    private List<Lugar> listaLugaresAgregados = new ArrayList<>();
     private Long idFinanciamientoGen = -1L;
     private Long idInstitucionGen = -1L;
+    private Long idLugarGen = -1L;
     
     private Financiamiento financiamientoActual = null;
     
     private boolean mostrarDlgInstitucion = false;
+    private boolean mostrarDlgLugar = false;
     private boolean hayExtensionFinalizacion = false;
     private boolean modoModificar = false;
     
     private Institucion institucion = null;
+    
+    private Lugar lugar = null;
 
     public GestorProyecto() {
 
@@ -85,6 +92,24 @@ public class GestorProyecto implements Serializable {
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         BeansUtils.ejecutarJS("PF('dlgInstitucion').show()");
     }
+    
+    public void abrirNuevoLugarDlg() {
+        this.lugar = new Lugar();
+        mostrarDlgLugar = true;
+        RequestContext.getCurrentInstance().update("formContenido:divDialogs");
+        BeansUtils.ejecutarJS("PF('dlgLugar').show()");
+    }
+    public void guardarLugar() {
+        lugar.setId(idLugarGen);
+        idLugarGen--;
+        listaLugaresAgregados.add(lugar);
+        
+        proyecto.setLugar(lugar);
+        
+        lugar = new Lugar();
+        mostrarDlgLugar = false;
+        BeansUtils.ejecutarJS("PF('dlgLugar').hide()");
+    }    
     public void guardarInstitucion() {
         institucion.setId(idInstitucionGen);
         financiamientoActual.setInstitucion(institucion);
@@ -102,6 +127,9 @@ public class GestorProyecto implements Serializable {
     
     public void onCloseDlgInstitucion() {
         mostrarDlgInstitucion = false;
+    }
+    public void onCloseDlgLugar() {
+        mostrarDlgLugar = false;
     }
 
     public void quitarFinanciamiento(Financiamiento financiamientoQuitar) {
@@ -121,6 +149,14 @@ public class GestorProyecto implements Serializable {
         nuevoFinan.setMonto(0.0);
     }
 
+    public void actualizarListaLugares() {
+        try {
+            listaLugares = proyectoController.listLugares();
+        } catch (Exception ex) {
+            Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+    }
+    
     public void actualizarListaProyecto() {
         try {
             listaProyecto = proyectoController.listProyecto();
@@ -182,14 +218,17 @@ public class GestorProyecto implements Serializable {
         GestorPersona.getInstance().actualizarListado();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
         GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
+        actualizarListaLugares();
 
         institucion = null;
         mostrarDlgInstitucion = false;
+        mostrarDlgLugar = false;
         idFinanciamientoGen = -1L;
         hayExtensionFinalizacion = false;
         
         listaFinanciamientos.clear();
         GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
+        listaLugaresAgregados.clear();
     }
 
     public String initCrearProyecto() {
@@ -348,6 +387,38 @@ public class GestorProyecto implements Serializable {
 
     public void setModoModificar(boolean modoModificar) {
         this.modoModificar = modoModificar;
+    }
+
+    public List<Lugar> getListaLugares() {
+        return listaLugares;
+    }
+
+    public void setListaLugares(List<Lugar> listaLugares) {
+        this.listaLugares = listaLugares;
+    }
+
+    public List<Lugar> getListaLugaresAgregados() {
+        return listaLugaresAgregados;
+    }
+
+    public void setListaLugaresAgregados(List<Lugar> listaLugaresAgregados) {
+        this.listaLugaresAgregados = listaLugaresAgregados;
+    }
+
+    public Lugar getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(Lugar lugar) {
+        this.lugar = lugar;
+    }
+
+    public boolean isMostrarDlgLugar() {
+        return mostrarDlgLugar;
+    }
+
+    public void setMostrarDlgLugar(boolean mostrarDlgLugar) {
+        this.mostrarDlgLugar = mostrarDlgLugar;
     }
     
 }

@@ -7,6 +7,7 @@ package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
+import ec.edu.chyc.manejopersonal.entity.Lugar;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
@@ -21,6 +22,20 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         setClassRef(Proyecto.class);
     }
 
+    public List<Lugar> listLugares() throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct l from Lugar l order by l.nombre asc");
+            List<Lugar> list = q.getResultList();
+            return list;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
     public List<Proyecto> listProyecto() throws Exception {
         EntityManager em = null;
         try {
@@ -78,6 +93,14 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            
+            if (proyecto.getLugar() != null) {
+                if (proyecto.getLugar().getId() == null || proyecto.getLugar().getId() < 0) {
+                    proyecto.getLugar().setId(null);
+                    em.persist(proyecto.getLugar());
+                }
+            }
+            
             em.persist(proyecto);
 
             for (Financiamiento finan : proyecto.getFinanciamientosCollection()) {                
@@ -125,6 +148,14 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
                 }
                 em.merge(finan);
             }
+            
+            if (proyecto.getLugar() != null) {
+                if (proyecto.getLugar().getId() == null || proyecto.getLugar().getId() < 0) {
+                    proyecto.getLugar().setId(null);                    
+                    em.persist(proyecto.getLugar());
+                }
+            }
+            
             
             em.merge(proyecto);
             em.getTransaction().commit();

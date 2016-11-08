@@ -23,9 +23,10 @@
                       resizable="false" modal="true" width="400">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgInstitucion()}" />
                 <h:panelGroup layout="block" id="divDlgInstitucion">
-                    <h:panelGrid id="panelCamposInst" columns="3">
+                    <h:panelGrid id="panelCamposInst" columns="2">
                         <p:outputLabel value="Nombre"/>
                         <p:inputText id="txtNombreInstitucion" required="true" requiredMessage="#{label.required}" value="#{gestorProyecto.institucion.nombre}"/>
+                        <h:panelGroup/>
                         <p:message for="txtNombreInstitucion"/>                                
                     </h:panelGrid>
                     <h:panelGrid columns="2">
@@ -34,9 +35,27 @@
                     </h:panelGrid>            
                 </h:panelGroup>
             </p:dialog>  
+            
+            <p:dialog id="dlgLugar" header="Lugar" widgetVar="dlgLugar" resizable="false" modal="true" width="400" rendered="#{gestorProyecto.mostrarDlgLugar}">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgLugar()}" />
+                <h:panelGroup id="divDlgLugar" layout="block">
+                    <h:panelGrid id="panelCamposTitulo" columns="2">
+                        <p:outputLabel value="Nombre"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtNombreLugar" required="true" requiredMessage="Requerido" value="#{gestorProyecto.lugar.nombre}"/>
+                        <h:panelGroup/>
+                        <p:message for="txtNombreLugar"/>
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" process="dlgLugar" update="divAccionesLugares divDlgLugar" action="#{gestorProyecto.guardarLugar()}" />
+                        <p:commandButton value="Cancelar" onclick="PF('dlgLugar').hide();"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </p:dialog>  
+            
         </h:panelGroup>        
 
-        <p:panel header="#{gestorProyecto.modoModificar?'Modificar':'Nuevo'} Proyecto">
+        <p:panel id="panelProyecto" header="#{gestorProyecto.modoModificar?'Modificar':'Nuevo'} Proyecto">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
             <h:panelGrid columns="3">
                 <h:panelGroup layout="block" style="width: 160px">
@@ -48,7 +67,33 @@
                     <p:inputText id="txtTitulo" requiredMessage="#{label.required}" required="true" value="#{gestorProyecto.proyecto.titulo}"/>  
                     <p:message for="txtTitulo"/>
                 </h:panelGroup>
-                <h:panelGroup/>                
+                <h:panelGroup/>
+                
+                <p:outputLabel value="Código externo"/>
+                <p:inputText value="#{gestorProyecto.proyecto.codigoExterno}"/>
+                <h:panelGroup/>
+                
+                <p:outputLabel value="Código interno"/>
+                <p:inputText value="#{gestorProyecto.proyecto.codigoInterno}"/>
+                <h:panelGroup/>
+                
+                <p:outputLabel value="Lugar"/>
+                <h:panelGroup id="divAccionesLugares" layout="block">
+                    <p:selectOneMenu rendered="#{not empty gestorProyecto.listaLugares or not empty gestorProyecto.listaLugaresAgregados}" id="cmbLugar" styleClass="cmbTitulo" value="#{gestorProyecto.proyecto.lugar}" converter="lugarConverter"
+                                     var="lugar" style="width: 300px;" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                        <f:selectItems value="#{gestorProyecto.listaLugares}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                        <f:selectItems value="#{gestorProyecto.listaLugaresAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+
+                        <p:column>
+                            <p:outputLabel value="#{lugar.nombre}"/>
+                        </p:column>
+                    </p:selectOneMenu>
+
+                    <p:commandLink value="Nuevo lugar"  style="margin-left: 5px;" update="dlgLugar" process="@this" action="#{gestorProyecto.abrirNuevoLugarDlg()}" />
+                </h:panelGroup>
+                <h:panelGroup/>
+
 
                 <p:outputLabel value="Director" >
                     <span class="asterisk"/>

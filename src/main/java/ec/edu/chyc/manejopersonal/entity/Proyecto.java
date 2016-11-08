@@ -40,6 +40,9 @@ public class Proyecto implements Serializable {
     private Long id;
     
     private String titulo;
+    
+    private String codigoExterno = "";
+    private String codigoInterno = "";
 
     @ManyToOne
     @JoinColumn(name = "idDirector", referencedColumnName = "id")    
@@ -48,6 +51,10 @@ public class Proyecto implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idCodirector", referencedColumnName = "id")    
     private Persona codirector;
+    
+    @ManyToOne
+    @JoinColumn(name = "idLugar", referencedColumnName = "id")
+    private Lugar lugar;    
 
     @Transient
     private Integer duracion;
@@ -275,5 +282,29 @@ public class Proyecto implements Serializable {
 
     public void setTotalFinanciamientos(Double totalFinanciamientos) {
         this.totalFinanciamientos = totalFinanciamientos;
+    }    
+
+    public String getCodigoExterno() {
+        return codigoExterno;
+    }
+
+    public void setCodigoExterno(String codigoExterno) {
+        this.codigoExterno = codigoExterno;
+    }
+
+    public String getCodigoInterno() {
+        return codigoInterno;
+    }
+
+    public void setCodigoInterno(String codigoInterno) {
+        this.codigoInterno = codigoInterno;
+    }
+
+    public Lugar getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(Lugar lugar) {
+        this.lugar = lugar;
     }    
 }
