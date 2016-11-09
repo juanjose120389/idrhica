@@ -5,6 +5,7 @@
  */
 package ec.edu.chyc.manejopersonal.controller;
 
+import ec.edu.chyc.manejopersonal.controller.exceptions.JPAControllerException;
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Lugar;
@@ -22,13 +23,15 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         setClassRef(Proyecto.class);
     }
 
-    public List<Lugar> listLugares() throws Exception {
+    public List<Lugar> listLugares() throws JPAControllerException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             Query q = em.createQuery("select distinct l from Lugar l order by l.nombre asc");
             List<Lugar> list = q.getResultList();
             return list;
+        } catch (Exception ex) {          
+            throw new JPAControllerException(ex);
         } finally {
             if (em != null) {
                 em.close();
@@ -36,13 +39,15 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         }
     }
     
-    public List<Proyecto> listProyecto() throws Exception {
+    public List<Proyecto> listProyecto() throws JPAControllerException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             Query q = em.createQuery("select distinct p from Proyecto p left join fetch p.financiamientosCollection order by p.fechaFin desc, p.titulo asc");
             List<Proyecto> list = q.getResultList();
             return list;
+        } catch (Exception ex) {          
+            throw new JPAControllerException(ex);
         } finally {
             if (em != null) {
                 em.close();
@@ -87,7 +92,7 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         }
     }
 
-    public void create(Proyecto proyecto) throws Exception {
+    public void create(Proyecto proyecto) throws JPAControllerException {
         EntityManager em = null;
 
         try {
@@ -119,6 +124,8 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             }
 
             em.getTransaction().commit();
+        } catch (Exception ex) {          
+            throw new JPAControllerException(ex);
         } finally {
             if (em != null) {
                 em.close();
@@ -126,7 +133,7 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         }
     }
 
-    public void edit(Proyecto proyecto) throws Exception {
+    public void edit(Proyecto proyecto) throws JPAControllerException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -165,8 +172,10 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             
             em.merge(proyecto);
             em.getTransaction().commit();
+        } catch (Exception ex) {          
+            throw new JPAControllerException(ex);
         } finally {
-            if (em != null) {
+            if (em != null && em.isOpen()) {
                 em.close();
             }
         }
