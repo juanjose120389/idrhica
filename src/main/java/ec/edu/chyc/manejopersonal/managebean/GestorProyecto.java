@@ -12,7 +12,9 @@ package ec.edu.chyc.manejopersonal.managebean;
 
 import ec.edu.chyc.manejopersonal.controller.ProyectoJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
+import ec.edu.chyc.manejopersonal.entity.GrupoInvestigacion;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
+import ec.edu.chyc.manejopersonal.entity.LineaInvestigacion;
 import ec.edu.chyc.manejopersonal.entity.Lugar;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
@@ -26,7 +28,9 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -37,6 +41,7 @@ import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.TabChangeEvent;
 
 /**
  *
@@ -51,22 +56,36 @@ public class GestorProyecto implements Serializable {
     private List<Proyecto> listaProyecto = new ArrayList<>();
     private List<Financiamiento> listaFinanciamientos = new ArrayList<>();
     //private List<Institucion> listaInstitucionesAgregadas = new ArrayList<>();
+    private List<Lugar> listaLugaresSeleccionados = new ArrayList<>();
     private List<Lugar> listaLugares = new ArrayList<>();
     private List<Lugar> listaLugaresAgregados = new ArrayList<>();
+    private List<GrupoInvestigacion> listaGruposInvestigacion = new ArrayList<>();
+    private List<GrupoInvestigacion> listaGruposInvestigacionAgregados = new ArrayList<>();
+    private List<LineaInvestigacion> listaLineasInvestigacion = new ArrayList<>();
+    private List<LineaInvestigacion> listaLineasInvestigacionAgregados = new ArrayList<>();
     private Long idFinanciamientoGen = -1L;
     private Long idInstitucionGen = -1L;
     private Long idLugarGen = -1L;
-    
+    private Long idGrupoInvestigacionGen = -1L;
+    private Long idLineaInvestigacionGen = -1L;
+    private String idTabSel = "";
+    private int  indexTabSel = 0;
+
+    private GrupoInvestigacion grupoInvestigacion = null;
+    private LineaInvestigacion lineaInvestigacion = null;
     private Financiamiento financiamientoActual = null;
     
     private boolean mostrarDlgInstitucion = false;
     private boolean mostrarDlgLugar = false;
+    private boolean mostrarDlgGrupoInvestigacion = false;
+    private boolean mostrarDlgLineaInvestigacion = false;
     private boolean hayExtensionFinalizacion = false;
     private boolean modoModificar = false;
     
     private Institucion institucion = null;
     
     private Lugar lugar = null;
+    private Lugar lugarNuevo = null;
 
     public GestorProyecto() {
 
@@ -92,24 +111,64 @@ public class GestorProyecto implements Serializable {
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         BeansUtils.ejecutarJS("PF('dlgInstitucion').show()");
     }
-    
+    public void onTabChange(TabChangeEvent event) {
+        String id = event.getTab().getId();
+        
+        idTabSel = id;
+        if (id.equals("tabLugarExistente")) {
+            indexTabSel = 0;
+        } else {
+            indexTabSel = 1;
+        }
+        //RequestContext.getCurrentInstance().update("formContenido:tabsLugar");
+    }    
     public void abrirNuevoLugarDlg() {
-        this.lugar = new Lugar();
+        this.lugarNuevo = new Lugar();
+        idTabSel = "tabLugarExistente";
+        indexTabSel = 0;
         mostrarDlgLugar = true;
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         BeansUtils.ejecutarJS("PF('dlgLugar').show()");
     }
     public void guardarLugar() {
-        lugar.setId(idLugarGen);
-        idLugarGen--;
-        listaLugaresAgregados.add(lugar);
+
+        if (idTabSel.equals("tabLugarExistente")) {
+            listaLugaresSeleccionados.add(lugar);
+        }
+        else {
+            lugarNuevo.setId(idLugarGen);
+            listaLugaresSeleccionados.add(lugarNuevo);
+            idLugarGen--;
+            listaLugaresAgregados.add(lugarNuevo);
+        }
         
-        proyecto.setLugar(lugar);
+        //proyecto.setLugar(lugar);
+        //proyecto.getLugaresCollection().add(lugar);
         
-        lugar = new Lugar();
+        lugarNuevo = new Lugar();
         mostrarDlgLugar = false;
         BeansUtils.ejecutarJS("PF('dlgLugar').hide()");
     }    
+    public void guardarGrupoInvestigacion() {
+        grupoInvestigacion.setId(idGrupoInvestigacionGen);
+        idGrupoInvestigacionGen--;
+        listaGruposInvestigacionAgregados.add(grupoInvestigacion);
+        proyecto.setGrupoInvestigacion(grupoInvestigacion);
+        
+        grupoInvestigacion = new GrupoInvestigacion();
+        mostrarDlgGrupoInvestigacion = false;
+        BeansUtils.ejecutarJS("PF('dlgGrupoInvestigacion').hide()");        
+    }
+    public void guardarLineaInvestigacion() {
+        lineaInvestigacion.setId(idLineaInvestigacionGen);
+        idLineaInvestigacionGen--;
+        listaLineasInvestigacionAgregados.add(lineaInvestigacion);
+        proyecto.setLineaInvestigacion(lineaInvestigacion);
+        
+        lineaInvestigacion = new LineaInvestigacion();
+        mostrarDlgLineaInvestigacion = false;
+        BeansUtils.ejecutarJS("PF('dlgLineaInvestigacion').hide()");        
+    }
     public void guardarInstitucion() {
         institucion.setId(idInstitucionGen);
         financiamientoActual.setInstitucion(institucion);
@@ -131,11 +190,42 @@ public class GestorProyecto implements Serializable {
     public void onCloseDlgLugar() {
         mostrarDlgLugar = false;
     }
+    public void onCloseDlgGrupoInvestigacion() {
+        mostrarDlgGrupoInvestigacion = false;
+    }
 
+    public void onCloseDlgLineaInvestigacion() {
+        mostrarDlgLineaInvestigacion = false;
+    }
+    
+    public void quitarObservatorio(Lugar observatorioQuitar) {
+        listaLugaresSeleccionados.remove(observatorioQuitar);
+    }
+    
     public void quitarFinanciamiento(Financiamiento financiamientoQuitar) {
         listaFinanciamientos.remove(financiamientoQuitar);
     }
 
+    public void agregarLugar() {
+        if (!listaLugares.isEmpty()) {
+            listaLugaresSeleccionados.add(listaLugares.get(0));
+        }
+        else if (!listaLugaresAgregados.isEmpty()) {
+            listaLugaresSeleccionados.add(listaLugaresAgregados.get(0));
+        }
+        else {
+            Lugar nuevoLugar = new Lugar();
+            nuevoLugar.setNombre("Nuevo lugar");
+            nuevoLugar.setId(idLugarGen);
+            idLugarGen--;
+        }
+    }
+
+    public void agregarGrupoInvestigacion() {
+        
+        
+    }
+    
     public void agregarFinanciamiento() {
         Financiamiento nuevoFinan = new Financiamiento();
         listaFinanciamientos.add(nuevoFinan);
@@ -155,6 +245,24 @@ public class GestorProyecto implements Serializable {
         } catch (Exception ex) {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
         }        
+    }
+    
+    public void actualizarListaGruposInvestigacion() {
+        try {
+            listaGruposInvestigacion = proyectoController.listGruposInvestigacion();
+        } catch (Exception ex) {
+            Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
+    }
+    
+    public void actualizarListaLineasInvestigacion() {
+        try {
+            listaLineasInvestigacion = proyectoController.listLineasInvestigacion();
+        } catch (Exception ex) {
+            Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
     }
     
     public void actualizarListaProyecto() {
@@ -178,7 +286,7 @@ public class GestorProyecto implements Serializable {
 
     public String initVerProyecto(Long id) {
         inicializarManejoProyecto();
-        proyecto = proyectoController.findProyecto(id, true, true, true, true, true);
+        proyecto = proyectoController.findProyecto(id, ProyectoJpaController.Flag.ALL_OPTS);
         listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
         
         Double total = 0.0;
@@ -196,15 +304,12 @@ public class GestorProyecto implements Serializable {
     
     public String initModificarProyecto(Long id) {
         inicializarManejoProyecto();
-        proyecto = proyectoController.findProyecto(id, true, false, false, false, false);        
+        proyecto = proyectoController.findProyecto(id, EnumSet.of(ProyectoJpaController.Flag.INC_FINANCIAMIENTOS, ProyectoJpaController.Flag.INC_LUGARES));
         listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
         modoModificar = true;
         
-        if (proyecto.getFechaFinEnDocumento() != null && !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin())) {
-            hayExtensionFinalizacion = true;
-        } else {
-            hayExtensionFinalizacion = false;
-        }
+        listaLugaresSeleccionados = new ArrayList(proyecto.getLugaresCollection());
+        hayExtensionFinalizacion = proyecto.getFechaFinEnDocumento() != null && !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin());
         
         //hayExtensionFinalizacion = !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin());
         
@@ -218,16 +323,20 @@ public class GestorProyecto implements Serializable {
         GestorPersona.getInstance().actualizarListado();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
         GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
+        listaGruposInvestigacionAgregados.clear();
+        listaLineasInvestigacionAgregados.clear();
         actualizarListaLugares();
+        actualizarListaGruposInvestigacion();
+        actualizarListaLineasInvestigacion();
 
         institucion = null;
         mostrarDlgInstitucion = false;
         mostrarDlgLugar = false;
         idFinanciamientoGen = -1L;
         hayExtensionFinalizacion = false;
-        
-        listaFinanciamientos.clear();
-        GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
+
+        listaLugaresSeleccionados.clear();        
+        listaFinanciamientos.clear();        
         listaLugaresAgregados.clear();
     }
 
@@ -249,6 +358,20 @@ public class GestorProyecto implements Serializable {
             c++;
         }
         return r;
+    }
+    public void abrirNuevoGrupoInvestigacionDlg() {
+        this.grupoInvestigacion = new GrupoInvestigacion();
+
+        mostrarDlgGrupoInvestigacion = true;
+        RequestContext.getCurrentInstance().update("formContenido:divDialogs");
+        BeansUtils.ejecutarJS("PF('dlgGrupoInvestigacion').show()");
+    }
+    public void abrirNuevaLineaInvestigacionDlg() {
+        this.lineaInvestigacion = new LineaInvestigacion();
+
+        mostrarDlgLineaInvestigacion = true;
+        RequestContext.getCurrentInstance().update("formContenido:divDialogs");
+        BeansUtils.ejecutarJS("PF('dlgLineaInvestigacion').show()");
     }
     
     public void abrirDialogNuevaPersona() {
@@ -325,6 +448,8 @@ public class GestorProyecto implements Serializable {
                 return "";
             }
         }
+        
+        proyecto.setLugaresCollection(new HashSet(listaLugaresSeleccionados));
         
         try {
             if (modoModificar) {
@@ -420,5 +545,102 @@ public class GestorProyecto implements Serializable {
     public void setMostrarDlgLugar(boolean mostrarDlgLugar) {
         this.mostrarDlgLugar = mostrarDlgLugar;
     }
+
+    public List<Lugar> getListaLugaresSeleccionados() {
+        return listaLugaresSeleccionados;
+    }
+
+    public void setListaLugaresSeleccionados(List<Lugar> listaLugaresSeleccionados) {
+        this.listaLugaresSeleccionados = listaLugaresSeleccionados;
+    }
+
+    public Lugar getLugarNuevo() {
+        return lugarNuevo;
+    }
+
+    public void setLugarNuevo(Lugar lugarNuevo) {
+        this.lugarNuevo = lugarNuevo;
+    }
+
+    public String getIdTabSel() {
+        return idTabSel;
+    }
+
+    public void setIdTabSel(String idTabSel) {
+        this.idTabSel = idTabSel;
+    }
+
+    public List<GrupoInvestigacion> getListaGruposInvestigacion() {
+        return listaGruposInvestigacion;
+    }
+
+    public void setListaGruposInvestigacion(List<GrupoInvestigacion> listaGruposInvestigacion) {
+        this.listaGruposInvestigacion = listaGruposInvestigacion;
+    }
+
+    public List<GrupoInvestigacion> getListaGruposInvestigacionAgregados() {
+        return listaGruposInvestigacionAgregados;
+    }
+
+    public void setListaGruposInvestigacionAgregados(List<GrupoInvestigacion> listaGruposInvestigacionAgregados) {
+        this.listaGruposInvestigacionAgregados = listaGruposInvestigacionAgregados;
+    }
+
+    public List<LineaInvestigacion> getListaLineasInvestigacion() {
+        return listaLineasInvestigacion;
+    }
+
+    public void setListaLineasInvestigacion(List<LineaInvestigacion> listaLineasInvestigacion) {
+        this.listaLineasInvestigacion = listaLineasInvestigacion;
+    }
+
+    public List<LineaInvestigacion> getListaLineasInvestigacionAgregados() {
+        return listaLineasInvestigacionAgregados;
+    }
+
+    public void setListaLineasInvestigacionAgregados(List<LineaInvestigacion> listaLineasInvestigacionAgregados) {
+        this.listaLineasInvestigacionAgregados = listaLineasInvestigacionAgregados;
+    }
+
+    public GrupoInvestigacion getGrupoInvestigacion() {
+        return grupoInvestigacion;
+    }
+
+    public void setGrupoInvestigacion(GrupoInvestigacion grupoInvestigacion) {
+        this.grupoInvestigacion = grupoInvestigacion;
+    }
+
+    public LineaInvestigacion getLineaInvestigacion() {
+        return lineaInvestigacion;
+    }
+
+    public void setLineaInvestigacion(LineaInvestigacion lineaInvestigacion) {
+        this.lineaInvestigacion = lineaInvestigacion;
+    }
+
+    public boolean isMostrarDlgGrupoInvestigacion() {
+        return mostrarDlgGrupoInvestigacion;
+    }
+
+    public void setMostrarDlgGrupoInvestigacion(boolean mostrarDlgGrupoInvestigacion) {
+        this.mostrarDlgGrupoInvestigacion = mostrarDlgGrupoInvestigacion;
+    }
+
+    public boolean isMostrarDlgLineaInvestigacion() {
+        return mostrarDlgLineaInvestigacion;
+    }
+
+    public void setMostrarDlgLineaInvestigacion(boolean mostrarDlgLineaInvestigacion) {
+        this.mostrarDlgLineaInvestigacion = mostrarDlgLineaInvestigacion;
+    }
+
+    public int getIndexTabSel() {
+        return indexTabSel;
+    }
+
+    public void setIndexTabSel(int indexTabSel) {
+        this.indexTabSel = indexTabSel;
+    }
+
     
 }

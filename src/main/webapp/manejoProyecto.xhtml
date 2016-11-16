@@ -36,23 +36,85 @@
                 </h:panelGroup>
             </p:dialog>  
             
-            <p:dialog id="dlgLugar" header="Lugar" widgetVar="dlgLugar" resizable="false" modal="true" width="400" rendered="#{gestorProyecto.mostrarDlgLugar}">
-                <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgLugar()}" />
-                <h:panelGroup id="divDlgLugar" layout="block">
-                    <h:panelGrid id="panelCamposTitulo" columns="2">
+            <p:dialog id="dlgGrupoInvestigacion" header="Grupo Investigación" widgetVar="dlgGrupoInvestigacion" rendered="#{gestorProyecto.mostrarDlgGrupoInvestigacion}" 
+                      resizable="false" modal="true" width="400">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgGrupoInvestigacion()}" />
+                <h:panelGroup layout="block" id="divDlgGrupoInvestigacion">
+                    <h:panelGrid columns="2">
                         <p:outputLabel value="Nombre"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtNombreLugar" required="true" requiredMessage="Requerido" value="#{gestorProyecto.lugar.nombre}"/>
+                        <p:inputText id="txtNombreGrupoInvestigacion" required="true" requiredMessage="#{label.required}" value="#{gestorProyecto.grupoInvestigacion.nombre}"/>
                         <h:panelGroup/>
-                        <p:message for="txtNombreLugar"/>
-
+                        <p:message for="txtNombreGrupoInvestigacion"/>                                
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgLugar" update="divAccionesLugares divDlgLugar" action="#{gestorProyecto.guardarLugar()}" />
-                        <p:commandButton value="Cancelar" onclick="PF('dlgLugar').hide();"/>
+                        <p:commandButton value="Aceptar" process="dlgGrupoInvestigacion" update="divAccionesGrupoInvestigacion divDlgGrupoInvestigacion" action="#{gestorProyecto.guardarGrupoInvestigacion()}"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dlgGrupoInvestigacion').hide();"/>
+                    </h:panelGrid>            
+                </h:panelGroup>
+            </p:dialog>  
+
+            <p:dialog id="dlgLineaInvestigacion" header="Línea Investigación" widgetVar="dlgLineaInvestigacion" rendered="#{gestorProyecto.mostrarDlgLineaInvestigacion}" 
+                      resizable="false" modal="true" width="400">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgLineaInvestigacion()}" />
+                <h:panelGroup layout="block" id="divDlgLineaInvestigacion">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Nombre"/>
+                        <p:inputText id="txtNombreLineaInvestigacion" required="true" requiredMessage="#{label.required}" value="#{gestorProyecto.lineaInvestigacion.nombre}"/>
+                        <h:panelGroup/>
+                        <p:message for="txtNombreLineaInvestigacion"/>                                
                     </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" process="dlgLineaInvestigacion" update="divAccionesLineaInvestigacion divDlgLineaInvestigacion" action="#{gestorProyecto.guardarLineaInvestigacion()}"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dlgLineaInvestigacion').hide();"/>
+                    </h:panelGrid>            
                 </h:panelGroup>
             </p:dialog>  
             
+
+            <p:dialog id="dlgLugar" header="Observatorio" widgetVar="dlgLugar" resizable="false" modal="true" width="500" rendered="#{gestorProyecto.mostrarDlgLugar}">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgLugar()}" />
+                <h:panelGroup id="divDlgLugar" layout="block">
+                    <p:tabView id="tabsLugar" activeIndex="#{gestorProyecto.indexTabSel}">
+                        <p:ajax event="tabChange" listener="#{gestorProyecto.onTabChange}" update="tabsLugar"/>
+                        <p:tab id="tabLugarExistente" title="Existente">
+                            <h:panelGroup id="divAccionesObservatorio" layout="block">
+                                <p:selectOneMenu id="cmbObservatorio" style="width: 200px" value="#{gestorProyecto.lugar}" converter="lugarConverter"
+                                                 var="lugar" filter="true" filterMatchMode="contains">
+                                    <f:selectItems value="#{gestorProyecto.listaLugares}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                                    <f:selectItems value="#{gestorProyecto.listaLugaresAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+
+                                    <p:column>
+                                        <p:outputLabel value="#{lugar.nombre}"/>
+                                    </p:column>
+                                </p:selectOneMenu>
+
+                            </h:panelGroup>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Aceptar" process="tabLugarExistente" update="tabsLugar :formContenido:divObservatorios" action="#{gestorProyecto.guardarLugar()}" />
+                                <p:commandButton value="Cancelar" onclick="PF('dlgLugar').hide();"/>
+                            </h:panelGrid>
+
+                        </p:tab>
+                        <p:tab id="tabLugarNuevo" title="Nuevo">
+                            <h:panelGrid id="panelCamposTitulo" columns="2">
+                                <p:outputLabel value="Nombre"/>
+                                <p:inputText styleClass="inputEnDlg" id="txtNombreLugar" required="true" requiredMessage="Requerido" value="#{gestorProyecto.lugarNuevo.nombre}"/>
+                                <h:panelGroup/>
+                                <p:message for="txtNombreLugar"/>
+
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Aceptar" process="tabLugarNuevo" update="tabsLugar :formContenido:divObservatorios" action="#{gestorProyecto.guardarLugar()}" />
+                                <p:commandButton value="Cancelar" onclick="PF('dlgLugar').hide();"/>
+                            </h:panelGrid>
+
+                        </p:tab>
+                    </p:tabView>
+
+
+                </h:panelGroup>
+            </p:dialog>  
+
         </h:panelGroup>        
 
         <p:panel id="panelProyecto" header="#{gestorProyecto.modoModificar?'Modificar':'Nuevo'} Proyecto">
@@ -68,31 +130,50 @@
                     <p:message for="txtTitulo"/>
                 </h:panelGroup>
                 <h:panelGroup/>
-                
+
                 <p:outputLabel value="Código externo"/>
                 <p:inputText value="#{gestorProyecto.proyecto.codigoExterno}"/>
                 <h:panelGroup/>
-                
+
                 <p:outputLabel value="Código interno"/>
                 <p:inputText value="#{gestorProyecto.proyecto.codigoInterno}"/>
                 <h:panelGroup/>
-                
-                <p:outputLabel value="Lugar"/>
-                <h:panelGroup id="divAccionesLugares" layout="block">
-                    <p:selectOneMenu rendered="#{not empty gestorProyecto.listaLugares or not empty gestorProyecto.listaLugaresAgregados}" id="cmbLugar" styleClass="cmbTitulo" value="#{gestorProyecto.proyecto.lugar}" converter="lugarConverter"
-                                     var="lugar" style="width: 300px;" filter="true" filterMatchMode="contains">
+
+                <p:outputLabel value="Grupo investigación"/>
+                <h:panelGroup id="divAccionesGrupoInvestigacion" layout="block">
+                    <p:selectOneMenu rendered="#{not empty gestorProyecto.listaGruposInvestigacion or not empty gestorProyecto.listaGruposInvestigacionAgregados}" styleClass="cmbTitulo" value="#{gestorProyecto.proyecto.grupoInvestigacion}" converter="grupoInvestigacionConverter"
+                                     var="grupo" style="width: 300px;" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                        <f:selectItems value="#{gestorProyecto.listaLugares}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-                        <f:selectItems value="#{gestorProyecto.listaLugaresAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                        <f:selectItems value="#{gestorProyecto.listaGruposInvestigacion}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                        <f:selectItems value="#{gestorProyecto.listaGruposInvestigacionAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
 
                         <p:column>
-                            <p:outputLabel value="#{lugar.nombre}"/>
+                            <p:outputLabel value="#{grupo.nombre}"/>
                         </p:column>
                     </p:selectOneMenu>
 
-                    <p:commandLink value="Nuevo lugar"  style="margin-left: 5px;" update="dlgLugar" process="@this" action="#{gestorProyecto.abrirNuevoLugarDlg()}" />
+                    <p:commandLink value="Nuevo grupo"  style="margin-left: 5px;" update="dlgGrupoInvestigacion" process="@this" action="#{gestorProyecto.abrirNuevoGrupoInvestigacionDlg()}" />
                 </h:panelGroup>
                 <h:panelGroup/>
+
+                <p:outputLabel value="Línea de investigación"/>
+                <h:panelGroup id="divAccionesLineaInvestigacion" layout="block">
+                    <p:selectOneMenu rendered="#{not empty gestorProyecto.listaLineasInvestigacion or not empty gestorProyecto.listaLineasInvestigacionAgregados}" styleClass="cmbTitulo" value="#{gestorProyecto.proyecto.lineaInvestigacion}" converter="lineaInvestigacionConverter"
+                                     var="linea" style="width: 300px;" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                        <f:selectItems value="#{gestorProyecto.listaLineasInvestigacion}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                        <f:selectItems value="#{gestorProyecto.listaLineasInvestigacionAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+
+                        <p:column>
+                            <p:outputLabel value="#{linea.nombre}"/>
+                        </p:column>
+                    </p:selectOneMenu>
+
+                    <p:commandLink value="Nueva línea"  style="margin-left: 5px;" update="dlgLineaInvestigacion" process="@this" action="#{gestorProyecto.abrirNuevaLineaInvestigacionDlg()}" />
+                </h:panelGroup>
+                <h:panelGroup/>
+              
+                
 
 
                 <p:outputLabel value="Director" >
@@ -110,7 +191,7 @@
                     <p:commandLink rendered="false" value="Nuevo" styleClass="linkDropdown" process="@this" action="#{gestorProyecto.abrirDialogNuevaPersona()}">
                         <p:ajax event="dialogReturn" listener="#{gestorProyecto.onPersonaNuevaChosen}" update="cmbDirector"/>
                     </p:commandLink>
-                    
+
                     <p:message for="cmbDirector"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/>
@@ -128,7 +209,7 @@
                 <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Fecha de Inicio">
-                    
+
                 </p:outputLabel>
                 <h:panelGroup layout="block">
                     <p:calendar id="calFechaInicio" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaInicio}"/>
@@ -137,7 +218,7 @@
                 <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Fecha de Finalización (Documento)">
-                    
+
                 </p:outputLabel>
                 <h:panelGroup layout="block">
                     <p:calendar id="calFechaFinDoc" pattern="dd/MM/yyyy" value="#{gestorProyecto.proyecto.fechaFinEnDocumento}"/>  
@@ -205,8 +286,28 @@
                         <p:commandButton value="Agregar" partialSubmit="true" process="@parent" action="#{gestorProyecto.agregarFinanciamiento()}" update="divFinanciamientos"/>
                     </h:panelGroup>
                 </h:panelGroup>
-
                 <h:panelGroup layout="block"/>            
+
+                <p:outputLabel value="Observatorios"/>
+                <h:panelGroup layout="block" id="divObservatorios">
+                    <p:dataTable id="dtObservatorios" rowKey="#{observatorio.id}" var="observatorio"  emptyMessage="#{label.emptyMessage}"
+                                 value="#{gestorProyecto.listaLugaresSeleccionados}" widgetVar="cellObservatorios">
+
+                        <p:column headerText="Observatorio" width="500">
+                            <h:outputText value="#{observatorio.nombre}" />
+                            <p:outputLabel rendered="#{observatorio.id &lt; 0}" style="font-size: 0.6em" value=" (Nuevo)"/>
+                        </p:column>
+
+                        <p:column style="text-align: center" width="32" >
+                            <p:commandButton action="#{gestorProyecto.quitarObservatorio(observatorio)}" update="dtObservatorios" partialSubmit="true" process="@this" icon="ui-icon-close" title="Eliminar"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <h:panelGroup layout="block" style="padding-top: 5px" >
+                        <p:commandButton value="Agregar" partialSubmit="true" process="@this" action="#{gestorProyecto.abrirNuevoLugarDlg()}" update="divObservatorios"/>
+                    </h:panelGroup>
+                </h:panelGroup>                
+                <h:panelGroup layout="block"/> 
 
                 <p:outputLabel value="Observaciones"/>
                 <p:inputTextarea rows="3" value="#{gestorProyecto.proyecto.observaciones}"/>  

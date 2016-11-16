@@ -52,9 +52,17 @@ public class Proyecto implements Serializable {
     @JoinColumn(name = "idCodirector", referencedColumnName = "id")    
     private Persona codirector;
     
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "idLugar", referencedColumnName = "id")
-    private Lugar lugar;    
+    private Lugar lugar;    */
+
+    @ManyToOne
+    @JoinColumn(name = "idGrupoInvestigacion", referencedColumnName = "id")
+    private GrupoInvestigacion grupoInvestigacion;
+
+    @ManyToOne
+    @JoinColumn(name = "idLineaInvestigacion", referencedColumnName = "id")
+    private LineaInvestigacion lineaInvestigacion;    
 
     @Transient
     private Integer duracion;
@@ -122,7 +130,14 @@ public class Proyecto implements Serializable {
         @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idContrato", referencedColumnName = "id")})
     private Set<Contrato> contratosCollection = new HashSet();   
-    
+
+
+    @ManyToMany
+    @JoinTable(name = "proyectoLugar", joinColumns = {
+        @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idLugar", referencedColumnName = "id")})
+    private Set<Lugar> lugaresCollection = new HashSet();
+
     public Long getId() {
         return id;
     }
@@ -300,11 +315,29 @@ public class Proyecto implements Serializable {
         this.codigoInterno = codigoInterno;
     }
 
-    public Lugar getLugar() {
-        return lugar;
+    public Set<Lugar> getLugaresCollection() {
+        return lugaresCollection;
     }
 
-    public void setLugar(Lugar lugar) {
-        this.lugar = lugar;
-    }    
+    public void setLugaresCollection(Set<Lugar> lugaresCollection) {
+        this.lugaresCollection = lugaresCollection;
+    }
+
+    public GrupoInvestigacion getGrupoInvestigacion() {
+        return grupoInvestigacion;
+    }
+
+    public void setGrupoInvestigacion(GrupoInvestigacion grupoInvestigacion) {
+        this.grupoInvestigacion = grupoInvestigacion;
+    }
+
+    public LineaInvestigacion getLineaInvestigacion() {
+        return lineaInvestigacion;
+    }
+
+    public void setLineaInvestigacion(LineaInvestigacion lineaInvestigacion) {
+        this.lineaInvestigacion = lineaInvestigacion;
+    }
+
+    
 }

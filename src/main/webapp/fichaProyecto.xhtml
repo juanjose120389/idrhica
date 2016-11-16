@@ -14,11 +14,14 @@
         <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.codigoInterno}" value="Código interno" />
         <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.codigoInterno}" value="#{gestorProyecto.proyecto.codigoInterno}"/>
         
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.grupoInvestigacion}" value="Grupo de Investigación" />
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.grupoInvestigacion}" value="#{gestorProyecto.proyecto.grupoInvestigacion.nombre}"/>
+        
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.lineaInvestigacion}" value="Línea de Investigación" />
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.lineaInvestigacion}" value="#{gestorProyecto.proyecto.lineaInvestigacion.nombre}"/>
+
         <p:outputLabel value="Director" />
         <p:outputLabel value="#{gestorProyecto.proyecto.director.nombres} #{gestorProyecto.proyecto.director.apellidos}"/>
-        
-        <p:outputLabel rendered="#{gestorProyecto.proyecto.lugar != null}" value="Lugar" />
-        <p:outputLabel rendered="#{gestorProyecto.proyecto.lugar != nul}" value="#{gestorProyecto.proyecto.lugar.nombre}"/>        
 
         <p:outputLabel rendered="#{gestorProyecto.proyecto.codirector != null}" value="Co-Director" />
         <h:panelGroup rendered="#{gestorProyecto.proyecto.codirector != null}" layout="block">
@@ -91,6 +94,23 @@
             </p:columnGroup>                    
         </p:dataTable>
     </h:panelGroup>        
+
+    <h:panelGroup layout="block" rendered="#{not empty gestorProyecto.proyecto.lugaresCollection}">
+        <h:panelGroup layout="block" style="height: 15px"/>
+        <p:dataTable var="lugar" value="#{gestorProyecto.proyecto.lugaresCollection}" rowIndexVar="rowIndex">
+            <f:facet name="header">
+                Observatorios
+            </f:facet>
+            <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>
+
+            <p:column headerText="Nombre">
+                <h:outputText value="#{lugar.nombre}" />
+            </p:column>
+
+        </p:dataTable>
+    </h:panelGroup>   
 
 
     <h:panelGroup layout="block" rendered="#{not empty gestorProyecto.proyecto.contratosCollection}">

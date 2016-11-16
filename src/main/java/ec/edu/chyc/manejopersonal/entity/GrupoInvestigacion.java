@@ -6,21 +6,20 @@
 package ec.edu.chyc.manejopersonal.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author marcelocaj
  */
 @Entity
-public class Lugar implements Serializable {
+public class GrupoInvestigacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -29,11 +28,8 @@ public class Lugar implements Serializable {
     
     private String nombre = "";
     
-    /*@OneToMany(mappedBy = "lugar")
-    private Collection<Proyecto> proyectosCollection = new ArrayList<>();    */
-
-    @ManyToMany(mappedBy = "lugaresCollection")
-    private Set<Proyecto> proyectosCollection = new HashSet<>();    
+    @OneToMany(mappedBy = "grupoInvestigacion")
+    private Collection<Proyecto> proyectosCollection = new ArrayList<>();    
 
     public Long getId() {
         return id;
@@ -53,10 +49,10 @@ public class Lugar implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Lugar)) {
+        if (!(object instanceof GrupoInvestigacion)) {
             return false;
         }
-        Lugar other = (Lugar) object;
+        GrupoInvestigacion other = (GrupoInvestigacion) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -65,7 +61,7 @@ public class Lugar implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.edu.chyc.manejopersonal.entity.Lugar[ id=" + id + " ]";
+        return "ec.edu.chyc.manejopersonal.entity.GrupoInvestigacion[ id=" + id + " ]";
     }
 
     public String getNombre() {
@@ -76,11 +72,12 @@ public class Lugar implements Serializable {
         this.nombre = nombre;
     }
 
-    public Set<Proyecto> getProyectosCollection() {
+    public Collection<Proyecto> getProyectosCollection() {
         return proyectosCollection;
     }
 
-    public void setProyectosCollection(Set<Proyecto> proyectosCollection) {
+    public void setProyectosCollection(Collection<Proyecto> proyectosCollection) {
         this.proyectosCollection = proyectosCollection;
-    }    
+    }
+    
 }

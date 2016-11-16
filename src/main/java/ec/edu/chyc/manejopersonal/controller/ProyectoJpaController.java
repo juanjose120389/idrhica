@@ -8,21 +8,84 @@ package ec.edu.chyc.manejopersonal.controller;
 import ec.edu.chyc.manejopersonal.controller.exceptions.JPAControllerException;
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
+import ec.edu.chyc.manejopersonal.entity.GrupoInvestigacion;
+import ec.edu.chyc.manejopersonal.entity.LineaInvestigacion;
 import ec.edu.chyc.manejopersonal.entity.Lugar;
 import java.io.Serializable;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.entity.Tesis;
+import java.util.EnumSet;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.hibernate.Hibernate;
 
 public class ProyectoJpaController extends GenericJpaController<Proyecto> implements Serializable {
+//public Proyecto findProyecto(Long id, boolean cargarFinanciamientos, boolean cargarConvenios, 
+    //boolean cargarArticulos, boolean cargarTesis, boolean cargarPasantias) {    
+    /*public enum Incluir {
+        INC_FINANCIAMIENTOS     (0b000001),
+        INC_CONVENIOS           (0b000010),
+        INC_ARTICULOS           (0b000100),
+        INC_TESIS               (0b001000),
+        INC_PASANTIAS           (0b010000),
+        INC_LUGARES             (0b100000),
+        INC_TODOS               (0b111111);
+     
+        private final int mask;
+        
+        private Incluir(int mask) {
+            this.mask = mask;
+        }
+
+        public int value() {
+            return mask;
+        }        
+    }*/
+    public enum Flag {
+        INC_FINANCIAMIENTOS, INC_CONVENIOS, INC_ARTICULOS, INC_TESIS, INC_PASANTIAS, INC_LUGARES;
+
+        public static final EnumSet<Flag> ALL_OPTS = EnumSet.allOf(Flag.class);
+    }    
+    
 
     public ProyectoJpaController() {
         setClassRef(Proyecto.class);
     }
 
+    public List<GrupoInvestigacion> listGruposInvestigacion() throws JPAControllerException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct gi from GrupoInvestigacion gi order by gi.nombre asc");
+            List<GrupoInvestigacion> list = q.getResultList();
+            return list;
+        } catch (Exception ex) {          
+            throw new JPAControllerException(ex);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }    
+
+    public List<LineaInvestigacion> listLineasInvestigacion() throws JPAControllerException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query q = em.createQuery("select distinct li from LineaInvestigacion li order by li.nombre asc");
+            List<LineaInvestigacion> list = q.getResultList();
+            return list;
+        } catch (Exception ex) {          
+            throw new JPAControllerException(ex);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }    
+
+    
     public List<Lugar> listLugares() throws JPAControllerException {
         EntityManager em = null;
         try {
@@ -55,7 +118,7 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
         }
     }
 
-    public Proyecto findProyecto(Long id, boolean cargarFinanciamientos, boolean cargarConvenios, boolean cargarArticulos, boolean cargarTesis, boolean cargarPasantias) {
+    public Proyecto findProyecto(Long id, EnumSet<Flag> incluir) {
         EntityManager em = null;
 
         try {
@@ -65,24 +128,35 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             q.setParameter("id", id);
             Proyecto p = (Proyecto) q.getSingleResult();
             
-            if (cargarConvenios || cargarArticulos) {
+
+            if (incluir.contains(Flag.INC_CONVENIOS) || incluir.contains(Flag.INC_ARTICULOS)) {
+                Hibernate.initialize(p.getConveniosCollection());
+                
+                if (incluir.contains(Flag.INC_ARTICULOS)) {
+                    Hibernate.initialize(p.getArticulosCollection());
+                }
+            }
+            /*if (cargarConvenios || cargarArticulos) {
                 Hibernate.initialize(p.getConveniosCollection());
 
                 if (cargarArticulos) {
                     Hibernate.initialize(p.getArticulosCollection());
                 }
-            }
-            if (cargarFinanciamientos) {
+            }*/
+            if (incluir.contains(Flag.INC_FINANCIAMIENTOS)) {
                 Hibernate.initialize(p.getFinanciamientosCollection());
             }
-            if (cargarTesis){
+            if (incluir.contains(Flag.INC_TESIS)){
                 Hibernate.initialize(p.getTesisCollection());
                 for (Tesis tesis : p.getTesisCollection()) {
                     Hibernate.initialize(tesis.getAutoresCollection());
                 }
             }
-            if (cargarPasantias) {
+            if (incluir.contains(Flag.INC_PASANTIAS)) {
                 Hibernate.initialize(p.getPasantiasCollection());
+            }
+            if (incluir.contains(Flag.INC_LUGARES)) {
+                Hibernate.initialize(p.getLugaresCollection());
             }
             return p;
         } finally {
@@ -99,15 +173,41 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             em = getEntityManager();
             em.getTransaction().begin();
             
+            if (proyecto.getLineaInvestigacion() != null) {
+                if (proyecto.getLineaInvestigacion().getId() == null || proyecto.getLineaInvestigacion().getId() < 0) {
+                    proyecto.getLineaInvestigacion().setId(null);
+                    em.persist(proyecto.getLineaInvestigacion());
+                }
+            }
+            if (proyecto.getGrupoInvestigacion() != null) {
+                if (proyecto.getGrupoInvestigacion().getId() == null || proyecto.getGrupoInvestigacion().getId() < 0) {
+                    proyecto.getGrupoInvestigacion().setId(null);
+                    em.persist(proyecto.getGrupoInvestigacion());
+                }
+            }
+/*            
             if (proyecto.getLugar() != null) {
                 if (proyecto.getLugar().getId() == null || proyecto.getLugar().getId() < 0) {
                     proyecto.getLugar().setId(null);
                     em.persist(proyecto.getLugar());
                 }
-            }
+            }*/
             
             em.persist(proyecto);
 
+            for (Lugar lugar : proyecto.getLugaresCollection()) {
+                if (lugar.getId() == null || lugar.getId() < 0) {
+                    lugar.setId(null);
+                    lugar.getProyectosCollection().add(proyecto);
+                    
+                    em.persist(lugar);                    
+                } 
+                else {
+                    Lugar lugarAttached = em.find(Lugar.class, lugar.getId());
+                    lugarAttached.getProyectosCollection().add(proyecto);
+                }
+            }            
+            
             for (Financiamiento finan : proyecto.getFinanciamientosCollection()) {                
                 finan.setProyecto(proyecto);
 
@@ -161,14 +261,34 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
                 
                 em.merge(finan);
             }
-            
-            if (proyecto.getLugar() != null) {
-                if (proyecto.getLugar().getId() == null || proyecto.getLugar().getId() < 0) {
-                    proyecto.getLugar().setId(null);                    
-                    em.persist(proyecto.getLugar());
+
+            //quitar elementos eliminados
+            for (Lugar lugarAntiguo : proyectoAntiguo.getLugaresCollection()) {
+                if (!proyecto.getLugaresCollection().contains(lugarAntiguo)) {
+                    lugarAntiguo.getProyectosCollection().remove(proyecto);
                 }
             }
             
+            for (Lugar lugar : proyecto.getLugaresCollection()) {
+                if (lugar.getId() == null || lugar.getId() < 0) {
+                    lugar.setId(null);
+                    lugar.getProyectosCollection().add(proyecto);
+                    em.persist(lugar);
+                }
+            }
+            
+            if (proyecto.getGrupoInvestigacion() != null) {
+                if (proyecto.getGrupoInvestigacion().getId() == null || proyecto.getGrupoInvestigacion().getId() < 0) {
+                    proyecto.getGrupoInvestigacion().setId(null);
+                    em.persist(proyecto.getGrupoInvestigacion());
+                }
+            }
+            if (proyecto.getLineaInvestigacion() != null) {
+                if (proyecto.getLineaInvestigacion().getId() == null || proyecto.getLineaInvestigacion().getId() < 0) {
+                    proyecto.getLineaInvestigacion().setId(null);
+                    em.persist(proyecto.getLineaInvestigacion());
+                }
+            }
             
             em.merge(proyecto);
             em.getTransaction().commit();

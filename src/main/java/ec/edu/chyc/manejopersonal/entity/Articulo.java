@@ -84,6 +84,9 @@ public class Articulo implements Serializable {
     @Transient
     private List<Institucion> listaInstFinanciamientos = new ArrayList<>();
     
+    @Transient
+    private List<Lugar> listaLugares = new ArrayList<>();
+    
     @Lob
     @Column(columnDefinition = "TEXT")
     @Type(type = "text")
@@ -280,6 +283,14 @@ public class Articulo implements Serializable {
 
     public void setAnioPublicacion(Integer anioPublicacion) {
         this.anioPublicacion = anioPublicacion;
+    }
+
+    public List<Lugar> getListaLugares() {
+        return listaLugares;
+    }
+
+    public void setListaLugares(List<Lugar> listaLugares) {
+        this.listaLugares = listaLugares;
     }
    
 }
