@@ -20,14 +20,19 @@ import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,6 +51,7 @@ import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jbibtex.BibTeXDatabase;
@@ -449,19 +455,53 @@ public class GestorArticulo implements Serializable {
      * @throws FileNotFoundException En caso de no encontrar el archivo 
      */
     private String unirStringBibtex(Path pathBibtex) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader(pathBibtex.toFile()));
-        StringBuilder stringBuf = new StringBuilder();
-        String linea;
         try {
-            while ((linea = br.readLine()) != null) {
-                stringBuf.append(linea).append(" ");
+            byte[] bytesArchivo = Files.readAllBytes(pathBibtex);
+            
+            //usar utf-8 por defecto para pasar el contenido del archivo a String
+            String text = new String(bytesArchivo, StandardCharsets.UTF_8);
+            char[] charArray = text.toCharArray();
+            for (char c : charArray) {
+                if (c == 65533) { 
+                    //en caso de encontrar un caracter que no se pudo codificar, intentar la codificación "Windows-1252" y transformarla de nuevo a utf-8
+                    String windows1252 = new String(bytesArchivo, "Windows-1252");
+                    text = new String(windows1252.getBytes(StandardCharsets.UTF_8));
+                    break;
+                }
             }
-            return stringBuf.toString();
+            return text;
         } catch (IOException ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        
+        }
         return "";
+/*        
+        InputStreamReader isr = null;
+        try {
+            FileInputStream is = new FileInputStream(pathBibtex.toFile());
+            //isr = new InputStreamReader(is, StandardCharsets.ISO_8859_1);
+            isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            //BufferedReader br = new BufferedReader(new FileReader(pathBibtex.toFile()));
+            StringBuilder stringBuf = new StringBuilder();
+            String linea;
+            try {
+                while ((linea = br.readLine()) != null) {
+                    stringBuf.append(linea).append(" ");
+                }
+                return stringBuf.toString();
+            } catch (IOException ex) {
+                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }/* catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                isr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }        
+        return "";*/
     }
 
     /**
