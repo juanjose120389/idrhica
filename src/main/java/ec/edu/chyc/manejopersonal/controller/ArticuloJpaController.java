@@ -10,6 +10,7 @@ import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
+import ec.edu.chyc.manejopersonal.entity.Lugar;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
 import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
@@ -37,7 +38,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Query q = em.createQuery("select distinct a from Articulo a join fetch a.personasArticuloCollection order by a.anioPublicacion desc, a.nombre asc");
+            Query q = em.createQuery("select distinct a from Articulo a join fetch a.personasArticuloCollection left join a.proyectosCollection p left join p.lugaresCollection order by a.anioPublicacion desc, a.nombre asc");
             List<Articulo> list = q.getResultList();
             for (Articulo articulo : list) {                
                 Collection<Proyecto> listProyectos = articulo.getProyectosCollection();
@@ -45,6 +46,11 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     for (Financiamiento financiamiento : proyecto.getFinanciamientosCollection()) {
                         if (!articulo.getListaInstFinanciamientos().contains(financiamiento.getInstitucion())) {
                             articulo.getListaInstFinanciamientos().add(financiamiento.getInstitucion());
+                        }
+                    }
+                    for (Lugar lugar : proyecto.getLugaresCollection()) {
+                        if (!articulo.getListaLugares().contains(lugar)) {
+                            articulo.getListaLugares().add(lugar);
                         }
                     }
                 }

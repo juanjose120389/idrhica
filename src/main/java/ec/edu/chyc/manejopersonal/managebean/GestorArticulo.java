@@ -11,6 +11,7 @@ import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Articulo.TipoArticulo;
 import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
+import ec.edu.chyc.manejopersonal.entity.Lugar;
 import ec.edu.chyc.manejopersonal.entity.Persona;
 import ec.edu.chyc.manejopersonal.entity.PersonaArticulo;
 import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
@@ -696,6 +697,8 @@ public class GestorArticulo implements Serializable {
     public String initListarArticulos() {
         actualizarListaArticulos();
         GestorInstitucion.getInstance().actualizarListaInstituciones();
+        GestorProyecto.getInstance().actualizarListaLugares();
+        GestorProyecto.getInstance().getListaLugaresAgregados().clear();        
         return "listaArticulos";
     }
 
@@ -716,6 +719,15 @@ public class GestorArticulo implements Serializable {
         return false;*/
     }
 
+    public boolean filtrarPorLugar(Object value, Object filter, Locale locale) {
+        Lugar lugarFilter = (Lugar) filter;
+        if (lugarFilter == null) {
+            return true;
+        }
+
+        List<Lugar> lugares = (List<Lugar>) value;
+        return (lugares.contains(lugarFilter));
+    }
     
     public boolean filtrarPorAutores(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();

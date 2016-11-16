@@ -47,7 +47,17 @@
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>
 
-            <p:column headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].personaFirma.persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}" width="150">
+            <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
+                <ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="perarticulo">
+                    <p:outputLabel value="• #{perarticulo.personaFirma.firma.nombre}"/><br/>
+                </ui:repeat>
+            </p:column>
+
+            <p:column headerText="Autores" styleClass="columnaOculta" exportable="true">
+                <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.personasArticuloCollection)}" escape="false"/>
+            </p:column> 
+            
+            <p:column rendered="false" headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].personaFirma.persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}" width="150">
                 <h:outputText value="#{articulo.personasArticuloCollection[0].personaFirma.firma.nombre}" />
             </p:column>           
 
@@ -68,10 +78,6 @@
                 </h:panelGroup>
             </p:column>
 
-            <p:column headerText="Tema" filterBy="#{articulo.tema}" filterMatchMode="contains" width="100">
-                <h:outputText value="#{articulo.tema}" />
-            </p:column>
-
             <p:column exportable="false" filterBy="#{articulo.listaInstFinanciamientos}" headerText="Financiamiento" width="150"
                       filterFunction="#{gestorArticulo.filtrarPorInstFinanciamiento}">
                 <f:facet name="filter">
@@ -90,20 +96,20 @@
                 <p:outputLabel value="#{gestorArticulo.convertirListaInstitucion(articulo.listaInstFinanciamientos)}"/>
             </p:column>
 
-            <p:column headerText="Enlace" filterBy="#{articulo.enlace}" filterMatchMode="contains" style="max-width: 150px">
-                <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>
+            
+            <p:column exportable="false" filterBy="#{articulo.listaLugares}" headerText="Observatorios" width="150"
+                      filterFunction="#{gestorArticulo.filtrarPorLugar}">
+                <f:facet name="filter">
+                    <p:selectOneMenu id="cmbLugar" style="width: 150px" onchange="PF('articulosTable').filter()" converter="lugarConverter">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{gestorProyecto.listaLugares}" var="lugar" itemLabel="#{lugar.nombre}" itemValue="#{lugar}"/>
+                    </p:selectOneMenu>
+                </f:facet>
+                <p:dataList styleClass="lista" emptyMessage="" value="#{articulo.listaLugares}" var="lugar" type="definition">
+                    • #{lugar.nombre}
+                </p:dataList>                
             </p:column>
 
-
-            <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
-                <ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="perarticulo">
-                    <p:outputLabel value="• #{perarticulo.personaFirma.firma.nombre}"/><br/>
-                </ui:repeat>
-            </p:column>
-
-            <p:column headerText="Autores" styleClass="columnaOculta" exportable="true">
-                <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.personasArticuloCollection)}" escape="false"/>
-            </p:column> 
             <p:column exportable="false">
                 <p:commandLink ajax="false" rendered="#{articulo.archivoArticulo != ''}" title="Descargar artículo">
                     <i class="fa fa-download"></i>
