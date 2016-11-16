@@ -161,15 +161,29 @@
                 <p:calendar pattern="dd/MM/yyyy" value="#{gestorPersona.persona.fechaVinculacion}"/>  
                 <h:panelGroup layout="block"/> 
 
-                <p:outputLabel value="Estado"/>
-                <p:selectOneMenu value="#{gestorPersona.persona.activo}"
-                                 required="true" style="width: 150px"
-                                 requiredMessage="Requerido"
-                                 id="cboActivo">
-                    <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
-                    <f:selectItem itemLabel="No Activo" itemValue="#{false}"/>
-                    <f:selectItem itemLabel="Contacto externo" itemValue=""/>
-                </p:selectOneMenu>                                        
+                <p:outputLabel value="Tipo" />
+                <p:selectOneMenu value="#{gestorPersona.persona.tipo}" style="width: 150px">
+                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                    <f:selectItems value="#{gestorPersona.tiposPersona}" var="tipo"
+                                   itemValue="#{tipo}" itemLabel="#{label['persona.tipo.' += tipo]}" />
+                    <p:ajax event="change" partialSubmit="true" process="@this" update="divLblEstado divCmbEstado" />
+                </p:selectOneMenu>
+                <h:panelGroup layout="block"/>                
+
+                <h:panelGroup id="divLblEstado">
+                    <p:outputLabel rendered="#{gestorPersona.persona.tipo != 'EXTERNO'}" value="Estado"/>
+                </h:panelGroup>
+                <h:panelGroup id="divCmbEstado">
+                    <p:selectOneMenu rendered="#{gestorPersona.persona.tipo != 'EXTERNO'}" value="#{gestorPersona.persona.activo}"
+                                     required="true" style="width: 150px"
+                                     requiredMessage="Requerido"
+                                     id="cboActivo">
+                        <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
+                        <f:selectItem itemLabel="No Activo" itemValue="#{false}"/>
+                        <!--f:selectItem itemLabel="Contacto externo" itemValue=""/-->
+                        <p:ajax event="change" partialSubmit="true" process="@this" />
+                    </p:selectOneMenu>
+                </h:panelGroup>
                 <h:panelGroup layout="block"/> 
 
                 <h:panelGroup layout="block"/> 
@@ -286,6 +300,12 @@
 
                     <h:panelGroup layout="block" style="height: 15px"/>
                 </h:panelGroup>
+                <h:panelGroup layout="block"/> 
+
+                <p:outputLabel value="Observaciones"/>
+                <p:inputTextarea value="#{gestorPersona.persona.observaciones}" rows="4"/>
+                <h:panelGroup layout="block"/> 
+
             </h:panelGrid>
             <h:panelGroup layout="block"/> 
 

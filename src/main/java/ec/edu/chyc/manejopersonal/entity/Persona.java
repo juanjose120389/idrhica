@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,11 +24,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -36,6 +40,15 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Persona implements Serializable {
 
+    public enum TipoPersona {
+        PROFESOR,
+        TESISTA,
+        INVESTIGADOR,
+        TECNICO,
+        LOGISTICA,
+        EXTERNO
+    }
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,6 +81,14 @@ public class Persona implements Serializable {
     @NotNull
     private String direccion = "";
     private Boolean activo;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "text")
+    private String observaciones = "";
+    
+    @Enumerated(EnumType.STRING)
+    private TipoPersona tipo;
 
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<Contrato> contratosCollection = new ArrayList<>();
@@ -332,6 +353,22 @@ public class Persona implements Serializable {
 
     public void setListaPersonaArticulos(List<PersonaArticulo> listaPersonaArticulos) {
         this.listaPersonaArticulos = listaPersonaArticulos;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public TipoPersona getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoPersona tipo) {
+        this.tipo = tipo;
     }
 
 }

@@ -8,10 +8,12 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.Persona.TipoPersona;
 import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
+import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import static ec.edu.chyc.manejopersonal.managebean.util.BeansUtils.ejecutarJS;
 import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import javax.inject.Named;
@@ -33,6 +35,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
@@ -181,6 +184,16 @@ public class GestorPersona implements Serializable {
         mostrarDlgUniversidad = false;
     }
     
+    public boolean filtrarPorTipo(Object value, Object filter, Locale locale) {        
+        if (filter == null) {
+            return true;
+        }
+        TipoPersona tipoPersonaFilter = TipoPersona.valueOf((String)filter);
+
+        TipoPersona tipoPersona = (TipoPersona)value;
+        return (tipoPersonaFilter.equals(tipoPersona));
+    }    
+    
     public boolean filtrarPorFirma(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
         if(filterText == null||filterText.equals("")) {
@@ -284,14 +297,19 @@ public class GestorPersona implements Serializable {
         //modoModificar = false;
         modo = Modo.AGREGAR;
         
-        LocalDate dtFechaNacDefault = LocalDateTime.now().toLocalDate();
+        /*LocalDate dtFechaNacDefault = LocalDateTime.now().toLocalDate();
         dtFechaNacDefault = dtFechaNacDefault.minusYears(28).withDayOfYear(1);
         
-        persona.setFechaNacimiento(FechaUtils.asDate(dtFechaNacDefault));        
+        persona.setFechaNacimiento(FechaUtils.asDate(dtFechaNacDefault));        */
+        persona.setFechaNacimiento(null);
         
         return "manejoPersona";
     }
-
+    
+    public TipoPersona[] getTiposPersona() {
+        return TipoPersona.values();
+    }
+    
     public void agregarFirma() {
         Firma nuevaFirma = new Firma();
         nuevaFirma.setId(idFirmaGen);
@@ -333,15 +351,21 @@ public class GestorPersona implements Serializable {
         return "";
     }
     
-    public void onTabChange(TabChangeEvent event) {
+    public void onTabChange(TabChangeEvent event) {        
         String id = event.getTab().getId();
+        //DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("formContenido:personasTable");
         if (id.equals("tabPersonal")) {
+            /*BeansUtils.ejecutarJS("PF('personasTable').clearFilters();");
+            if (!dataTable.getFilters().isEmpty()) {
+                dataTable.getFilters().clear();
+            }*/
             tabActivo = 0;
             listaPersonasSel = listaPersonas;
         } else {
             tabActivo = 1;
             listaPersonasSel = listaPersonasSoloExternos;
         }
+
         //FacesMessage msg = new FacesMessage("Tab Changed", "Active Tab: " + event.getTab().getTitle());
         //FacesContext.getCurrentInstance().addMessage(null, msg);
     }
