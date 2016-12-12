@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,6 +44,13 @@ public class Institucion implements Serializable {
     
     @OneToMany(mappedBy = "institucion")
     private Collection<Financiamiento> financiamientosCollection = new ArrayList<>();    
+    
+    @Transient
+    private List<Articulo> articulosList = new ArrayList();
+    @Transient
+    private List<Tesis> tesisList = new ArrayList();
+    @Transient
+    private List<Pasantia> pasantiasList = new ArrayList();
 
     public Long getId() {
         return id;
@@ -115,6 +123,30 @@ public class Institucion implements Serializable {
 
     public void setTotalFinanciamientos(Double totalFinanciamientos) {
         this.totalFinanciamientos = totalFinanciamientos;
+    }
+
+    public List<Articulo> getArticulosList() {
+        return articulosList;
+    }
+
+    public void setArticulosList(List<Articulo> articulosList) {
+        this.articulosList = articulosList;
+    }
+
+    public List<Tesis> getTesisList() {
+        return tesisList;
+    }
+
+    public void setTesisList(List<Tesis> tesisList) {
+        this.tesisList = tesisList;
+    }
+
+    public List<Pasantia> getPasantiasList() {
+        return pasantiasList;
+    }
+
+    public void setPasantiasList(List<Pasantia> pasantiasList) {
+        this.pasantiasList = pasantiasList;
     }
     
 }

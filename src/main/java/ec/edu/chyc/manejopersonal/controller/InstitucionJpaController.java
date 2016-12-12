@@ -6,8 +6,13 @@
 package ec.edu.chyc.manejopersonal.controller;
 
 import ec.edu.chyc.manejopersonal.controller.interfaces.GenericJpaController;
+import ec.edu.chyc.manejopersonal.entity.Articulo;
 import ec.edu.chyc.manejopersonal.entity.Convenio;
+import ec.edu.chyc.manejopersonal.entity.Financiamiento;
 import ec.edu.chyc.manejopersonal.entity.Institucion;
+import ec.edu.chyc.manejopersonal.entity.Pasantia;
+import ec.edu.chyc.manejopersonal.entity.Proyecto;
+import ec.edu.chyc.manejopersonal.entity.Tesis;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -28,11 +33,33 @@ public class InstitucionJpaController extends GenericJpaController<Institucion> 
             q.setParameter("id", id);
             Institucion institucion = (Institucion)q.getSingleResult();
             
+            for (Financiamiento financiamiento : institucion.getFinanciamientosCollection()) {
+                Proyecto proyecto = financiamiento.getProyecto();
+
+                for (Articulo articulo : proyecto.getArticulosCollection()) {
+                    if (!institucion.getArticulosList().contains(articulo)) {
+                        institucion.getArticulosList().add(articulo);
+                    }
+                }
+                for (Tesis tesis : proyecto.getTesisCollection()) {
+                    if (!institucion.getTesisList().contains(tesis)) {
+                        Hibernate.initialize(tesis.getAutoresCollection());
+                        institucion.getTesisList().add(tesis);
+                    }
+                }
+                for (Pasantia pasantia : proyecto.getPasantiasCollection()) {
+                    if (!institucion.getPasantiasList().contains(pasantia)) {
+                        institucion.getPasantiasList().add(pasantia);
+                    }
+                }
+
+            }
             if (!institucion.getConveniosCollection().isEmpty()) {
                 for (Convenio convenio : institucion.getConveniosCollection()) {
-                    Hibernate.initialize(convenio.getProyectosCollection());
+                    Hibernate.initialize(convenio.getProyectosCollection());                    
                 }
             }
+            
             //Hibernate.initialize(institucion.getConveniosCollection());            
             return institucion;
         } finally {
