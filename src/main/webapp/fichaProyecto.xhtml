@@ -206,23 +206,13 @@
                 <h:outputText value="#{articulo.revista}" />
             </p:column>                
 
-            <p:column headerText="Publicación" width="100">
-                <h:outputText value="#{articulo.fechaPublicacion}" >
-                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                </h:outputText>                        
+            <p:column headerText="Año" width="100">
+                <h:outputText value="#{articulo.anioPublicacion}" />
             </p:column>                
 
             <p:column headerText="Enlace">
                 <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>
             </p:column>
-
-            <p:column headerText="" exportable="false" width="150">
-                <p:commandLink value="Descargar" ajax="false" rendered="#{articulo.archivoArticulo != ''}">
-                    <p:fileDownload value="#{gestorArticulo.streamParaDescarga(articulo)}" />
-                </p:commandLink>
-            </p:column>
-
-
         </p:dataTable>
     </h:panelGroup>               
 
@@ -309,7 +299,5 @@
 
         </p:dataTable>
     </h:panelGroup>   
-
-
 
 </ui:composition>
