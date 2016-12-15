@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-
+        <h:inputHidden id="iDRiCA#{gestorProyecto.proyecto.id}" value="#{gestorUsuario.logeado}"/>
         <p:commandLink value="Regresar" immediate="true" action="#{gestorProyecto.initListarProyectos()}"/>
         <i class="fa fa-print" style="margin-left: 20px; margin-right: 5px;"></i>
         <p:commandLink value="Versión para imprimir" immediate="true"  ajax="false" target="_blank" action="#{gestorProyecto.initImprimirProyecto()}"/>

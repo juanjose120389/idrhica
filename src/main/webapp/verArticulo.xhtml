@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./template.xhtml">
     <ui:define name="body">
-
+        <h:inputHidden id="iDRiCA#{gestorArticulo.articulo.id}" value="#{gestorUsuario.logeado}"/>
         <p:commandLink value="Regresar" immediate="true" action="#{gestorArticulo.initListarArticulos()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Artículo">
