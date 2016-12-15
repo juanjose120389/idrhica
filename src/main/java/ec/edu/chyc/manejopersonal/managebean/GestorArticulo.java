@@ -433,6 +433,7 @@ public class GestorArticulo implements Serializable {
                     articulo.setArchivoBibtex(nombreArchivoSubido);
                     tamanoArchivoBibtex = ServerUtils.humanReadableByteCount(file.getSize());
                     if (!soloSubirBibtex) {
+                        listaPersonaArticulo.clear();
                         leerBibtex(pathArchivo);
                     }
                 } else {
