@@ -28,6 +28,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -512,7 +513,18 @@ public class GestorArticulo implements Serializable {
         try {
             BibTeXParser bibtexParser = new BibTeXParser();
 
-            StringReader stringReader = new StringReader(unirStringBibtex(pathBibtex));
+            String stringUnida = unirStringBibtex(pathBibtex);
+            if (stringUnida.indexOf("\0") >= 0) {
+                try {
+                    stringUnida = stringUnida.replace("\0", "");
+                    String decoded = new String(stringUnida.getBytes("ISO-8859-1"), "UTF-8");
+                    stringUnida = decoded;
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //stringUnida = stringUnida.replace("\0", "");
+            StringReader stringReader = new StringReader(stringUnida);
             
             BibTeXDatabase database = bibtexParser.parse(stringReader);
 

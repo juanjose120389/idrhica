@@ -13,9 +13,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
@@ -114,7 +118,20 @@ public class BeansUtils {
     public static String latexToString(String latexString) throws ParseException {
         if (isLatexString(latexString)) {
             // LaTeX string that needs to be translated to plain text string
-            
+            latexString = latexString.replace("–", "-");
+            latexString = latexString.replace("−", "-");
+            latexString = latexString.replace("≤", "<=");
+            latexString = latexString.replace("≥", ">=");
+         
+            /*String transformed = "";
+            for (int i = 0; i < latexString.length();i++) {
+                if (latexString.charAt(i) > 255) {
+                    transformed += "\\symbol{\""+Integer.toHexString((int)latexString.charAt(i)).toUpperCase()+"}";
+                } else {
+                    transformed += latexString.charAt(i);
+                }
+            }
+            latexString = transformed;*/
             org.jbibtex.LaTeXParser latexParser = new org.jbibtex.LaTeXParser();
 
             List<org.jbibtex.LaTeXObject> latexObjects = latexParser.parse(latexString);
