@@ -14,8 +14,6 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -173,6 +171,13 @@ public class ServerUtils {
         return toFileSystemSafeName(nombreOriginal, false, 255);
     }
     
+    /***
+     * Convertir el nombre del archivo a uno válido por el sistema
+     * @param nombreOriginal Nombre original del archivo, incluído extension.
+     * @param extension Extensión del archivo.
+     * @param caracteres Número de caracteres máximo permitido en el nombre del archivo.
+     * @return Nombre del archivo convertido a una versión válida para ser guardado. 
+     */
     public static String convertirNombreArchivo(String nombreOriginal, String extension, int caracteres) {
         String nombre = nombreOriginal;
         if (nombre.length() - extension.length() - 1 > caracteres) {
@@ -221,11 +226,21 @@ public class ServerUtils {
         }
     }
     
+    /***
+     * Genera un nombre de archivo válido que no exista, se usa UUID para la generación del archivo
+     * @param extension Extensión del archivo.
+     * @return Nombre del archivo generado. El archivo no existe, debe ser creado.
+     */
     public static String generarNombreValidoArchivo(String extension) {
         String nombreArchivo = ServerUtils.generateB64Uuid().replace("=", "") + ((new Random()).nextInt(8999)+1000) + "." + extension;
         return ServerUtils.convertirNombreArchivo(nombreArchivo);
     }
-    
+
+    /***
+     * Devolver el hash SHA-256 del texto 
+     * @param input Texto a codificar en hash
+     * @return Hash del input
+     */
     static public String sha256(String input) {
         return DigestUtils.sha256Hex(input);
     }

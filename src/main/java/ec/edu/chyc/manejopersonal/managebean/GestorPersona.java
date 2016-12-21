@@ -13,15 +13,12 @@ import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
 import ec.edu.chyc.manejopersonal.entity.Titulo;
 import ec.edu.chyc.manejopersonal.entity.Universidad;
-import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import static ec.edu.chyc.manejopersonal.managebean.util.BeansUtils.ejecutarJS;
-import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -35,7 +32,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
@@ -61,19 +57,18 @@ public class GestorPersona implements Serializable {
     
     private Date fechaActual = new Date();
     
-    private boolean mostrarDlgUniversidad;
-    private boolean mostrarDlgTitulo;
+    private boolean mostrarDlgUniversidad; //para que no renderice el dlgUniversidad
+    private boolean mostrarDlgTitulo; //para que no renderice dlgTitulo
     
     private Date filtroFechaInicio;
     private Date filtroFechaFin;
     
-    private List<PersonaTitulo> listaPersonaTitulos = null;
+    private List<PersonaTitulo> listaPersonaTitulos = null; //para almacenar los títulos que tiene la persona
     
     private List<Persona> listaPersonas = new ArrayList<>();
-    private List<Persona> listaPersonasConExternos = new ArrayList<>();
-    private List<Persona> listaPersonasAgregadas = new ArrayList<>();
-    private List<Persona> listaPersonasSoloExternos = new ArrayList();
-    private List<Persona> listaPersonasSel = new ArrayList();
+    private List<Persona> listaPersonasConExternos = new ArrayList<>(); //Lista de personas includendo contactos externos
+    private List<Persona> listaPersonasSoloExternos = new ArrayList(); //Lista de personas solo de tipo externo
+    //private List<Persona> listaPersonasSel = new ArrayList();
     
     private int tabActivo = 0;
     
@@ -325,6 +320,7 @@ public class GestorPersona implements Serializable {
         idPersonaFirmaGen--;
     }
     
+    //Agrega un título por defecto a la lista de títulos de la persona actual
     public String agregarTitulo() {
         PersonaTitulo personaTituloNuevo = new PersonaTitulo();        
         
@@ -360,16 +356,17 @@ public class GestorPersona implements Serializable {
                 dataTable.getFilters().clear();
             }*/
             tabActivo = 0;
-            listaPersonasSel = listaPersonas;
+            //listaPersonasSel = listaPersonas;
         } else {
             tabActivo = 1;
-            listaPersonasSel = listaPersonasSoloExternos;
+            //listaPersonasSel = listaPersonasSoloExternos;
         }
 
         //FacesMessage msg = new FacesMessage("Tab Changed", "Active Tab: " + event.getTab().getTitle());
         //FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
+    //actualizar los listados de personas
     public String actualizarListado() {
         try {
             listaPersonasConExternos = personaController.listTodasPersonas();
@@ -382,7 +379,7 @@ public class GestorPersona implements Serializable {
                     listaPersonasSoloExternos.add(per);
                 }
             }
-            listaPersonasSel = listaPersonas;
+            //listaPersonasSel = listaPersonas;
             //listaPersonas = personaController.listPersonas();            
         } catch (Exception ex) {
             Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
@@ -397,6 +394,7 @@ public class GestorPersona implements Serializable {
         return (GestorPersona) ex.getValue(context);
     }    
 
+    //Devuelve una lista de las universidades que contengan el texto indicado
     public List<Universidad> completarUniversidad(String query) {
         List<Universidad> list = GestorGeneral.getInstance().getListaUniversidades();
         List<Universidad> listResults = new ArrayList<>();
@@ -413,6 +411,7 @@ public class GestorPersona implements Serializable {
         }
         return listResults;
     }
+    //Convierte una lista de personas en String (separado por comas)
     public String convertirListaPersonas(Collection<Persona> listaConvertir) {
         String r = "";
         int c = 0;
@@ -426,23 +425,6 @@ public class GestorPersona implements Serializable {
         return r;
     }
 
-    public List<Titulo> completarTitulo(String query) {
-        List<Titulo> list = GestorGeneral.getInstance().getListaTitulos();
-        List<Titulo> listResults = new ArrayList<>();
-        
-        for (Titulo titu : list) {
-            if (StringUtils.containsIgnoreCase(titu.getNombre(), query)) {
-                listResults.add(titu);
-            }
-        }
-        for (Titulo titu : listaTitulosAgregados) {
-            if (StringUtils.containsIgnoreCase(titu.getNombre(), query)) {
-                listResults.add(titu);
-            }
-        }
-        return listResults;
-    }
-        
     public String guardar() {
         try {            
             
@@ -593,22 +575,6 @@ public class GestorPersona implements Serializable {
 
     public void setListaPersonasConExternos(List<Persona> listaPersonasConExternos) {
         this.listaPersonasConExternos = listaPersonasConExternos;
-    }
-
-    public List<Persona> getListaPersonasAgregadas() {
-        return listaPersonasAgregadas;
-    }
-
-    public void setListaPersonasAgregadas(List<Persona> listaPersonasAgregadas) {
-        this.listaPersonasAgregadas = listaPersonasAgregadas;
-    }
-
-    public List<Persona> getListaPersonasSel() {
-        return listaPersonasSel;
-    }
-
-    public void setListaPersonasSel(List<Persona> listaPersonasSel) {
-        this.listaPersonasSel = listaPersonasSel;
     }
 
     public List<Persona> getListaPersonasSoloExternos() {

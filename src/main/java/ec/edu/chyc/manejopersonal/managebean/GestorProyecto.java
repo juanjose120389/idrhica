@@ -111,6 +111,8 @@ public class GestorProyecto implements Serializable {
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         BeansUtils.ejecutarJS("PF('dlgInstitucion').show()");
     }
+    
+    //Al cambiar de tab cuando se eligió añadir un nuevo lugar/observatorio
     public void onTabChange(TabChangeEvent event) {
         String id = event.getTab().getId();
         
@@ -227,6 +229,8 @@ public class GestorProyecto implements Serializable {
     }
     
     public void agregarFinanciamiento() {
+        //Agregar a la lista, un financiamiento por defecto con monto 0.0
+        
         Financiamiento nuevoFinan = new Financiamiento();
         listaFinanciamientos.add(nuevoFinan);
         nuevoFinan.setId(idFinanciamientoGen);
@@ -347,6 +351,7 @@ public class GestorProyecto implements Serializable {
         return "manejoProyecto";
     }
     
+    //Convierte la lista de proyectos a una cadena de texto separada por comas
     public String convertirListaProyectos(Collection<Proyecto> listaConvertir) {
         String r = "";
         int c = 0;
@@ -393,14 +398,18 @@ public class GestorProyecto implements Serializable {
         return proyecto.getTitulo();
     }
 
+    /***
+     * Llena el parámetro duración con el número de meses de acuerdo a la fecha de inicio y fin (ya sea extendida u original)
+     * @param proy Proyecto el cual el parámetro duración será llenado
+     */
     public void colocarDuracion(Proyecto proy) {
         if (proy.getFechaInicio() != null && (proy.getFechaFin() != null || proy.getFechaFinEnDocumento() != null)) {
             LocalDateTime fechaInicio = FechaUtils.asLocalDateTime(proy.getFechaInicio());
             LocalDateTime fechaFin;
 
-            if (proy.getFechaFin() != null) {
+            if (proy.getFechaFin() != null) { //Si hay extensión de fecha
                 fechaFin = FechaUtils.asLocalDateTime(proy.getFechaFin());
-            } else {
+            } else { //Si la fecha de finalización sigue siendo la original
                 fechaFin = FechaUtils.asLocalDateTime(proy.getFechaFinEnDocumento());
             }
 
@@ -435,6 +444,7 @@ public class GestorProyecto implements Serializable {
         }
         
         if (proyecto.getFechaInicio() != null && proyecto.getFechaFinEnDocumento() != null) {
+            //Convertir todos los tiempos a Java Time para realizar comparaciones
             LocalDate fechaInicio = FechaUtils.asLocalDate(proyecto.getFechaInicio());
             LocalDate fechaFinDoc = FechaUtils.asLocalDate(proyecto.getFechaFinEnDocumento());
             LocalDate fechaFin = FechaUtils.asLocalDate(proyecto.getFechaFin());

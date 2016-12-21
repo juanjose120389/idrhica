@@ -13,13 +13,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
@@ -35,6 +31,10 @@ import org.primefaces.model.UploadedFile;
  */
 public class BeansUtils {
 
+    /***
+     * Ejecuta código javascript
+     * @param codigo Código javascript a ejecutar
+     */
     public static void ejecutarJS(String codigo) {
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute(codigo);
@@ -80,6 +80,13 @@ public class BeansUtils {
         }
     }
     
+    /***
+     * Abre un stream para descargar un archivo
+     * @param direccionArchivoOrigen Archivo a descargar
+     * @param nombreArchivoDescarga Nombre del archivo como se quiere descargar, puede ser diferente al nombre original
+     * @return Stream de descarga
+     * @throws FileNotFoundException En caso de no encontrar el archivo
+     */
     public static StreamedContent streamParaDescarga(Path direccionArchivoOrigen, String nombreArchivoDescarga) throws FileNotFoundException {
         String nombreArchivoGuardado = direccionArchivoOrigen.getFileName().toString();
         String extension = FilenameUtils.getExtension(nombreArchivoGuardado);
@@ -94,6 +101,11 @@ public class BeansUtils {
         return streamParaDescarga;
     }
     
+    /***
+     * Para obtener el valor de un parámetro colocado desde otra página mediante jsf
+     * @param nombreParametro Nombre del parámetro
+     * @return Valor (texto) del parámetro
+     */
     public static String valorParam(String nombreParametro) {
         FacesContext fc = FacesContext.getCurrentInstance();
         Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
@@ -117,7 +129,7 @@ public class BeansUtils {
      */
     public static String latexToString(String latexString) throws ParseException {
         if (isLatexString(latexString)) {
-            // LaTeX string that needs to be translated to plain text string
+            // Reemplazar cadenas de texto por su equivalente en ansi común
             latexString = latexString.replace("–", "-");
             latexString = latexString.replace("−", "-");
             latexString = latexString.replace("≤", "<=");

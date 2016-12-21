@@ -18,22 +18,17 @@ import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.managebean.util.BeansUtils;
 import ec.edu.chyc.manejopersonal.util.ServerUtils;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -52,7 +47,6 @@ import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
-import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jbibtex.BibTeXDatabase;
@@ -79,18 +73,21 @@ public class GestorArticulo implements Serializable {
     private final ArticuloJpaController articuloController = new ArticuloJpaController();
     private final PersonaJpaController personaController = new PersonaJpaController();
     
-    private List<Articulo> listaArticulos = new ArrayList<>();
-    private List<PersonaArticulo> listaPersonaArticulo = new ArrayList<>();
-    private List<Proyecto> listaProyectos = new ArrayList<>();
-    private List<Institucion> listaAgradecimientos = new ArrayList<>();
+    private List<Articulo> listaArticulos = new ArrayList<>(); //lista de artículos que se muestran en la vista principal
+    private List<PersonaArticulo> listaPersonaArticulo = new ArrayList<>(); //Los autores del artículo
+    private List<Proyecto> listaProyectos = new ArrayList<>(); //Lista de proyectos relacionados al artículo
+    private List<Institucion> listaAgradecimientos = new ArrayList<>(); //Lista de instituciones que el artículo agradece
     private Articulo articulo;
-    private String tamanoArchivo;
-    private String tamanoArchivoBibtex;
+    private String tamanoArchivo; //Tamaño del archivo (artículo) en formato visible al usuario
+    private String tamanoArchivoBibtex; //Tamaño del bibtex en formato visible al usuario
     private boolean modoModificar = false;
+    //ids generados para nuevos elementos
     private Long idPersonaArticuloGen = -1L;
     private Long idPersonaFirmaGen = -1L;
     private Long idFirmaGen = -1L;
-    private boolean soloSubirBibtex = false;
+    
+    private boolean soloSubirBibtex = false; //si es true, solo se sube el archivo y todos los campos quedan intactos, si vale false,
+                                             // se llenarán todos los campos de acuerdo a lo leído en el bibtex
     
     public GestorArticulo() {
     }
@@ -100,8 +97,10 @@ public class GestorArticulo implements Serializable {
 
     }
 
+    //mover una posición arriba el puesto de un autor
     public void moverArriba(PersonaArticulo personaArticuloMover, Integer indexActual) {
         if (indexActual != 0) {
+            //Collections.swap intercambia el contenido de las posiciones dadas
             Collections.swap(listaPersonaArticulo, indexActual, indexActual - 1);
         }
     }
@@ -130,6 +129,7 @@ public class GestorArticulo implements Serializable {
      */
     private void agregarNuevoAutor(Persona per, String firmaSel) {
         boolean encontrado = false;
+        //buscar si la persona ya se encuentra en la lista de autores
         for (PersonaArticulo perart : listaPersonaArticulo) {
             if (perart.getPersona().getId().equals(per.getId())) {
                 encontrado = true;
@@ -137,18 +137,21 @@ public class GestorArticulo implements Serializable {
             }
         }
 
-        if (!encontrado) {
+        if (!encontrado) { 
+            //Agregar la nueva persona 
             PersonaArticulo perArt = new PersonaArticulo();
             perArt.setPersona(per);
             per.getListaFirmas().clear();
             int c = 0;
+            
+            //Obtener el objeto firma para indicar que el autor eligió la firma
             for (PersonaFirma perFirma : per.getPersonaFirmasCollection()) {
-                if (firmaSel == null) {
+                if (firmaSel == null) { //Si no eligió una firma de la persona, usar la primera por defecto
                     if (c == 0) {
                         perArt.setFirma(perFirma.getFirma());
                     }
-                } else if (StringUtils.equalsIgnoreCase(perFirma.getFirma().getNombre(), firmaSel)) {
-                    perArt.setFirma(perFirma.getFirma());
+                } else if (StringUtils.equalsIgnoreCase(perFirma.getFirma().getNombre(), firmaSel)) { //Si la firma coincide con la seleccionada
+                    perArt.setFirma(perFirma.getFirma()); //usar esa firma
                 }
                 per.getListaFirmas().add(perFirma.getFirma());
                 c++;
@@ -156,6 +159,7 @@ public class GestorArticulo implements Serializable {
             
             perArt.setId(idPersonaArticuloGen);
 
+            //Si la persona no posee ninguna firma o la firma es nueva, crear nueva firma y asignarla a la persona
             if (firmaSel == null && perArt.getFirma() == null) {
                 
                 Firma firmaNueva = new Firma();
@@ -333,7 +337,11 @@ public class GestorArticulo implements Serializable {
     }
 
     
-    
+    /***
+     * Agrega http:// a la url en caso de no tener
+     * @param url Texto correspondiente a la url a verificar
+     * @return Url corregida o la misma si es que ya poseía http://
+     */
     public String corregirUrl(String url) {
         if (!url.contains("://")) {
             url = "http://" + url;
@@ -365,6 +373,11 @@ public class GestorArticulo implements Serializable {
         return null;
     }
 
+    /***
+     * Conviert la lista de instituciones en una cadena de texto separada por comas
+     * @param instituciones
+     * @return 
+     */
     public String convertirListaInstitucion(List<Institucion> instituciones) {
         String r = "";
         for (Iterator<Institucion> iter = instituciones.iterator(); iter.hasNext();) {
@@ -373,7 +386,11 @@ public class GestorArticulo implements Serializable {
         }
         return r;
     }
-
+    /***
+     * Conviert la lista de personas en una cadena de texto separada por comas
+     * @param listaConvertir
+     * @return 
+     */
     public String convertirListaPersonas(Collection<PersonaArticulo> listaConvertir) {
         String r = "";
         int c = 0;
@@ -441,6 +458,7 @@ public class GestorArticulo implements Serializable {
                     tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
                 }
             } catch (IOException ex) {
+                GestorMensajes.getInstance().mostrarMensajeError(ex.getLocalizedMessage());
                 Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -641,7 +659,8 @@ public class GestorArticulo implements Serializable {
         articulo.setProyectosCollection(new HashSet(listaProyectos));
         articulo.setAgradecimientosCollection(new HashSet(listaAgradecimientos));
         //articuloController.create(articulo);
-        
+
+        //Asignar a cada autor, la firma que se eligió para el artículo
         for (PersonaArticulo perArticulo : articulo.getPersonasArticuloCollection()) {
             if (perArticulo.getPersonaFirma() == null || !perArticulo.getFirma().getId().equals(perArticulo.getPersonaFirma().getFirma().getId())) {
                 PersonaFirma perFirma = personaController.findPersonaFirma(perArticulo.getPersona().getId(), perArticulo.getFirma().getId());
