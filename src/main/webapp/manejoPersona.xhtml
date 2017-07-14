@@ -170,6 +170,14 @@
                 </p:selectOneMenu>
                 <h:panelGroup layout="block"/>                
 
+                <p:outputLabel value="Grado Académico" />
+                <p:selectOneMenu value="#{gestorPersona.persona.gradoAcademico}" style="width: 150px">
+                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                    <f:selectItems value="#{gestorPersona.gradosAcademicos}" var="gradoAcademico"
+                                   itemValue="#{gradoAcademico}" itemLabel="#{label['persona.gradoAcademico.' += gradoAcademico]}" />
+                </p:selectOneMenu>
+                <h:panelGroup layout="block"/>                
+
                 <h:panelGroup id="divLblEstado">
                     <p:outputLabel rendered="#{gestorPersona.persona.tipo != 'EXTERNO'}" value="Estado"/>
                 </h:panelGroup>

@@ -35,6 +35,11 @@
                 <h:panelGroup>
                     <p:outputLabel value="#{gestorConvenio.convenio.administrador.nombres} #{gestorConvenio.convenio.administrador.apellidos}" rendered="#{gestorConvenio.convenio.administrador != null}"/>
                 </h:panelGroup>
+                
+                <p:outputLabel value="Administrador Otra Institución" />
+                <h:panelGroup>
+                    <p:outputLabel value="#{gestorConvenio.convenio.administradorOtro.nombres} #{gestorConvenio.convenio.administradorOtro.apellidos}" rendered="#{gestorConvenio.convenio.administradorOtro != null}"/>
+                </h:panelGroup>
 
                 <p:outputLabel value="Observaciones"/>
                 <p:outputLabel value="#{gestorConvenio.convenio.observaciones}" styleClass="lineaMultiple"/>

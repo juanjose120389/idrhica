@@ -41,6 +41,8 @@ public class Proyecto implements Serializable {
     
     private String titulo;
     
+    private String nickname;
+    
     private String codigoExterno = "";
     private String codigoInterno = "";
 
@@ -137,6 +139,8 @@ public class Proyecto implements Serializable {
         @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idLugar", referencedColumnName = "id")})
     private Set<Lugar> lugaresCollection = new HashSet();
+    
+    
 
     public Long getId() {
         return id;
@@ -178,6 +182,14 @@ public class Proyecto implements Serializable {
         this.titulo = titulo;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    
     public Integer getDuracion() {
         return duracion;
     }

@@ -55,6 +55,12 @@
 
                 <p:outputLabel value="Estado"/>
                 <p:outputLabel value="#{gestorPersona.persona.activo == true?'Activo': gestorPersona.persona.activo == false? 'No Activo' : 'Contacto externo'}"/>
+                
+                <p:outputLabel value="Grado Académico"/>
+                <p:outputLabel value="#{empty gestorPersona.persona.gradoAcademico?'':label['persona.gradoAcademico.'+=gestorPersona.persona.gradoAcademico]}"/>
+                
+                
+            
             </h:panelGrid>
 
             <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.personaFirmasCollection}">

@@ -801,6 +801,16 @@ public class GestorArticulo implements Serializable {
         return (lugares.contains(lugarFilter));
     }
     
+    public boolean filtrarPorAnio(Object value, Object filter, Locale locale) {
+        Lugar lugarFilter = (Lugar) filter;
+        if (lugarFilter == null) {
+            return true;
+        }
+
+        List<Lugar> lugares = (List<Lugar>) value;
+        return (lugares.contains(lugarFilter));
+    }
+    
     public boolean filtrarPorAutores(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
         if (filterText == null || filterText.equals("")) {

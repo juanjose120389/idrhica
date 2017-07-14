@@ -8,6 +8,7 @@ package ec.edu.chyc.manejopersonal.managebean;
 import ec.edu.chyc.manejopersonal.controller.PersonaJpaController;
 import ec.edu.chyc.manejopersonal.entity.Firma;
 import ec.edu.chyc.manejopersonal.entity.Persona;
+import ec.edu.chyc.manejopersonal.entity.Persona.GradoAcademico;
 import ec.edu.chyc.manejopersonal.entity.Persona.TipoPersona;
 import ec.edu.chyc.manejopersonal.entity.PersonaFirma;
 import ec.edu.chyc.manejopersonal.entity.PersonaTitulo;
@@ -187,7 +188,17 @@ public class GestorPersona implements Serializable {
 
         TipoPersona tipoPersona = (TipoPersona)value;
         return (tipoPersonaFilter.equals(tipoPersona));
-    }    
+    }   
+    
+    public boolean filtrarPorGradoAcademico(Object value, Object filter, Locale locale) {        
+        if (filter == null) {
+            return true;
+        }
+        GradoAcademico gradoAcademicoFilter = GradoAcademico.valueOf((String)filter);
+
+        GradoAcademico gradoAcademico = (GradoAcademico)value;
+        return (gradoAcademicoFilter.equals(gradoAcademico));
+    }
     
     public boolean filtrarPorFirma(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
@@ -303,6 +314,10 @@ public class GestorPersona implements Serializable {
     
     public TipoPersona[] getTiposPersona() {
         return TipoPersona.values();
+    }
+    
+    public GradoAcademico[] getGradosAcademicos() {
+        return GradoAcademico.values();
     }
     
     public void agregarFirma() {

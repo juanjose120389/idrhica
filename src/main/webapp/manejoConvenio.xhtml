@@ -84,6 +84,18 @@
                 </p:selectOneMenu>                
                 <h:panelGroup layout="block"/>
                 
+                <p:outputLabel value="Administrador Otra Institución" />
+                <p:selectOneMenu style="width: 300px" id="cmbAdminOtro" value="#{gestorConvenio.convenio.administradorOtro}" converter="personaConverter"
+                                 var="per" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                    <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
+
+                    <p:column>
+                        <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                    </p:column>
+                </p:selectOneMenu>                
+                <h:panelGroup layout="block"/>
+                
                 <p:outputLabel value="Asociado a Proyectos">
                     <span class="asterisk"/>
                 </p:outputLabel>

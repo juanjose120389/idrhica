@@ -90,6 +90,14 @@
                 </f:facet>
                 <h:outputText value="#{proyecto.observaciones}" />
             </p:column>
+            
+            <p:column headerText="Nickname" width="200" filterBy="#{proyecto.nickname}" filterMatchMode="contains" sortBy="#{proyecto.nickname}">
+                <f:facet name="header">  
+                    <h:outputText value="Nickname"/>  
+                </f:facet>
+                <h:outputText value="#{proyecto.nickname}" />
+            </p:column>
+            
             <p:column exportable="false" width="80">
                 <p:commandLink value="Ver" action="#{gestorProyecto.initVerProyecto(proyecto.id)}"/>
                 <p:outputLabel value=" "/>

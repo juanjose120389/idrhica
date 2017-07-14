@@ -8,6 +8,11 @@
         <p:outputLabel value="Titulo"/>
         <p:outputLabel value="#{gestorProyecto.proyecto.titulo}"/>
 
+        <ui:remove> 
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.nickname}" value="Nickname" />
+        <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.nickname}" value="#{gestorProyecto.proyecto.nickname}"/>
+        </ui:remove>
+        
         <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.codigoExterno}" value="Código externo" />
         <p:outputLabel rendered="#{not empty gestorProyecto.proyecto.codigoExterno}" value="#{gestorProyecto.proyecto.codigoExterno}"/>
 

@@ -47,25 +47,33 @@
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>
 
-            <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutores}">
-                <ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="perarticulo">
-                    <p:outputLabel value="• #{perarticulo.personaFirma.firma.nombre}"/><br/>
-                </ui:repeat>
+            <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" 
+                      filterFunction="#{gestorArticulo.filtrarPorAutores}">
+                <ul style="width: 220px; font-size: 13px"><ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="perarticulo">
+                    <li><h:outputText value="#{perarticulo.personaFirma.firma.nombre}"/></li>
+                    </ui:repeat></ul>
             </p:column>
 
             <p:column headerText="Autores" styleClass="columnaOculta" exportable="true">
                 <p:outputLabel value="#{gestorArticulo.convertirListaPersonas(articulo.personasArticuloCollection)}" escape="false"/>
             </p:column> 
-            
+
             <p:column rendered="false" headerText="Autor principal" sortBy="#{articulo.personasArticuloCollection[0].personaFirma.persona.nombres}" filterBy="#{articulo.personasArticuloCollection}" filterFunction="#{gestorArticulo.filtrarPorAutorPrincipal}" width="150">
                 <h:outputText value="#{articulo.personasArticuloCollection[0].personaFirma.firma.nombre}" />
             </p:column>           
 
-            <p:column headerText="Título" filterBy="#{articulo.nombre}" style="max-width: 450px; min-width: 300px" filterMatchMode="contains">
+            <p:column headerText="Título" filterBy="#{articulo.nombre}" style="max-width: 450px; min-width: 300px" 
+                      sortBy="#{articulo.nombre}" filterMatchMode="contains">
                 <p:outputLabel style="font-weight: bold;white-space: pre-wrap;" value="#{articulo.nombre}" />
             </p:column>
 
-            <p:column headerText="Año" sortBy="#{articulo.anioPublicacion}" width="80">
+            <p:column headerText="Año" sortBy="#{articulo.anioPublicacion}" width="40" 
+                      filterBy="#{articulo.anioPublicacion}" filterMatchMode="exact">
+                <f:facet name="filter">
+                    <p:spinner onchange="PF('articulosTable').filter()" styleClass="year-spinner" maxlength="4" size="4">
+                        <f:converter converterId="javax.faces.Integer" />
+                    </p:spinner>
+                </f:facet>
                 <h:outputText value="#{articulo.anioPublicacion}"/>
             </p:column>
 
@@ -96,7 +104,7 @@
                 <p:outputLabel value="#{gestorArticulo.convertirListaInstitucion(articulo.listaInstFinanciamientos)}"/>
             </p:column>
 
-            
+
             <p:column exportable="false" filterBy="#{articulo.listaLugares}" headerText="Observatorios" width="150"
                       filterFunction="#{gestorArticulo.filtrarPorLugar}">
                 <f:facet name="filter">

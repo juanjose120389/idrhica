@@ -78,6 +78,10 @@ public class Convenio implements Serializable {
     private Persona administrador;    
     
     @ManyToOne
+    @JoinColumn(name = "idAdministradorOtro", referencedColumnName = "id")    
+    private Persona administradorOtro;   
+    
+    @ManyToOne
     @JoinColumn(name = "idInstitucion", referencedColumnName = "id")    
     private Institucion institucion;        
     
@@ -148,6 +152,14 @@ public class Convenio implements Serializable {
         this.administrador = administrador;
     }
 
+    public void setAdministradorOtro(Persona administradorOtro) {
+        this.administradorOtro = administradorOtro;
+    }
+
+    public Persona getAdministradorOtro() {
+        return administradorOtro;
+    }
+    
     public Institucion getInstitucion() {
         return institucion;
     }

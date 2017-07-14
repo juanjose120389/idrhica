@@ -49,6 +49,14 @@ public class Persona implements Serializable {
         EXTERNO
     }
     
+    public enum GradoAcademico {
+        DOCTORADO, 
+        MAESTRIA, 
+        TERCER_NIVEL, 
+        EGRESADO, 
+        SEGUNDO_NIVEL
+    }
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,6 +97,9 @@ public class Persona implements Serializable {
     
     @Enumerated(EnumType.STRING)
     private TipoPersona tipo;
+    
+    @Enumerated(EnumType.STRING)
+    private GradoAcademico gradoAcademico;
 
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private Collection<Contrato> contratosCollection = new ArrayList<>();
@@ -370,5 +381,13 @@ public class Persona implements Serializable {
     public void setTipo(TipoPersona tipo) {
         this.tipo = tipo;
     }
+
+    public GradoAcademico getGradoAcademico() {
+        return gradoAcademico;
+    }
+    
+    public void setGradoAcademico(GradoAcademico gradoAcademico) {
+        this.gradoAcademico = gradoAcademico;
+    }    
 
 }

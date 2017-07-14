@@ -56,16 +56,27 @@
                         <h:outputText value="#{persona.apellidos}" />
                     </p:column>
 
-                    <p:column exportable="false" filterBy="#{persona.tipo}" headerText="Tipo" width="170"
-                              filterFunction="#{gestorPersona.filtrarPorTipo}">
+                    <p:column exportable="false" filterBy="#{persona.tipo}" headerText="Tipo" width="120"
+                              filterFunction="#{gestorPersona.filtrarPorTipo}" sortBy="#{persona.tipo}">
                         <f:facet name="filter">
-                            <p:selectOneMenu id="cmbTipoPersona" style="width: 130px" onchange="PF('personasTable').filter()" >
+                            <p:selectOneMenu id="cmbTipoPersona" style="width: 90px" onchange="PF('personasTable').filter()" >
                                 <f:selectItem itemLabel="Seleccionar" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{gestorPersona.tiposPersona}" var="tipo" itemLabel="#{label['persona.tipo.' += tipo]}" itemValue="#{tipo}"/>
                             </p:selectOneMenu>
                         </f:facet>
                         <h:outputText rendered="#{not empty persona.tipo}" value="#{label['persona.tipo.' += persona.tipo]}"/>
-                    </p:column>            
+                    </p:column>
+                    
+                    <p:column exportable="false" filterBy="#{persona.gradoAcademico}" headerText="Grado Académico" width="120"
+                              filterFunction="#{gestorPersona.filtrarPorGradoAcademico}" sortBy="#{persona.gradoAcademico}">
+                        <f:facet name="filter">
+                            <p:selectOneMenu id="cmbGradoAcademico" style="width: 90px" onchange="PF('personasTable').filter()" >
+                                <f:selectItem itemLabel="Seleccionar" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{gestorPersona.gradosAcademicos}" var="gradoAcademico" itemLabel="#{label['persona.gradoAcademico.' += gradoAcademico]}" itemValue="#{gradoAcademico}"/>
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <h:outputText rendered="#{not empty persona.gradoAcademico}" value="#{label['persona.gradoAcademico.' += persona.gradoAcademico]}"/>
+                    </p:column>
 
                     <p:column width="90" filterBy="#{persona.activo}" filterMatchMode="exact">
                         <f:facet name="header">

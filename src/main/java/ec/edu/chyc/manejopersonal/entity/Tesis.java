@@ -43,6 +43,8 @@ public class Tesis implements Serializable {
     private Long id;
 
     private String nombre;
+    
+    private String enlace;
 
     @ManyToOne
     @JoinColumn(name = "idDirectorTesis", referencedColumnName = "id")
@@ -146,6 +148,16 @@ public class Tesis implements Serializable {
     public void setResumen(String resumen) {
         this.resumen = resumen;
     }
+
+    public void setEnlace(String enlace) {
+        this.enlace = enlace;
+    }
+
+    public String getEnlace() {
+        return enlace;
+    }
+    
+    
 
     @Override
     public int hashCode() {

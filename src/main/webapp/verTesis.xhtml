@@ -42,6 +42,10 @@
 
                 <p:outputLabel value="Observaciones"/>
                 <p:outputLabel value="#{gestorTesis.tesis.observaciones}"/>  
+                
+                <p:outputLabel value="Enlace"/>
+                <p:link value="#{gestorTesis.tesis.enlace}" href="#{gestorTesis.corregirUrl(gestorTesis.tesis.enlace)}" target="_blank"/>
+
 
                 <p:outputLabel value="Acta de aprobación" rendered="#{gestorTesis.tesis.archivoActaAprobacion != ''}"/>
                 <p:commandLink value="Descargar" ajax="false" rendered="#{gestorTesis.tesis.archivoActaAprobacion != ''}">

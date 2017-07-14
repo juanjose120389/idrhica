@@ -433,6 +433,23 @@ public class GestorTesis implements Serializable {
         }
         return "";
     }
+    
+    
+    /***
+     * Agrega http:// a la url en caso de no tener
+     * @param url Texto correspondiente a la url a verificar
+     * @return Url corregida o la misma si es que ya poseía http://
+     */
+    public String corregirUrl(String url) {
+        if (!url.contains("://")) {
+            url = "http://" + url;
+        }
+        /*if (!url.toLowerCase().matches("^\\w+://.*")) {
+            url = "http://" + url;
+        }*/
+        return url;
+    }
+    
 
     public List<Proyecto> getListaProyectos() {
         return listaProyectos;

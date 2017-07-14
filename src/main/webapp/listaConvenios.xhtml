@@ -59,6 +59,10 @@
                 <h:outputText value="#{convenio.administrador.nombres} #{convenio.administrador.apellidos}" />
             </p:column>
             
+            <p:column headerText="Admnistrador Otra Intitución" filterBy="#{convenio.administradorOtro.nombres} #{convenio.administradorOtro.apellidos}" filterMatchMode="contains" sortBy="#{convenio.administradorOtro.nombres}">
+                <h:outputText value="#{convenio.administradorOtro.nombres} #{convenio.administradorOtro.apellidos}" />
+            </p:column>
+            
             <p:column headerText="Fecha Inicio" sortBy="#{convenio.fechaInicio}" >
                 <h:outputText value="#{convenio.fechaInicio}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
