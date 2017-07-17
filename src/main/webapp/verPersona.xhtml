@@ -118,7 +118,7 @@
                         <h:outputText value="#{rowIndex+1}"/>
                     </p:column>                    
                     <p:column headerText="Tema" width="500">
-                        <h:outputText value="#{pasantia.tema}" />
+                        <p:commandLink value="#{pasantia.tema}" action="#{gestorPasantia.initVerPasantia(pasantia.id)}" />
                     </p:column>
                     <p:column headerText="# Horas" width="100">
                         <h:outputText value="#{pasantia.numeroHoras}" />

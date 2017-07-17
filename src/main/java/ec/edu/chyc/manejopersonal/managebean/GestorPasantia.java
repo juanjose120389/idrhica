@@ -50,6 +50,13 @@ public class GestorPasantia implements Serializable {
         
         return "verPasantia";
     }
+    
+    public String initVerPasantia(Long id, String estado) {
+        inicializarManejoPasantia();
+        pasantia = pasantiaController.findEntity(id);
+        
+        return "verPasantia";
+    }
 
     public String initModificarPasantia(Long id) {
         inicializarManejoPasantia();
@@ -80,11 +87,11 @@ public class GestorPasantia implements Serializable {
         }
     }
 
-    public static GestorPersona getInstance() {
+    public static GestorPasantia getInstance() {
         javax.faces.context.FacesContext facesContext = javax.faces.context.FacesContext.getCurrentInstance();
         javax.el.ELContext context = facesContext.getELContext();
-        javax.el.ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorPersona}", GestorPersona.class);
-        return (GestorPersona) ex.getValue(context);
+        javax.el.ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorPasantia}", GestorPasantia.class);
+        return (GestorPasantia) ex.getValue(context);
     }
 
     public String guardar() {
