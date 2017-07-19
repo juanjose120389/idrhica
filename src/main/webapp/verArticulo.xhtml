@@ -6,7 +6,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
         <h:inputHidden id="iDRiCA#{gestorArticulo.articulo.id}" value="#{gestorUsuario.logeado}"/>
-        <p:commandLink value="Regresar" immediate="true" action="#{gestorArticulo.initListarArticulos()}"/>
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Artículo">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
@@ -63,7 +63,7 @@
                     </p:column>
 
                     <p:column headerText="Identificación" >
-                        <h:outputText value="#{personaArticulo.personaFirma.persona.identificacion}" />
+                        <p:commandLink value="#{personaArticulo.personaFirma.persona.identificacion}" action="#{gestorNavegacion.cargarPagina(6, personaArticulo.personaFirma.persona.id)}"/>
                     </p:column>
                     
                     <p:column headerText="Nombres" >
@@ -89,7 +89,7 @@
                     </p:column>
 
                     <p:column headerText="Título" >
-                        <h:outputText value="#{proyectoArticulo.titulo}" />
+                        <p:commandLink value="#{proyectoArticulo.titulo}" action="#{gestorNavegacion.cargarPagina(7, proyectoArticulo.id)}"/>
                     </p:column>
 
                     <p:column headerText="Director" width="200">

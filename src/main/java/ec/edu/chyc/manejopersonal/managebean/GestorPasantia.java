@@ -51,13 +51,6 @@ public class GestorPasantia implements Serializable {
         return "verPasantia";
     }
     
-    public String initVerPasantia(Long id, String estado) {
-        inicializarManejoPasantia();
-        pasantia = pasantiaController.findEntity(id);
-        
-        return "verPasantia";
-    }
-
     public String initModificarPasantia(Long id) {
         inicializarManejoPasantia();
         modoModificar = true;

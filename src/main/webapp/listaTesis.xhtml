@@ -98,7 +98,7 @@
             </p:column>
 
             <p:column exportable="false" width="80">
-                <p:commandLink value="Ver" action="#{gestorTesis.initVerTesis(tesis.id)}"/>
+                <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(8, tesis.id)}"/>
                 <p:outputLabel value=" "/>
                 <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorTesis.initModificarTesis(tesis.id)}"/>
             </p:column>

@@ -82,7 +82,7 @@
             </p:column>
             
             <p:column width="90" exportable="false">
-                <p:commandLink value="Ver" action="#{gestorConvenio.initVerConvenio(convenio.id)}"/>
+                <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(3, convenio.id)}"/>
                 <p:outputLabel value=" "/>
                 <p:commandLink value="Editar" action="#{gestorConvenio.initModificarConvenio(convenio.id)}" rendered="#{gestorUsuario.puedeEditar}"/>
             </p:column>

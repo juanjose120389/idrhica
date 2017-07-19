@@ -6,7 +6,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
         <h:inputHidden id="iDRiCA#{gestorPasantia.pasantia.id}" value="#{gestorUsuario.logeado}"/>
-        <p:commandLink value="Regresar" immediate="true" action="#{gestorPasantia.initListarPasantias()}"/>
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Ficha de Pasantía">
             <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
@@ -14,7 +14,7 @@
                 <p:outputLabel value="#{gestorPasantia.pasantia.tema}"/>
 
                 <p:outputLabel value="Pasante"/>
-                <p:outputLabel value="#{gestorPasantia.pasantia.pasante.nombres} #{gestorPasantia.pasantia.pasante.apellidos}"/>
+                <p:commandLink value="#{gestorPasantia.pasantia.pasante.nombres} #{gestorPasantia.pasantia.pasante.apellidos}" action="#{gestorNavegacion.cargarPagina(6, gestorPasantia.pasantia.pasante.id)}"/>
 
                 <p:outputLabel value="Número de horas"/>
                 <p:outputLabel value="#{gestorPasantia.pasantia.numeroHoras}"/>
@@ -42,7 +42,7 @@
                 <p:outputLabel value="#{gestorPasantia.pasantia.escuela}"/>
                 
                 <p:outputLabel rendered="#{gestorPasantia.pasantia.proyecto != null}" value="Proyecto vinculado" />
-                <p:outputLabel rendered="#{gestorPasantia.pasantia.proyecto != null}" value="#{gestorPasantia.pasantia.proyecto.titulo}"/>                
+                <p:commandLink rendered="#{gestorPasantia.pasantia.proyecto != null}" value="#{gestorPasantia.pasantia.proyecto.titulo}" action="#{gestorNavegacion.cargarPagina(7, gestorPasantia.pasantia.proyecto.id)}"/>                
 
                 <p:outputLabel value="Resumen" />
                 <p:outputLabel value="#{gestorPasantia.pasantia.resumen}"/>

@@ -65,7 +65,7 @@
             </p:column>
 
             <p:column exportable="false" width="90">
-                <p:commandLink value="Ver" action="#{gestorPasantia.initVerPasantia(pasantia.id)}"/>
+                <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(5, pasantia.id)}"/>
                 <p:outputLabel value=" "/>
                 <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPasantia.initModificarPasantia(pasantia.id)}"/>
             </p:column>            

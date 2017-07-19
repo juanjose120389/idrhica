@@ -63,6 +63,7 @@ public class GestorGeneral implements Serializable {
         
     }
     
+    
     public String regresarPaginaPrincipal() {
         return "index";
     }

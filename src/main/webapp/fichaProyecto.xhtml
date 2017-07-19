@@ -70,6 +70,7 @@
             <f:facet name="header">
                 Financiamiento del Proyecto
             </f:facet>
+            
             <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>
@@ -146,7 +147,7 @@
                 </h:panelGroup>
             </p:column>                
 
-            <p:column headerText="Finalización" width="100">
+            <p:column headerText="Finalización" width="50">
                 <h:outputText value="#{contrato.fechaFin}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -167,7 +168,7 @@
             </p:column>
 
             <p:column headerText="Título" style="min-width: 100px; max-width: 350px;">
-                <h:outputText value="#{convenio.titulo}" />
+                <p:commandLink value="#{convenio.titulo}" action="#{gestorNavegacion.cargarPagina(3, convenio.id)}" />
             </p:column>
 
             <p:column headerText="Institución" style="min-width: 80px; max-width: 200px;">
@@ -180,7 +181,7 @@
                 </h:panelGroup>
             </p:column>
 
-            <p:column headerText="Fecha finalización" width="100">
+            <p:column headerText="Fecha finalización" width="50">
                 <h:outputText value="#{convenio.fechaFin}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -201,7 +202,7 @@
             </p:column>
 
             <p:column headerText="Título" width="500">
-                <h:outputText value="#{articulo.nombre}" />
+                <p:commandLink value="#{articulo.nombre}" action="#{gestorNavegacion.cargarPagina(1, articulo.id)}" />
             </p:column>
             <p:column headerText="Tipo" width="100">
                 <h:outputText value="#{label['articulo.tipo.' += articulo.tipo]}" />
@@ -233,10 +234,10 @@
             </p:column>
 
             <p:column headerText="Título" style="min-width: 100px; max-width: 350px;">
-                <h:outputText value="#{tesis.nombre}" />
-
+                <p:commandLink value="#{tesis.nombre}" action="#{gestorNavegacion.cargarPagina(8, tesis.id)}" />
             </p:column>     
-            <p:column headerText="Fecha Inicio" width="100">
+            
+            <p:column headerText="Fecha Inicio" width="50">
                 <h:outputText value="#{tesis.fechaInicio}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -273,17 +274,17 @@
             </p:column>
 
             <p:column headerText="Tema" width="500">
-                <h:outputText value="#{pasantia.tema}" />
+                <p:commandLink value="#{pasantia.tema}" action="#{gestorNavegacion.cargarPagina(5, pasantia.id)}" />
             </p:column>
-            <p:column headerText="# Horas" width="100">
+            <p:column headerText="# Horas" width="50">
                 <h:outputText value="#{pasantia.numeroHoras}" />
             </p:column>                
-            <p:column headerText="Inicio" width="100">
+            <p:column headerText="Inicio" width="50">
                 <h:outputText value="#{pasantia.fechaInicio}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Finalización" width="100">
+            <p:column headerText="Finalización" width="50">
                 <h:outputText value="#{pasantia.fechaFin}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>

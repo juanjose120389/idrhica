@@ -41,7 +41,7 @@
             </p:column>
 
             <p:column width="90" exportable="false">
-                <p:commandLink value="Detalles" action="#{gestorInstitucion.initVerInstitucion(institucion.id)}"/>
+                <p:commandLink value="Detalles" action="#{gestorNavegacion.cargarPagina(4, institucion.id)}"/>
             </p:column>
         </p:dataTable>
     </ui:define>

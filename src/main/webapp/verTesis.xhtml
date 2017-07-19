@@ -6,7 +6,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
         <h:inputHidden id="iDRiCA#{gestorTesis.tesis.id}" value="#{gestorUsuario.logeado}"/>
-        <p:commandLink value="Regresar" immediate="true" action="#{gestorTesis.initListarTesis()}"/>
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Ficha de la Tesis">
             <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
@@ -65,7 +65,7 @@
                     </p:column>
 
                     <p:column headerText="Identificación" width="100">
-                        <h:outputText value="#{autor.identificacion}" />
+                        <p:commandLink value="#{autor.identificacion}" action="#{gestorNavegacion.cargarPagina(6, autor.id)}" />
                     </p:column>
 
                     <p:column headerText="Nombres">
@@ -89,7 +89,7 @@
                     </p:column>
 
                     <p:column headerText="Identificación" width="100">
-                        <h:outputText value="#{codirector.identificacion}" />
+                        <p:commandLink value="#{codirector.identificacion}" action="#{gestorNavegacion.cargarPagina(6, codirector.id)}"/>
                     </p:column>
 
                     <p:column headerText="Nombres" >
@@ -115,7 +115,7 @@
                     </p:column>
                     
                     <p:column headerText="Identificación" width="100">
-                        <h:outputText value="#{tutor.identificacion}" />
+                        <p:commandLink value="#{tutor.identificacion}" action="#{gestorNavegacion.cargarPagina(6, tutor.id)}" />
                     </p:column>
 
                     <p:column headerText="Nombres">
@@ -142,7 +142,7 @@
                     </p:column>
                     
                     <p:column headerText="Nombre proyecto" width="300">
-                        <h:outputText value="#{proyecto.titulo}" />
+                        <p:commandLink value="#{proyecto.titulo}" action="#{gestorNavegacion.cargarPagina(7, proyecto.id)}" />
                     </p:column>
 
                     <p:column headerText="Director" width="200">

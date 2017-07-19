@@ -6,7 +6,9 @@
 package ec.edu.chyc.manejopersonal.managebean;
 
 import java.io.Serializable;
-import javax.enterprise.context.SessionScoped;
+import java.util.ArrayList;
+import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
 /**
@@ -15,36 +17,165 @@ import javax.inject.Named;
  * paginas
  */
 @Named(value = "gestorNavegacion")
-@SessionScoped
+@ApplicationScoped
 public class GestorNavegacion implements Serializable {
 
-    static final int VER_ARTICULO = 1;
-    static final int VER_CONTRATO = 2;
-    static final int VER_CONVENIO = 3;
-    static final int VER_INSTITUCION = 4;
-    static final int VER_PASANTIA = 5;
-    static final int VER_PERSONA = 6;
-    static final int VER_PROYECTO = 7;
-    static final int VER_TESIS = 8;
+    static final int ARTICULO = 1;
+    static final int CONTRATO = 2;
+    static final int CONVENIO = 3;
+    static final int INSTITUCION = 4;
+    static final int PASANTIA = 5;
+    static final int PERSONA = 6;
+    static final int PROYECTO = 7;
+    static final int TESIS = 8;
 
-    /*static final int VER_LISTA_ARTICULO=1;
-    static final int VER_LISTA_CONTRATO=2;
-    static final int VER_LISTA_CONVENIO=3;
-    static final int VER_LISTA_INSTITUCION=4;
-    static final int VER_LISTA_PASANTIA=5;
-    static final int VER_LISTA_PERSONA=6;
-    static final int VER_LISTA_PROYECTO=7;
-    static final int VER_LISTA_TESIS=8;*/
-    public void regresar(int idPagDestino, long id) {
+    private List<EstadoPagina> listaNavegacion = new ArrayList<>();
 
+    public GestorNavegacion() {
+        EstadoPagina ep=new EstadoPagina();
+        ep.setId(null);
+        ep.setIdPagina(6);
+        listaNavegacion.add(ep);
+    }
+    
+
+    public String cargarPagina(int idPagina, Long idElemento) {
+        if (idElemento == null) {
+            vaciarListaNavegacion();
+            EstadoPagina ep = new EstadoPagina();
+            ep.setIdPagina(idPagina);
+            ep.setId(null);
+            listaNavegacion.add(ep);
+            return cargarPaginaLista(idPagina);
+        } else {
+            EstadoPagina ep = new EstadoPagina();
+            ep.setIdPagina(idPagina);
+            ep.setId(idElemento);
+            listaNavegacion.add(ep);
+            return cargarPaginaDetalle(idPagina, idElemento);
+        }
+    }
+    
+    private String regresarPagina(int idPagina, Long idElemento) {
+        if (idElemento == null) {            
+            return cargarPaginaLista(idPagina);
+        } else {            
+            return cargarPaginaDetalle(idPagina, idElemento);
+        }
+    }
+
+    private String cargarPaginaLista(int idPagina) {
         javax.faces.context.FacesContext facesContext = javax.faces.context.FacesContext.getCurrentInstance();
         javax.el.ELContext context = facesContext.getELContext();
         javax.el.ValueExpression ex;
 
-        if (idPagDestino == VER_PASANTIA) {
-            ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorPasantia}", GestorPasantia.class);
-            GestorPasantia gestor = (GestorPasantia) ex.getValue(context);
+        switch (idPagina) {
+            case ARTICULO: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorArticulo}", GestorArticulo.class);
+                GestorArticulo gestor = (GestorArticulo) ex.getValue(context);
+                return gestor.initListarArticulos();
+            }
+            case CONTRATO: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorContrato}", GestorContrato.class);
+                GestorContrato gestor = (GestorContrato) ex.getValue(context);
+                return gestor.initListarContratos();
+            }
+            case CONVENIO: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorConvenio}", GestorConvenio.class);
+                GestorConvenio gestor = (GestorConvenio) ex.getValue(context);
+                return gestor.initListarConvenios();
+            }
+            case INSTITUCION: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorInstitucion}", GestorInstitucion.class);
+                GestorInstitucion gestor = (GestorInstitucion) ex.getValue(context);
+                return gestor.initListarInstituciones();
+            }
+            case PASANTIA: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorPasantia}", GestorPasantia.class);
+                GestorPasantia gestor = (GestorPasantia) ex.getValue(context);
+                return gestor.initListarPasantias();
+            }
+            case PERSONA: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorGeneral}", GestorGeneral.class);
+                GestorGeneral gestor = (GestorGeneral) ex.getValue(context);
+                return gestor.regresarPaginaPrincipal();
+            }
+            case PROYECTO: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorProyecto}", GestorProyecto.class);
+                GestorProyecto gestor = (GestorProyecto) ex.getValue(context);
+                return gestor.initListarProyectos();
+            }
+            case TESIS: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorTesis}", GestorTesis.class);
+                GestorTesis gestor = (GestorTesis) ex.getValue(context);
+                return gestor.initListarTesis();
+            }
+            default:
+                return "";
         }
+    }
+
+    private String cargarPaginaDetalle(int idPagina, Long idElemento) {
+        javax.faces.context.FacesContext facesContext = javax.faces.context.FacesContext.getCurrentInstance();
+        javax.el.ELContext context = facesContext.getELContext();
+        javax.el.ValueExpression ex;
+
+        switch (idPagina) {
+            case ARTICULO: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorArticulo}", GestorArticulo.class);
+                GestorArticulo gestor = (GestorArticulo) ex.getValue(context);
+                return gestor.initVerArticulo(idElemento);
+            }
+            case CONTRATO: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorContrato}", GestorContrato.class);
+                GestorContrato gestor = (GestorContrato) ex.getValue(context);
+                //gestor.init;
+                break;
+            }
+            case CONVENIO: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorConvenio}", GestorConvenio.class);
+                GestorConvenio gestor = (GestorConvenio) ex.getValue(context);
+                return gestor.initVerConvenio(idElemento);
+            }
+            case INSTITUCION: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorInstitucion}", GestorInstitucion.class);
+                GestorInstitucion gestor = (GestorInstitucion) ex.getValue(context);
+                return gestor.initVerInstitucion(idElemento);
+            }
+            case PASANTIA: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorPasantia}", GestorPasantia.class);
+                GestorPasantia gestor = (GestorPasantia) ex.getValue(context);
+                return gestor.initVerPasantia(idElemento);
+            }
+            case PERSONA: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorPersona}", GestorPersona.class);
+                GestorPersona gestor = (GestorPersona) ex.getValue(context);
+                return gestor.initVerPersona(idElemento);
+            }
+            case PROYECTO: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorProyecto}", GestorProyecto.class);
+                GestorProyecto gestor = (GestorProyecto) ex.getValue(context);
+                return gestor.initVerProyecto(idElemento);
+            }
+            case TESIS: {
+                ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorTesis}", GestorTesis.class);
+                GestorTesis gestor = (GestorTesis) ex.getValue(context);
+                return gestor.initVerTesis(idElemento);
+            }
+            default:
+                return "";
+        }
+        return "";
+    }
+
+    private void vaciarListaNavegacion() {
+        listaNavegacion.clear();
+    }
+
+    public String regresar() {
+        listaNavegacion.remove(listaNavegacion.size() - 1);
+        EstadoPagina ep = listaNavegacion.get(listaNavegacion.size() - 1);
+        return regresarPagina(ep.getIdPagina(), ep.getId());
     }
 
 }

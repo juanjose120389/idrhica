@@ -6,7 +6,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
 
-        <p:commandLink value="Regresar" immediate="true" action="#{gestorConvenio.initListarConvenios()}"/>
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Ficha del Convenio">
             <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
@@ -62,7 +62,7 @@
                     </p:column>
 
                     <p:column headerText="Título">
-                        <h:outputText value="#{proyecto.titulo}" />
+                        <p:commandLink value="#{proyecto.titulo}" action="#{gestorNavegacion.cargarPagina(7, proyecto.id)}" />
                     </p:column>
 
                     <p:column headerText="Director" width="200">
@@ -83,7 +83,7 @@
                     </p:column>
 
                     <p:column headerText="Título">
-                        <h:outputText value="#{articulo.nombre}" />
+                        <p:commandLink value="#{articulo.nombre}" action="#{gestorNavegacion.cargarPagina(1, articulo.id)}" />
                     </p:column>
                     
                     <p:column headerText="Revista" width="200">
@@ -108,7 +108,7 @@
                     </p:column>
 
                     <p:column headerText="Título">
-                        <h:outputText value="#{tesis.nombre}" />
+                        <p:commandLink value="#{tesis.nombre}" action="#{gestorNavegacion.cargarPagina(8, tesis.id)}" />
                     </p:column>
 
                     <p:column headerText="Autores" width="200">

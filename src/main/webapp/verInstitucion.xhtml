@@ -6,7 +6,7 @@
                 template="./template.xhtml">
     <ui:define name="body">
         <h:inputHidden id="iDRiCA#{gestorInstitucion.institucion.id}" value="#{gestorUsuario.logeado}"/>
-        <p:commandLink value="Regresar" immediate="true" action="#{gestorInstitucion.initListarInstituciones()}"/>
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Ficha de institución">
             <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
@@ -35,7 +35,7 @@
                     </p:column>
 
                     <p:column headerText="Título" sortBy="#{financiamiento.proyecto.titulo}">
-                        <h:outputText value="#{financiamiento.proyecto.titulo}" />
+                        <p:commandLink value="#{financiamiento.proyecto.titulo}" action="#{gestorNavegacion.cargarPagina(7, financiamiento.proyecto.id)}" />
                     </p:column>
 
                     <p:column headerText="Monto" width="100" style="text-align: right" rendered="#{gestorUsuario.puedeVerMasInfo}" sortBy="#{financiamiento.monto}">
@@ -73,21 +73,23 @@
                     </p:column>                    
 
                     <p:column headerText="Título del convenio" width="300" sortBy="#{convenio.titulo}">
-                        <h:outputText value="#{convenio.titulo}" />
+                        <p:commandLink value="#{convenio.titulo}" action="#{gestorNavegacion.cargarPagina(3, convenio.id)}" />
                     </p:column>
 
                     <p:column headerText="Proyectos vinculados" width="300" >
-                        <ui:repeat value="#{convenio.proyectosCollection.toArray()}" var="proyecto">
-                            <p:outputLabel value="• #{gestorProyecto.acortarTitulo(proyecto)}"/><br />
-                        </ui:repeat>
+                        <ul style="width: 220px; font-size: 13px">                       
+                            <ui:repeat value="#{convenio.proyectosCollection.toArray()}" var="proyecto">
+                                <li><p:commandLink value="#{gestorProyecto.acortarTitulo(proyecto)}" action="#{gestorNavegacion.cargarPagina(7, proyecto.id)}"/></li>
+                            </ui:repeat>
+                        </ul>
                     </p:column>
 
-                    <p:column headerText="Fecha Inicio" width="100" >
+                    <p:column headerText="Fecha Inicio" width="50" >
                         <h:outputText value="#{convenio.fechaInicio}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Fecha Fin" width="100" >
+                    <p:column headerText="Fecha Fin" width="50" >
                         <h:outputText value="#{convenio.fechaFin}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
@@ -109,7 +111,7 @@
                     </p:column>
 
                     <p:column headerText="Título" width="500">
-                        <h:outputText value="#{articulo.nombre}" />
+                        <p:commandLink value="#{articulo.nombre}" action="#{gestorNavegacion.cargarPagina(1, articulo.id)}" />
                     </p:column>
                     <p:column headerText="Tipo" width="100">
                         <h:outputText value="#{label['articulo.tipo.' += articulo.tipo]}" />
@@ -149,10 +151,10 @@
                     </p:column>
 
                     <p:column headerText="Título" style="min-width: 100px; max-width: 350px;">
-                        <h:outputText value="#{tesis.nombre}" />
-
+                        <p:commandLink value="#{tesis.nombre}" action="#{gestorNavegacion.cargarPagina(8, tesis.id)}" />
                     </p:column>     
-                    <p:column headerText="Fecha Inicio" width="100">
+                    
+                    <p:column headerText="Fecha Inicio" width="50">
                         <h:outputText value="#{tesis.fechaInicio}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
@@ -178,7 +180,7 @@
             </h:panelGroup>   
 
 
-                <h:panelGroup rendered="#{not empty gestorInstitucion.institucion.pasantiasList}" layout="block">
+            <h:panelGroup rendered="#{not empty gestorInstitucion.institucion.pasantiasList}" layout="block">
                 <h:panelGroup layout="block" style="height: 15px"/>
                 <p:dataTable var="pasantia" value="#{gestorInstitucion.institucion.pasantiasList}" rowIndexVar="rowIndex">
                     <f:facet name="header">
@@ -189,17 +191,17 @@
                     </p:column>
 
                     <p:column headerText="Tema" width="500">
-                        <h:outputText value="#{pasantia.tema}" />
+                        <p:commandLink value="#{pasantia.tema}" action="#{gestorNavegacion.cargarPagina(5, pasantia.id)}" />
                     </p:column>
-                    <p:column headerText="# Horas" width="100">
+                    <p:column headerText="# Horas" width="50">
                         <h:outputText value="#{pasantia.numeroHoras}" />
                     </p:column>                
-                    <p:column headerText="Inicio" width="100">
+                    <p:column headerText="Inicio" width="50">
                         <h:outputText value="#{pasantia.fechaInicio}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Finalización" width="100">
+                    <p:column headerText="Finalización" width="50">
                         <h:outputText value="#{pasantia.fechaFin}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>

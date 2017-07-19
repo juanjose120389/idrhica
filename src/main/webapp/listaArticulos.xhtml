@@ -130,7 +130,7 @@
             </p:column>
 
             <p:column exportable="false">
-                <p:commandLink value="Ver" action="#{gestorArticulo.initVerArticulo(articulo.id)}"/>
+                <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(1, articulo.id)}"/>
                 <p:outputLabel value=" "/>
                 <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}" rendered="#{gestorUsuario.puedeEditar}"/>
             </p:column>
