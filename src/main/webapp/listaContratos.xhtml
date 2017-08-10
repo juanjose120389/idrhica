@@ -36,12 +36,12 @@
                 <h:outputText value="#{contrato.codigoContrato}" />
             </p:column>
 
-            <p:column headerText="Fecha Inicio" width="100" sortBy="#{contrato.fechaInicio}">
+            <p:column headerText="Fecha Inicio" width="75" sortBy="#{contrato.fechaInicio}">
                 <h:outputText value="#{contrato.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Fecha Finalización" width="100" sortBy="#{contrato.fechaFin}">
+            <p:column headerText="Fecha Finalización" width="75" sortBy="#{contrato.fechaFin}">
                 <h:outputText value="#{contrato.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>

@@ -58,9 +58,7 @@
                 
                 <p:outputLabel value="Grado Académico"/>
                 <p:outputLabel value="#{empty gestorPersona.persona.gradoAcademico?'':label['persona.gradoAcademico.'+=gestorPersona.persona.gradoAcademico]}"/>
-                
-                
-            
+                       
             </h:panelGrid>
 
             <h:panelGroup layout="block" rendered="#{not empty gestorPersona.persona.personaFirmasCollection}">
@@ -75,7 +73,7 @@
                         <h:outputText value="#{rowIndex+1}"/>
                     </p:column>
 
-                    <p:column headerText="Firma" width="400">
+                    <p:column headerText="Firma">
                         <h:outputText value="#{personaFirma.firma.nombre}" />
                     </p:column>
                 </p:dataTable>
@@ -117,27 +115,27 @@
                     <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                         <h:outputText value="#{rowIndex+1}"/>
                     </p:column>                    
-                    <p:column headerText="Tema" width="500">
+                    <p:column headerText="Tema">
                         <p:commandLink value="#{pasantia.tema}" action="#{gestorNavegacion.cargarPagina(5, pasantia.id)}" />
                     </p:column>
-                    <p:column headerText="# Horas" width="100">
+                    <p:column headerText="# Horas" width="60">
                         <h:outputText value="#{pasantia.numeroHoras}" />
                     </p:column>                
-                    <p:column headerText="Inicio" width="150">
+                    <p:column headerText="Inicio" width="75">
                         <h:outputText value="#{pasantia.fechaInicio}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Finalización" width="150">
+                    <p:column headerText="Finalización" width="75">
                         <h:outputText value="#{pasantia.fechaFin}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Cordinador">
+                    <p:column headerText="Cordinador" width="200">
                         <h:outputText value="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" />
                     </p:column>
 
-                    <p:column headerText="Universidad" width="150">
+                    <p:column headerText="Universidad" width="200">
                         <p:outputLabel value="#{pasantia.universidad.nombre}"/>
                         <p:outputLabel value=" #{pasantia.facultad}"/>
                         <p:outputLabel value=" #{pasantia.escuela}"/>
@@ -155,24 +153,24 @@
                     <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                         <h:outputText value="#{rowIndex+1}"/>
                     </p:column>
-                    <p:column headerText="Título" width="500">
+                    <p:column headerText="Título" >
                         <p:commandLink  value="#{tesis.nombre}" action="#{gestorNavegacion.cargarPagina(8, tesis.id)}"/>                                                  
                     </p:column>     
-                    <p:column headerText="Fecha Inicio" width="150">
+                    <p:column headerText="Fecha Inicio" width="75">
                         <h:outputText value="#{tesis.fechaInicio}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Director">
+                    <p:column headerText="Director" width="160">
                         <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
                     </p:column>
 
-                    <p:column headerText="Universidad" width="150">
+                    <p:column headerText="Universidad" width="200">
                         <p:outputLabel value="#{tesis.universidad.nombre}"/>
                         <p:outputLabel value=" #{tesis.facultad}"/>
                         <p:outputLabel value=" #{tesis.escuela}"/>
                     </p:column>
-                    <p:column headerText="Observaciones">
+                    <p:column headerText="Observaciones" width="160">
                         <h:outputText value="#{tesis.observaciones}" />
                     </p:column>
 
@@ -190,10 +188,10 @@
                     <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                         <h:outputText value="#{rowIndex+1}"/>
                     </p:column>                    
-                    <p:column headerText="Título" width="400">
+                    <p:column headerText="Título" >
                         <p:commandLink value="#{perarticulo.articulo.nombre}" action="#{gestorNavegacion.cargarPagina(1, perarticulo.articulo.id)}"/>
                     </p:column>
-                    <p:column headerText="Autor #" width="70">
+                    <p:column headerText="Autor #" width="50">
                         <h:outputText value="#{perarticulo.orden}" />
                         <h:panelGroup rendered="#{perarticulo.orden == 1}">
                             <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
@@ -204,7 +202,7 @@
                         <h:outputText value="#{perarticulo.personaFirma.firma.nombre}" />
                     </p:column>
 
-                    <p:column headerText="Tipo" width="100">
+                    <p:column headerText="Tipo" width="80">
                         <h:outputText value="#{label['articulo.tipo.' += perarticulo.articulo.tipo]}" />
                     </p:column>                                
 
@@ -228,8 +226,7 @@
                         <p:commandLink ajax="false" rendered="#{perarticulo.articulo.archivoBibtex != ''}" title="Descargar bibtex">
                             <p:graphicImage name="images/bibtex-icon.png" width="20"/>
                             <p:fileDownload value="#{gestorArticulo.streamParaDescargaBibtex(perarticulo.articulo)}"/>
-                        </p:commandLink>                
-
+                        </p:commandLink>
                     </p:column>
 
 
@@ -260,13 +257,13 @@
                         </ui:repeat>
                     </p:column>
 
-                    <p:column headerText="Inicio Contrato" width="100">
+                    <p:column headerText="Inicio Contrato" width="75">
                         <h:outputText value="#{contrato.fechaInicio}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Finalización Contrato" width="100">
+                    <p:column headerText="Finalización Contrato" width="75">
                         <h:outputText value="#{contrato.fechaFin}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>

@@ -5,8 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <p:menu toggleable="true" style="width: 99%">
-        <p:submenu label="Listado">
+    <p:menu toggleable="true" >
+        <p:submenu label="Listados:">
             <p:menuitem value="Personal"  action="#{gestorNavegacion.cargarPagina(6, null)}" icon="fa fa-list" update="formContenido"/>
             <p:menuitem value="Proyectos" action="#{gestorNavegacion.cargarPagina(7, null)}" icon="fa fa-list" update="formContenido"/>
             <p:menuitem value="Contratos" rendered="#{gestorUsuario.puedeVerMasInfo}" action="#{gestorNavegacion.cargarPagina(2, null)}" icon="fa fa-list" update="formContenido"/>
@@ -16,7 +16,7 @@
             <p:menuitem value="Pasantías" action="#{gestorNavegacion.cargarPagina(5, null)}" icon="fa fa-list" update="formContenido"/>
             <p:menuitem value="Instituciones" action="#{gestorNavegacion.cargarPagina(4, null)}" icon="fa fa-list" update="formContenido"/>
         </p:submenu>
-        <p:submenu label="Nuevo" rendered="#{gestorUsuario.puedeAgregar}">
+        <p:submenu label="Nuevo:" rendered="#{gestorUsuario.puedeAgregar}">
             <p:menuitem value="Persona" action="#{gestorPersona.initCrearPersona()}" icon="fa fa-plus" update="formContenido"/>
             <p:menuitem value="Proyecto" action="#{gestorProyecto.initCrearProyecto()}" icon="fa fa-plus" update="formContenido"/>
             <p:menuitem value="Contrato" action="#{gestorContrato.initCrearContrato()}" icon="fa fa-plus" update="formContenido"/>
@@ -26,18 +26,22 @@
             <p:menuitem value="Pasantía" action="#{gestorPasantia.initCrearPasantia()}" icon="fa fa-plus" update="formContenido"/>
         </p:submenu>
     </p:menu>
-    <p:panel style="margin-top: 15px;" >
-        <h:panelGroup layout="block" rendered="#{gestorUsuario.logeado}">
-            <p:outputLabel value="Sesión iniciada como: #{gestorUsuario.usuarioActual.usuario}"/>
+    <p:panel>
+        <h:panelGroup layout="block" rendered="#{gestorUsuario.logeado}" >
+            <p:outputLabel value="Usuario:" />
+            <br/>
+            <p:outputLabel value="#{gestorUsuario.usuarioActual.usuario}" />
             <br/>
             <p:commandButton value="Cerrar sesión" action="#{gestorUsuario.logout()}" update="formMenu formContenido"/>
         </h:panelGroup>
-        <h:panelGrid columns="1" rendered="#{!gestorUsuario.logeado}">
+        <h:panelGrid columns="1" rendered="#{!gestorUsuario.logeado}" >
             <p:outputLabel value="Usuario"/>
-            <p:inputText id="txtUser" value="#{gestorUsuario.usuario}" size="12" maxlength="50"/>
+            <p:inputText id="txtUser" value="#{gestorUsuario.usuario}" size="12" maxlength="50"
+                         style="width: 80px"/>
             <p:outputLabel value="Contraseña"/>
-            <p:password id="txtPass" widgetVar="pass" value="#{gestorUsuario.password}" size="12" maxlength="255"/>
+            <p:password id="txtPass" widgetVar="pass" value="#{gestorUsuario.password}" size="12" maxlength="255"
+                        style="width: 80px"/>
             <p:commandButton value="Login" action="#{gestorUsuario.login()}" update="formMenu formContenido"/>
-        </h:panelGrid>
+        </h:panelGrid>       
     </p:panel>   
 </ui:composition>

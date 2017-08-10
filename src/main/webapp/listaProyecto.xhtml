@@ -6,10 +6,11 @@
                 xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="./template.xhtml">
     <ui:define name="body">
-        <p:dataTable widgetVar="proyectoTable" id="proyectoTable" var="proyecto" value="#{gestorProyecto.listaProyecto}" rows="10"
+        <p:dataTable widgetVar="proyectoTable" id="proyectoTable" var="proyecto" value="#{gestorProyecto.listaProyecto}"                 
+                     rows="10"
                      paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
+                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"                     
                      >
 
             <f:facet name="{Exporters}">
@@ -39,7 +40,7 @@
                 <h:outputText value="#{proyecto.titulo}" />
             </p:column>
 
-            <p:column headerText="Fecha de Inicio" width="100" sortBy="#{proyecto.fechaInicio}">
+            <p:column headerText="Fecha de Inicio" width="75" sortBy="#{proyecto.fechaInicio}">
                 <f:facet name="header">  
                     <h:outputText value="Fecha Inicio"/>  
                 </f:facet>
@@ -49,9 +50,9 @@
             </p:column>
 
 
-            <p:column headerText="Fecha de Finalización" width="150" sortBy="#{proyecto.fechaFin}"> 
+            <p:column headerText="Fecha de Finalización" width="75" sortBy="#{proyecto.fechaFin}"> 
                 <f:facet name="header">  
-                    <h:outputText value="Fecha de Finalización"/>  
+                    <h:outputText value="Fecha Finalización"/>  
                 </f:facet>                
                 <h:outputText value="#{proyecto.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
@@ -91,7 +92,7 @@
                 <h:outputText value="#{proyecto.observaciones}" />
             </p:column>
             
-            <p:column headerText="Nickname" width="200" filterBy="#{proyecto.nickname}" filterMatchMode="contains" sortBy="#{proyecto.nickname}">
+            <p:column headerText="Nickname" width="105" filterBy="#{proyecto.nickname}" filterMatchMode="contains" sortBy="#{proyecto.nickname}">
                 <f:facet name="header">  
                     <h:outputText value="Nickname"/>  
                 </f:facet>

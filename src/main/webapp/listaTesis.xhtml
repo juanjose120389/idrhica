@@ -61,13 +61,13 @@
                 <p:outputLabel value="#{gestorPersona.convertirListaPersonas(tesis.codirectoresCollection)}" escape="false"/>
             </p:column>            
 
-            <p:column headerText="Fecha de Inicio" width="100" sortBy="#{tesis.fechaInicio}">
+            <p:column headerText="Fecha de Inicio" width="75" sortBy="#{tesis.fechaInicio}">
                 <h:outputText value="#{tesis.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
 
-            <p:column headerText="Fecha de Finalización" width="100" sortBy="#{tesis.fechaFin}">
+            <p:column headerText="Fecha de Finalización" width="75" sortBy="#{tesis.fechaFin}">
                 <h:outputText value="#{tesis.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>

@@ -1,19 +1,19 @@
 body {
-	margin:0;
-	padding:0;
-	border:0;			/* This removes the border around the viewport in old versions of IE */
-	width:100%;
-	background:#fff;
-	min-width:600px;    	/* Minimum width of layout - remove line if not required */
-					/* The min-width property does not work in old versions of Internet Explorer */
-	font-size:90%;
+    margin:0;
+    padding:0;
+    border:0;			/* This removes the border around the viewport in old versions of IE */
+    width:100%;
+    background:#fff;
+    min-width:600px;    	/* Minimum width of layout - remove line if not required */
+    /* The min-width property does not work in old versions of Internet Explorer */
+    font-size: 0.8em;
 }
 
 /* Header styles */
 #header {
-	clear:both;
-	float:left;
-	width:100%;
+    clear:both;
+    float:left;
+    width:100%;
 }
 #header {
 
@@ -21,79 +21,73 @@ body {
 #header p,
 #header h1,
 #header h2 {
-	padding:.4em 15px 0 15px;
-	margin:0;
+    padding:.4em 15px 0 15px;
+    margin:0;
 }
+
 /* 'widths' sub menu */
-#layoutdims {
-	clear:both;
-	background:#eee;
-	border-top:4px solid #000;
-	margin:0;
-	padding:6px 15px !important;
-	text-align:right;
-}
+/*#layoutdims {
+        clear:both;
+        background:#eee;
+        border-top:4px solid #000;
+        margin:0;
+        padding:6px 15px !important;
+        text-align:right;
+}*/
+
 #wrapper {
     min-height: 100%;
 }
 /* column container */
 .colmask {    
-	position:relative;	/* This fixes the IE7 overflow hidden bug */
-	clear:both;
-	float:left;
-	width:100%;			/* width of whole page */
-	overflow:hidden;		/* This chops off any overhanging divs */
-        height: auto;
-        
+    position:relative;	/* This fixes the IE7 overflow hidden bug */
+    clear:both;
+    float:left;
+    width:100%;			/* width of whole page */
+    /*overflow:hidden;*/		/* This chops off any overhanging divs */
+    height: auto;
+
+    background: burlywood;
 }
-/* common column settings */
-.colright,
-.colmid,
-.colleft {
-	float:left;
-	width:100%;
-	position:relative;
-}
+
 .col1,
-.col2,
-.col3 {
-	float:left;
-	position:relative;
-	padding:5px 0 1em 0;
-	overflow:hidden;
+.col2{
+    float:left;
+    position:relative;
+    padding:0.5em 0 1em 0;
+    /*overflow:hidden;*/
 }
-/* 2 Column (left menu) settings */
-.leftmenu {
-	/*background:#fff;*/		/* right column background colour */
-}
-.leftmenu .colleft {
-	right:88%;			/* right column width */
-	/*background:#f4f4f4;*/	/* left column background colour */
-}
+
+
 .leftmenu .col1 {
-	width:86%;			/* right column content width */
-	left:100%;			/* 100% plus left column left padding */
+    width:80%;			/* right column content width */
+    left:20%;			/* 100% plus left column left padding */
+    background-color: aliceblue;
 }
 .leftmenu .col2 {
-	width:10%;			/* left column content width (column width minus left and right padding) */
-	left:3%;			/* (right column left and right padding) plus (left column left padding) */
+    width:20%;			/* left column content width (column width minus left and right padding) */
+    left:-80%;			/* (right column left and right padding) plus (left column left padding) */
+    overflow: hidden;
+    max-width: 140px;
 }
+
 .footer, .push {
-	height: 30px; /* .push must be the same height as .footer */
-        clear: both;
+    height: 30px; /* .push must be the same height as .footer */
+    clear: both;
 }
 /* Footer styles */
+
 #footer {
-	clear:both;
-	float:left;
-	width:100%;
-        background: #003580 none repeat scroll 0 0; 
-        color: white;
-        font-size: 0.9em;
+    clear:both;
+    float:left;
+    width:100%;
+    background: #003580 none repeat scroll 0 0; 
+    color: white;
+    font-size: 0.9em;
 }
 #footer p {
-	padding:10px;
-	margin-top:-30px;
+    padding:10px;
+    margin-top:-30px;
 }
 
 

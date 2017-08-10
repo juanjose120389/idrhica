@@ -76,20 +76,20 @@
                         <p:commandLink value="#{convenio.titulo}" action="#{gestorNavegacion.cargarPagina(3, convenio.id)}" />
                     </p:column>
 
-                    <p:column headerText="Proyectos vinculados" width="300" >
-                        <ul style="width: 220px; font-size: 13px">                       
+                    <p:column headerText="Proyectos vinculados" width="400" >
+                        <ul style="width: 400px; font-size: 13px">                       
                             <ui:repeat value="#{convenio.proyectosCollection.toArray()}" var="proyecto">
                                 <li><p:commandLink value="#{gestorProyecto.acortarTitulo(proyecto)}" action="#{gestorNavegacion.cargarPagina(7, proyecto.id)}"/></li>
                             </ui:repeat>
                         </ul>
                     </p:column>
 
-                    <p:column headerText="Fecha Inicio" width="50" >
+                    <p:column headerText="Fecha Inicio" width="75" >
                         <h:outputText value="#{convenio.fechaInicio}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Fecha Fin" width="50" >
+                    <p:column headerText="Fecha Fin" width="75" >
                         <h:outputText value="#{convenio.fechaFin}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
@@ -121,15 +121,17 @@
                         <h:outputText value="#{articulo.revista}" />
                     </p:column>                
 
-                    <p:column headerText="Año" width="100">
+                    <p:column headerText="Año" width="50">
                         <h:outputText value="#{articulo.anioPublicacion}" />
                     </p:column>                
 
-                    <p:column headerText="Enlace">
-                        <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" target="_blank"/>
+                    <p:column headerText="Enlace" width="130">
+                        <p:link value="#{articulo.enlace}" href="#{gestorArticulo.corregirUrl(articulo.enlace)}" 
+                                target="_blank" 
+                                style="font-size: 12px;"/>
                     </p:column>
 
-                    <p:column headerText="" exportable="false" width="150">
+                    <p:column headerText="" exportable="false" width="20">
                         <p:commandLink value="Descargar" ajax="false" rendered="#{articulo.archivoArticulo != ''}">
                             <p:fileDownload value="#{gestorArticulo.streamParaDescarga(articulo)}" />
                         </p:commandLink>
@@ -154,7 +156,7 @@
                         <p:commandLink value="#{tesis.nombre}" action="#{gestorNavegacion.cargarPagina(8, tesis.id)}" />
                     </p:column>     
                     
-                    <p:column headerText="Fecha Inicio" width="50">
+                    <p:column headerText="Fecha Inicio" width="75">
                         <h:outputText value="#{tesis.fechaInicio}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
@@ -196,12 +198,12 @@
                     <p:column headerText="# Horas" width="50">
                         <h:outputText value="#{pasantia.numeroHoras}" />
                     </p:column>                
-                    <p:column headerText="Inicio" width="50">
+                    <p:column headerText="Inicio" width="75">
                         <h:outputText value="#{pasantia.fechaInicio}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Finalización" width="50">
+                    <p:column headerText="Finalización" width="75">
                         <h:outputText value="#{pasantia.fechaFin}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>

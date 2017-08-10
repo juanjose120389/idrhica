@@ -43,7 +43,7 @@
             <f:convertDateTime pattern="dd/MM/yyyy" />
         </p:outputLabel>
 
-        <h:panelGroup layout="block" style="width: 150px">
+        <h:panelGroup layout="block" style="width: 75px">
             <p:outputLabel value="Fecha de Finalización (Documento)"/>
         </h:panelGroup>
         <p:outputLabel value="#{gestorProyecto.proyecto.fechaFinEnDocumento}">
@@ -147,7 +147,7 @@
                 </h:panelGroup>
             </p:column>                
 
-            <p:column headerText="Finalización" width="50">
+            <p:column headerText="Finalización" width="75">
                 <h:outputText value="#{contrato.fechaFin}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -181,7 +181,7 @@
                 </h:panelGroup>
             </p:column>
 
-            <p:column headerText="Fecha finalización" width="50">
+            <p:column headerText="Fecha finalización" width="75">
                 <h:outputText value="#{convenio.fechaFin}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -237,7 +237,7 @@
                 <p:commandLink value="#{tesis.nombre}" action="#{gestorNavegacion.cargarPagina(8, tesis.id)}" />
             </p:column>     
             
-            <p:column headerText="Fecha Inicio" width="50">
+            <p:column headerText="Fecha Inicio" width="75">
                 <h:outputText value="#{tesis.fechaInicio}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -279,12 +279,12 @@
             <p:column headerText="# Horas" width="50">
                 <h:outputText value="#{pasantia.numeroHoras}" />
             </p:column>                
-            <p:column headerText="Inicio" width="50">
+            <p:column headerText="Inicio" width="75">
                 <h:outputText value="#{pasantia.fechaInicio}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Finalización" width="50">
+            <p:column headerText="Finalización" width="75">
                 <h:outputText value="#{pasantia.fechaFin}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>

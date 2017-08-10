@@ -39,13 +39,13 @@
                 <p:outputLabel value="#{pasantia.pasante.nombres} #{pasantia.pasante.apellidos}"/>
             </p:column>            
 
-            <p:column headerText="Fecha Inicio" width="100" sortBy="#{pasantia.fechaInicio}">
+            <p:column headerText="Fecha Inicio" width="75" sortBy="#{pasantia.fechaInicio}">
                 <h:outputText value="#{pasantia.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
             </p:column>
 
-            <p:column headerText="Fecha Finalización" width="100" sortBy="#{pasantia.fechaFin}">
+            <p:column headerText="Fecha Finalización" width="75" sortBy="#{pasantia.fechaFin}">
                 <h:outputText value="#{pasantia.fechaFin}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>

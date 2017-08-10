@@ -56,15 +56,17 @@
                         <h:outputText value="#{persona.apellidos}" />
                     </p:column>
 
-                    <p:column exportable="false" filterBy="#{persona.tipo}" headerText="Tipo" width="120"
-                              filterFunction="#{gestorPersona.filtrarPorTipo}" sortBy="#{persona.tipo}">
+                    <p:column exportable="false" filterBy="#{persona.tipo}" headerText="Tipo" width="110"
+                              filterFunction="#{gestorPersona.filtrarPorTipo}" sortBy="#{persona.tipo}"
+                              >
                         <f:facet name="filter">
-                            <p:selectOneMenu id="cmbTipoPersona" style="width: 90px" onchange="PF('personasTable').filter()" >
+                            <p:selectOneMenu id="cmbTipoPersona" style="width: 80px" onchange="PF('personasTable').filter()" >
                                 <f:selectItem itemLabel="Seleccionar" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{gestorPersona.tiposPersona}" var="tipo" itemLabel="#{label['persona.tipo.' += tipo]}" itemValue="#{tipo}"/>
                             </p:selectOneMenu>
                         </f:facet>
-                        <h:outputText rendered="#{not empty persona.tipo}" value="#{label['persona.tipo.' += persona.tipo]}"/>
+                        <h:outputText rendered="#{not empty persona.tipo}"                                      
+                                      value="#{label['persona.tipo.' += persona.tipo]}" />
                     </p:column>
                     
                     <p:column exportable="false" filterBy="#{persona.gradoAcademico}" headerText="Grado Académico" width="120"
@@ -78,7 +80,8 @@
                         <h:outputText rendered="#{not empty persona.gradoAcademico}" value="#{label['persona.gradoAcademico.' += persona.gradoAcademico]}"/>
                     </p:column>
 
-                    <p:column width="90" filterBy="#{persona.activo}" filterMatchMode="exact">
+                    <p:column width="90" filterBy="#{persona.activo}" filterMatchMode="exact"
+                              style="text-align: center" >
                         <f:facet name="header">
                             <p:outputLabel id="lblEstado" value="Estado"/>
 
@@ -96,15 +99,16 @@
                         <h:outputText value="#{persona.activo == true ? 'Activo' : persona.activo == false ? 'Inactivo' : 'Externo'}" />
                     </p:column>
 
-                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="Correo" filterBy="#{persona.correo}" filterMatchMode="contains">
+                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="Correo" 
+                              filterBy="#{persona.correo}" filterMatchMode="contains">
                         <f:facet name="header">  
                             Correo
                         </f:facet>                
 
-                        <h:outputText value="#{persona.correo}" />
+                        <h:outputText value="#{persona.correo}" style="font-size: 12px"/>
                     </p:column>
 
-                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" width="90">
+                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" width="90" style="text-align: center">
                         <f:facet name="header">
                             Fecha de Nacimiento
                             <h:panelGroup layout="block" style="display: block;  width: 100%; margin: auto;" rendered="false">
@@ -127,7 +131,8 @@
 
                     </p:column>
 
-                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="" exportable="false">
+                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="" exportable="false" width="80" 
+                              style="text-align: center">
                         <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(6, persona.id)}"/>
                         <p:outputLabel value=" "/>
                         <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
@@ -141,6 +146,7 @@
                              paginator="true" emptyMessage="#{label.emptyMessage}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                              rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
+                             style="width: wrap-content"
                              >
                     <f:facet name="{Exporters}">
                         <h:panelGroup layout="block" styleClass="exportButtons">
@@ -159,14 +165,18 @@
                     <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                         <h:outputText value="#{rowIndex+1}"/>
                     </p:column>
-                    <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
+                    <p:column headerText="Nombres" filterBy="#{persona.nombres}" 
+                              filterMatchMode="contains" sortBy="#{persona.nombres}"
+                              width="150px">
                         <f:facet name="header">  
                             Nombres
                         </f:facet>                
                         <h:outputText value="#{persona.nombres}" />
                     </p:column>
 
-                    <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains" sortBy="#{persona.apellidos}">
+                    <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" 
+                              filterMatchMode="contains" sortBy="#{persona.apellidos}"
+                              width="150px">
                         <f:facet name="header">  
                             Apellidos
                         </f:facet>                
@@ -174,7 +184,9 @@
                         <h:outputText value="#{persona.apellidos}" />
                     </p:column>
 
-                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="Correo" filterBy="#{persona.correo}" filterMatchMode="contains">
+                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="Correo" 
+                              filterBy="#{persona.correo}" filterMatchMode="contains"
+                              width="120px">
                         <f:facet name="header">  
                             Correo
                         </f:facet>                
@@ -205,7 +217,7 @@
 
                     </p:column>
 
-                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="" exportable="false">
+                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="" exportable="false" width="80">
                         <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(6, persona.id)}"/>
                         <p:outputLabel value=" "/>
                         <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
