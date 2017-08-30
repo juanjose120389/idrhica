@@ -14,6 +14,7 @@ body {
     clear:both;
     float:left;
     width:100%;
+    min-width: 960px;
 }
 #header {
 
@@ -44,50 +45,79 @@ body {
     clear:both;
     float:left;
     width:100%;			/* width of whole page */
-    /*overflow:hidden;*/		/* This chops off any overhanging divs */
-    height: auto;
 
+
+    overflow:hidden;		/* This chops off any overhanging divs */
+    height: auto;
     background: burlywood;
 }
 
+.leftmenu {
+    background:#fff;		/* right column background colour */
+}
+
+.leftmenu .colright {
+    float:left;
+    width:170%;
+    position:relative;
+    left:140px;
+    background:#fff;
+}
+.leftmenu .col1wrap {
+    float:right;
+    width:50%;
+    position:relative;
+    right:140px;
+    padding-bottom:1em;
+}
+
+.leftmenu .col1 {
+    margin:0 15px 0 155px;
+    position:relative;
+    
+    right:100%;
+    overflow:hidden;
+    background-color: aliceblue;
+}
+.leftmenu .col2 {
+    float:left;
+    width:110px;
+    position:relative;
+    right:125px;
+}
+
+.col1 {
+    width:100%;
+}
+
+/*
 .col1,
 .col2{
     float:left;
     position:relative;
     padding:0.5em 0 1em 0;
-    /*overflow:hidden;*/
-}
+
+  
+}*/
 
 
-.leftmenu .col1 {
-    width:80%;			/* right column content width */
-    left:20%;			/* 100% plus left column left padding */
-    background-color: aliceblue;
-}
-.leftmenu .col2 {
-    width:20%;			/* left column content width (column width minus left and right padding) */
-    left:-80%;			/* (right column left and right padding) plus (left column left padding) */
-    overflow: hidden;
-    max-width: 140px;
-}
+
+
 
 .footer, .push {
-    height: 30px; /* .push must be the same height as .footer */
+    height: 35px; /* .push must be the same height as .footer */
     clear: both;
 }
 /* Footer styles */
 
 #footer {
-    clear:both;
-    float:left;
-    width:100%;
+
     background: #003580 none repeat scroll 0 0; 
-    color: white;
-    font-size: 0.9em;
+
 }
 #footer p {
-    padding:10px;
-    margin-top:-30px;
+    padding:5px;
+    margin-top:-35px;
 }
 
 

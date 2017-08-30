@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="metadata"></ui:define>
+    <h:head>
+        <title><ui:insert name="title">Sistema iDRHiCA Manejo Personal</ui:insert></title>
+        <h:outputStylesheet library="css" name="layout.css"/>
+        <h:outputStylesheet library="css" name="screen.css"/>
+        <h:outputScript library="js" name="locale.js"/>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="3000" />
+
+        <h:form id="formIdle">
+            <p:idleMonitor timeout="3600000"><!--- 1800000 (30 min) -->
+                <p:ajax event="idle" listener="#{gestorGeneral.onIdle()}" />
+                <p:ajax event="active" listener="#{gestorGeneral.mantenerSesion()}" />
+            </p:idleMonitor>
+        </h:form>
+
+
+
+        <p:layout fullPage="true">
+
+            <p:layoutUnit id="header" position="north" size="100">
+                <p:graphicImage name="images/logo_universidad-01.png" style="vertical-align: middle; padding: 0px;"/>            
+                <p:outputLabel style="font-size: 1.8em; margin-left: 20px;" value="Departamento de Recursos Hídricos y Ciencias Ambientales"/>
+            </p:layoutUnit>
+
+            <p:layoutUnit id="footer" position="south" size="35">
+                <ui:include src="./footer.xhtml"/>
+            </p:layoutUnit>
+
+            <p:layoutUnit id="lMenu" position="west" size="145" header="Opciones:" collapsible="true">
+                <h:form id="formMenu">
+                    <ui:include src="./menu.xhtml"/>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit id="lContenido" position="center">
+                <h:form id="formContenido">
+                    <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
+                    <ui:insert name="body"/>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+
+</html>

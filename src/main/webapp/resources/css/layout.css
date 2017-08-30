@@ -79,6 +79,44 @@ and open the template in the editor.
     max-width: 140px;    
 }
 
+#footer .ui-widget-content{
+    clear:both;
+    float:left;
+    width:100%;
+    background: #003580 none repeat scroll 0 0; 
+    color: white;
+    font-size: 0.9em;
+}
+
+#header{    
+    border: 0px;
+}
+
+#lContenido{    
+    padding: 0px;
+}
+
+.ui-layout-unit-content .ui-widget-content{
+    padding: 0px;
+}
+
+#header-resizer{
+    top: 82px !important;
+}
+
+#lMenu-resizer{
+    top: 88px !important;
+}
+
+#lMenu, #lContenido{
+    /*top: 106px;*/ 
+    top: 88px !important;
+    height: auto!important;
+}
+
+
+
+
 
 
 
