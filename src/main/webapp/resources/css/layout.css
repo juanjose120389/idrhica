@@ -19,10 +19,12 @@ and open the template in the editor.
 .labelscol2 {
     width: 135px;
 }
+
 .labelscol {
     vertical-align: top;
     font-weight: bold;
 }
+
 .inputscol {
     padding-left: 15px;
 }
@@ -31,6 +33,7 @@ and open the template in the editor.
 .exportButtons {
     text-align: right; margin-top: -26px;
 }
+
 .ui-widget-overlay {
     opacity: 0.3 !important;
 }
@@ -39,6 +42,7 @@ and open the template in the editor.
     content: " * ";
     color: red;    
 }
+
 .columnaOculta {
     display: none; 
     width: 1px !important; 
@@ -48,6 +52,7 @@ and open the template in the editor.
 .tamanoArchivo {
     font-size: 0.9em;
 }
+
 .buttonset > div > span {
     padding-left: 0.5em !important;
     padding-right: 0.5em !important;
@@ -70,13 +75,20 @@ and open the template in the editor.
     padding: 0.2em !important;   
 }
 
+#formMenu .ui-panel{
+    margin-top: 8px;
+}
+
 .ui-panel {
-    min-width: 120px !important;
-    padding: 0.2em;
-    margin-top: 8px; 
+    padding: 0.2em !important;  
+    min-width: 120px !important;  
+    
     border: 1px solid rgba(0, 0, 0, 0.2) !important;
-    border-radius: 6px;
-    max-width: 140px;    
+    border-radius: 6px;      
+}
+
+#formContenido .ui-panel{
+    margin-top: -5px;             
 }
 
 #footer .ui-widget-content{

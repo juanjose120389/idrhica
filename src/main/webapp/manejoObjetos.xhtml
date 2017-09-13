@@ -43,294 +43,211 @@
                 display: inline-block;
             }
         </style>
-        <h:panelGroup layout="block" id="divDialogs">
-            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" rendered="#{gestorPersona.mostrarDlgUniversidad}" resizable="false" modal="true" width="400">
-                <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgUniversidad()}" />
-                <h:panelGroup layout="block" id="divDlgUniversidad">
-                    <h:panelGrid id="panelCamposUniversidad" columns="3">
-                        <p:outputLabel value="Nombre">
-                            <span class="asterisk"/>
-                        </p:outputLabel>
-                        <p:inputText styleClass="inputEnDlg" id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.nombre}"/>
-                        <p:message for="txtNombreUniversidad"/>                                
 
-                        <p:outputLabel value="País"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtPaisUniversidad" value="#{gestorPersona.universidad.pais}"/>
-                        <p:message for="txtPaisUniversidad"/>
-
-                        <p:outputLabel value="Ciudad"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtCiudadUniversidad" value="#{gestorPersona.universidad.ciudad}"/>
-                        <p:message for="txtCiudadUniversidad"/>
-
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgUniversidad" update="dtTitulos divDlgUniversidad" action="#{gestorPersona.guardarUniversidad()}"/>
-                        <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
-                    </h:panelGrid>            
-                </h:panelGroup>
-            </p:dialog>  
-
-            <p:dialog id="dlgTitulo" header="Título" widgetVar="dlgTitulo" resizable="false" modal="true" width="400" rendered="#{gestorPersona.mostrarDlgTitulo}">
-                <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgTitulo()}" />
-                <h:panelGroup id="divDlgTitulo" layout="block">
-                    <h:panelGrid id="panelCamposTitulo" columns="3">
-                        <p:outputLabel value="Nombre"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtNombreTitulo" required="true" requiredMessage="Requerido" value="#{gestorPersona.titulo.nombre}"/>
-                        <p:message for="txtNombreTitulo"/>
-
-                        <p:outputLabel value="Nivel"/>
-                        <p:spinner id="spnNivel" min="1" max="5" size="2" required="true" requiredMessage="Requerido" value="#{gestorPersona.titulo.nivel}"/>
-                        <p:message for="spnNivel"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgTitulo" update="dtTitulos divDlgTitulo" action="#{gestorPersona.guardarTitulo()}" />
-                        <p:commandButton value="Cancelar" onclick="PF('dlgTitulo').hide();"/>
-                    </h:panelGrid>
-                </h:panelGroup>
-            </p:dialog>  
-        </h:panelGroup>
-
-        <p:panel header="#{gestorPersona.modoModificar?'Modificar':'Nueva'} Persona">
+        <p:panel header="#{gestorPersona.modoModificar?'Modificar':'Nuevo'} Objeto">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
             <h:panelGrid columns="3" width="100%" columnClasses="labelscol2,inputscol,tipscol">
-                <h:panelGroup layout="block" style="width: 135px">
-                    <p:outputLabel value="Cédula/Pasaporte">
+                <h:panelGroup layout="block" style="width: 
+                              px">
+                    <p:outputLabel value="ID Interno">
                         <span class="asterisk"/>
                     </p:outputLabel>
                 </h:panelGroup>
                 <h:panelGroup>
-                    <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.identificacion}"/>  
+                    <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" />  
                     <p:message for="txtIdentificacion"/>
-                </h:panelGroup>
-                <h:panelGroup/>
+                </h:panelGroup>               
 
-                <p:outputLabel value="Nombres">
-                    <span class="asterisk"/>
-                </p:outputLabel>
                 <h:panelGroup>
-                    <p:inputText id="txtNombres" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.nombres}" maxlength="255"/>  
-                    <p:message for="txtNombres"/>
+                    <p:outputLabel value="Serie"/>               
                 </h:panelGroup>
-                <h:panelGroup/>
-
-                <p:outputLabel value="Apellidos">
-                    <span class="asterisk"/>
-                </p:outputLabel>
                 <h:panelGroup>
-                    <p:inputText id="txtApellidos" requiredMessage="Requerido" required="true" value="#{gestorPersona.persona.apellidos}" maxlength="255"/>  
-                    <p:message for="txtApellidos"/>
+                    <p:inputText id="txtSerie" maxlength="255"/>  
+                    <p:message for="txtSerie"/>
                 </h:panelGroup>
-                <h:panelGroup/>
-
-                <p:outputLabel value="Dirección"/>
-                <p:inputTextarea rows="2" value="#{gestorPersona.persona.direccion}" maxlength="1024"/>  
-                <h:panelGroup layout="block"/> 
-
-                <p:outputLabel value="Fecha nacimiento"/>
-                <p:calendar pattern="dd/MM/yyyy" maxdate="#{gestorPersona.fechaActual}" value="#{gestorPersona.persona.fechaNacimiento}"/>  
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Descripción"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtDescripcion" maxlength="255"/>  
+                    <p:message for="txtDescripcion"/>
+                </h:panelGroup>
+                                
+                <h:panelGroup>
+                    <p:outputLabel value="Ubicación"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtUbicacion" maxlength="255"/>  
+                    <p:message for="txtUbicacion"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Marca"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtMarca" maxlength="255"/>  
+                    <p:message for="txtMarca"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Modelo"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtModelo" maxlength="255"/>  
+                    <p:message for="txtModelo"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Dimensiones"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtDimensiones" maxlength="255"/>  
+                    <p:message for="txtDimensiones"/>
+                </h:panelGroup>
+                
+                <p:outputLabel value="Fecha adquirido"/>
+                <p:calendar pattern="dd/MM/yyyy" />  
                 <h:panelGroup layout="block"/>
-
-                <p:outputLabel value="Género"/>
-                <p:selectOneMenu value="#{gestorPersona.persona.genero}"
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Valor 1"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtValor1" maxlength="255"/>  
+                    <p:message for="txtValor1"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Valor 2"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtValor2" maxlength="255"/>  
+                    <p:message for="txtValor2"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Depreciación"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtDepreciacion" maxlength="255"/>  
+                    <p:message for="txtDepreciacion"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Valor Libros"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtValorLibros" maxlength="255"/>  
+                    <p:message for="txtValorLibros"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Vida Útil"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtVidaUtil" maxlength="255"/>  
+                    <p:message for="txtVidaUtil"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Nombre Cuenta Contable"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtNomCuenCont" maxlength="255"/>  
+                    <p:message for="txtNomCuenCont"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Número Cuenta Contable"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtNumCuenCont" maxlength="255"/>  
+                    <p:message for="txtNumCuenCont"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Proceso Compra"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtProcesoCompra" maxlength="255"/>  
+                    <p:message for="txtProcesoCompra"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Número Pedido Proveeduría"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtNumPedProv" maxlength="255"/>  
+                    <p:message for="txtNumPedProv"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Número Factura"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtNumFact" maxlength="255"/>  
+                    <p:message for="txtNumFact"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Observación"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtObservacion" maxlength="255"/>  
+                    <p:message for="txtObservacion"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Ubicación Seguro"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtUbicSeguro" maxlength="255"/>  
+                    <p:message for="txtUbicSeguro"/>
+                </h:panelGroup>
+                
+                <h:panelGroup>
+                    <p:outputLabel value="Garantía"/>               
+                </h:panelGroup>
+                <h:panelGroup>
+                    <p:inputText id="txtGarantia" maxlength="255"/>  
+                    <p:message for="txtGarantia"/>
+                </h:panelGroup>
+                
+                <p:outputLabel value="Categoría"/>
+                <p:selectOneMenu 
                                  required="true" style="width: 150px"
                                  requiredMessage="Requerido"
-                                 id="cboGenero">
-                    <f:selectItem itemLabel="Masculino" itemValue="M"/>
-                    <f:selectItem itemLabel="Femenino" itemValue="F"/>
+                                 id="cboCategoria">
+                    <f:selectItem itemLabel="Categoria 1" itemValue="1"/>
+                    <f:selectItem itemLabel="Categoria 2" itemValue="2"/>
                 </p:selectOneMenu>                        
                 <h:panelGroup layout="block"/>
-
-                <p:outputLabel value="Celular"/>
-                <p:inputText  id="txtCelular" value="#{gestorPersona.persona.celular}" maxlength="10"/>  
+                
+                <p:outputLabel value="Custodio"/>
+                <p:selectOneMenu 
+                                 required="true" style="width: 150px"
+                                 requiredMessage="Requerido"
+                                 id="cboCustodio">
+                    <f:selectItem itemLabel="Custodio 1" itemValue="1"/>
+                    <f:selectItem itemLabel="Custodio 2" itemValue="2"/>
+                </p:selectOneMenu>                        
                 <h:panelGroup layout="block"/>
-
-                <p:outputLabel value="Correo electrónico"/>
-                <h:panelGroup>
-                    <p:inputText id="txtCorreo" value="#{gestorPersona.persona.correo}" validatorMessage="Correo inválido"> 
-                        <f:validateRegex pattern="([\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z])?" />
-                    </p:inputText> 
-                    <p:message for="txtCorreo"/>
-                </h:panelGroup>
-                <h:panelGroup/>
-
-                <p:outputLabel value="Skype"/>
-                <p:inputText value="#{gestorPersona.persona.skype}"/>  
-                <h:panelGroup layout="block"/> 
-
-                <p:outputLabel value="Fecha vinculacion"/>
-                <p:calendar pattern="dd/MM/yyyy" value="#{gestorPersona.persona.fechaVinculacion}"/>  
-                <h:panelGroup layout="block"/> 
-
-                <p:outputLabel value="Tipo" />
-                <p:selectOneMenu value="#{gestorPersona.persona.tipo}" style="width: 150px">
-                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                    <f:selectItems value="#{gestorPersona.tiposPersona}" var="tipo"
-                                   itemValue="#{tipo}" itemLabel="#{label['persona.tipo.' += tipo]}" />
-                    <p:ajax event="change" partialSubmit="true" process="@this" update="divLblEstado divCmbEstado" />
-                </p:selectOneMenu>
-                <h:panelGroup layout="block"/>                
-
-                <p:outputLabel value="Grado Académico" />
-                <p:selectOneMenu value="#{gestorPersona.persona.gradoAcademico}" style="width: 150px">
-                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                    <f:selectItems value="#{gestorPersona.gradosAcademicos}" var="gradoAcademico"
-                                   itemValue="#{gradoAcademico}" itemLabel="#{label['persona.gradoAcademico.' += gradoAcademico]}" />
-                </p:selectOneMenu>
-                <h:panelGroup layout="block"/>                
-
-                <h:panelGroup id="divLblEstado">
-                    <p:outputLabel rendered="#{gestorPersona.persona.tipo != 'EXTERNO'}" value="Estado"/>
-                </h:panelGroup>
-                <h:panelGroup id="divCmbEstado">
-                    <p:selectOneMenu rendered="#{gestorPersona.persona.tipo != 'EXTERNO'}" value="#{gestorPersona.persona.activo}"
-                                     required="true" style="width: 150px"
-                                     requiredMessage="Requerido"
-                                     id="cboActivo">
-                        <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
-                        <f:selectItem itemLabel="No Activo" itemValue="#{false}"/>
-                        <!--f:selectItem itemLabel="Contacto externo" itemValue=""/-->
-                        <p:ajax event="change" partialSubmit="true" process="@this" />
-                    </p:selectOneMenu>
-                </h:panelGroup>
-                <h:panelGroup layout="block"/> 
-
-                <h:panelGroup layout="block"/> 
-                <h:panelGroup layout="block" style="width: 100%"/> 
-                <h:panelGroup layout="block"/>             
-
-
-
-
-
-                <p:outputLabel value="Títulos"/>
-                <h:panelGroup layout="block" id="divTitulos">
-                    <h:panelGroup layout="block" style="height: 20px"/>
-                    <p:dataTable id="dtTitulos" emptyMessage="#{label.emptyMessage}" rowKey="#{personaTitulo.id}" var="personaTitulo" value="#{gestorPersona.listaPersonaTitulos}" 
-                                 editable="true" editMode="cell" widgetVar="cellTitulos">
-
-                        <p:ajax event="cellEdit" listener="#{gestorPersona.onCellEdit}"  />
-
-                        <p:column headerText="Título" width="500">
-                            <p:cellEditor>
-                                <f:facet name="output">
-                                    <h:outputText value="#{personaTitulo.titulo.nombre}" />
-                                </f:facet>
-                                <f:facet name="input">
-
-                                    <h:panelGroup id="divAccionesTitulos" layout="block">
-                                        <p:selectOneMenu rendered="#{not empty gestorGeneral.listaTitulos and not empty gestorPersona.listaTitulosAgregados}" id="cmbTitulo" styleClass="cmbTitulo" value="#{personaTitulo.titulo}" converter="tituloConverter"
-                                                         var="titulo" filter="true" filterMatchMode="contains">
-                                            <f:selectItems value="#{gestorPersona.listaTitulosAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-                                            <f:selectItems value="#{gestorGeneral.listaTitulos}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-
-                                            <p:column>
-                                                <p:outputLabel value="#{titulo.nombre}"/>
-                                            </p:column>
-                                        </p:selectOneMenu>                                
-
-                                        <p:commandLink value="Nuevo título" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirTituloDialog(personaTitulo)}" />
-                                    </h:panelGroup>
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column headerText="Universidad">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{personaTitulo.universidad.nombre}" /></f:facet>
-                                <f:facet name="input">
-
-                                    <h:panelGroup id="divAccionesUniversidad" layout="block">
-
-                                        <p:selectOneMenu id="cmbUniversidad" styleClass="cmbUniversidad" value="#{personaTitulo.universidad}" converter="universidadConverter"
-                                                         var="uni" filter="true" filterMatchMode="contains">
-                                            <f:selectItems value="#{gestorGeneral.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
-                                            <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
-
-                                            <p:column>
-                                                <p:outputLabel value="#{uni.nombre}"/>
-                                            </p:column>
-                                        </p:selectOneMenu>                                
-
-                                        <p:commandLink value="Nueva universidad" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirUniversidadDialog(personaTitulo)}" />
-                                    </h:panelGroup>
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column headerText="Año" width="65">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{personaTitulo.anio}" /></f:facet>
-                                <f:facet name="input">
-                                    <p:spinner max="2099" value="#{personaTitulo.anio}" size="5"/>
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column style="text-align: center" width="32" >
-                            <p:commandButton action="#{gestorPersona.quitarPersonaTitulo(personaTitulo)}" update="dtTitulos" partialSubmit="true" process="@this" icon="ui-icon-close" title="Eliminar"/>
-                        </p:column>
-
-                    </p:dataTable>
-                    <h:panelGroup layout="block" style="padding-top: 5px" >
-                        <p:commandButton value="Agregar" partialSubmit="true" process="divTitulos"  action="#{gestorPersona.agregarTitulo()}" update="divTitulos"/>            
-                    </h:panelGroup>
-                </h:panelGroup>
-                <h:panelGroup layout="block"/> 
-
-
-                <h:panelGroup layout="block">
-                    <p:outputLabel value="Firmas"/>
-                    <h:panelGroup id="helpFirmas" style="margin-left: 5px" styleClass="fa fa-question-circle"/>
-                    <p:tooltip id="toolTipFade" for="helpFirmas" value="Debe indicarse el nombre exactamente como aparece en los artículos publicados. Por ejemplo: Pérez, J." />
-                </h:panelGroup>                
-                <h:panelGroup layout="block" id="divFirmas">
-                    <h:panelGroup layout="block" style="height: 15px"/>
-
-                    <p:dataTable emptyMessage="#{label.emptyMessage}" id="dtFirmas" style="width: 40%" paginator="true" paginatorAlwaysVisible="false" 
-                                 editable="true" editMode="cell" rows="10" var="personafirma" value="#{gestorPersona.listaPersonaFirmas}">
-                        <p:column headerText="Firmas usadas en artículos">
-                            <p:cellEditor>
-                                <f:facet name="output">
-                                    <h:outputText value="#{personafirma.firma.nombre}"/>
-                                </f:facet>
-                                <f:facet name="input">
-                                    <p:inputText style="width: 90%" value="#{personafirma.firma.nombre}"/>
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column style="text-align: center" width="60">
-                            <p:commandButton id="cmdQuitarFirma" action="#{gestorPersona.quitarFirma(personafirma)}" update="dtFirmas" process="@this" icon="fa fa-remove" title="Eliminar"/>
-                        </p:column>                    
-                    </p:dataTable>
-
-                    <h:panelGroup layout="block" style="padding-top: 5px" >
-                        <p:commandButton value="Agregar" partialSubmit="true" process="divFirmas"  action="#{gestorPersona.agregarFirma()}" update="divFirmas"/> 
-                    </h:panelGroup>
-
-                    <h:panelGroup layout="block" style="height: 15px"/>
-                </h:panelGroup>
-                <h:panelGroup layout="block"/> 
-
-                <p:outputLabel value="Observaciones"/>
-                <p:inputTextarea value="#{gestorPersona.persona.observaciones}" rows="4"/>
-                <h:panelGroup layout="block"/> 
-
+                
+                <p:outputLabel value="Proveedor"/>
+                <p:selectOneMenu 
+                                 required="true" style="width: 150px"
+                                 requiredMessage="Requerido"
+                                 id="cboProveedor">
+                    <f:selectItem itemLabel="Proveedor 1" itemValue="1"/>
+                    <f:selectItem itemLabel="Proveedor 2" itemValue="2"/>
+                </p:selectOneMenu>                        
+                <h:panelGroup layout="block"/>
+  
             </h:panelGrid>
-            <h:panelGroup layout="block"/> 
-
-
-            <h:panelGroup layout="block" style="height: 20px"/>
-
-
-            <h:panelGroup layout="block" style="clear: both" id="checksTipoPersona">
-
-            </h:panelGroup>
-
-            <pe:keyFilter for="txtNombres" regEx="/[A-Z áéíóú]/i" preventPaste="false"/>  
-            <pe:keyFilter for="txtApellidos" regEx="/[A-Z áéíóú]/i" preventPaste="false"/> 
-            <pe:keyFilter for="txtCelular" regEx="/[\d\-]/" preventPaste="false"/> 
-
-
+            
         </p:panel>
+        
         <h:panelGroup layout="block" style="height: 15px"/>
 
         <p:commandButton value="Guardar" update="formContenido" action="#{gestorPersona.guardar()}" icon="fa fa-save"/>

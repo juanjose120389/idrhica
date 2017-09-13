@@ -17,7 +17,7 @@ and open the template in the editor.
         <title>Manejo Personal</title>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
 
     </h:head>
     <h:body>
@@ -27,36 +27,22 @@ and open the template in the editor.
                 <p:ajax event="active" listener="#{gestorGeneral.mantenerSesion()}" />
             </p:idleMonitor>
         </h:form>
-        <div id="wrapper">
-            <div id="header">
-                <!-- HEADER -->
-                <p:graphicImage name="images/logo_universidad-01.png" style="vertical-align: middle; padding: 5px;"/>            
-                <p:outputLabel style="font-size: 1.8em; margin-left: 20px;" value="Departamento de Recursos Hídricos y Ciencias Ambientales"/>
-            </div>
-            <div class="colmask leftmenu">       
-                <div class="colright">
-                    <div class="col1wrap">
-                        <div class="col1">
-                            <!-- Column 1 start -->
-                            <h:form id="formContenido">
-                                <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
-                                <ui:insert name="mensaje"/>
-                                <ui:insert name="body"/>
-                            </h:form>
-                            <!-- Column 1 end -->
-                        </div>
 
-                    </div>  
-                    <div class="col2">
-                        <!-- Column 2 start -->
-                        <h:form id="formMenu">
-                            <ui:include src="./menu.xhtml"/>
-                        </h:form>
-                        <!-- Column 2 end -->
-                    </div>
-                </div>
-            </div>
+        <div id="header">
+            <p:graphicImage name="images/logo_universidad-01.png" style="vertical-align: middle; padding: 5px;"/>            
+            <p:outputLabel style="font-size: 1.8em; margin-left: 20px;" value="Departamento de Recursos Hídricos y Ciencias Ambientales"/>
         </div>
+
+        <h:form id="formContenido">
+            <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
+            <ui:insert name="mensaje"/>
+            <ui:insert name="body"/>
+        </h:form>
+        
+        <h:form id="formMenu">
+            <ui:include src="./menu.xhtml"/>
+        </h:form>
+        
         <div id="footer">
             <ui:include src="./footer.xhtml"/>
         </div>

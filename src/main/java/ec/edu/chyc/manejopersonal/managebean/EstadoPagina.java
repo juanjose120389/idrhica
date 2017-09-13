@@ -10,7 +10,7 @@ package ec.edu.chyc.manejopersonal.managebean;
  * @author CHYC-DK-005
  */
 public class EstadoPagina {
-    
+
     private Long id;
     private int idPagina;
 

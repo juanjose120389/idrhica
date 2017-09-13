@@ -11,27 +11,24 @@ and open the template in the editor.
 
     <ui:define name="metadata"></ui:define>
     <h:head>
-        <title><ui:insert name="title">Sistema iDRHiCA Manejo Personal</ui:insert></title>
         <h:outputStylesheet library="css" name="layout.css"/>
         <h:outputStylesheet library="css" name="screen.css"/>
         <h:outputScript library="js" name="locale.js"/>
+        <title><ui:insert name="title">Sistema iDRHiCA Manejo Personal</ui:insert></title>
+
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+    
     </h:head>
 
     <h:body>
-
-        <p:growl id="growl" life="3000" />
-
         <h:form id="formIdle">
             <p:idleMonitor timeout="3600000"><!--- 1800000 (30 min) -->
-                <p:ajax event="idle" listener="#{gestorGeneral.onIdle()}" />
+                <p:ajax event="idle" listener="#{gestorGeneral.onIdle()}" update=":formContenido :formMenu" />
                 <p:ajax event="active" listener="#{gestorGeneral.mantenerSesion()}" />
             </p:idleMonitor>
         </h:form>
-
-
 
         <p:layout fullPage="true">
 
@@ -44,7 +41,7 @@ and open the template in the editor.
                 <ui:include src="./footer.xhtml"/>
             </p:layoutUnit>
 
-            <p:layoutUnit id="lMenu" position="west" size="145" header="Opciones:" collapsible="true">
+            <p:layoutUnit id="lMenu" position="west" size="155" header="Opciones:" collapsible="true">
                 <h:form id="formMenu">
                     <ui:include src="./menu.xhtml"/>
                 </h:form>
@@ -53,10 +50,14 @@ and open the template in the editor.
             <p:layoutUnit id="lContenido" position="center">
                 <h:form id="formContenido">
                     <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
+                    <ui:insert name="mensaje"/>
                     <ui:insert name="body"/>
                 </h:form>
+                
             </p:layoutUnit>
+            
         </p:layout>
+        
     </h:body>
 
 </html>

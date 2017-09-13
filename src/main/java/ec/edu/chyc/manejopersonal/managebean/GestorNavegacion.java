@@ -5,10 +5,14 @@
  */
 package ec.edu.chyc.manejopersonal.managebean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 /**
@@ -32,34 +36,46 @@ public class GestorNavegacion implements Serializable {
     private List<EstadoPagina> listaNavegacion = new ArrayList<>();
 
     public GestorNavegacion() {
-        EstadoPagina ep=new EstadoPagina();
+        EstadoPagina ep = new EstadoPagina();
         ep.setId(null);
         ep.setIdPagina(6);
         listaNavegacion.add(ep);
     }
-    
 
-    public String cargarPagina(int idPagina, Long idElemento) {
+    public void cargarPagina(int idPagina, Long idElemento) {
+
+        System.err.println("&&%%%%%%%%%%&%&%&%&%&&&&&&&&&&&&&&&&&&&&&&&&&&&&########¬¬ :" + "idpagina:" + idPagina + ", idElemento:" + idElemento);
+
+        String redirect_url = null;
         if (idElemento == null) {
             vaciarListaNavegacion();
             EstadoPagina ep = new EstadoPagina();
             ep.setIdPagina(idPagina);
             ep.setId(null);
             listaNavegacion.add(ep);
-            return cargarPaginaLista(idPagina);
+            //return 
+            redirect_url = cargarPaginaLista(idPagina)+".jsf";
+
         } else {
             EstadoPagina ep = new EstadoPagina();
             ep.setIdPagina(idPagina);
             ep.setId(idElemento);
             listaNavegacion.add(ep);
-            return cargarPaginaDetalle(idPagina, idElemento);
+            //return 
+            redirect_url = cargarPaginaDetalle(idPagina, idElemento)+".jsf";
+        }
+        
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(redirect_url);
+        } catch (IOException ex) {
+            Logger.getLogger(GestorNavegacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private String regresarPagina(int idPagina, Long idElemento) {
-        if (idElemento == null) {            
+        if (idElemento == null) {
             return cargarPaginaLista(idPagina);
-        } else {            
+        } else {
             return cargarPaginaDetalle(idPagina, idElemento);
         }
     }
@@ -170,12 +186,23 @@ public class GestorNavegacion implements Serializable {
 
     private void vaciarListaNavegacion() {
         listaNavegacion.clear();
+        System.err.println("&&%%%%%%%%%%&%&%&%&%&&&&&&&&&&&&&&&&&&&&&&&&&&&&########¬¬ :" + "Limpia la lista de navegacion");   
     }
 
-    public String regresar() {
+    public void regresar() {
+        int size = listaNavegacion.size();
+        System.err.println("&&%%%%%%%%%%&%&%&%&%&&&&&&&&&&&&&&&&&&&&&&&&&&&&########¬¬ :" + size);
         listaNavegacion.remove(listaNavegacion.size() - 1);
         EstadoPagina ep = listaNavegacion.get(listaNavegacion.size() - 1);
-        return regresarPagina(ep.getIdPagina(), ep.getId());
+        //return 
+        String redirect_url=regresarPagina(ep.getIdPagina(), ep.getId())+".jsf";
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(redirect_url);
+        } catch (IOException ex) {
+            Logger.getLogger(GestorNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
 }

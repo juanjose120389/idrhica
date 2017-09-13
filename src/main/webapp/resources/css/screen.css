@@ -1,11 +1,10 @@
 body {
     margin:0;
     padding:0;
-    border:0;			/* This removes the border around the viewport in old versions of IE */
+    border:0;			
     width:100%;
     background:#fff;
-    min-width:600px;    	/* Minimum width of layout - remove line if not required */
-    /* The min-width property does not work in old versions of Internet Explorer */
+    min-width:600px; 
     font-size: 0.8em;
 }
 
@@ -16,9 +15,7 @@ body {
     width:100%;
     min-width: 960px;
 }
-#header {
 
-}
 #header p,
 #header h1,
 #header h2 {
@@ -26,101 +23,28 @@ body {
     margin:0;
 }
 
-/* 'widths' sub menu */
-/*#layoutdims {
-        clear:both;
-        background:#eee;
-        border-top:4px solid #000;
-        margin:0;
-        padding:6px 15px !important;
-        text-align:right;
-}*/
-
-#wrapper {
-    min-height: 100%;
-}
-/* column container */
-.colmask {    
-    position:relative;	/* This fixes the IE7 overflow hidden bug */
-    clear:both;
-    float:left;
-    width:100%;			/* width of whole page */
-
-
-    overflow:hidden;		/* This chops off any overhanging divs */
-    height: auto;
-    background: burlywood;
-}
-
-.leftmenu {
-    background:#fff;		/* right column background colour */
-}
-
-.leftmenu .colright {
-    float:left;
-    width:170%;
-    position:relative;
-    left:140px;
-    background:#fff;
-}
-.leftmenu .col1wrap {
-    float:right;
-    width:50%;
-    position:relative;
-    right:140px;
-    padding-bottom:1em;
-}
-
-.leftmenu .col1 {
-    margin:0 15px 0 155px;
-    position:relative;
-    
-    right:100%;
-    overflow:hidden;
-    background-color: aliceblue;
-}
-.leftmenu .col2 {
-    float:left;
-    width:110px;
-    position:relative;
-    right:125px;
-}
-
-.col1 {
-    width:100%;
-}
-
-/*
-.col1,
-.col2{
-    float:left;
-    position:relative;
-    padding:0.5em 0 1em 0;
-
-  
-}*/
-
-
-
-
-
 .footer, .push {
-    height: 35px; /* .push must be the same height as .footer */
+    height: 35px; 
     clear: both;
 }
-/* Footer styles */
 
 #footer {
-
     background: #003580 none repeat scroll 0 0; 
-
 }
+
 #footer p {
     padding:5px;
     margin-top:-35px;
 }
 
+html, body{ 
+    height: 100%; 
+}
 
-html, body, #wrapper { height: 100%; }
-#wrapper { height: auto; min-height: 100%; }
-#footer { clear: both; position: relative; z-index: 10; height: 2.5em; margin-top: -2.5em; }
+#footer { 
+    clear: both; 
+    position: relative; 
+    z-index: 10; 
+    height: 2.5em; 
+    margin-top: -2.5em; 
+}

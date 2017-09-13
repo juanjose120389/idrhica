@@ -51,8 +51,7 @@
                     <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains" sortBy="#{persona.apellidos}">
                         <f:facet name="header">  
                             Apellidos
-                        </f:facet>                
-
+                        </f:facet>
                         <h:outputText value="#{persona.apellidos}" />
                     </p:column>
 
@@ -84,7 +83,6 @@
                               style="text-align: center" >
                         <f:facet name="header">
                             <p:outputLabel id="lblEstado" value="Estado"/>
-
                             <p:tooltip id="tipEstado" for="lblEstado" value="T=Todos, A=Activos, I=Inactivos" />                    
                         </f:facet>
                         <f:facet name="filter">
@@ -94,7 +92,6 @@
                                 <f:selectItem itemLabel="A" itemValue="true" />
                                 <f:selectItem itemLabel="I" itemValue="false" />                        
                             </p:selectOneButton>
-
                         </f:facet>            
                         <h:outputText value="#{persona.activo == true ? 'Activo' : persona.activo == false ? 'Inactivo' : 'Externo'}" />
                     </p:column>
@@ -103,8 +100,7 @@
                               filterBy="#{persona.correo}" filterMatchMode="contains">
                         <f:facet name="header">  
                             Correo
-                        </f:facet>                
-
+                        </f:facet>
                         <h:outputText value="#{persona.correo}" style="font-size: 12px"/>
                     </p:column>
 
@@ -127,8 +123,6 @@
                         <h:outputText value="#{persona.fechaNacimiento}">
                             <f:convertDateTime pattern="dd/MM/yyy" locale="es_EC" />
                         </h:outputText>
-
-
                     </p:column>
 
                     <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="" exportable="false" width="80" 
@@ -137,8 +131,7 @@
                         <p:outputLabel value=" "/>
                         <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
                     </p:column>            
-                </p:dataTable>        
-
+                </p:dataTable>   
 
             </p:tab>
             <p:tab title="Contactos externos" id="tabExterno">                
@@ -189,8 +182,7 @@
                               width="120px">
                         <f:facet name="header">  
                             Correo
-                        </f:facet>                
-
+                        </f:facet>
                         <h:outputText value="#{persona.correo}" />
                     </p:column>
 
@@ -213,7 +205,6 @@
                         <h:outputText value="#{persona.fechaNacimiento}">
                             <f:convertDateTime pattern="dd/MM/yyy" locale="es_EC" />
                         </h:outputText>
-
 
                     </p:column>
 
