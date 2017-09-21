@@ -126,6 +126,24 @@ and open the template in the editor.
     height: auto!important;
 }
 
+/*CSS para modulos de inventarios*/
+
+.panelInventarios .input{
+    width: 150px;
+}
+
+.panelInventarios .inputShort{
+    width: 100px;
+}
+
+.panelInventarios .inputLarge{
+    width: 200px;
+}
+
+
+
+
+
 
 
 

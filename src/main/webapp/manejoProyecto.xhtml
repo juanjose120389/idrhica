@@ -20,7 +20,7 @@
 
         <h:panelGroup layout="block" id="divDialogs">
             <p:dialog id="dlgInstitucion" header="Institución" widgetVar="dlgInstitucion" rendered="#{gestorProyecto.mostrarDlgInstitucion}" 
-                      resizable="false" modal="true" width="400">
+                      resizable="false" modal="true" width="400" appendTo="@(body)">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgInstitucion()}" />
                 <h:panelGroup layout="block" id="divDlgInstitucion">
                     <h:panelGrid id="panelCamposInst" columns="2">
@@ -37,7 +37,7 @@
             </p:dialog>  
             
             <p:dialog id="dlgGrupoInvestigacion" header="Grupo Investigación" widgetVar="dlgGrupoInvestigacion" rendered="#{gestorProyecto.mostrarDlgGrupoInvestigacion}" 
-                      resizable="false" modal="true" width="400">
+                      resizable="false" modal="true" width="400" appendTo="@(body)">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgGrupoInvestigacion()}" />
                 <h:panelGroup layout="block" id="divDlgGrupoInvestigacion">
                     <h:panelGrid columns="2">
@@ -54,7 +54,7 @@
             </p:dialog>  
 
             <p:dialog id="dlgLineaInvestigacion" header="Línea Investigación" widgetVar="dlgLineaInvestigacion" rendered="#{gestorProyecto.mostrarDlgLineaInvestigacion}" 
-                      resizable="false" modal="true" width="400">
+                      resizable="false" modal="true" width="400" appendTo="@(body)">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgLineaInvestigacion()}" />
                 <h:panelGroup layout="block" id="divDlgLineaInvestigacion">
                     <h:panelGrid columns="2">
@@ -71,7 +71,7 @@
             </p:dialog>  
             
 
-            <p:dialog id="dlgLugar" header="Observatorio" widgetVar="dlgLugar" resizable="false" modal="true" width="500" rendered="#{gestorProyecto.mostrarDlgLugar}">
+            <p:dialog id="dlgLugar" header="Observatorio" widgetVar="dlgLugar" resizable="false" modal="true" width="500" rendered="#{gestorProyecto.mostrarDlgLugar}" appendTo="@(body)">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgLugar()}" />
                 <h:panelGroup id="divDlgLugar" layout="block">
                     <p:tabView id="tabsLugar" activeIndex="#{gestorProyecto.indexTabSel}">

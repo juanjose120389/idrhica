@@ -44,18 +44,21 @@
             }
         </style>
         <h:panelGroup layout="block" id="divDialogs">
-            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" rendered="#{gestorPersona.mostrarDlgUniversidad}" resizable="false" modal="true" width="400">
+            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" rendered="#{gestorPersona.mostrarDlgUniversidad}" resizable="false" modal="true" width="400" appendTo="@(body)">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgUniversidad()}" />
                 <h:panelGroup layout="block" id="divDlgUniversidad">
                     <h:panelGrid id="panelCamposUniversidad" columns="3">
                         <p:outputLabel value="Nombre">
                             <span class="asterisk"/>
                         </p:outputLabel>
-                        <p:inputText styleClass="inputEnDlg" id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorPersona.universidad.nombre}"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtNombreUniversidad" 
+                                     required="true" requiredMessage="Requerido" 
+                                     value="#{gestorPersona.universidad.nombre}"/>
                         <p:message for="txtNombreUniversidad"/>                                
 
                         <p:outputLabel value="País"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtPaisUniversidad" value="#{gestorPersona.universidad.pais}"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtPaisUniversidad" 
+                                     value="#{gestorPersona.universidad.pais}"/>
                         <p:message for="txtPaisUniversidad"/>
 
                         <p:outputLabel value="Ciudad"/>
@@ -70,7 +73,7 @@
                 </h:panelGroup>
             </p:dialog>  
 
-            <p:dialog id="dlgTitulo" header="Título" widgetVar="dlgTitulo" resizable="false" modal="true" width="400" rendered="#{gestorPersona.mostrarDlgTitulo}">
+            <p:dialog id="dlgTitulo" header="Título" widgetVar="dlgTitulo" resizable="false" modal="true" width="400" rendered="#{gestorPersona.mostrarDlgTitulo}" appendTo="@(body)">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgTitulo()}" />
                 <h:panelGroup id="divDlgTitulo" layout="block">
                     <h:panelGrid id="panelCamposTitulo" columns="3">

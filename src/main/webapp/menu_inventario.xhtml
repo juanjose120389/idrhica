@@ -4,7 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html">
-
+    
     <p:menu toggleable="true" >
         <p:submenu label="Objetos y equipos:">
             <p:menuitem value="Lista"  icon="fa fa-list" />
@@ -12,8 +12,7 @@
         </p:submenu>
         
         <p:submenu label="Responsables:">
-            <p:menuitem value="Lista"  icon="fa fa-list" />
-            
+            <p:menuitem value="Lista"  icon="fa fa-list" />            
         </p:submenu>
         
         <p:submenu label="Categorias:">
@@ -22,12 +21,11 @@
         </p:submenu>
         
         <p:submenu label="Reportes:">
-            <p:menuitem value="Historial"  icon="fa fa-list" />
-           
+            <p:menuitem value="Historial"  icon="fa fa-list" />           
         </p:submenu>
         
-        
     </p:menu>
+        
     <p:panel>
         <h:panelGroup layout="block" rendered="#{gestorUsuario.logeado}" >
             <p:outputLabel value="Usuario:" />

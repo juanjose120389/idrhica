@@ -43,7 +43,7 @@ and open the template in the editor.
 
             <p:layoutUnit id="lMenu" position="west" size="155" header="Opciones:" collapsible="true">
                 <h:form id="formMenu">
-                    <ui:include src="./menu.xhtml"/>
+                    <ui:include src="./menu_inventario.xhtml"/>
                 </h:form>
             </p:layoutUnit>
 
@@ -52,8 +52,7 @@ and open the template in the editor.
                     <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
                     <ui:insert name="mensaje"/>
                     <ui:insert name="body"/>
-                </h:form>
-                
+                </h:form>                
             </p:layoutUnit>
             
         </p:layout>

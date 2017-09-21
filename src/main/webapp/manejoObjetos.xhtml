@@ -42,215 +42,324 @@
             .ui-messages-error, .ui-message-error {
                 display: inline-block;
             }
+
+            /*
+            Custom Styles
+            */
+            .labelscolC {
+                width: 100px;
+                min-width: 100px;
+                max-width: 100px;
+                background-color: whitesmoke;
+                padding-left: 12px;
+            }
+            .inputscolC {
+                /*width:100%;*/   
+                background-color: whitesmoke;
+            }
+
         </style>
 
-        <p:panel header="#{gestorPersona.modoModificar?'Modificar':'Nuevo'} Objeto">
-            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
-            <h:panelGrid columns="3" width="100%" columnClasses="labelscol2,inputscol,tipscol">
-                <h:panelGroup layout="block" style="width: 
-                              px">
-                    <p:outputLabel value="ID Interno">
-                        <span class="asterisk"/>
-                    </p:outputLabel>
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtIdentificacion" requiredMessage="Requerido" required="true" />  
-                    <p:message for="txtIdentificacion"/>
-                </h:panelGroup>               
+        <h:panelGroup layout="block" id="divDialogs">
+            <p:dialog id="dlgUbicacion" header="Ubicación" widgetVar="dlgUbicacion" 
+                      rendered="#{gestorObjeto.mostrarDlgUbicacion}" resizable="false" 
+                      width="400" modal="true" appendTo="@(body)">
+                <p:ajax event="close" update="divDialogs" 
+                        listener="#{gestorObjeto.onCloseDlgUbicacion()}" />
+                <h:panelGroup layout="block" id="divDlgUbicacion">
+                    <h:panelGrid id="panelCamposUbicacion" columns="3">
+                        <p:outputLabel value="Lugar/">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <p:inputText styleClass="inputEnDlg" id="txtLugarUbicacion" 
+                                     required="true" requiredMessage="Requerido"/>
+                        <p:message for="txtLugarUbicacion"/>                                
 
-                <h:panelGroup>
-                    <p:outputLabel value="Serie"/>               
+                        <p:outputLabel value="Estante"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtEstanteUbicacion"/>
+                        <p:message for="txtEstanteUbicacion"/>
+
+                        <p:outputLabel value="Código"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtCodigoUbicacion"/>
+                        <p:message for="txtCodigoUbicacion"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" process="dlgUbicacion" update="divDlgUbicacion inputProveedor"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dlgUbicacion').hide();"/>
+                    </h:panelGrid>            
                 </h:panelGroup>
+            </p:dialog>
+
+            <p:dialog id="dlgProveedor" header="Seleccionar Proveedor" widgetVar="dlgProveedor" 
+                      rendered="#{gestorObjeto.mostrarDlgProveedor}" resizable="false" width="700" 
+                      modal="true" appendTo="@(body)">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorObjeto.onCloseDlgProveedor()}" />
+
+                <h:panelGrid columns="2" id="divDlgProveedor"> 
+
+                    <h:form>
+                        <h:panelGroup layout="block" id="panelCamposProveedor" style="width: 320px">
+
+                            <p:selectOneListbox id="selListBoxProveedor" converter="proveedorConverter" 
+                                                var="p" filter="true" filterMatchMode="contains" style="width: 300px"
+                                                value="#{gestorObjeto.proveedor}">
+                                <f:selectItems value="#{gestorProveedor.listaProveedores}" var="proveedor" 
+                                               itemLabel="#{proveedor.ruc} #{proveedor.nombre_comercial}" 
+                                               itemValue="#{proveedor}" />
+                                <p:column>
+                                    <h:outputText value="#{p.ruc}" />
+                                </p:column>                            
+                                <p:column>
+                                    <h:outputText value="#{p.nombre_comercial}" />
+                                </p:column>
+                            </p:selectOneListbox>  
+                            <p:commandButton value="Aceptar" update="formContenido" actionListener="#{gestorObjeto.guardarProveedor()}"/>
+                        </h:panelGroup>
+                    </h:form>
+
+
+                    <h:panelGrid columns="3" style="border-style: solid; padding: 5px">
+                        <p:outputLabel value="ID">
+                            <span class="asterisk"/>
+                        </p:outputLabel>                        
+                        <h:panelGroup>
+                            <p:inputText id="txtIdProveedor" requiredMessage="Requerido" required="true" maxlength="255"/>  
+                            <p:message for="txtIdProveedor"/>
+                        </h:panelGroup>
+                        <p:commandButton value="Ingresar" />
+
+                        <p:outputLabel value="RUC">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <h:panelGroup>
+                            <p:inputText id="txtRUCProveedor" requiredMessage="Requerido" 
+                                         required="true" maxlength="255" style="width: 150px"/>  
+                            <p:message for="txtRUCProveedor"/>
+                        </h:panelGroup>
+                        <h:panelGroup/>
+
+                        <p:outputLabel value="Nombre Comercial">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <h:panelGroup>
+                            <p:inputText id="txtNom_Com_Proveedor" requiredMessage="Requerido" 
+                                         required="true" maxlength="255" style="width: 150px"/>  
+                            <p:message for="txtNom_Com_Proveedor"/>
+                        </h:panelGroup>
+                        <h:panelGroup/>                        
+                    </h:panelGrid>
+
+                </h:panelGrid>
+
+            </p:dialog> 
+
+            <p:dialog id="dlgCustodio" header="Seleccionar Custodio" widgetVar="dlgCustodio" 
+                      rendered="#{gestorObjeto.mostrarDlgCustodio}" resizable="false" width="700" 
+                      modal="true" appendTo="@(body)">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorObjeto.onCloseDlgCustodio()}" />
+
+                <h:panelGroup layout="block" id="divDlgCustodio" style="width: 320px">
+                    <p:selectOneListbox id="selListBoxCustodio" converter="custodioConverter" 
+                                        var="p" filter="true" filterMatchMode="contains" style="width: 300px">
+                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="persona" 
+                                       itemLabel="#{persona.nombres} #{persona.apellidos}" 
+                                       itemValue="#{persona}" />
+                        <p:column>
+                            <h:outputText value="#{p.nombres}" />
+                        </p:column>                            
+                        <p:column>
+                            <h:outputText value="#{p.apellidos}" />
+                        </p:column>
+                    </p:selectOneListbox>
+                </h:panelGroup>
+
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Aceptar" process="dlgCustodio" update="divDlgCustodio"/>
+                    <p:commandButton value="Cancelar" onclick="PF('dlgCustodio').hide();"/>
+                </h:panelGrid>                      
+
+            </p:dialog>
+
+
+
+        </h:panelGroup>
+
+        <p:panel class="panelInventarios" header="#{gestorObjeto.modoModificar?'Modificar':'Nuevo'} Objeto">
+            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
+
+            <h3>Información</h3>            
+
+            <h:panelGrid columns="6" columnClasses="labelscolC,inputscolC,labelscolC,inputscolC,labelscolC,inputscolC">
+                <p:outputLabel value="ID Interno">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+                <h:panelGroup>
+                    <p:inputText id="txtIdInterno" requiredMessage="Requerido" required="true" maxlength="255"/>  
+                    <p:message for="txtIdInterno"/>
+                </h:panelGroup>
+
+                <p:outputLabel value="Serie"/>
                 <h:panelGroup>
                     <p:inputText id="txtSerie" maxlength="255"/>  
                     <p:message for="txtSerie"/>
                 </h:panelGroup>
-                
+
+                <p:outputLabel value="Descripción"/>            
                 <h:panelGroup>
-                    <p:outputLabel value="Descripción"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtDescripcion" maxlength="255"/>  
+                    <p:inputText class="inputLarge" id="txtDescripcion" maxlength="255" />  
                     <p:message for="txtDescripcion"/>
-                </h:panelGroup>
-                                
-                <h:panelGroup>
-                    <p:outputLabel value="Ubicación"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtUbicacion" maxlength="255"/>  
-                    <p:message for="txtUbicacion"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Marca"/>               
-                </h:panelGroup>
+                </h:panelGroup>  
+
+                <p:outputLabel value="Categoría"/>
+                <p:selectOneMenu 
+                    required="true" 
+                    requiredMessage="Requerido"
+                    id="cboCategoria">
+                    <f:selectItem itemLabel="Categoria 1" itemValue="1"/>
+                    <f:selectItem itemLabel="Categoria 2" itemValue="2"/>
+                </p:selectOneMenu>                        
+
+                <p:outputLabel value="Marca"/>
                 <h:panelGroup>
                     <p:inputText id="txtMarca" maxlength="255"/>  
                     <p:message for="txtMarca"/>
                 </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Modelo"/>               
-                </h:panelGroup>
+
+                <p:outputLabel value="Modelo"/>
                 <h:panelGroup>
                     <p:inputText id="txtModelo" maxlength="255"/>  
                     <p:message for="txtModelo"/>
                 </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Dimensiones"/>               
-                </h:panelGroup>
+
+
+
+                <p:outputLabel value="Dimensiones"/>
                 <h:panelGroup>
                     <p:inputText id="txtDimensiones" maxlength="255"/>  
                     <p:message for="txtDimensiones"/>
                 </h:panelGroup>
-                
-                <p:outputLabel value="Fecha adquirido"/>
-                <p:calendar pattern="dd/MM/yyyy" />  
-                <h:panelGroup layout="block"/>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Valor 1"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtValor1" maxlength="255"/>  
-                    <p:message for="txtValor1"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Valor 2"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtValor2" maxlength="255"/>  
-                    <p:message for="txtValor2"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Depreciación"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtDepreciacion" maxlength="255"/>  
-                    <p:message for="txtDepreciacion"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Valor Libros"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtValorLibros" maxlength="255"/>  
-                    <p:message for="txtValorLibros"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Vida Útil"/>               
-                </h:panelGroup>
+
+                <p:outputLabel value="Vida Útil"/>
                 <h:panelGroup>
                     <p:inputText id="txtVidaUtil" maxlength="255"/>  
                     <p:message for="txtVidaUtil"/>
                 </h:panelGroup>
-                
+
+                <h:panelGroup/>
+                <h:panelGroup/>
+            </h:panelGrid>
+
+            <h3>Información Contable</h3>
+
+            <h:panelGrid columns="4" columnClasses="labelscolC,inputscolC,labelscolC,inputscolC">    
+
+                <p:outputLabel value="Número Factura"/>
                 <h:panelGroup>
-                    <p:outputLabel value="Nombre Cuenta Contable"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtNomCuenCont" maxlength="255"/>  
-                    <p:message for="txtNomCuenCont"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Número Cuenta Contable"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtNumCuenCont" maxlength="255"/>  
-                    <p:message for="txtNumCuenCont"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Proceso Compra"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtProcesoCompra" maxlength="255"/>  
-                    <p:message for="txtProcesoCompra"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Número Pedido Proveeduría"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtNumPedProv" maxlength="255"/>  
-                    <p:message for="txtNumPedProv"/>
-                </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Número Factura"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtNumFact" maxlength="255"/>  
+                    <p:inputText class="inputLarge" id="txtNumFact" maxlength="255"/>  
                     <p:message for="txtNumFact"/>
                 </h:panelGroup>
-                
+
+                <p:outputLabel value="Proveedor"/>
+                <h:panelGroup id="inputProveedor">
+                    <h:inputText value="#{gestorObjeto.objeto.proveedor.nombre_comercial}"></h:inputText>
+                    <p:commandButton id="btnProveedor" value="Seleccionar..." icon="ui-icon-extlink" 
+                                     process="@this" action="#{gestorObjeto.abrirProveedorDialog}" />
+                </h:panelGroup>                
+
+                <p:outputLabel value="Fecha adquirido"/>
+                <p:calendar pattern="dd/MM/yyyy" />  
+
+                <p:outputLabel value="Observación"/>  
                 <h:panelGroup>
-                    <p:outputLabel value="Observación"/>               
-                </h:panelGroup>
-                <h:panelGroup>
-                    <p:inputText id="txtObservacion" maxlength="255"/>  
+                    <p:inputText class="inputLarge" id="txtObservacion" maxlength="255"/>  
                     <p:message for="txtObservacion"/>
                 </h:panelGroup>
-                
+
+
+
+                <p:outputLabel value="Valor 1"/>
                 <h:panelGroup>
-                    <p:outputLabel value="Ubicación Seguro"/>               
+                    <p:inputText id="txtValor1" maxlength="255"/>  
+                    <p:message for="txtValor1"/>
                 </h:panelGroup>
+
+                <p:outputLabel value="Valor 2"/>
+                <h:panelGroup>
+                    <p:inputText id="txtValor2" maxlength="255"/>  
+                    <p:message for="txtValor2"/>
+                </h:panelGroup>
+
+
+
+                <p:outputLabel value="Depreciación"/>
+                <h:panelGroup>
+                    <p:inputText id="txtDepreciacion" maxlength="255"/>  
+                    <p:message for="txtDepreciacion"/>
+                </h:panelGroup>
+
+                <p:outputLabel value="Valor Libros"/>
+                <h:panelGroup>
+                    <p:inputText id="txtValorLibros" maxlength="255"/>  
+                    <p:message for="txtValorLibros"/>
+                </h:panelGroup>         
+
+
+
+                <p:outputLabel value="Nombre Cuenta Contable"/>
+                <h:panelGroup>
+                    <p:inputText class="inputLarge" id="txtNomCuenCont" maxlength="255"/>  
+                    <p:message for="txtNomCuenCont"/>
+                </h:panelGroup>
+
+                <p:outputLabel value="Número Cuenta Contable"/>
+                <h:panelGroup>
+                    <p:inputText class="inputLarge" id="txtNumCuenCont" maxlength="255"/>  
+                    <p:message for="txtNumCuenCont"/>
+                </h:panelGroup>
+
+
+
+                <p:outputLabel value="Proceso Compra"/>
+                <h:panelGroup>
+                    <p:inputText class="inputLarge" id="txtProcesoCompra" maxlength="255"/>  
+                    <p:message for="txtProcesoCompra"/>
+                </h:panelGroup>
+
+                <p:outputLabel value="Número Pedido Proveeduría"/>
+                <h:panelGroup>
+                    <p:inputText class="inputLarge" id="txtNumPedProv" maxlength="255"/>  
+                    <p:message for="txtNumPedProv"/>
+                </h:panelGroup>
+
+                <p:outputLabel value="Ubicación Seguro"/>               
                 <h:panelGroup>
                     <p:inputText id="txtUbicSeguro" maxlength="255"/>  
                     <p:message for="txtUbicSeguro"/>
                 </h:panelGroup>
-                
-                <h:panelGroup>
-                    <p:outputLabel value="Garantía"/>               
-                </h:panelGroup>
+
+                <p:outputLabel value="Garantía"/>               
                 <h:panelGroup>
                     <p:inputText id="txtGarantia" maxlength="255"/>  
                     <p:message for="txtGarantia"/>
-                </h:panelGroup>
-                
-                <p:outputLabel value="Categoría"/>
-                <p:selectOneMenu 
-                                 required="true" style="width: 150px"
-                                 requiredMessage="Requerido"
-                                 id="cboCategoria">
-                    <f:selectItem itemLabel="Categoria 1" itemValue="1"/>
-                    <f:selectItem itemLabel="Categoria 2" itemValue="2"/>
-                </p:selectOneMenu>                        
-                <h:panelGroup layout="block"/>
-                
-                <p:outputLabel value="Custodio"/>
-                <p:selectOneMenu 
-                                 required="true" style="width: 150px"
-                                 requiredMessage="Requerido"
-                                 id="cboCustodio">
-                    <f:selectItem itemLabel="Custodio 1" itemValue="1"/>
-                    <f:selectItem itemLabel="Custodio 2" itemValue="2"/>
-                </p:selectOneMenu>                        
-                <h:panelGroup layout="block"/>
-                
-                <p:outputLabel value="Proveedor"/>
-                <p:selectOneMenu 
-                                 required="true" style="width: 150px"
-                                 requiredMessage="Requerido"
-                                 id="cboProveedor">
-                    <f:selectItem itemLabel="Proveedor 1" itemValue="1"/>
-                    <f:selectItem itemLabel="Proveedor 2" itemValue="2"/>
-                </p:selectOneMenu>                        
-                <h:panelGroup layout="block"/>
-  
+                </h:panelGroup>                
             </h:panelGrid>
-            
+
+            <h3>Inventario</h3>
+
+            <h:panelGrid columns="2" columnClasses="labelscolC,inputscolC">  
+
+                <p:outputLabel value="Custodio"/>
+                <p:commandButton id="btnDlgCustodio" value="Seleccionar..." icon="ui-icon-extlink" process="@this" action="#{gestorObjeto.abrirCustodioDialog}" />
+
+                <p:outputLabel for="btnDlgUbicacion" value="Ubicación" />
+                <p:commandButton id="btnDlgUbicacion" value="Seleccionar..." icon="ui-icon-extlink" process="@this" action="#{gestorObjeto.abrirUbicacionDialog}" />               
+            </h:panelGrid>
+
         </p:panel>
-        
+
         <h:panelGroup layout="block" style="height: 15px"/>
 
-        <p:commandButton value="Guardar" update="formContenido" action="#{gestorPersona.guardar()}" icon="fa fa-save"/>
+        <p:commandButton value="Guardar" update="formContenido" icon="fa fa-save"/>
 
     </ui:define>
 </ui:composition>
