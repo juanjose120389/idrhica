@@ -69,6 +69,15 @@ public class GestorProveedor implements Serializable{
         this.proveedor = proveedor;
     }
     
+    public Proveedor buscarProveedor(String RUC){
+        for (Proveedor proveedor : listaProveedores) {
+            if (proveedor.getRuc().equalsIgnoreCase(RUC)) {
+                return proveedor;
+            }
+        }
+        return null;
+    }
+    
     
     
     

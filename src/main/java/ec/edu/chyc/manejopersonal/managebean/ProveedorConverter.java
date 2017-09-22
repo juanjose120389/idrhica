@@ -21,35 +21,30 @@ import javax.faces.convert.FacesConverter;
 public class ProveedorConverter implements Converter {
 
     @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        String v=value;
-        System.err.println("€¬€¬€¬¬#@#~€~#@€~#@VALUE: "+value);
-        if (value != null && value.trim().length() > 0) {
+    public Object getAsObject(FacesContext fc, UIComponent uic, String RUCProveedor) {
+      
+        System.err.println("############ Valor recuperado (dlg Proveedor): "+RUCProveedor);
+        if(RUCProveedor != null && RUCProveedor.trim().length() > 0) {
             try {
-                GestorProveedor proveedores = (GestorProveedor) fc.getExternalContext().getApplicationMap().get("gestorProveedor");
-                //return proveedores.getListaProveedores().get(Integer.parseInt(value));
-                return proveedores.getListaProveedores().get(0);
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid proveedor."));
+                GestorProveedor gestorProveedor = (GestorProveedor) fc.getExternalContext().getApplicationMap().get("gestorProveedor");
+                return gestorProveedor.buscarProveedor(RUCProveedor);
+            } catch(NumberFormatException e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid theme."));
             }
-        } else {
-            //return null;
-            GestorProveedor proveedores = (GestorProveedor) fc.getExternalContext().getApplicationMap().get("gestorProveedor");
-            //return proveedores.getListaProveedores().get(Integer.parseInt(value));
-            return proveedores.getListaProveedores().get(0);
-
+        }
+        else {
+            return null;
         }
     }
 
     @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        Proveedor p=(Proveedor) object;
-        if (object != null) {
-            //return String.valueOf(((Proveedor) object).getId());
-            return "1234";
-        } else {
-            //return null;
-            return "1234";
+    public String getAsString(FacesContext fc, UIComponent uic, Object proveedor) {
+        Proveedor p=(Proveedor) proveedor;
+        if(proveedor != null) {
+            return String.valueOf(((Proveedor) proveedor).getRuc());
+        }
+        else {
+            return null;
         }
     }
 

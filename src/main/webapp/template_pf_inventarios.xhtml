@@ -19,7 +19,7 @@ and open the template in the editor.
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-
+    
     </h:head>
 
     <h:body>
@@ -52,11 +52,12 @@ and open the template in the editor.
                     <p:growl id="mensajes" escape="false" globalOnly="true" showDetail="true"  life="15000" />
                     <ui:insert name="mensaje"/>
                     <ui:insert name="body"/>
-                </h:form>                
+                </h:form>   
+                <ui:insert name="panel_dlgs"/>
             </p:layoutUnit>
-
+            
         </p:layout>
-
+        
     </h:body>
 
 </html>

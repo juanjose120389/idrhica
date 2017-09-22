@@ -24,9 +24,9 @@ import org.primefaces.context.RequestContext;
 public class GestorObjeto implements Serializable {
 
     private Modo modo;
-    private boolean mostrarDlgUbicacion;
+    /*private boolean mostrarDlgUbicacion;
     private boolean mostrarDlgProveedor;
-    private boolean mostrarDlgCustodio;
+    private boolean mostrarDlgCustodio;*/
 
     private Objeto objeto;
     private Proveedor proveedor;
@@ -98,26 +98,26 @@ public class GestorObjeto implements Serializable {
     }
 
     public void inicializarManejoObjeto() {
-        mostrarDlgUbicacion = false;
+        /*mostrarDlgUbicacion = false;
         mostrarDlgCustodio = false;
-        mostrarDlgProveedor = false;
+        mostrarDlgProveedor = false;*/
     }
 
     public void abrirUbicacionDialog() {
-        mostrarDlgUbicacion = true;
+        //mostrarDlgUbicacion = true;
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         ejecutarJS("PF('dlgUbicacion').show()");
     }
 
     public void abrirCustodioDialog() {
-        mostrarDlgCustodio = true;
+        //mostrarDlgCustodio = true;
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         ejecutarJS("PF('dlgCustodio').show()");
     }
 
     public void abrirProveedorDialog() {
-        mostrarDlgProveedor = true;
-        RequestContext.getCurrentInstance().update("formContenido:divDialogs");
+        //mostrarDlgProveedor = true;
+        RequestContext.getCurrentInstance().update("divDialogs");
         ejecutarJS("PF('dlgProveedor').show()");
     }
 
@@ -127,36 +127,40 @@ public class GestorObjeto implements Serializable {
         //System.err.println("$$$$$$$$$$$**********" + proveedor);
     }
 
+    /*
     public void onCloseDlgUbicacion() {
-        mostrarDlgUbicacion = false;
+        //mostrarDlgUbicacion = false;
     }
 
     public void onCloseDlgCustodio() {
-        mostrarDlgCustodio = false;
+        //mostrarDlgCustodio = false;
     }
 
     public void onCloseDlgProveedor() {
-        mostrarDlgProveedor = false;
+        //mostrarDlgProveedor = false;
     }
+    
 
     public void setMostrarDlgUbicacion(boolean mostrarDlgUbicacion) {
-        this.mostrarDlgUbicacion = mostrarDlgUbicacion;
+        //this.mostrarDlgUbicacion = mostrarDlgUbicacion;
     }
 
     public void setMostrarDlgCustodio(boolean mostrarDlgCustodio) {
-        this.mostrarDlgCustodio = mostrarDlgCustodio;
+        //this.mostrarDlgCustodio = mostrarDlgCustodio;
     }
 
     public void setMostrarDlgProveedor(boolean mostrarDlgProveedor) {
-        this.mostrarDlgProveedor = mostrarDlgProveedor;
+        //this.mostrarDlgProveedor = mostrarDlgProveedor;
     }
+    */
 
     public boolean isModoModificar() {
         return modo == Modo.EDITAR;
     }
 
+    /*
     public boolean isMostrarDlgUbicacion() {
-        return mostrarDlgUbicacion;
+        //return mostrarDlgUbicacion;
     }
 
     public boolean isMostrarDlgCustodio() {
@@ -165,6 +169,6 @@ public class GestorObjeto implements Serializable {
 
     public boolean isMostrarDlgProveedor() {
         return mostrarDlgProveedor;
-    }
+    }*/
 
 }

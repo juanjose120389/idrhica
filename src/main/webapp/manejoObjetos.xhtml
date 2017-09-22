@@ -5,184 +5,62 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="./template_pf.xhtml">
+
+    <style>       
+        .cmbUniversidad {
+            width: 300px;
+        }
+        .cmbTitulo {
+            width: 300px;
+        }
+        .linkDropdown {
+            color: white !important; 
+            margin-left: 15px;
+        }
+        .contentCheckbox {
+            margin-left: 20px;
+        }
+        .ui-inputfield {
+            width: 40%;
+        }
+        .ui-calendar > .ui-inputfield {
+            width: 100px;
+        }
+        .labelscol {
+            padding-right: 15px;
+            width: 100px;
+        }
+        .inputscol {
+            /*width:100%;*/
+        }
+        .tipscol {
+            width: 100px;
+        }
+        .inputEnDlg {
+            width: 100%;
+        }
+        .ui-messages-error, .ui-message-error {
+            display: inline-block;
+        }
+
+        /*
+        Custom Styles
+        */
+        .labelscolC {
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+            background-color: whitesmoke;
+            padding-left: 12px;
+        }
+        .inputscolC {
+            /*width:100%;*/   
+            background-color: whitesmoke;
+        }
+
+    </style>
+
     <ui:define name="body">
-        <style>       
-            .cmbUniversidad {
-                width: 300px;
-            }
-            .cmbTitulo {
-                width: 300px;
-            }
-            .linkDropdown {
-                color: white !important; 
-                margin-left: 15px;
-            }
-            .contentCheckbox {
-                margin-left: 20px;
-            }
-            .ui-inputfield {
-                width: 40%;
-            }
-            .ui-calendar > .ui-inputfield {
-                width: 100px;
-            }
-            .labelscol {
-                padding-right: 15px;
-                width: 100px;
-            }
-            .inputscol {
-                /*width:100%;*/
-            }
-            .tipscol {
-                width: 100px;
-            }
-            .inputEnDlg {
-                width: 100%;
-            }
-            .ui-messages-error, .ui-message-error {
-                display: inline-block;
-            }
-
-            /*
-            Custom Styles
-            */
-            .labelscolC {
-                width: 100px;
-                min-width: 100px;
-                max-width: 100px;
-                background-color: whitesmoke;
-                padding-left: 12px;
-            }
-            .inputscolC {
-                /*width:100%;*/   
-                background-color: whitesmoke;
-            }
-
-        </style>
-
-        <h:panelGroup layout="block" id="divDialogs">
-            <p:dialog id="dlgUbicacion" header="Ubicación" widgetVar="dlgUbicacion" 
-                      rendered="#{gestorObjeto.mostrarDlgUbicacion}" resizable="false" 
-                      width="400" modal="true" appendTo="@(body)">
-                <p:ajax event="close" update="divDialogs" 
-                        listener="#{gestorObjeto.onCloseDlgUbicacion()}" />
-                <h:panelGroup layout="block" id="divDlgUbicacion">
-                    <h:panelGrid id="panelCamposUbicacion" columns="3">
-                        <p:outputLabel value="Lugar/">
-                            <span class="asterisk"/>
-                        </p:outputLabel>
-                        <p:inputText styleClass="inputEnDlg" id="txtLugarUbicacion" 
-                                     required="true" requiredMessage="Requerido"/>
-                        <p:message for="txtLugarUbicacion"/>                                
-
-                        <p:outputLabel value="Estante"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtEstanteUbicacion"/>
-                        <p:message for="txtEstanteUbicacion"/>
-
-                        <p:outputLabel value="Código"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtCodigoUbicacion"/>
-                        <p:message for="txtCodigoUbicacion"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgUbicacion" update="divDlgUbicacion inputProveedor"/>
-                        <p:commandButton value="Cancelar" onclick="PF('dlgUbicacion').hide();"/>
-                    </h:panelGrid>            
-                </h:panelGroup>
-            </p:dialog>
-
-            <p:dialog id="dlgProveedor" header="Seleccionar Proveedor" widgetVar="dlgProveedor" 
-                      rendered="#{gestorObjeto.mostrarDlgProveedor}" resizable="false" width="700" 
-                      modal="true" appendTo="@(body)">
-                <p:ajax event="close" update="divDialogs" listener="#{gestorObjeto.onCloseDlgProveedor()}" />
-
-                <h:panelGrid columns="2" id="divDlgProveedor"> 
-
-                    <h:form>
-                        <h:panelGroup layout="block" id="panelCamposProveedor" style="width: 320px">
-
-                            <p:selectOneListbox id="selListBoxProveedor" converter="proveedorConverter" 
-                                                var="p" filter="true" filterMatchMode="contains" style="width: 300px"
-                                                value="#{gestorObjeto.proveedor}">
-                                <f:selectItems value="#{gestorProveedor.listaProveedores}" var="proveedor" 
-                                               itemLabel="#{proveedor.ruc} #{proveedor.nombre_comercial}" 
-                                               itemValue="#{proveedor}" />
-                                <p:column>
-                                    <h:outputText value="#{p.ruc}" />
-                                </p:column>                            
-                                <p:column>
-                                    <h:outputText value="#{p.nombre_comercial}" />
-                                </p:column>
-                            </p:selectOneListbox>  
-                            <p:commandButton value="Aceptar" update="formContenido" actionListener="#{gestorObjeto.guardarProveedor()}"/>
-                        </h:panelGroup>
-                    </h:form>
-
-
-                    <h:panelGrid columns="3" style="border-style: solid; padding: 5px">
-                        <p:outputLabel value="ID">
-                            <span class="asterisk"/>
-                        </p:outputLabel>                        
-                        <h:panelGroup>
-                            <p:inputText id="txtIdProveedor" requiredMessage="Requerido" required="true" maxlength="255"/>  
-                            <p:message for="txtIdProveedor"/>
-                        </h:panelGroup>
-                        <p:commandButton value="Ingresar" />
-
-                        <p:outputLabel value="RUC">
-                            <span class="asterisk"/>
-                        </p:outputLabel>
-                        <h:panelGroup>
-                            <p:inputText id="txtRUCProveedor" requiredMessage="Requerido" 
-                                         required="true" maxlength="255" style="width: 150px"/>  
-                            <p:message for="txtRUCProveedor"/>
-                        </h:panelGroup>
-                        <h:panelGroup/>
-
-                        <p:outputLabel value="Nombre Comercial">
-                            <span class="asterisk"/>
-                        </p:outputLabel>
-                        <h:panelGroup>
-                            <p:inputText id="txtNom_Com_Proveedor" requiredMessage="Requerido" 
-                                         required="true" maxlength="255" style="width: 150px"/>  
-                            <p:message for="txtNom_Com_Proveedor"/>
-                        </h:panelGroup>
-                        <h:panelGroup/>                        
-                    </h:panelGrid>
-
-                </h:panelGrid>
-
-            </p:dialog> 
-
-            <p:dialog id="dlgCustodio" header="Seleccionar Custodio" widgetVar="dlgCustodio" 
-                      rendered="#{gestorObjeto.mostrarDlgCustodio}" resizable="false" width="700" 
-                      modal="true" appendTo="@(body)">
-                <p:ajax event="close" update="divDialogs" listener="#{gestorObjeto.onCloseDlgCustodio()}" />
-
-                <h:panelGroup layout="block" id="divDlgCustodio" style="width: 320px">
-                    <p:selectOneListbox id="selListBoxCustodio" converter="custodioConverter" 
-                                        var="p" filter="true" filterMatchMode="contains" style="width: 300px">
-                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="persona" 
-                                       itemLabel="#{persona.nombres} #{persona.apellidos}" 
-                                       itemValue="#{persona}" />
-                        <p:column>
-                            <h:outputText value="#{p.nombres}" />
-                        </p:column>                            
-                        <p:column>
-                            <h:outputText value="#{p.apellidos}" />
-                        </p:column>
-                    </p:selectOneListbox>
-                </h:panelGroup>
-
-                <h:panelGrid columns="2">
-                    <p:commandButton value="Aceptar" process="dlgCustodio" update="divDlgCustodio"/>
-                    <p:commandButton value="Cancelar" onclick="PF('dlgCustodio').hide();"/>
-                </h:panelGrid>                      
-
-            </p:dialog>
-
-
-
-        </h:panelGroup>
 
         <p:panel class="panelInventarios" header="#{gestorObjeto.modoModificar?'Modificar':'Nuevo'} Objeto">
             <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
@@ -362,4 +240,126 @@
         <p:commandButton value="Guardar" update="formContenido" icon="fa fa-save"/>
 
     </ui:define>
+
+    <ui:define name="panel_dlgs">
+        <h:panelGroup layout="block" id="divDialogs">
+
+            <p:dialog id="dlgProveedor" header="Seleccionar Proveedor" widgetVar="dlgProveedor" 
+                       resizable="false" width="700" modal="true" appendTo="@(body)">
+                
+                <h:panelGrid columns="2" id="divDlgProveedor"> 
+
+                    <h:form>
+                        <h:panelGroup layout="block" id="panelCamposProveedor" style="width: 320px">
+
+                            <p:selectOneListbox id="selListBoxProveedor" converter="proveedorConverter" 
+                                                var="p" filter="true" filterMatchMode="contains" style="width: 300px"
+                                                value="#{gestorObjeto.proveedor}">
+                                <f:selectItems value="#{gestorProveedor.listaProveedores}" var="proveedor" 
+                                               itemLabel="#{proveedor.ruc} #{proveedor.nombre_comercial}" 
+                                               itemValue="#{proveedor}" />
+                                <p:column>
+                                    <h:outputText value="#{p.ruc}" />
+                                </p:column>                            
+                                <p:column>
+                                    <h:outputText value="#{p.nombre_comercial}" />
+                                </p:column>
+                            </p:selectOneListbox>  
+                            <p:commandButton value="Aceptar" update="formContenido" actionListener="#{gestorObjeto.guardarProveedor()}"/>
+                        </h:panelGroup>
+                    </h:form>
+
+
+                    <h:panelGrid columns="3" style="border-style: solid; padding: 5px">
+                        <p:outputLabel value="ID">
+                            <span class="asterisk"/>
+                        </p:outputLabel>                        
+                        <h:panelGroup>
+                            <p:inputText id="txtIdProveedor" requiredMessage="Requerido" required="true" maxlength="255"/>  
+                            <p:message for="txtIdProveedor"/>
+                        </h:panelGroup>
+                        <p:commandButton value="Ingresar" />
+
+                        <p:outputLabel value="RUC">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <h:panelGroup>
+                            <p:inputText id="txtRUCProveedor" requiredMessage="Requerido" 
+                                         required="true" maxlength="255" style="width: 150px"/>  
+                            <p:message for="txtRUCProveedor"/>
+                        </h:panelGroup>
+                        <h:panelGroup/>
+
+                        <p:outputLabel value="Nombre Comercial">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <h:panelGroup>
+                            <p:inputText id="txtNom_Com_Proveedor" requiredMessage="Requerido" 
+                                         required="true" maxlength="255" style="width: 150px"/>  
+                            <p:message for="txtNom_Com_Proveedor"/>
+                        </h:panelGroup>
+                        <h:panelGroup/>                        
+                    </h:panelGrid>
+
+                </h:panelGrid>
+
+            </p:dialog> 
+
+            <p:dialog id="dlgUbicacion" header="Ubicación" widgetVar="dlgUbicacion" 
+                      resizable="false" width="400" modal="true" appendTo="@(body)">
+                <p:ajax event="close" update="divDialogs" 
+                        listener="#{gestorObjeto.onCloseDlgUbicacion()}" />
+                <h:panelGroup layout="block" id="divDlgUbicacion">
+                    <h:panelGrid id="panelCamposUbicacion" columns="3">
+                        <p:outputLabel value="Lugar/">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <p:inputText styleClass="inputEnDlg" id="txtLugarUbicacion" 
+                                     required="true" requiredMessage="Requerido"/>
+                        <p:message for="txtLugarUbicacion"/>                                
+
+                        <p:outputLabel value="Estante"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtEstanteUbicacion"/>
+                        <p:message for="txtEstanteUbicacion"/>
+
+                        <p:outputLabel value="Código"/>
+                        <p:inputText styleClass="inputEnDlg" id="txtCodigoUbicacion"/>
+                        <p:message for="txtCodigoUbicacion"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" process="dlgUbicacion" update="divDlgUbicacion inputProveedor"/>
+                        <p:commandButton value="Cancelar" onclick="PF('dlgUbicacion').hide();"/>
+                    </h:panelGrid>            
+                </h:panelGroup>
+            </p:dialog>
+
+            <p:dialog id="dlgCustodio" header="Seleccionar Custodio" widgetVar="dlgCustodio" 
+                      rendered="#{gestorObjeto.mostrarDlgCustodio}" resizable="false" width="700" 
+                      modal="true" appendTo="@(body)">
+                <p:ajax event="close" update="divDialogs" listener="#{gestorObjeto.onCloseDlgCustodio()}" />
+
+                <h:panelGroup layout="block" id="divDlgCustodio" style="width: 320px">
+                    <p:selectOneListbox id="selListBoxCustodio" converter="custodioConverter" 
+                                        var="p" filter="true" filterMatchMode="contains" style="width: 300px">
+                        <f:selectItems value="#{gestorPersona.listaPersonas}" var="persona" 
+                                       itemLabel="#{persona.nombres} #{persona.apellidos}" 
+                                       itemValue="#{persona}" />
+                        <p:column>
+                            <h:outputText value="#{p.nombres}" />
+                        </p:column>                            
+                        <p:column>
+                            <h:outputText value="#{p.apellidos}" />
+                        </p:column>
+                    </p:selectOneListbox>
+                </h:panelGroup>
+
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Aceptar" process="dlgCustodio" update="divDlgCustodio"/>
+                    <p:commandButton value="Cancelar" onclick="PF('dlgCustodio').hide();"/>
+                </h:panelGrid>                      
+
+            </p:dialog>
+        </h:panelGroup>
+    </ui:define>
+
 </ui:composition>
