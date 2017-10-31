@@ -35,26 +35,35 @@
             <h:panelGrid columns="3">
                 <p:outputLabel value="Archivo BibTeX"/>
                 <h:panelGroup layout="block">
-                    <p:fileUpload fileUploadListener="#{gestorArticulo.fileUploadListener}" 
-                                  mode="advanced"
-                                  update="panelArticulo" 
-                                  auto="true" 
-                                  sizeLimit="15728640" 
-                                  allowTypes="/(\.|\/)(bib|bibtex)$/" 
-                                  accept="*.bib|*.bibtex"
-                                  invalidFileMessage="Archivo no válido. Solo se permite .BIB o .BIBTEX" 
-                                  fileLimitMessage="Máximo 15MB" label="Elegir..."
-                                  >
+                    <p:fileUpload 
+                        fileUploadListener="#{gestorArticulo.fileUploadListener}" 
+                        mode="advanced"
+                        update="panelArticulo" 
+                        auto="true"
+                        sizeLimit="15728640" 
+                        allowTypes="/(\.|\/)(bib|bibtex)$/" 
+                        accept="*.bib|*.bibtex"
+                        invalidFileMessage="Archivo no válido. Solo se permite .BIB o .BIBTEX" 
+                        fileLimitMessage="Máximo 15MB" label="Elegir..."
+                        >
                         <f:attribute name="bibtex" value="true" />
                     </p:fileUpload> 
-                    <h:panelGroup id="spanTamanioArchivoBib" styleClass="tamanoArchivo">
+                    <h:panelGroup 
+                        id="spanTamanioArchivoBib" 
+                        styleClass="tamanoArchivo">
                         <p:outputLabel id="lblTamanioArchivoBib" escape="false" rendered="#{gestorArticulo.articulo.archivoBibtex != ''}" value="Tamaño del archivo subido: #{gestorArticulo.tamanoArchivoBibtex}&lt;br/&gt;"/>
                     </h:panelGroup>
-                    <p:selectBooleanCheckbox id="chkSoloSubirBibtex" value="#{gestorArticulo.soloSubirBibtex}" itemLabel="Solo subir el BibTex y no llenar campos automáticamente." />
-                    <p:tooltip for="chkSoloSubirBibtex" escape="false" value="Si está activado, solo se guarda el archivo y mantiene los campos de abajo intactos. &lt;br/&gt;Si está desactivado, se llenará todos los campos de abajo que consten en el BibTeX." />
+                    <p:selectBooleanCheckbox 
+                        id="chkSoloSubirBibtex" 
+                        value="#{gestorArticulo.soloSubirBibtex}" 
+                        itemLabel="Solo subir el BibTex y no llenar campos automáticamente." >
+                        <p:ajax/>
+                    </p:selectBooleanCheckbox>
+                    <p:tooltip for="chkSoloSubirBibtex" escape="false" 
+                               value="Si está activado, solo se guarda el archivo y mantiene los campos de abajo intactos. &lt;br/&gt;Si está desactivado, se llenará todos los campos de abajo que consten en el BibTeX." />
                 </h:panelGroup> 
-                <h:panelGroup layout="block"/>                 
-                
+                <h:panelGroup layout="block"/>
+
                 <p:outputLabel value="Título"/>
                 <h:panelGroup>
                     <p:inputText id="txtNombre" requiredMessage="Requerido" required="true" value="#{gestorArticulo.articulo.nombre}"/>  
@@ -83,7 +92,10 @@
 
                 <p:outputLabel value="Autores"/>
                 <h:panelGroup layout="block" id="divAutores">
-                    <p:dataTable emptyMessage="#{label.emptyMessage}" draggableRows="true" id="dtAutores" paginator="true" rowIndexVar="rowIndex" paginatorAlwaysVisible="false" 
+                    <p:dataTable emptyMessage="#{label.emptyMessage}" draggableRows="true" 
+                                 id="dtAutores" paginator="true" 
+                                 rowIndexVar="rowIndex" 
+                                 paginatorAlwaysVisible="false" 
                                  editable="true" editMode="cell"
                                  rows="10" var="personaArticulo" value="#{gestorArticulo.listaPersonaArticulo}" rowKey="#{personaArticulo.id}">
                         <p:ajax event="rowReorder" update="dtAutores" />
@@ -93,7 +105,7 @@
                                 <p:outputLabel value=" (Principal)" style="font-size: 0.7em"/>
                             </h:panelGroup>
                         </p:column>
-                        
+
                         <p:column headerText="Firma" width="200">
                             <p:cellEditor>
                                 <f:facet name="input">
@@ -121,7 +133,7 @@
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        
+
                         <p:column headerText="Identificación" width="150">
                             <h:outputText value="#{personaArticulo.persona.identificacion}" />
                         </p:column>

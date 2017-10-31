@@ -19,7 +19,6 @@ and open the template in the editor.
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-
     </h:head>
 
     <h:body>
@@ -31,7 +30,6 @@ and open the template in the editor.
         </h:form>
 
         <p:layout fullPage="true">
-
             <p:layoutUnit id="header" position="north" size="100">
                 <p:graphicImage name="images/logo_universidad-01.png" style="vertical-align: middle; padding: 0px;"/>            
                 <p:outputLabel style="font-size: 1.8em; margin-left: 20px;" value="Departamento de Recursos Hídricos y Ciencias Ambientales"/>
@@ -43,7 +41,7 @@ and open the template in the editor.
 
             <p:layoutUnit id="lMenu" position="west" size="155" header="Opciones:" collapsible="true">
                 <h:form id="formMenu">
-                    <ui:include src="./menu_inventario.xhtml"/>
+                    <ui:include src="./menu.xhtml"/>
                 </h:form>
             </p:layoutUnit>
 
@@ -54,9 +52,7 @@ and open the template in the editor.
                     <ui:insert name="body"/>
                 </h:form>                
             </p:layoutUnit>
-
         </p:layout>
-
     </h:body>
 
 </html>

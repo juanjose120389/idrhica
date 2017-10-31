@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template_pf.xhtml">
+    <ui:define name="body">
+        <style>
+            .linkDropdown {
+                color: white !important; 
+                margin-left: 15px;
+            }
+            .ui-messages-error, .ui-message-error {
+                display: inline-block;
+            }
+            td > .ui-inputfield.ui-inputtext,td > .ui-inputfield.ui-inputtextarea {
+                width: 300px;
+            }
+            table .ui-fileupload-files {
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+            .ui-fileupload-content {
+                border: none;
+            }
+            
+        </style>
+
+        <p:panel id="panelAcuerdoConfidencialidad" header="#{gestorAcuerdoConfidencialidad.modoModificar?'Modificar':'Nuevo'} Acuerdo de Confidencialidad">
+            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
+            <h:panelGrid columns="2" columnClasses="outputMed">
+                <p:outputLabel value="Beneficiario">
+                    <span class="asterisk"/>
+                </p:outputLabel>
+
+                <h:panelGroup layout="block">
+                    <p:selectOneMenu style="width: 300px" required="true" id="cmbBeneficiario" value="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.beneficiario}" converter="personaConverter"
+                                     var="per" filter="true" filterMatchMode="contains" requiredMessage="#{label.required}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                        <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />                        
+                        <p:column>
+                            <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                        </p:column>
+                    </p:selectOneMenu>
+                    <p:commandLink rendered="false" value="Nuevo" styleClass="linkDropdown" process="@this" action="#{gestorAcuerdoConfidencialidad.seleccionarBeneficiario}">
+                        <p:ajax event="dialogReturn" listener="#{gestorAcuerdoConfidencialidad.onPersonaChosen}" update="cmbBeneficiario"/>
+                    </p:commandLink>
+                    <p:message for="cmbBeneficiario"/>
+                </h:panelGroup>
+
+                <p:outputLabel value="Objeto del acuerdo"/>
+                <p:inputTextarea value="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.objetoAcuerdo}"/>
+
+                <p:outputLabel value="Definición de Información Confidencial" />                      
+                <p:inputTextarea value="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.descripcionInformacion}"/>
+
+                <p:outputLabel value="Fecha de Inicio"/>
+                <h:panelGroup layout="block">
+                    <p:calendar id="calFechaInicio" pattern="dd/MM/yyyy" showOn="button" 
+                                value="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.fechaInicio}"/>
+                    <p:message for="calFechaInicio"/>
+                </h:panelGroup>
+                
+                <p:outputLabel value="Archivo PDF"/>
+                <h:panelGroup layout="block">
+                    <p:fileUpload fileUploadListener="#{gestorAcuerdoConfidencialidad.fileUploadListener}" 
+                                  mode="advanced"
+                                  update="spanTamanioArchivo" 
+                                  auto="true" 
+                                  sizeLimit="15728640" 
+                                  allowTypes="/(\.|\/)(pdf|docx?)$/" 
+                                  accept="*.pdf|*.doc|*.docx"
+                                  invalidFileMessage="Archivo no válido. Solo se permite PDF y DOC." 
+                                  fileLimitMessage="Máximo 15MB" label="Elegir..."
+                                  /> 
+                    <h:panelGroup id="spanTamanioArchivo" styleClass="tamanoArchivo">
+                        <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.archivoAcuerdoConf != null and gestorAcuerdoConfidencialidad.acuerdoConfidencial.archivoAcuerdoConf != ''}" value="Tamaño del archivo subido: #{gestorAcuerdoConfidencialidad.tamanoArchivo}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+            </h:panelGrid>
+        </p:panel>
+
+        <h:panelGroup layout="block" style="height: 15px"/>
+
+        <p:commandButton value="Guardar" update="formContenido" 
+                         action="#{gestorAcuerdoConfidencialidad.guardar()}" 
+                         icon="fa fa-save"/>
+    </ui:define>
+</ui:composition>

@@ -6,7 +6,7 @@
                 xmlns:pe="http://primefaces.org/ui/extensions" 
                 template="./template_pf.xhtml">
     <ui:define name="body">
-        <style >
+        <style>
             .ui-datatable table {
                 table-layout: auto;
             }
@@ -36,13 +36,22 @@
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>
             
-            <p:column headerText="Nombre" sortBy="#{institucion.nombre}" filterBy="#{institucion.nombre}" filterMatchMode="contains" >
-                <h:outputText value="#{institucion.nombre}" />
+            <p:column 
+                headerText="Nombre" 
+                sortBy="#{institucion.nombre}" 
+                filterBy="#{institucion.nombre}" 
+                filterMatchMode="contains" 
+                style="text-align:justify; padding:5px;">                
+                <p:commandLink 
+                    value="#{institucion.nombre}" 
+                    action="#{gestorNavegacion.cargarPagina(4, institucion.id)}"
+                    style="font-weight: bold;white-space: pre-wrap;"/>
             </p:column>
 
             <p:column width="90" exportable="false">
                 <p:commandLink value="Detalles" action="#{gestorNavegacion.cargarPagina(4, institucion.id)}"/>
             </p:column>
+            
         </p:dataTable>
     </ui:define>
 </ui:composition>

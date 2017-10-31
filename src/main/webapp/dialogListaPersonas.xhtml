@@ -33,9 +33,12 @@
             <p:accordionPanel>
 
                 <p:tab title="Personas existentes" rendered="#{!gestorDialogListaPersonas.soloNuevaPersona}">
-
-                    <p:dataTable widgetVar="personasTable" resizableColumns="false" selection="#{gestorDialogListaPersonas.listaPersonasSel}" rowKey="#{persona.id}" 
-                                 id="personasTable" var="persona" value="#{gestorDialogListaPersonas.listaPersonas}" rows="10"
+                    <p:dataTable widgetVar="personasTable" 
+                                 resizableColumns="false" 
+                                 selection="#{gestorDialogListaPersonas.listaPersonasSel}" 
+                                 rowKey="#{persona.id}" 
+                                 id="personasTable" 
+                                 var="persona" value="#{gestorDialogListaPersonas.listaPersonas}" rows="10"
                                  paginatorAlwaysVisible="false" paginator="true"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
@@ -98,6 +101,7 @@
                         </f:facet>
                     </p:dataTable>
                 </p:tab>
+                
                 <p:tab title="Agregar una nueva persona externa">
                     <h:panelGrid columns="3" id="gridDatosNuevaPersona">
                         <p:outputLabel value="Identificación"/>

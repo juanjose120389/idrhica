@@ -14,24 +14,23 @@
             }
             .linkDropdown {
                 margin-left: 15px;
-            }            
+            }
         </style>
         <h:panelGroup layout="block" id="divDialogs">
-            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" resizable="false" modal="true" width="400" appendTo="@(body)">
+            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" resizable="false" width="400">
                 <h:panelGroup layout="block" id="divDlgUniversidad">
                     <h:panelGrid id="panelCamposUniversidad" columns="3">
                         <p:outputLabel value="Nombre"/>
                         <p:inputText style="width: 100%" id="txtNombreUniversidad" required="true" requiredMessage="Requerido" value="#{gestorTesis.universidad.nombre}"/>
                         <p:message for="txtNombreUniversidad"/>                                
-
+                        
                         <p:outputLabel value="País"/>
                         <p:inputText style="width: 100%" id="txtPaisUniversidad" value="#{gestorTesis.universidad.pais}"/>
                         <p:message for="txtPaisUniversidad"/>
-
+                        
                         <p:outputLabel value="Ciudad"/>
                         <p:inputText style="width: 100%" id="txtCiudadUniversidad" value="#{gestorTesis.universidad.ciudad}"/>
-                        <p:message for="txtCiudadUniversidad"/>
-
+                        <p:message for="txtCiudadUniversidad"/>                        
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:commandButton value="Aceptar" process="divDlgUniversidad" update="divDlgUniversidad cmbUniversidad" action="#{gestorTesis.guardarUniversidad()}"/>
@@ -51,14 +50,14 @@
                     <p:message for="txtNombre"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/>
-
+                
                 <p:outputLabel value="Tipo" />
                 <p:selectOneMenu value="#{gestorTesis.tesis.tipo}" style="width: 300px">
                     <f:selectItems value="#{gestorTesis.tiposTesis}" var="tipo"
                                    itemValue="#{tipo}" itemLabel="#{label['tesis.tipo.' += tipo]}" />
                 </p:selectOneMenu>
                 <h:panelGroup layout="block"/>
-
+                
                 <p:outputLabel value="Director" >
                     <span class="asterisk"/>
                 </p:outputLabel>
@@ -67,7 +66,7 @@
                                      var="per" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" />
                         <f:selectItems value="#{gestorPersona.listaPersonas}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />
-
+                        
                         <p:column>
                             <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                         </p:column>
@@ -75,7 +74,7 @@
                     <p:message for="cmbDirector"/>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/>            
-
+                
                 <p:outputLabel value="Co-directores"/>
                 <h:panelGroup layout="block" id="divCodirectores">
                     <h:panelGroup layout="block" style="height: 15px"/>
@@ -102,7 +101,7 @@
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/>
-
+                
                 <p:outputLabel value="Tutores"/>
                 <h:panelGroup layout="block" id="divTutores">
                     <h:panelGroup layout="block" style="height: 15px"/>
@@ -129,7 +128,7 @@
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup layout="block"/>
-
+                
                 <p:outputLabel value="Autores"/>
                 <h:panelGroup layout="block" id="divAutoresTesis">
                     <h:panelGroup layout="block" style="height: 15px"/>

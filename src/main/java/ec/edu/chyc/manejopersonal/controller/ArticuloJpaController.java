@@ -83,12 +83,6 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                 proyectoAttached.getArticulosCollection().add(obj);
             }
             
-            /*for (Persona per : listaAutores) {
-                //para cada una de los autores, agregar este artículo a su lista de artículos
-                // no hace falta hacer un merge ya que lo detecta automáticamente
-                Persona perAttached = em.find(Persona.class, per.getId());                
-                perAttached.getArticulosCollection().add(obj);
-            }*/
             if (!obj.getPersonasArticuloCollection().isEmpty()) {
                 for (PersonaArticulo personaArticulo : obj.getPersonasArticuloCollection()) {
                     personaArticulo.setArticulo(obj);
@@ -119,7 +113,8 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                 }
             }
 
-            if (obj.getArchivoArticulo() != null && !obj.getArchivoArticulo().isEmpty()) {
+            if (obj.getArchivoArticulo() != null 
+                    && !obj.getArchivoArticulo().isEmpty()) {
                 //si se subió el archivo, mover del directorio de temporales al original de artículos
                 Path origen = ServerUtils.getPathTemp().resolve(obj.getArchivoArticulo());
                 String nuevoNombre = "id" + obj.getId() + "_" + obj.getArchivoArticulo();

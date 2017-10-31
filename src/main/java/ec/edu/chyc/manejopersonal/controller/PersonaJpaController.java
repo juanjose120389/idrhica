@@ -56,8 +56,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             em = getEntityManager();
             Query q = em.createQuery("select distinct pf from PersonaFirma pf where pf.persona.id=:idPersona and pf.firma.id=:idFirma");
             q.setParameter("idPersona", idPersona);
-            q.setParameter("idFirma", idFirma);
-            
+            q.setParameter("idFirma", idFirma);            
             List<PersonaFirma> list = q.getResultList();
             if (list != null && list.size() > 0) {
                 return list.get(0);
@@ -73,7 +72,6 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
     private Firma findFirma(EntityManager em, String strFirma) {
         Query q = em.createQuery("select distinct f from Firma f where f.nombre=:nombre");
         q.setParameter("nombre", strFirma);
-
         List<Firma> list = q.getResultList();
         if (list != null && list.size() > 0) {
             return list.get(0);
@@ -86,8 +84,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
         try {
             em = getEntityManager();
             Query q = em.createQuery("select distinct f from Firma f left join fetch f.personasFirmaCollection where f.id=:id");
-            q.setParameter("id", idFirma);
-            
+            q.setParameter("id", idFirma);            
             List<Firma> list = q.getResultList();
             if (list != null && list.size() > 0) {
                 return list.get(0);
@@ -108,8 +105,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             List<Persona> list = q.getResultList();
             if (list != null && list.size() > 0) {
                 Persona persona = list.get(0);
-                Hibernate.initialize(persona.getPersonaFirmasCollection());
-                
+                Hibernate.initialize(persona.getPersonaFirmasCollection());                
                 return persona;
             }
             return null;
@@ -127,8 +123,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             em = getEntityManager();
             Query q = em.createQuery("select distinct pf from PersonaFirma pf where pf.persona.id=:idPersona and pf.firma.nombre=:firma");
             q.setParameter("idPersona", idPersona);
-            q.setParameter("firma", firma);
-            
+            q.setParameter("firma", firma);            
             List<PersonaFirma> list = q.getResultList();
             if (list != null && list.size() > 0) {
                 return list.get(0);
@@ -192,7 +187,6 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             Query q = em.createQuery("select distinct p from Persona p join fetch p.personaFirmasCollection pf where pf.firma.nombre in :firmas order by pf.firma.nombre asc");
             q.setParameter("firmas", firmasAutores);
             List<Persona> list = q.getResultList();
-
             return list;
         } finally {
             if (em != null) {
@@ -239,11 +233,9 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
     //public Persona findPersona(Long id, boolean incluirArticulos, boolean incluirContratos, boolean incluirTitulos, boolean incluirTesis, boolean incluirPasantias, boolean incluirFirmas) {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            
+            em = getEntityManager();            
             //String incluir = "";
-            ArrayList<String> listaFetchs = new ArrayList<>();
-            
+            ArrayList<String> listaFetchs = new ArrayList<>();            
             /*int totalFetchs = 0;
             if (incluirContratos) {
                 listaFetchs.add(" left join fetch p.contratosCollection ");
@@ -268,9 +260,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             if (incluirFirmas) {
                 listaFetchs.add(" left join fetch p.personaFirmasCollection ");
                 totalFetchs++;                
-            }
-            
-            
+            }            
             if (listaFetchs.size() > 1) {
                 incluir = listaFetchs.get(0);
             }*/
@@ -310,8 +300,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             if ((incluir & Incluir.INC_FIRMAS.value()) != 0) {
             //if (incluirFirmas) {
                 Hibernate.initialize(p.getPersonaFirmasCollection());
-            }
-            
+            }            
             return p;
         } finally {
             if (em != null) {
@@ -377,7 +366,6 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                     personaTitulo.setId(null);
                     em.persist(personaTitulo);
                 }
-
             }
             /*for (PersonaFirma personaFirma : persona.getPersonaFirmasCollection()) {
                 personaFirma.setPersona(persona);
@@ -424,6 +412,15 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 if (perTitulo.getPersona() == null) {
                     perTitulo.setPersona(persona);
                 }
+                Titulo titulo = perTitulo.getTitulo();
+                if (titulo.getId() == null || titulo.getId() < 0) {
+                    titulo.setId(null);
+                    em.persist(titulo);
+                }                
+                if (perTitulo.getUniversidad().getId() == null || perTitulo.getUniversidad().getId() < 0) {
+                    perTitulo.getUniversidad().setId(null);
+                    em.persist(perTitulo.getUniversidad());
+                }                
                 em.merge(perTitulo);
             }
             
@@ -479,7 +476,6 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 em.close();
             }
         }
-
     }
     
     /**
@@ -521,8 +517,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
                 perFirma.setId(null);
                 em.persist(perFirma);
             }
-        }
-        
+        }        
     }
     
     public void destroy(Long id) throws Exception {
@@ -531,8 +526,7 @@ public class PersonaJpaController extends GenericJpaController<Persona> implemen
             em = getEntityManager();
             em.getTransaction().begin();
             em.remove(id);
-            em.getTransaction().commit();
-                    
+            em.getTransaction().commit();                    
         } finally {
             if (em != null) {
                 em.close();

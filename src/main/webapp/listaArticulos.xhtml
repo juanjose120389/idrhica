@@ -25,8 +25,8 @@
         <p:dataTable widgetVar="articulosTable" id="articulosTable" var="articulo" value="#{gestorArticulo.listaArticulos}" rows="10"
                      paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
-                     >
+                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex">
+
             <f:facet name="{Exporters}">
                 <h:panelGroup layout="block" styleClass="exportButtons">
                     <h:commandLink>
@@ -39,6 +39,7 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
+
             <f:facet name="header">
                 Artículos
             </f:facet>
@@ -50,7 +51,7 @@
             <p:column headerText="Autores" exportable="false" filterBy="#{articulo.personasArticuloCollection}" 
                       filterFunction="#{gestorArticulo.filtrarPorAutores}">
                 <ul style="width: 220px; font-size: 13px"><ui:repeat value="#{articulo.personasArticuloCollection.toArray()}" var="perarticulo">
-                    <li><h:outputText value="#{perarticulo.personaFirma.firma.nombre}"/></li>
+                        <li><h:outputText value="#{perarticulo.personaFirma.firma.nombre}"/></li>
                     </ui:repeat></ul>
             </p:column>
 
@@ -62,9 +63,11 @@
                 <h:outputText value="#{articulo.personasArticuloCollection[0].personaFirma.firma.nombre}" />
             </p:column>           
 
-            <p:column headerText="Título" filterBy="#{articulo.nombre}" style="max-width: 450px; min-width: 300px" 
-                      sortBy="#{articulo.nombre}" filterMatchMode="contains">
-                <p:outputLabel style="font-weight: bold;white-space: pre-wrap;" value="#{articulo.nombre}" />
+            <p:column headerText="Título" filterBy="#{articulo.nombre}" 
+                      sortBy="#{articulo.nombre}" filterMatchMode="contains" 
+                      style="text-align:justify; padding:15px; max-width:450px; min-width:300px">
+                <p:commandLink style="font-weight: bold;white-space: pre-wrap;" 
+                               value="#{articulo.nombre}" action="#{gestorNavegacion.cargarPagina(1, articulo.id)}"/>
             </p:column>
 
             <p:column headerText="Año" sortBy="#{articulo.anioPublicacion}" width="40" 
@@ -95,11 +98,15 @@
                     </p:selectOneMenu>
 
                 </f:facet>
-                <p:dataList styleClass="lista" emptyMessage="" value="#{articulo.listaInstFinanciamientos}" var="institucion" type="definition">
-                    • #{institucion.nombre}
-                </p:dataList>
+
+                <ul style="width: 150px; font-size: 13px">
+                    <ui:repeat value="#{articulo.listaInstFinanciamientos.toArray()}" var="artfinanciamiento">
+                        <li><h:outputText value="#{artfinanciamiento.nombre}"/></li>
+                    </ui:repeat>
+                </ul>          
 
             </p:column>
+
             <p:column headerText="Financiamiento" exportable="true" styleClass="columnaOculta">
                 <p:outputLabel value="#{gestorArticulo.convertirListaInstitucion(articulo.listaInstFinanciamientos)}"/>
             </p:column>
@@ -132,7 +139,7 @@
             <p:column exportable="false">
                 <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(1, articulo.id)}"/>
                 <p:outputLabel value=" "/>
-                <p:commandLink value="Editar" action="#{gestorArticulo.initModificarArticulo(articulo.id)}" rendered="#{gestorUsuario.puedeEditar}"/>
+                <p:commandLink value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(1,articulo.id)}" rendered="#{gestorUsuario.puedeEditar}"/>
             </p:column>
         </p:dataTable>
     </ui:define>

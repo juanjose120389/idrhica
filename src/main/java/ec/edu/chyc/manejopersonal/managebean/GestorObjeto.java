@@ -117,8 +117,9 @@ public class GestorObjeto implements Serializable {
 
     public void abrirProveedorDialog() {
         //mostrarDlgProveedor = true;
-        RequestContext.getCurrentInstance().update("divDialogs");
+        //RequestContext.getCurrentInstance().update("divDialogs");
         ejecutarJS("PF('dlgProveedor').show()");
+        System.err.println("///////////////////////////////Abriendo dlgProveedor");
     }
 
     public void guardarProveedor() {

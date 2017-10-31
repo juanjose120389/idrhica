@@ -20,7 +20,7 @@
 
         <h:panelGroup layout="block" id="divDialogs">
             <p:dialog id="dlgInstitucion" header="Institución" widgetVar="dlgInstitucion" rendered="#{gestorProyecto.mostrarDlgInstitucion}" 
-                      resizable="false" modal="true" width="400" appendTo="@(body)">
+                      resizable="false" width="400">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgInstitucion()}" />
                 <h:panelGroup layout="block" id="divDlgInstitucion">
                     <h:panelGrid id="panelCamposInst" columns="2">
@@ -37,7 +37,7 @@
             </p:dialog>  
             
             <p:dialog id="dlgGrupoInvestigacion" header="Grupo Investigación" widgetVar="dlgGrupoInvestigacion" rendered="#{gestorProyecto.mostrarDlgGrupoInvestigacion}" 
-                      resizable="false" modal="true" width="400" appendTo="@(body)">
+                      resizable="false" width="400">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgGrupoInvestigacion()}" />
                 <h:panelGroup layout="block" id="divDlgGrupoInvestigacion">
                     <h:panelGrid columns="2">
@@ -54,7 +54,7 @@
             </p:dialog>  
 
             <p:dialog id="dlgLineaInvestigacion" header="Línea Investigación" widgetVar="dlgLineaInvestigacion" rendered="#{gestorProyecto.mostrarDlgLineaInvestigacion}" 
-                      resizable="false" modal="true" width="400" appendTo="@(body)">
+                      resizable="false" width="400">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgLineaInvestigacion()}" />
                 <h:panelGroup layout="block" id="divDlgLineaInvestigacion">
                     <h:panelGrid columns="2">
@@ -71,7 +71,8 @@
             </p:dialog>  
             
 
-            <p:dialog id="dlgLugar" header="Observatorio" widgetVar="dlgLugar" resizable="false" modal="true" width="500" rendered="#{gestorProyecto.mostrarDlgLugar}" appendTo="@(body)">
+            <p:dialog id="dlgLugar" header="Observatorio" widgetVar="dlgLugar" resizable="false" 
+                      width="500" rendered="#{gestorProyecto.mostrarDlgLugar}">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgLugar()}" />
                 <h:panelGroup id="divDlgLugar" layout="block">
                     <p:tabView id="tabsLugar" activeIndex="#{gestorProyecto.indexTabSel}">
@@ -80,8 +81,18 @@
                             <h:panelGroup id="divAccionesObservatorio" layout="block">
                                 <p:selectOneMenu id="cmbObservatorio" style="width: 200px" value="#{gestorProyecto.lugar}" converter="lugarConverter"
                                                  var="lugar" filter="true" filterMatchMode="contains">
-                                    <f:selectItems value="#{gestorProyecto.listaLugares}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-                                    <f:selectItems value="#{gestorProyecto.listaLugaresAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                                    <f:selectItems 
+                                        value="#{gestorProyecto.listaLugares}" 
+                                        var="t" 
+                                        itemLabel="#{t.nombre}" 
+                                        itemValue="#{t}" 
+                                        rendered="#{not empty gestorProyecto.listaLugares}"/>
+                                    <f:selectItems 
+                                        value="#{gestorProyecto.listaLugaresAgregados}" 
+                                        var="t" 
+                                        itemLabel="#{t.nombre}" 
+                                        itemValue="#{t}" 
+                                        rendered="#{not empty gestorProyecto.listaLugares}"/>
 
                                     <p:column>
                                         <p:outputLabel value="#{lugar.nombre}"/>
@@ -184,10 +195,18 @@
                     <span class="asterisk"/>
                 </p:outputLabel>
                 <h:panelGroup layout="block">
-                    <p:selectOneMenu style="width: 300px" required="true" id="cmbDirector" value="#{gestorProyecto.proyecto.director}" converter="personaConverter"
-                                     var="per" filter="true" filterMatchMode="contains" requiredMessage="#{label.required}">
+                    <p:selectOneMenu style="width: 300px" required="true" 
+                                     id="cmbDirector" 
+                                     value="#{gestorProyecto.proyecto.director}" 
+                                     converter="personaConverter"
+                                     var="per" filter="true" 
+                                     filterMatchMode="contains" 
+                                     requiredMessage="#{label.required}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                        <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />                        
+                        <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" 
+                                       var="u" 
+                                       itemLabel="#{u.nombres} #{u.apellidos}" 
+                                       itemValue="#{u}" />                        
                         <p:column>
                             <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                         </p:column>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>Personas</title>
+        <h:outputStylesheet library="css" name="layout.css"/>
+        <h:outputStylesheet library="css" name="screen.css"/>
+
+        <style type="text/css">
+            .ui-widget {
+                font-size: 0.9em;
+            }
+            body {
+                font-size: 0.9em;
+            }
+            .ui-datatable table {
+                /*width: auto !important;*/
+            }
+            .ui-state-highlight .ui-icon {
+                background-image: url("#{resource['primefaces-bootstrap:images/ui-icons_333333_256x240.png']}");
+
+            }
+
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form id="formTabla">
+            <p:accordionPanel activeIndex="1">
+
+                <p:tab title="Agregar nueva persona">
+                    <h:panelGrid columns="3" id="gridDatosNuevaPersona">
+                        <p:outputLabel value="Identificación"/>
+                        <p:inputText id="txtIdentificacionNuevo" value="#{gestorDialogListaPersonasSimple.nuevaPersona.identificacion}"/>
+                        <p:message for="txtIdentificacionNuevo"/>
+
+                        <p:outputLabel value="Nombres">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <p:inputText id="txtNombresNuevo" value="#{gestorDialogListaPersonasSimple.nuevaPersona.nombres}" required="true" requiredMessage="#{label.required}"/>
+                        <p:message for="txtNombresNuevo"/>
+
+                        <p:outputLabel value="Apellidos">
+                            <span class="asterisk"/>
+                        </p:outputLabel>
+                        <p:inputText id="txtApellidosNuevo" value="#{gestorDialogListaPersonasSimple.nuevaPersona.apellidos}" required="true" requiredMessage="#{label.required}"/>
+                        <p:message for="txtApellidosNuevo"/>
+
+                        <p:outputLabel value="Género"/>
+                        <p:selectOneMenu value="#{gestorDialogListaPersonasSimple.nuevaPersona.genero}"
+                                         required="true" style="width: 150px"
+                                         requiredMessage="Requerido"
+                                         id="cboGeneroNuevo">
+                            <f:selectItem itemLabel="Masculino" itemValue="M"/>
+                            <f:selectItem itemLabel="Femenino" itemValue="F"/>
+                        </p:selectOneMenu>                        
+                        <p:message for="cboGeneroNuevo"/>
+
+                        <p:outputLabel value="Celular"/>
+                        <p:inputText id="txtCelularNuevo" value="#{gestorDialogListaPersonasSimple.nuevaPersona.celular}"/>
+                        <p:message for="txtCelularNuevo"/>
+
+                        <p:outputLabel value="E-mail"/>
+                        <p:inputText id="txtEmailNuevo" value="#{gestorDialogListaPersonasSimple.nuevaPersona.correo}"/>
+                        <p:message for="txtEmailNuevo"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Aceptar" action="#{gestorDialogListaPersonasSimple.guardarNuevaPersona()}" process="gridDatosNuevaPersona @parent" update="gridDatosNuevaPersona"/>
+                        <p:commandButton value="Cancelar" process="@parent" action="#{gestorDialogListaPersonasSimple.cancelarSeleccionPersonas()}"/>
+                    </h:panelGrid>
+                </p:tab>
+
+                <p:tab title="Seleccionar Persona" rendered="#{!gestorDialogListaPersonasSimple.soloNuevaPersona}" >
+
+                    <p:dataTable widgetVar="personasTable" 
+                                 resizableColumns="false" 
+                                 selectionMode="single"
+                                 selection="#{gestorDialogListaPersonasSimple.listaPersonasSel}" 
+                                 rowKey="#{persona}"
+                                 id="personasTable" var="persona" 
+                                 value="#{gestorDialogListaPersonasSimple.listaPersonas}" 
+                                 rows="100"
+                                 paginatorAlwaysVisible="false" paginator="true"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,15,20,40" 
+                                 rowIndexVar="rowIndex" 
+                                 paginatorPosition="top" 
+                                 scrollable="true"
+                                 >
+                        <f:facet name="{Exporters}">
+                            <h:panelGroup layout="block" styleClass="exportButtons">
+                                <h:commandLink>
+                                    <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                                    <p:dataExporter type="xls" target="personasTable" fileName="personas" />
+                                </h:commandLink>
+                                <h:commandLink>
+                                    <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                                    <p:dataExporter type="pdf" target="personasTable" fileName="personas" encoding="iso-8859-1"/>
+                                </h:commandLink>
+                            </h:panelGroup>                    
+                        </f:facet>
+
+                        <p:column headerText="Identificación" filterBy="#{persona.identificacion}" filterMatchMode="contains" width="100">
+                            <h:outputText value="#{persona.identificacion}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre" filterBy="#{persona.nombres} #{persona.apellidos}" filterMatchMode="contains" width="100">
+                            <h:outputText value="#{persona.nombres} #{persona.apellidos}" />
+                        </p:column>
+
+                        <p:column headerText="Tipo" filterBy="#{persona.tipo}" width="110"                                 
+                                  sortBy="#{persona.tipo}">                            
+                            <h:outputText rendered="#{not empty persona.tipo}"                                      
+                                          value="#{label['persona.tipo.' += persona.tipo]}" />
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Aceptar" process="personasTable" action="#{gestorDialogListaPersonasSimple.aceptarSeleccionPersonas()}"/>
+                            <p:commandButton value="Cancelar" process="@this" action="#{gestorDialogListaPersonasSimple.cancelarSeleccionPersonas()}"/>
+                        </f:facet>
+                    </p:dataTable>        
+
+                </p:tab>
+
+            </p:accordionPanel>
+
+        </h:form>
+    </h:body>
+
+</html>

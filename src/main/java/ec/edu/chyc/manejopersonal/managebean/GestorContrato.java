@@ -113,7 +113,8 @@ public class GestorContrato implements Serializable {
             }
             RequestContext.getCurrentInstance().update("formContenido:dtProyectos");
         }
-    }    
+    }
+    
     private void inicializarManejoContrato() {
         contrato = new Contrato();
         esProfesor = false;
@@ -134,11 +135,11 @@ public class GestorContrato implements Serializable {
             esProfesor = true;
         }
         
-        if (!esProfesor) {
+        /*if (!esProfesor) {
             //si no es profesor, asignar el unico proyecto relacionado al contrato, a la variable contrato.proyecto para poder obtener de una sola
             Proyecto unicoProyecto = contrato.getProyectosCollection().stream().findFirst().get();
             contrato.setProyecto(unicoProyecto);
-        }
+        }*/
         modoModificar = true;
         try {
             Path pathArchivoSubido = ServerUtils.getPathContratos().resolve(contrato.getArchivoContrato());
@@ -151,8 +152,6 @@ public class GestorContrato implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-
         return "manejoContratos";
     }
     
@@ -170,13 +169,11 @@ public class GestorContrato implements Serializable {
 
     public String guardar() {
         if (!esProfesor) {
-            contrato.setTipoProfesor(null);
-            
+            contrato.setTipoProfesor(null);            
             //agregar a la lista de proyectos el único proyecto seleccionado
             listaProyectos.clear();
             listaProyectos.add(contrato.getProyecto());
         }
-        
         contrato.setProyectosCollection(new HashSet(listaProyectos));
         try {
             if (modoModificar) {
@@ -185,7 +182,6 @@ public class GestorContrato implements Serializable {
                 contratoController.create(contrato);
             }
             return initListarContratos();
-            //return "index";
         } catch (Exception ex) {
             Logger.getLogger(GestorContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -209,23 +205,17 @@ public class GestorContrato implements Serializable {
             String nombreArchivo = ServerUtils.generateB64Uuid().replace("=", "") + (new Random()).nextInt(9999) + "." + extension;
             nombreArchivo = ServerUtils.convertirNombreArchivo(nombreArchivo);
             Path pathArchivo = ServerUtils.getPathTemp().resolve(nombreArchivo).normalize();
-
             File newFile = pathArchivo.toFile();
-
             try {
                 BeansUtils.subirArchivoPrimefaces(file, newFile);
-
                 contrato.setArchivoContrato(nombreArchivo);
-
                 tamanoArchivo = ServerUtils.humanReadableByteCount(file.getSize());
             } catch (IOException ex) {
                 Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         } else {
             System.err.println("Error al subir archivo");
         }
-
     }
     
     public boolean puedeSerContratoProfesor() {

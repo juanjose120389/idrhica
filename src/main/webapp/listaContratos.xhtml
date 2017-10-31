@@ -47,40 +47,63 @@
                 </h:outputText>
             </p:column>
 
-
-
-            <p:column headerText="Contratado" filterBy="#{contrato.persona.nombres} #{contrato.persona.apellidos}" filterMatchMode="contains" sortBy="#{contrato.persona.nombres}">
+            <p:column 
+                headerText="Contratado" 
+                filterBy="#{contrato.persona.nombres} #{contrato.persona.apellidos}" 
+                filterMatchMode="contains" 
+                sortBy="#{contrato.persona.nombres}">
                 <h:outputText value="#{contrato.persona.nombres} #{contrato.persona.apellidos}" />
             </p:column>
 
-
-            <p:column headerText="Proyecto" filterBy="#{contrato.proyecto.titulo}" filterMatchMode="contains" sortBy="#{contrato.proyecto.titulo}">
+            <p:column 
+                headerText="Proyecto" 
+                filterBy="#{contrato.proyecto.titulo}" 
+                filterMatchMode="contains" 
+                sortBy="#{contrato.proyecto.titulo}"
+                exportable="false">
                 <ui:repeat value="#{contrato.proyectosCollection.toArray()}" var="proyecto">
                     <h:outputText value="• #{gestorProyecto.acortarTitulo(proyecto)}"/><br/>
                 </ui:repeat>
-            </p:column>
-            <p:column headerText="Administrador" filterBy="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" filterMatchMode="contains" sortBy="#{contrato.administrador.nombres}">
+            </p:column>            
+            
+            <p:column
+                headerText="Administrador" 
+                filterBy="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" 
+                filterMatchMode="contains" sortBy="#{contrato.administrador.nombres}">
                 <h:outputText value="#{contrato.administrador.nombres} #{contrato.administrador.apellidos}" />
             </p:column>
-            <p:column headerText="Actividad" filterBy="#{contrato.actividadPrincipal}" filterMatchMode="contains" sortBy="#{contrato.actividadPrincipal}">
+            
+            <p:column 
+                headerText="Actividad" 
+                filterBy="#{contrato.actividadPrincipal}" 
+                filterMatchMode="contains" 
+                sortBy="#{contrato.actividadPrincipal}">
                 <h:outputText value="#{contrato.actividadPrincipal}" />
             </p:column>
 
-            <p:column headerText="Tipo" filterBy="#{contrato.tipo}" filterMatchMode="contains" sortBy="#{contrato.tipo}">
+            <p:column 
+                headerText="Tipo" 
+                filterBy="#{contrato.tipo}" 
+                filterMatchMode="contains" 
+                sortBy="#{contrato.tipo}">
                 <h:outputText value="#{label['contrato.tipo.' += contrato.tipo]}" />
                 <h:panelGroup layout="block" rendered="#{contrato.tipoProfesor != null}">
                     <br/>
                     <p:outputLabel value="Profesor: #{label['contrato.tipoProfesor.' += contrato.tipoProfesor]}"/>
                 </h:panelGroup>
             </p:column>
-            <p:column exportable="false" headerText="Doc." width="40">
+            
+            <p:column 
+                exportable="false" 
+                headerText="Doc." 
+                width="40">
                 <p:commandLink ajax="false" rendered="#{contrato.archivoContrato != ''}" title="Descargar contrato">
                     <i class="fa fa-download"></i>
                     <p:fileDownload value="#{gestorContrato.streamParaDescarga(contrato)}"/>
                 </p:commandLink>
             </p:column>            
             <p:column width="60" rendered="#{gestorUsuario.puedeEditar}" exportable="false">
-                <p:commandLink value="Editar" action="#{gestorContrato.initModificarContrato(contrato.id)}"/>
+                <p:commandLink value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(2, contrato.id)}"/>
             </p:column>
         </p:dataTable>         
     </ui:define>

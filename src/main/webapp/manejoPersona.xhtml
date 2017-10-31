@@ -44,7 +44,8 @@
             }
         </style>
         <h:panelGroup layout="block" id="divDialogs">
-            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" rendered="#{gestorPersona.mostrarDlgUniversidad}" resizable="false" modal="true" width="400" appendTo="@(body)">
+            <p:dialog id="dlgUniversidad" header="Universidad" widgetVar="dlgUniversidad" 
+                      rendered="#{gestorPersona.mostrarDlgUniversidad}" resizable="false" width="400">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgUniversidad()}" />
                 <h:panelGroup layout="block" id="divDlgUniversidad">
                     <h:panelGrid id="panelCamposUniversidad" columns="3">
@@ -64,16 +65,18 @@
                         <p:outputLabel value="Ciudad"/>
                         <p:inputText styleClass="inputEnDlg" id="txtCiudadUniversidad" value="#{gestorPersona.universidad.ciudad}"/>
                         <p:message for="txtCiudadUniversidad"/>
-
                     </h:panelGrid>
+                    
                     <h:panelGrid columns="2">
                         <p:commandButton value="Aceptar" process="dlgUniversidad" update="dtTitulos divDlgUniversidad" action="#{gestorPersona.guardarUniversidad()}"/>
                         <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
-                    </h:panelGrid>            
+                    </h:panelGrid>
+                    
                 </h:panelGroup>
             </p:dialog>  
 
-            <p:dialog id="dlgTitulo" header="Título" widgetVar="dlgTitulo" resizable="false" modal="true" width="400" rendered="#{gestorPersona.mostrarDlgTitulo}" appendTo="@(body)">
+            <p:dialog id="dlgTitulo" header="Título" widgetVar="dlgTitulo" resizable="false" width="400" 
+                      rendered="#{gestorPersona.mostrarDlgTitulo}">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorPersona.onCloseDlgTitulo()}" />
                 <h:panelGroup id="divDlgTitulo" layout="block">
                     <h:panelGrid id="panelCamposTitulo" columns="3">
@@ -86,7 +89,8 @@
                         <p:message for="spnNivel"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgTitulo" update="dtTitulos divDlgTitulo" action="#{gestorPersona.guardarTitulo()}" />
+                        <p:commandButton value="Aceptar" process="dlgTitulo" 
+                                         update="dtTitulos divDlgTitulo" action="#{gestorPersona.guardarTitulo()}" />
                         <p:commandButton value="Cancelar" onclick="PF('dlgTitulo').hide();"/>
                     </h:panelGrid>
                 </h:panelGroup>
@@ -213,39 +217,54 @@
 
                         <p:ajax event="cellEdit" listener="#{gestorPersona.onCellEdit}"  />
 
-                        <p:column headerText="Título" width="500">
+                        <p:column headerText="Título" width="300">
                             <p:cellEditor>
                                 <f:facet name="output">
                                     <h:outputText value="#{personaTitulo.titulo.nombre}" />
                                 </f:facet>
                                 <f:facet name="input">
-
-                                    <h:panelGroup id="divAccionesTitulos" layout="block">
-                                        <p:selectOneMenu rendered="#{not empty gestorGeneral.listaTitulos and not empty gestorPersona.listaTitulosAgregados}" id="cmbTitulo" styleClass="cmbTitulo" value="#{personaTitulo.titulo}" converter="tituloConverter"
-                                                         var="titulo" filter="true" filterMatchMode="contains">
+                                    <h:panelGroup id="divAccionesTitulos" 
+                                                  layout="block">
+                                        <p:selectOneMenu rendered="#{not empty gestorGeneral.listaTitulos 
+                                                                     or not empty gestorPersona.listaTitulosAgregados}" 
+                                                         id="cmbTitulo" 
+                                                         styleClass="cmbTitulo" 
+                                                         value="#{personaTitulo.titulo}" 
+                                                         converter="tituloConverter"
+                                                         var="titulo" 
+                                                         filter="true" 
+                                                         filterMatchMode="contains">
                                             <f:selectItems value="#{gestorPersona.listaTitulosAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
                                             <f:selectItems value="#{gestorGeneral.listaTitulos}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-
                                             <p:column>
                                                 <p:outputLabel value="#{titulo.nombre}"/>
                                             </p:column>
                                         </p:selectOneMenu>                                
 
-                                        <p:commandLink value="Nuevo título" styleClass="linkDropdown" process="@this" action="#{gestorPersona.abrirTituloDialog(personaTitulo)}" />
+                                        <p:commandLink value="Nuevo título" 
+                                                       styleClass="linkDropdown" 
+                                                       process="@this" 
+                                                       action="#{gestorPersona.abrirTituloDialog(personaTitulo)}" />
                                     </h:panelGroup>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
 
-                        <p:column headerText="Universidad">
+                        <p:column headerText="Universidad" width="300">
                             <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{personaTitulo.universidad.nombre}" /></f:facet>
+                                <f:facet name="output">
+                                    <h:outputText value="#{personaTitulo.universidad.nombre}" />
+                                </f:facet>
                                 <f:facet name="input">
-
-                                    <h:panelGroup id="divAccionesUniversidad" layout="block">
-
-                                        <p:selectOneMenu id="cmbUniversidad" styleClass="cmbUniversidad" value="#{personaTitulo.universidad}" converter="universidadConverter"
-                                                         var="uni" filter="true" filterMatchMode="contains">
+                                    <h:panelGroup id="divAccionesUniversidad" 
+                                                  layout="block">
+                                        <p:selectOneMenu id="cmbUniversidad" 
+                                                         styleClass="cmbUniversidad" 
+                                                         value="#{personaTitulo.universidad}" 
+                                                         converter="universidadConverter"
+                                                         var="uni" 
+                                                         filter="true" 
+                                                         filterMatchMode="contains">
                                             <f:selectItems value="#{gestorGeneral.listaUniversidadesAgregadas}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
                                             <f:selectItems value="#{gestorGeneral.listaUniversidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u}" />
 

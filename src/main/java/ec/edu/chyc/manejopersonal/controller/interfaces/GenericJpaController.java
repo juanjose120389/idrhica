@@ -12,14 +12,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-
 /**
  * *
  *
  * @param <T> Tipo de clase que manejará el controlador
  */
 public class GenericJpaController<T> implements Serializable {
-
     /**
      * *
      * La clase que manera el controlador.
@@ -27,7 +25,6 @@ public class GenericJpaController<T> implements Serializable {
     private Class<?> classRef = null;
 
     public GenericJpaController() {
-
     }
 
     public EntityManager getEntityManager() {
@@ -35,9 +32,7 @@ public class GenericJpaController<T> implements Serializable {
             System.err.println("*****************************************************");
             System.err.println("ERROR: No se ha especificado una clase de referencia.");
             System.err.println("*****************************************************");
-
         }
-
         return EntityManagerUtil.get().createEntityManager();
     }
 
@@ -50,9 +45,7 @@ public class GenericJpaController<T> implements Serializable {
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             Long result = (Long) q.getSingleResult();
-
             em.getTransaction().commit();
-
             int resultInt = result.intValue();
             return resultInt;
         } finally {
@@ -62,7 +55,7 @@ public class GenericJpaController<T> implements Serializable {
         }
     }
 
-    public T findEntity(Object id) {
+    public T findEntity(Object id){
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -77,7 +70,7 @@ public class GenericJpaController<T> implements Serializable {
         }
     }
 
-    protected List<T> findEntities(boolean all, int maxResults, int firstResult) {
+    protected List<T> findEntities(boolean all, int maxResults, int firstResult){
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -98,12 +91,12 @@ public class GenericJpaController<T> implements Serializable {
             }
         }
     }
-    
+
     public Class<?> getClassRef() {
         return classRef;
     }
 
-    public void setClassRef(Class<?> classRef) {
+    public void setClassRef(Class<?> classRef){
         this.classRef = classRef;
     }
 }

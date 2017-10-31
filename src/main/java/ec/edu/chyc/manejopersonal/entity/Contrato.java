@@ -70,6 +70,8 @@ public class Contrato implements Serializable {
     
     @ManyToMany(mappedBy = "contratosCollection")
     private Set<Proyecto> proyectosCollection = new HashSet<>();
+    
+
 
     private String cargo;
     private String actividadPrincipal;
@@ -137,7 +139,7 @@ public class Contrato implements Serializable {
         this.administrador = administrador;
     }
 
-    public Proyecto getProyecto() {
+    public Proyecto getProyecto() {        
         return proyecto;
     }
 

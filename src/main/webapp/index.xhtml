@@ -18,11 +18,15 @@
         <p:tabView activeIndex="#{gestorPersona.tabActivo}">
             <p:ajax event="tabChange" listener="#{gestorPersona.onTabChange}" />
             <p:tab title="Personal Departamento" id="tabPersonal">
-
-                <p:dataTable widgetVar="personasTable" id="personasTable" var="persona" value="#{gestorPersona.listaPersonas}" rows="40"
-                             paginator="true" emptyMessage="#{label.emptyMessage}"
+                <p:dataTable widgetVar="personasTable" 
+                             id="personasTable" 
+                             var="persona" 
+                             value="#{gestorPersona.listaPersonas}" rows="40"
+                             paginator="true" 
+                             emptyMessage="#{label.emptyMessage}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                             rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
+                             rowsPerPageTemplate="10,15,20,40" 
+                             rowIndexVar="rowIndex"
                              >
                     <f:facet name="{Exporters}">
                         <h:panelGroup layout="block" styleClass="exportButtons">
@@ -32,34 +36,40 @@
                             </h:commandLink>
                             <h:commandLink>
                                 <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
-
                                 <pe:exporter skipComponents="org.primefaces.component.tooltip.Tooltip" fontName="Verdana"
                                              type="pdf" target="personasTable" fileName="personas_" encoding="iso-8859-1"/>   
                             </h:commandLink>
                         </h:panelGroup>                    
                     </f:facet>
-                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
-                        <h:outputText value="#{rowIndex+1}"/>
+                    <p:column headerText="#" width="10" style="text-align: right" exportable="false">
+                        <p:commandLink 
+                            rendered="#{gestorUsuario.puedeVerMasInfo}"
+                            style="font-weight: bold;white-space: pre-wrap;"
+                            value="#{rowIndex+1}" 
+                            action="#{gestorNavegacion.cargarPagina(6, persona.id)}"/>
+                        <h:outputText
+                            rendered="#{!gestorUsuario.puedeVerMasInfo}"
+                            value="#{rowIndex+1}"/>
                     </p:column>
-                    <p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
+                    
+                    <p:column headerText="Nombres" width="100" filterBy="#{persona.nombres}" filterMatchMode="contains" sortBy="#{persona.nombres}">
                         <f:facet name="header">  
                             Nombres
                         </f:facet>                
                         <h:outputText value="#{persona.nombres}" />
                     </p:column>
 
-                    <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains" sortBy="#{persona.apellidos}">
+                    <p:column headerText="Apellidos" width="100" filterBy="#{persona.apellidos}" filterMatchMode="contains" sortBy="#{persona.apellidos}">
                         <f:facet name="header">  
                             Apellidos
                         </f:facet>
                         <h:outputText value="#{persona.apellidos}" />
                     </p:column>
 
-                    <p:column exportable="false" filterBy="#{persona.tipo}" headerText="Tipo" width="110"
-                              filterFunction="#{gestorPersona.filtrarPorTipo}" sortBy="#{persona.tipo}"
-                              >
+                    <p:column exportable="false" filterBy="#{persona.tipo}" headerText="Tipo" width="100"
+                              filterFunction="#{gestorPersona.filtrarPorTipo}" sortBy="#{persona.tipo}">
                         <f:facet name="filter">
-                            <p:selectOneMenu id="cmbTipoPersona" style="width: 80px" onchange="PF('personasTable').filter()" >
+                            <p:selectOneMenu id="cmbTipoPersona" onchange="PF('personasTable').filter()" >
                                 <f:selectItem itemLabel="Seleccionar" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{gestorPersona.tiposPersona}" var="tipo" itemLabel="#{label['persona.tipo.' += tipo]}" itemValue="#{tipo}"/>
                             </p:selectOneMenu>
@@ -67,11 +77,11 @@
                         <h:outputText rendered="#{not empty persona.tipo}"                                      
                                       value="#{label['persona.tipo.' += persona.tipo]}" />
                     </p:column>
-                    
-                    <p:column exportable="false" filterBy="#{persona.gradoAcademico}" headerText="Grado Académico" width="120"
+
+                    <p:column exportable="false" filterBy="#{persona.gradoAcademico}" headerText="Grado Académico" width="100"
                               filterFunction="#{gestorPersona.filtrarPorGradoAcademico}" sortBy="#{persona.gradoAcademico}">
                         <f:facet name="filter">
-                            <p:selectOneMenu id="cmbGradoAcademico" style="width: 90px" onchange="PF('personasTable').filter()" >
+                            <p:selectOneMenu id="cmbGradoAcademico" onchange="PF('personasTable').filter()" >
                                 <f:selectItem itemLabel="Seleccionar" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{gestorPersona.gradosAcademicos}" var="gradoAcademico" itemLabel="#{label['persona.gradoAcademico.' += gradoAcademico]}" itemValue="#{gradoAcademico}"/>
                             </p:selectOneMenu>
@@ -97,7 +107,7 @@
                     </p:column>
 
                     <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="Correo" 
-                              filterBy="#{persona.correo}" filterMatchMode="contains">
+                              filterBy="#{persona.correo}" filterMatchMode="contains" width="100">
                         <f:facet name="header">  
                             Correo
                         </f:facet>
@@ -129,17 +139,25 @@
                               style="text-align: center">
                         <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(6, persona.id)}"/>
                         <p:outputLabel value=" "/>
-                        <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
+                        <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(6, persona.id)}"/>
                     </p:column>            
                 </p:dataTable>   
 
             </p:tab>
             <p:tab title="Contactos externos" id="tabExterno">                
-                <p:dataTable widgetVar="personasTable2" id="personasTable2" var="persona" value="#{gestorPersona.listaPersonasSoloExternos}" rows="40"
-                             paginator="true" emptyMessage="#{label.emptyMessage}"
+                <p:dataTable widgetVar="personasTable2" 
+                             id="personasTable2" 
+                             var="persona" 
+                             value="#{gestorPersona.listaPersonasSoloExternos}" 
+                             rows="40"
+                             paginator="true" 
+                             emptyMessage="#{label.emptyMessage}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                             rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"
-                             style="width: wrap-content"
+                             rowsPerPageTemplate="10,15,20,40" 
+                             rowIndexVar="rowIndex"
+                             tableStyle="width:auto;  margin-left:auto; 
+                             margin-right:auto;"
+                             style="center"
                              >
                     <f:facet name="{Exporters}">
                         <h:panelGroup layout="block" styleClass="exportButtons">
@@ -149,18 +167,29 @@
                             </h:commandLink>
                             <h:commandLink>
                                 <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
-
                                 <pe:exporter skipComponents="org.primefaces.component.tooltip.Tooltip" fontName="Verdana"
                                              type="pdf" target="personasTable2" fileName="personas_" encoding="iso-8859-1"/>   
                             </h:commandLink>
                         </h:panelGroup>                    
                     </f:facet>
-                    <p:column headerText="#" width="20" style="text-align: right" exportable="false">
-                        <h:outputText value="#{rowIndex+1}"/>
+                    <p:column 
+                        headerText="#" 
+                        width="10" 
+                        style="text-align: right;" 
+                        exportable="false">
+                        <p:commandLink 
+                            rendered="#{gestorUsuario.puedeVerMasInfo}"
+                            style="font-weight: bold;white-space: pre-wrap;"
+                            value="#{rowIndex+1}" 
+                            action="#{gestorNavegacion.cargarPagina(6, persona.id)}"/>
+                        <h:outputText
+                            rendered="#{!gestorUsuario.puedeVerMasInfo}"
+                            value="#{rowIndex+1}"/>
                     </p:column>
                     <p:column headerText="Nombres" filterBy="#{persona.nombres}" 
                               filterMatchMode="contains" sortBy="#{persona.nombres}"
-                              width="150px">
+                              style="min-width: 220px"
+                              width="120">
                         <f:facet name="header">  
                             Nombres
                         </f:facet>                
@@ -169,7 +198,8 @@
 
                     <p:column headerText="Apellidos" filterBy="#{persona.apellidos}" 
                               filterMatchMode="contains" sortBy="#{persona.apellidos}"
-                              width="150px">
+                              style="min-width: 220px"
+                              width="120">
                         <f:facet name="header">  
                             Apellidos
                         </f:facet>                
@@ -186,7 +216,7 @@
                         <h:outputText value="#{persona.correo}" />
                     </p:column>
 
-                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" width="90">
+                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" width="90px">
                         <f:facet name="header">
                             Fecha de Nacimiento
                             <h:panelGroup layout="block" style="display: block;  width: 100%; margin: auto;" rendered="false">
@@ -208,15 +238,15 @@
 
                     </p:column>
 
-                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="" exportable="false" width="80">
+                    <p:column rendered="#{gestorUsuario.puedeVerMasInfo}" headerText="" exportable="false" width="80px">
                         <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(6, persona.id)}"/>
                         <p:outputLabel value=" "/>
-                        <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPersona.initModificarPersona(persona.id)}"/>
+                        <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(6, persona.id)}"/>
                     </p:column>            
                 </p:dataTable>        
 
             </p:tab>
         </p:tabView> 
-        
+
     </ui:define>
 </ui:composition>

@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
+                template="./template_pf.xhtml">
+    <ui:define name="body">
+        <style>
+            .fa-download:before {
+                font-size: 1.3em;
+            }  
+        </style>
+        <p:dataTable widgetVar="acuerdosConfTable" id="acuerdosConfTable" var="acuerdoConf" value="#{gestorAcuerdoConfidencialidad.listaAcuerdos}"                 
+                     rows="10"
+                     paginator="true" emptyMessage="#{label.emptyMessage}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"  
+                     >
+            <f:facet name="{Exporters}">
+                <h:panelGroup layout="block" styleClass="exportButtons">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                        <pe:exporter type="xlsx" target="acuerdosConfTable" fileName="acuerdoConf" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                        <pe:exporter type="pdf" target="acuerdosConfTable" fileName="acuerdoConf" encoding="iso-8859-1"/>
+                    </h:commandLink>
+                </h:panelGroup>                    
+            </f:facet>
+            <f:facet name="header">
+                Acuerdos de Confidencialidad
+            </f:facet>
+
+            <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>            
+
+            <p:column headerText="Beneficiario" width="250" filterBy="#{acuerdoConf.beneficiario.apellidos}" filterMatchMode="contains" sortBy="#{acuerdoConf.beneficiario.apellidos}">
+                <f:facet name="header">  
+                    <h:outputText value="Beneficiario"/>  
+                </f:facet>                  
+                <h:outputText value="#{acuerdoConf.beneficiario.nombres} #{acuerdoConf.beneficiario.apellidos}" /> 
+                <!--
+                TODO: Revisar filtros
+                -->
+            </p:column>
+
+            <p:column headerText="Objeto del Acuerdo" width="75" sortBy="#{acuerdoConf.objetoAcuerdo}">
+                <f:facet name="header">  
+                    <h:outputText value="Objeto del Acuerdo"/>  
+                </f:facet>
+                <h:outputText value="#{acuerdoConf.objetoAcuerdo}"/>                
+            </p:column>
+
+
+            <p:column headerText="Fecha" width="75" sortBy="#{acuerdoConf.fechaInicio}"> 
+                <f:facet name="header">  
+                    <h:outputText value="Fecha"/>  
+                </f:facet>                
+                <h:outputText value="#{acuerdoConf.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>                
+            </p:column>
+
+            <p:column width="10" exportable="false">
+                <p:commandLink 
+                    ajax="false" 
+                    rendered="#{acuerdoConf.archivoAcuerdoConf != ''}" 
+                    title="Descargar archivo">
+                    <i class="fa fa-download"></i>
+                    <p:fileDownload 
+                        value="#{gestorAcuerdoConfidencialidad.streamParaDescarga(acuerdoConf)}"/>
+                </p:commandLink>              
+            </p:column>
+
+            <p:column width="20" exportable="false">
+                <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(9,acuerdoConf.id)}"/>
+                <p:outputLabel value=" "/>
+                <p:commandLink value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(9,acuerdoConf.id)}" rendered="#{gestorUsuario.puedeEditar}"/>
+            </p:column>
+            <!--
+            TODO: Agregar opciones ver/editar
+            -->
+        </p:dataTable>         
+    </ui:define>
+</ui:composition>

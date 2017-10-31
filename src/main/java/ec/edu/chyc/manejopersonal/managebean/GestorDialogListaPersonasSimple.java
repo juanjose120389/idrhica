@@ -21,14 +21,14 @@ import org.primefaces.context.RequestContext;
  *
  * @author marcelocaj
  */
-@Named(value = "gestorDialogListaPersonas")
+@Named(value = "gestorDialogListaPersonasSimple")
 @SessionScoped
-public class GestorDialogListaPersonas implements Serializable {
+public class GestorDialogListaPersonasSimple implements Serializable {
 
     private List<Persona> listaPersonas = new ArrayList<>();
     private List<Persona> listaPersonasSel = new ArrayList<>();
     //private List<Persona> listaPersonasNuevas = new ArrayList<>();
-    private String modoSeleccion = "multiple";// single - multiple
+    private String modoSeleccion = "single";// single - multiple
     private Persona personaSel = null;
     private Persona nuevaPersona = null;
     private long idGenPersona = -1L;
@@ -37,7 +37,7 @@ public class GestorDialogListaPersonas implements Serializable {
     /**
      * Creates a new instance of GestorDialogListaPersonas
      */
-    public GestorDialogListaPersonas() {
+    public GestorDialogListaPersonasSimple() {
     }
 
     @PostConstruct
@@ -70,11 +70,11 @@ public class GestorDialogListaPersonas implements Serializable {
         nuevaPersona = new Persona();
     }
 
-    public static GestorDialogListaPersonas getInstance() {
+    public static GestorDialogListaPersonasSimple getInstance() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELContext context = facesContext.getELContext();
-        ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorDialogListaPersonas}", GestorDialogListaPersonas.class);
-        return (GestorDialogListaPersonas) ex.getValue(context);
+        ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorDialogListaPersonasSimple}", GestorDialogListaPersonasSimple.class);
+        return (GestorDialogListaPersonasSimple) ex.getValue(context);
     }
 
     public void aceptarSeleccionPersonas() {

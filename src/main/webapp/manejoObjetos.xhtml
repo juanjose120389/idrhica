@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pe="http://primefaces.org/ui/extensions" 
-                template="./template_pf.xhtml">
+                template="./template_pf_inventarios.xhtml">
 
     <style>       
         .cmbUniversidad {
@@ -139,9 +139,30 @@
 
                 <p:outputLabel value="Proveedor"/>
                 <h:panelGroup id="inputProveedor">
-                    <h:inputText value="#{gestorObjeto.objeto.proveedor.nombre_comercial}"></h:inputText>
-                    <p:commandButton id="btnProveedor" value="Seleccionar..." icon="ui-icon-extlink" 
-                                     process="@this" action="#{gestorObjeto.abrirProveedorDialog}" />
+                    <p:selectOneMenu id="cmbProveedor" value="#{gestorObjeto.objeto.proveedor}" 
+                                     converter="proveedorConverter"
+                                     var="prov" filter="true" 
+                                     filterMatchMode="contains"
+                                     requiredMessage="#{label.required}">
+                        <f:selectItem itemLabel="--Seleccionar--" itemValue="" />
+                        <f:selectItems value="#{gestorProveedor.listaProveedores}" 
+                                       var="p" 
+                                       itemLabel="#{p.nombre_comercial} #{p.ruc} " 
+                                       itemValue="#{p}" 
+                                       />
+                        <p:column>
+                            <p:outputLabel value="#{prov.ruc}"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{prov.nombre_comercial}"/>
+                        </p:column>
+                    </p:selectOneMenu>
+                    <p:commandLink value="Nuevo Proveedor" styleClass="linkDropdown" 
+                                   process="@this" 
+                                   action="#{gestorObjeto.abrirProveedorDialog()}" 
+                                   oncomplete="PF('dlgProveedor').show()"
+                                   style="padding-left: 15px"/>
+
                 </h:panelGroup>                
 
                 <p:outputLabel value="Fecha adquirido"/>
@@ -244,33 +265,11 @@
     <ui:define name="panel_dlgs">
         <h:panelGroup layout="block" id="divDialogs">
 
-            <p:dialog id="dlgProveedor" header="Seleccionar Proveedor" widgetVar="dlgProveedor" 
-                       resizable="false" width="700" modal="true" appendTo="@(body)">
-                
-                <h:panelGrid columns="2" id="divDlgProveedor"> 
+            <p:dialog id="dlgProveedor" header="Ingresar Proveedor" widgetVar="dlgProveedor" 
+                      resizable="false" width="500" modal="true" appendTo="@(body)">
+                <h:form>
+                    <h:panelGrid columns="3" >
 
-                    <h:form>
-                        <h:panelGroup layout="block" id="panelCamposProveedor" style="width: 320px">
-
-                            <p:selectOneListbox id="selListBoxProveedor" converter="proveedorConverter" 
-                                                var="p" filter="true" filterMatchMode="contains" style="width: 300px"
-                                                value="#{gestorObjeto.proveedor}">
-                                <f:selectItems value="#{gestorProveedor.listaProveedores}" var="proveedor" 
-                                               itemLabel="#{proveedor.ruc} #{proveedor.nombre_comercial}" 
-                                               itemValue="#{proveedor}" />
-                                <p:column>
-                                    <h:outputText value="#{p.ruc}" />
-                                </p:column>                            
-                                <p:column>
-                                    <h:outputText value="#{p.nombre_comercial}" />
-                                </p:column>
-                            </p:selectOneListbox>  
-                            <p:commandButton value="Aceptar" update="formContenido" actionListener="#{gestorObjeto.guardarProveedor()}"/>
-                        </h:panelGroup>
-                    </h:form>
-
-
-                    <h:panelGrid columns="3" style="border-style: solid; padding: 5px">
                         <p:outputLabel value="ID">
                             <span class="asterisk"/>
                         </p:outputLabel>                        
@@ -300,15 +299,11 @@
                         </h:panelGroup>
                         <h:panelGroup/>                        
                     </h:panelGrid>
-
-                </h:panelGrid>
-
+                </h:form>
             </p:dialog> 
 
             <p:dialog id="dlgUbicacion" header="Ubicación" widgetVar="dlgUbicacion" 
-                      resizable="false" width="400" modal="true" appendTo="@(body)">
-                <p:ajax event="close" update="divDialogs" 
-                        listener="#{gestorObjeto.onCloseDlgUbicacion()}" />
+                      resizable="false" width="400" modal="true" appendTo="@(body)">                
                 <h:panelGroup layout="block" id="divDlgUbicacion">
                     <h:panelGrid id="panelCamposUbicacion" columns="3">
                         <p:outputLabel value="Lugar/">
@@ -327,16 +322,14 @@
                         <p:message for="txtCodigoUbicacion"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgUbicacion" update="divDlgUbicacion inputProveedor"/>
+                        <p:commandButton value="Aceptar" process="dlgUbicacion" update="divDlgUbicacion"/>
                         <p:commandButton value="Cancelar" onclick="PF('dlgUbicacion').hide();"/>
                     </h:panelGrid>            
                 </h:panelGroup>
             </p:dialog>
 
             <p:dialog id="dlgCustodio" header="Seleccionar Custodio" widgetVar="dlgCustodio" 
-                      rendered="#{gestorObjeto.mostrarDlgCustodio}" resizable="false" width="700" 
-                      modal="true" appendTo="@(body)">
-                <p:ajax event="close" update="divDialogs" listener="#{gestorObjeto.onCloseDlgCustodio()}" />
+                      resizable="false" width="700" modal="true" appendTo="@(body)">                
 
                 <h:panelGroup layout="block" id="divDlgCustodio" style="width: 320px">
                     <p:selectOneListbox id="selListBoxCustodio" converter="custodioConverter" 

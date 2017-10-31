@@ -95,7 +95,7 @@ public class Articulo implements Serializable {
 
     @NotNull
     private String archivoArticulo = "";//nombre del archivo subido que corresponde al artículo
-    
+
     @NotNull
     private String archivoBibtex = "";
     
@@ -115,8 +115,7 @@ public class Articulo implements Serializable {
         @JoinColumn(name = "idArticulo", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idInstitucion", referencedColumnName = "id")})
     private Set<Institucion> agradecimientosCollection = new HashSet();
-    
-    
+        
     public Long getId() {
         return id;
     }

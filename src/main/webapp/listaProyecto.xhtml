@@ -11,6 +11,7 @@
                      paginator="true" emptyMessage="#{label.emptyMessage}"
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                      rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"  
+                     scrollable="false"
                      >
 
             <f:facet name="{Exporters}">
@@ -33,11 +34,17 @@
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>            
             
-            <p:column headerText="Título" width="250" filterBy="#{proyecto.titulo}" filterMatchMode="contains" sortBy="#{proyecto.titulo}">
+            <p:column headerText="Título" width="250" filterBy="#{proyecto.titulo}" 
+                      filterMatchMode="contains" sortBy="#{proyecto.titulo}"
+                      style="text-align: justify;padding: 15px;"
+                      >
                 <f:facet name="header">  
                     <h:outputText value="Título"/>  
-                </f:facet>                  
-                <h:outputText value="#{proyecto.titulo}" />
+                </f:facet>    
+                <p:commandLink 
+                    style="font-weight: bold;white-space: pre-wrap;"
+                    value="#{proyecto.titulo}" 
+                    action="#{gestorNavegacion.cargarPagina(7, proyecto.id)}" />       
             </p:column>
 
             <p:column headerText="Fecha de Inicio" width="75" sortBy="#{proyecto.fechaInicio}">
@@ -85,7 +92,11 @@
                 <h:outputText value="#{proyecto.codirector.nombres} #{proyecto.codirector.apellidos}" />
             </p:column>
 
-            <p:column headerText="Observaciones" width="200" filterBy="#{proyecto.observaciones}" filterMatchMode="contains" sortBy="#{proyecto.observaciones}">
+            <p:column headerText="Observaciones" width="200" 
+                      filterBy="#{proyecto.observaciones}" 
+                      filterMatchMode="contains" 
+                      sortBy="#{proyecto.observaciones}"
+                      style="text-align: justify;">
                 <f:facet name="header">  
                     <h:outputText value="Observaciones"/>  
                 </f:facet>
@@ -102,7 +113,7 @@
             <p:column exportable="false" width="80">
                 <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(7, proyecto.id)}"/>
                 <p:outputLabel value=" "/>
-                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorProyecto.initModificarProyecto(proyecto.id)}"/>
+                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(7, proyecto.id)}"/>
             </p:column>            
         </p:dataTable>         
     </ui:define>

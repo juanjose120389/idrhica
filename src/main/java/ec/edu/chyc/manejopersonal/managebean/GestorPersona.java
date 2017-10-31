@@ -89,7 +89,6 @@ public class GestorPersona implements Serializable {
     
     //private boolean modoModificar = false;
     private Modo modo;
-
     /**
      * Creates a new instance of GestorPersona
      */
@@ -298,14 +297,12 @@ public class GestorPersona implements Serializable {
     }
 
     public String initCrearPersona() {
-        inicializarManejoPersona();
-        
+        inicializarManejoPersona();        
         //modoModificar = false;
         modo = Modo.AGREGAR;
         
         /*LocalDate dtFechaNacDefault = LocalDateTime.now().toLocalDate();
-        dtFechaNacDefault = dtFechaNacDefault.minusYears(28).withDayOfYear(1);
-        
+        dtFechaNacDefault = dtFechaNacDefault.minusYears(28).withDayOfYear(1);        
         persona.setFechaNacimiento(FechaUtils.asDate(dtFechaNacDefault));        */
         persona.setFechaNacimiento(null);
         
@@ -442,7 +439,6 @@ public class GestorPersona implements Serializable {
 
     public String guardar() {
         try {            
-            
             persona.setPersonaTitulosCollection(listaPersonaTitulos);
             persona.setPersonaFirmasCollection(listaPersonaFirmas);
             

@@ -1,17 +1,7 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : Apr 5, 2016, 10:24:56 AM
-    Author     : marcelocaj
-*/
+.ui-state-highlight .ui-icon{
+    background-image: url("/idrhica2/javax.faces.resource/images/ui-icons_333333_256x240.png.jsf?ln=primefaces-bootstrap");
+}
 
-/*.ui-paginator a, .exporter .ui-datatable-header a {
-    float: right;
-    margin-right: 5px;
-}*/
 .ui-column-title {
     font-weight: normal;
 }
@@ -28,8 +18,11 @@ and open the template in the editor.
 .inputscol {
     padding-left: 15px;
 }
+
+
 #content {
 }
+
 .exportButtons {
     text-align: right; margin-top: -26px;
 }
@@ -67,24 +60,28 @@ and open the template in the editor.
     white-space: pre-wrap;
 }
 
-.ui-menu
-{    
+.ui-menu {
     min-width: 120px !important;
     max-width: 140px;
     width: auto !important;
-    padding: 0.2em !important;   
+    padding: 0.2em !important; 
 }
 
 #formMenu .ui-panel{
-    margin-top: 8px;
+    margin-top: 8px;   
+    width: 140px !important;
 }
 
 .ui-panel {
-    padding: 0.2em !important;  
-    min-width: 120px !important;  
-    
+    min-width: 120px !important;     
+    width: auto !important;
+    padding: 0.2em !important;    
     border: 1px solid rgba(0, 0, 0, 0.2) !important;
-    border-radius: 6px;      
+    border-radius: 6px;    
+}
+
+#formMenu .ui-panel{
+    width: 140px !important;
 }
 
 #formContenido .ui-panel{
@@ -127,7 +124,6 @@ and open the template in the editor.
 }
 
 /*CSS para modulos de inventarios*/
-
 .panelInventarios .input{
     width: 150px;
 }
@@ -140,15 +136,19 @@ and open the template in the editor.
     width: 200px;
 }
 
+/*CSS Panel Grid General*/
+.outputMed{
+    width: 180px;
+}
 
+#lContenido #ui-layout-unit{
+    height: 100%;
+}
 
+#formContenido{
+    height: 100%;
+}
 
-
-
-
-
-
-
-
-
-
+th{
+    text-align: center !important;
+}

@@ -280,7 +280,8 @@ public class Persona implements Serializable {
             return false;
         }
         Persona other = (Persona) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null) 
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -288,7 +289,8 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.edu.ucuenca.manejopersonal.entity.Persona[ id=" + id + " ]";
+        return "ec.edu.ucuenca.manejopersonal.entity.Persona[ id=" 
+                + id + " ]";
     }
 
     public Collection<Articulo> getArticulosPrincipalCollection() {
@@ -296,7 +298,8 @@ public class Persona implements Serializable {
     }
 
     public void setArticulosPrincipalCollection(Collection<Articulo> articulosPrincipalCollection) {
-        this.articulosPrincipalCollection = articulosPrincipalCollection;
+        this.articulosPrincipalCollection = 
+                articulosPrincipalCollection;
     }
 
     public Persona() {        

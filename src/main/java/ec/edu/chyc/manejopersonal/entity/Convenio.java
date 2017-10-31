@@ -83,7 +83,7 @@ public class Convenio implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "idInstitucion", referencedColumnName = "id")    
-    private Institucion institucion;        
+    private Institucion institucion;
     
     @NotNull
     private String archivoConvenio = "";

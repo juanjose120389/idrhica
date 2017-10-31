@@ -33,6 +33,10 @@ public class ServerUtils {
     public static Path getPathArticulos() {
         return getDocRootPath().resolve("articulos");
     }
+    
+    public static Path getPathAcuerdosConfidenciales() {
+        return getDocRootPath().resolve("acuerdosConfidenciales");
+    }
 
     /***
      *

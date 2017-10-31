@@ -12,8 +12,13 @@
             }
 
         </style>
-        <h:inputHidden id="iDRiCA#{gestorPersona.persona.id}" value="#{gestorUsuario.logeado}"/>
-        <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
+        <h:inputHidden 
+            id="iDRiCA#{gestorPersona.persona.id}" 
+            value="#{gestorUsuario.logeado}"/>
+        <p:commandLink 
+            value="Regresar" 
+            immediate="true" 
+            action="#{gestorNavegacion.regresar()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>                
         <p:panel header="Ficha de personal">
             <h:panelGrid columns="2" width="100%" columnClasses="labelscol labelscol2,inputscol">

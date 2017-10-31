@@ -98,7 +98,10 @@
                 </h:panelGroup>
                 <h:panelGroup layout="block" id="divCmbProyecto">
                     <h:panelGroup layout="block" style="height: 15px" rendered="#{!gestorContrato.esProfesor}"/>
-                    <p:selectOneMenu rendered="#{!gestorContrato.esProfesor}" id="cmbProyecto" style="width: 300px" value="#{gestorContrato.contrato.proyecto}" converter="proyectoConverter"
+                    <p:selectOneMenu rendered="#{!gestorContrato.esProfesor}" 
+                                     id="cmbProyecto" 
+                                     style="width: 300px" 
+                                     value="#{gestorContrato.contrato.proyecto}" converter="proyectoConverter"
                                      var="per2" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="Ninguno" itemValue="" />
                         <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
@@ -162,7 +165,7 @@
                     <h:panelGroup id="spanTamanioArchivo">
                         <p:outputLabel id="lblTamanioArchivo" rendered="#{gestorContrato.contrato.archivoContrato != ''}" value="Tamaño archivo: #{gestorContrato.tamanoArchivo}"/>
                     </h:panelGroup>
-                </h:panelGroup> 
+                </h:panelGroup>
                 <h:panelGroup layout="block"/> 
 
             </h:panelGrid>        

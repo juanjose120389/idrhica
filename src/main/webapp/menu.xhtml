@@ -17,13 +17,13 @@
             <p:menuitem value="Instituciones" action="#{gestorNavegacion.cargarPagina(4, null)}" icon="fa fa-list" />
         </p:submenu>
         <p:submenu label="Nuevo:" rendered="#{gestorUsuario.puedeAgregar}">
-            <p:menuitem value="Persona" action="#{gestorPersona.initCrearPersona()}" icon="fa fa-plus" />
-            <p:menuitem value="Proyecto" action="#{gestorProyecto.initCrearProyecto()}" icon="fa fa-plus" />
-            <p:menuitem value="Contrato" action="#{gestorContrato.initCrearContrato()}" icon="fa fa-plus" />
-            <p:menuitem value="Artículo" action="#{gestorArticulo.initCrearArticulo()}" icon="fa fa-plus" />
-            <p:menuitem value="Convenio" action="#{gestorConvenio.initCrearConvenio()}" icon="fa fa-plus" />
-            <p:menuitem value="Tesis" action="#{gestorTesis.initCrearTesis()}" icon="fa fa-plus" />            
-            <p:menuitem value="Pasantía" action="#{gestorPasantia.initCrearPasantia()}" icon="fa fa-plus" />
+            <p:menuitem value="Persona" action="#{gestorNavegacion.cargarPaginaCrearModificar(6, null)}" icon="fa fa-plus" />
+            <p:menuitem value="Proyecto" action="#{gestorNavegacion.cargarPaginaCrearModificar(7, null)}" icon="fa fa-plus" />
+            <p:menuitem value="Contrato" action="#{gestorNavegacion.cargarPaginaCrearModificar(2, null)}" icon="fa fa-plus" />
+            <p:menuitem value="Artículo" action="#{gestorNavegacion.cargarPaginaCrearModificar(1, null)}" icon="fa fa-plus" />
+            <p:menuitem value="Convenio" action="#{gestorNavegacion.cargarPaginaCrearModificar(3, null)}" icon="fa fa-plus" />
+            <p:menuitem value="Tesis" action="#{gestorNavegacion.cargarPaginaCrearModificar(8, null)}" icon="fa fa-plus" />            
+            <p:menuitem value="Pasantía" action="#{gestorNavegacion.cargarPaginaCrearModificar(5, null)}" icon="fa fa-plus" />
         </p:submenu>
     </p:menu>
     <p:panel>

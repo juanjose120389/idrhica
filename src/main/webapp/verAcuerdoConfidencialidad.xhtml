@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template_pf.xhtml">
+    <ui:define name="body">
+        <h:inputHidden id="iDRiCA#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.id}" value="#{gestorUsuario.logeado}"/>
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>        
+        
+        <p:panel header="Acuerdo de Confidencialidad">
+            
+            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
+            <h:panelGrid columns="2" columnClasses="labelscol labelscol2,inputscol">
+                <p:outputLabel value="Beneficiario"/>
+                <p:outputLabel 
+                    value="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.beneficiario.nombres} 
+                    #{gestorAcuerdoConfidencialidad.acuerdoConfidencial.beneficiario.apellidos}"/>
+
+                <p:outputLabel value="Objeto del acuerdo" />
+                <p:outputLabel value="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.objetoAcuerdo}"
+                               styleClass="lineaMultiple"/>
+
+                <p:outputLabel value="Definición de Información Confidencial" />
+                <p:outputLabel  value="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.descripcionInformacion}"
+                                styleClass="lineaMultiple"/>
+
+                <p:outputLabel value="Fecha de inicio"/>
+                <p:outputLabel value="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.fechaInicio}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </p:outputLabel>
+
+                <p:outputLabel value="Archivo" rendered="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.archivoAcuerdoConf != ''}"/>
+                <p:commandLink value="Descargar" ajax="false" rendered="#{gestorAcuerdoConfidencialidad.acuerdoConfidencial.archivoAcuerdoConf != ''}">
+                    <p:fileDownload value="#{gestorAcuerdoConfidencialidad.streamParaDescarga(gestorAcuerdoConfidencialidad.acuerdoConfidencial)}" />
+                </p:commandLink>
+            </h:panelGrid> 
+            
+        </p:panel>
+    </ui:define>
+</ui:composition>

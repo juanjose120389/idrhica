@@ -39,26 +39,24 @@ public class BeansUtils {
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute(codigo);
     }
-
+    
     /***
      * Dado el archivo de fileUpload de primefaces (en el evento fileUpload), sube el archivo a un destino
      * @param origen Variable tipo UploadedFile obtenida del evento fileUpload del componente de primefaces, ahí se obtendrá el archivo
      * @param destino Archivo donde se guardará el archivo
      * @throws IOException Excepción ocurrida al crear, leer o escribir el archivo
      */
-    public static void subirArchivoPrimefaces(UploadedFile origen, File destino) throws IOException {
+    public static void subirArchivoPrimefaces(UploadedFile origen, 
+            File destino) throws IOException {
         destino.createNewFile();
-
+    
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
         try {
-            fileOutputStream = new FileOutputStream(destino);
-
-            byte[] buffer = new byte[ServerUtils.BUFFER_SIZE];
-
+            fileOutputStream = new FileOutputStream(destino);    
+            byte[] buffer = new byte[ServerUtils.BUFFER_SIZE];    
             int bulk;
-            inputStream = origen.getInputstream();
-
+            inputStream = origen.getInputstream();    
             while (true) {
                 bulk = inputStream.read(buffer);
                 if (bulk < 0) {
@@ -67,7 +65,6 @@ public class BeansUtils {
                 fileOutputStream.write(buffer, 0, bulk);
                 fileOutputStream.flush();
             }
-
             fileOutputStream.close();
             inputStream.close();
         } finally {

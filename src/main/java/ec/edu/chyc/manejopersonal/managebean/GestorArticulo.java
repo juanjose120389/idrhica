@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -68,7 +69,7 @@ import org.primefaces.model.UploadedFile;
  */
 @Named(value = "gestorArticulo")
 @SessionScoped
-public class GestorArticulo implements Serializable {
+public class GestorArticulo implements Serializable{
 
     private final ArticuloJpaController articuloController = new ArticuloJpaController();
     private final PersonaJpaController personaController = new PersonaJpaController();
@@ -94,7 +95,6 @@ public class GestorArticulo implements Serializable {
 
     @PostConstruct
     public void init() {
-
     }
 
     //mover una posición arriba el puesto de un autor
@@ -314,6 +314,7 @@ public class GestorArticulo implements Serializable {
         GestorDialogListaPersonas.getInstance().prepararApertura();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
+    
     public void agregarProyecto() {
         Map<String, Object> options = new HashMap<>();
         options.put("resizable", true);
@@ -355,7 +356,9 @@ public class GestorArticulo implements Serializable {
     public StreamedContent streamParaDescargaBibtex(Articulo articuloDescarga) {
         String nombreArchivo = articuloDescarga.getArchivoBibtex();
         try {
-            return BeansUtils.streamParaDescarga(ServerUtils.getPathArticulos().resolve(nombreArchivo), "bibtex_" + articuloDescarga.getNombre());
+            return BeansUtils.streamParaDescarga(ServerUtils.getPathArticulos().resolve(
+                    "id"+articuloDescarga.getId()+"_"+nombreArchivo), 
+                    "bibtex_" + articuloDescarga.getNombre());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -366,9 +369,13 @@ public class GestorArticulo implements Serializable {
     public StreamedContent streamParaDescarga(Articulo articuloDescarga) {
         String nombreArchivo = articuloDescarga.getArchivoArticulo();
         try {
-            return BeansUtils.streamParaDescarga(ServerUtils.getPathArticulos().resolve(nombreArchivo), "articulo_" + articuloDescarga.getNombre());
+            return BeansUtils.streamParaDescarga(
+                    ServerUtils.getPathArticulos().resolve(
+                            "id"+articuloDescarga.getId()+"_"+nombreArchivo), 
+                    "articulo_" + articuloDescarga.getNombre());
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(
+                    GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -404,7 +411,6 @@ public class GestorArticulo implements Serializable {
         /*if (!r.isEmpty()) {
             r = r.substring(0, r.length() - 2);
         }*/
-
         return r;
     }
 
@@ -414,10 +420,10 @@ public class GestorArticulo implements Serializable {
         ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorArticulo}", GestorArticulo.class);
         return (GestorArticulo) ex.getValue(context);
     }
+    
     public void fileUploadListener(FileUploadEvent event) {
         UploadedFile file = event.getFile();
         boolean isBibtex = event.getComponent().getAttributes().get("bibtex") != null;
-
         //nombre del archivo que ya se encuentra almacenado en las propiedades
         String nombreArchivoGuardado;
         if (isBibtex) {
@@ -461,11 +467,9 @@ public class GestorArticulo implements Serializable {
                 GestorMensajes.getInstance().mostrarMensajeError(ex.getLocalizedMessage());
                 Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         } else {
             System.err.println("Error al subir archivo");
         }
-
     }
 
     /**
@@ -672,8 +676,7 @@ public class GestorArticulo implements Serializable {
             for (int c=0;c<listaPersonaArticulo.size();c++) {
                 //guardar el orden de acuerdo al orden de la lista
                 listaPersonaArticulo.get(c).setOrden(c+1);
-            }
-            
+            }            
             if (modoModificar) {
                 articuloController.edit(articulo);
             } else {
@@ -685,6 +688,7 @@ public class GestorArticulo implements Serializable {
             return "";
         }
     }
+    
     public TipoArticulo[] getTiposArticulo() {
         return TipoArticulo.values();
     }
@@ -752,13 +756,13 @@ public class GestorArticulo implements Serializable {
 
         return "manejoArticulo";
     }
+    
     public String initCrearArticulo() {
         inicializarManejoArticulo();
-
         return "manejoArticulo";
     }
 
-    public void actualizarListaArticulos() {
+    public void actualizarListaArticulos(){
         try {
             listaArticulos = articuloController.listArticulos();
         } catch (Exception ex) {
@@ -782,13 +786,7 @@ public class GestorArticulo implements Serializable {
 
         List<Institucion> instituciones = (List<Institucion>) value;
         return (instituciones.contains(institucionFiltro));
-        /*
-        for (Institucion inst : instituciones) {
-            if (StringUtils.containsIgnoreCase(inst.getNombre(),filterText)) {
-                return true;
-            }
-        }
-        return false;*/
+
     }
 
     public boolean filtrarPorLugar(Object value, Object filter, Locale locale) {
@@ -796,7 +794,6 @@ public class GestorArticulo implements Serializable {
         if (lugarFilter == null) {
             return true;
         }
-
         List<Lugar> lugares = (List<Lugar>) value;
         return (lugares.contains(lugarFilter));
     }
@@ -806,7 +803,6 @@ public class GestorArticulo implements Serializable {
         if (lugarFilter == null) {
             return true;
         }
-
         List<Lugar> lugares = (List<Lugar>) value;
         return (lugares.contains(lugarFilter));
     }
@@ -816,18 +812,16 @@ public class GestorArticulo implements Serializable {
         if (filterText == null || filterText.equals("")) {
             return true;
         }
-
         if (value == null) {
             return false;
         }
-
+        
         Collection<PersonaArticulo> autores = (Collection) value;
         for (PersonaArticulo per : autores) {
             if (StringUtils.containsIgnoreCase(per.getPersona().getNombres(), filterText) || StringUtils.containsIgnoreCase(per.getPersona().getApellidos(), filterText)) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -836,20 +830,19 @@ public class GestorArticulo implements Serializable {
         if (filterText == null || filterText.equals("")) {
             return true;
         }
-
         if (value == null) {
             return false;
         }
-
         //como el autor principal es siempre el primer elemento, solo revisar el primer elemento
         Optional<PersonaArticulo> primerElem = ((Collection<PersonaArticulo>) value).stream().findFirst();
         //PersonaArticulo perArticuloPrincipal = ((Collection<PersonaArticulo>) value).stream().findFirst().get();
         if (primerElem.isPresent()) {
             Persona autorPrincipal = primerElem.get().getPersona();
-            return (StringUtils.containsIgnoreCase(autorPrincipal.getNombres(), filterText)
-                    || StringUtils.containsIgnoreCase(autorPrincipal.getApellidos(), filterText));
+            return (StringUtils.containsIgnoreCase(
+                    autorPrincipal.getNombres(), filterText)
+                    || StringUtils.containsIgnoreCase(
+                            autorPrincipal.getApellidos(), filterText));
         }
-
         return false;
     }
 
@@ -929,13 +922,20 @@ public class GestorArticulo implements Serializable {
         return "verArticulo";
     }
 
+    
     public boolean isSoloSubirBibtex() {
         return soloSubirBibtex;
     }
-
+    
+    
     public void setSoloSubirBibtex(boolean soloSubirBibtex) {
         this.soloSubirBibtex = soloSubirBibtex;
     }
-
-
+    
+    public void verificarCheck(){
+    String summary = soloSubirBibtex ? "Checked" : "Unchecked";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));    
+    }
+    
+   
 }

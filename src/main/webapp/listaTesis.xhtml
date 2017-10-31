@@ -27,36 +27,53 @@
             <f:facet name="header">
                 Tesis
             </f:facet>
-            
+
             <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>            
-            
+
             <p:column headerText="Autores" styleClass="columnaOculta" exportable="true">
                 <p:outputLabel value="#{gestorPersona.convertirListaPersonas(tesis.autoresCollection)}" escape="false"/>
             </p:column>
-            <p:column exportable="false" headerText="Autores" width="150" filterBy="#{tesis.autoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarPorAutor}">
-                <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
-                    <p:outputLabel value="• #{autor.apellidos} #{autor.nombres}"/><br />
-                </ui:repeat>
+            <p:column exportable="false" headerText="Autores" width="200" 
+                      filterBy="#{tesis.autoresCollection}" 
+                      filterMatchMode="contains" 
+                      filterFunction="#{gestorTesis.filtrarPorAutor}">
+
+                <ul style="width: 80%; font-size: 13px">
+                    <ui:repeat value="#{tesis.autoresCollection.toArray()}" var="autor">
+                        <li><h:outputText value="#{autor.apellidos} #{autor.nombres}"/></li>
+                    </ui:repeat>
+                </ul>  
             </p:column>
-            
-            <p:column headerText="Título" width="300" filterBy="#{tesis.nombre}" filterMatchMode="contains" sortBy="#{tesis.nombre}">
-                <h:outputText value="#{tesis.nombre}" />
+
+            <p:column 
+                style="text-align:justify; padding:15px; max-width:350px; min-width:250px"
+                headerText="Título" width="300" filterBy="#{tesis.nombre}" filterMatchMode="contains" sortBy="#{tesis.nombre}">
+                <p:commandLink 
+                    style="font-weight: bold;white-space: pre-wrap;"
+                    value="#{tesis.nombre}" 
+                    action="#{gestorNavegacion.cargarPagina(8, tesis.id)}"/>
             </p:column>
 
             <p:column headerText="Tipo" width="70" sortBy="#{tesis.tipo}">
                 <h:outputText value="#{label['tesis.tipo.' += tesis.tipo]}"/>
             </p:column>
-            
+
             <p:column headerText="Director" width="150" filterBy="#{tesis.director.nombres} #{tesis.director.apellidos}" filterMatchMode="contains" sortBy="#{tesis.director.nombre}">
                 <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
             </p:column>
-            <p:column exportable="false" headerText="Co-Directores" width="150" filterBy="#{tesis.codirectoresCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarCoDirector}">
-                <ui:repeat value="#{tesis.codirectoresCollection.toArray()}" var="codirector">
-                    <p:outputLabel value="• #{codirector.nombres} #{codirector.apellidos}"/><br />
-                </ui:repeat>
+            <p:column exportable="false" headerText="Co-Directores" width="150" 
+                      filterBy="#{tesis.codirectoresCollection}" 
+                      filterMatchMode="contains" 
+                      filterFunction="#{gestorTesis.filtrarCoDirector}">                
+                <ul style="width: 80%; font-size: 13px">
+                    <ui:repeat value="#{tesis.codirectoresCollection.toArray()}" var="codirector">
+                        <li><h:outputText value="#{codirector.nombres} #{codirector.apellidos}"/></li>
+                    </ui:repeat>
+                </ul>                
             </p:column>
+
             <p:column headerText="Co-Directores" styleClass="columnaOculta" exportable="true">
                 <p:outputLabel value="#{gestorPersona.convertirListaPersonas(tesis.codirectoresCollection)}" escape="false"/>
             </p:column>            
@@ -76,21 +93,30 @@
             <p:column headerText="Facultad" filterBy="#{tesis.facultad}" filterMatchMode="contains" width="100" sortBy="#{tesis.facultad}">
                 <h:outputText value="#{tesis.facultad}" />
             </p:column>
-            <p:column headerText="Escuela" filterBy="#{tesis.escuela}" filterMatchMode="contains" width="100" sortBy="#{tesis.escuela}">
+            
+            <p:column headerText="Escuela" filterBy="#{tesis.escuela}" 
+                      filterMatchMode="contains" 
+                      width="100" sortBy="#{tesis.escuela}"
+                      style="text-align:justify;">
                 <h:outputText value="#{tesis.escuela}" />
             </p:column>            
 
-            <p:column exportable="false" headerText="Proyectos" width="200" filterBy="#{tesis.proyectosCollection}" filterMatchMode="contains" filterFunction="#{gestorTesis.filtrarProyecto}">
-                <ui:repeat value="#{tesis.proyectosCollection.toArray()}" var="proyecto">
-                    <p:outputLabel value="• #{gestorProyecto.acortarTitulo(proyecto)}"/><br />
-                </ui:repeat>
+            <p:column exportable="false" headerText="Proyectos" width="220" 
+                      filterBy="#{tesis.proyectosCollection}" 
+                      filterMatchMode="contains" 
+                      filterFunction="#{gestorTesis.filtrarProyecto}">
+                <ul style="width:80%; font-size:13px; text-align:justify;">
+                    <ui:repeat value="#{tesis.proyectosCollection.toArray()}" var="proyecto">
+                        <li><h:outputText value="#{gestorProyecto.acortarTitulo(proyecto)}"/></li>
+                    </ui:repeat>
+                </ul>
             </p:column> 
 
             <p:column headerText="Proyectos" styleClass="columnaOculta" exportable="true">
                 <p:outputLabel value="#{gestorProyecto.convertirListaProyectos(tesis.proyectosCollection)}" escape="false"/>
             </p:column>
-            
-            
+
+
             <p:column exportable="false" headerText="Acta Aprobación" width="75">
                 <p:commandLink value="Descargar" ajax="false" rendered="#{tesis.archivoActaAprobacion != ''}">
                     <p:fileDownload value="#{gestorTesis.streamParaDescarga(tesis)}" />
@@ -100,12 +126,10 @@
             <p:column exportable="false" width="80">
                 <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(8, tesis.id)}"/>
                 <p:outputLabel value=" "/>
-                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorTesis.initModificarTesis(tesis.id)}"/>
+                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(8, tesis.id)}"/>
             </p:column>
 
         </p:dataTable>   
-
-
 
     </ui:define>
 </ui:composition>

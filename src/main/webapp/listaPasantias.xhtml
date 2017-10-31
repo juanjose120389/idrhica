@@ -26,16 +26,32 @@
             <f:facet name="header">
                 Pasantías
             </f:facet>
-            
+
             <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>            
-            
-            <p:column headerText="Tema" filterBy="#{pasantia.tema}" filterMatchMode="contains" sortBy="#{pasantia.tema}">
-                <h:outputText value="#{pasantia.tema}" />
+
+            <p:column 
+                headerText="Tema" 
+                filterBy="#{pasantia.tema}" 
+                filterMatchMode="contains" 
+                sortBy="#{pasantia.tema}"
+                style="text-align:justify; padding:15px; max-width:350px; min-width:150px"
+                width="200"
+                >
+                <p:commandLink 
+                    style="font-weight: bold;white-space: pre-wrap;"
+                    value="#{pasantia.tema}" 
+                    action="#{gestorNavegacion.cargarPagina(5, pasantia.id)}"/>
             </p:column>
-            
-            <p:column headerText="Pasante" filterBy="#{pasantia.pasante.nombres} #{pasantia.pasante.apellidos}" filterMatchMode="contains" sortBy="#{pasantia.pasante.nombres}">
+
+            <p:column 
+                headerText="Pasante" 
+                filterBy="#{pasantia.pasante.nombres} 
+                #{pasantia.pasante.apellidos}" 
+                filterMatchMode="contains" 
+                sortBy="#{pasantia.pasante.nombres}"
+                width="150">
                 <p:outputLabel value="#{pasantia.pasante.nombres} #{pasantia.pasante.apellidos}"/>
             </p:column>            
 
@@ -54,11 +70,10 @@
             <p:column headerText="Facultad" filterBy="#{pasantia.facultad}" filterMatchMode="contains" width="100" sortBy="#{pasantia.facultad}">
                 <h:outputText value="#{pasantia.facultad}" />
             </p:column>            
-            
+
             <p:column headerText="Escuela" filterBy="#{pasantia.escuela}" filterMatchMode="contains" width="100" sortBy="#{pasantia.escuela}">
                 <h:outputText value="#{pasantia.escuela}" />
             </p:column>            
-            
 
             <p:column headerText="Director" filterBy="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" filterMatchMode="contains" sortBy="#{pasantia.coordinador.nombres}">
                 <h:outputText value="#{pasantia.coordinador.nombres} #{pasantia.coordinador.apellidos}" />
@@ -67,7 +82,7 @@
             <p:column exportable="false" width="90">
                 <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(5, pasantia.id)}"/>
                 <p:outputLabel value=" "/>
-                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorPasantia.initModificarPasantia(pasantia.id)}"/>
+                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(5, pasantia.id)}"/>
             </p:column>            
         </p:dataTable>   
 

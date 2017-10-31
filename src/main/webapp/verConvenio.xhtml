@@ -3,21 +3,24 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="./template_pf.xhtml">
+                template="./template_pf.xhtml">    
     <ui:define name="body">
-
         <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
         <h:panelGroup layout="block" style="height: 20px"/>        
         <p:panel header="Ficha del Convenio">
             <h:panelGrid columns="2" columnClasses="labelscol,inputscol">
                 <p:outputLabel value="Titulo"/>
-                <p:outputLabel value="#{gestorConvenio.convenio.titulo}"/>
+                <p:outputLabel 
+                    value="#{gestorConvenio.convenio.titulo}"/>
 
                 <p:outputLabel value="Objetivo" />
-                <p:outputLabel value="#{gestorConvenio.convenio.objetivo}" styleClass="lineaMultiple"/>
+                <p:outputLabel
+                    value="#{gestorConvenio.convenio.objetivo}" 
+                    styleClass="lineaMultiple"/>
 
                 <p:outputLabel value="Fecha de Inicio"/>
-                <p:outputLabel value="#{gestorConvenio.convenio.fechaInicio}">
+                <p:outputLabel 
+                    value="#{gestorConvenio.convenio.fechaInicio}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </p:outputLabel>
 
@@ -121,9 +124,7 @@
                         <h:outputText value="#{tesis.director.nombres} #{tesis.director.apellidos}" />
                     </p:column>
                 </p:dataTable>
-            </h:panelGroup>   
-
+            </h:panelGroup>
         </p:panel>
-
     </ui:define>
 </ui:composition>
