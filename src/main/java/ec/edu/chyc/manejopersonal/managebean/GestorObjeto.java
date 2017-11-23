@@ -5,12 +5,24 @@
  */
 package ec.edu.chyc.manejopersonal.managebean;
 
+import ec.edu.chyc.manejopersonal.controller.ObjetoJpaController;
+import ec.edu.chyc.manejopersonal.controller.ProveedorJpaController;
 import ec.edu.chyc.manejopersonal.entity.Objeto;
 import ec.edu.chyc.manejopersonal.entity.Proveedor;
 import static ec.edu.chyc.manejopersonal.managebean.util.BeansUtils.ejecutarJS;
+import ec.edu.chyc.manejopersonal.util.FechaUtils;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.el.ELContext;
+import javax.el.ValueExpression;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
@@ -24,12 +36,23 @@ import org.primefaces.context.RequestContext;
 public class GestorObjeto implements Serializable {
 
     private Modo modo;
-    /*private boolean mostrarDlgUbicacion;
-    private boolean mostrarDlgProveedor;
-    private boolean mostrarDlgCustodio;*/
+    private final ObjetoJpaController objetoController=new ObjetoJpaController();
+    private final ProveedorJpaController proveedorController=new ProveedorJpaController();
+    
+    private List<Objeto> listaObjetos = new ArrayList<>();
 
+    
+    private List<Proveedor> listaProveedores=new ArrayList();
+    private List<Proveedor> listaProveedoresAgregados=new ArrayList();
+    
     private Objeto objeto;
     private Proveedor proveedor;
+    
+    
+    private Long idProveedorGen = -1L;
+    
+    private boolean modoModificar = false;
+
 
     /**
      * @return the objeto
@@ -59,54 +82,46 @@ public class GestorObjeto implements Serializable {
         this.proveedor = proveedor;
     }
 
+    public List<Objeto> getListaObjetos() {
+        return listaObjetos;
+    }
+
+    public void setListaObjetos(List<Objeto> listaObjetos) {
+        this.listaObjetos = listaObjetos;
+    }
+    
     private enum Modo {
         AGREGAR,
         EDITAR,
         VER
     }
-
+    
     public GestorObjeto() {
+        //TODO Borrar para que se pueda acceder desde el menu
+       initCrearObjeto();
     }
 
     @PostConstruct
-    public void init() {
-        //actualizarListado();
-        /*try {
-            listaPersonas = personaController.listPersonas();
-        } catch (Exception ex) {
-            Logger.getLogger(GestorPersona.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        //universidad = new Universidad();
-        //titulo = new Titulo();
-        //tabActivo = 0;
-
+    public void init() {        
         proveedor = new Proveedor();
         objeto = new Objeto();
     }
 
     public String initCrearObjeto() {
         inicializarManejoObjeto();
-
-        //modoModificar = false;
-        //modo = Modo.AGREGAR;
-        /*LocalDate dtFechaNacDefault = LocalDateTime.now().toLocalDate();
-        dtFechaNacDefault = dtFechaNacDefault.minusYears(28).withDayOfYear(1);
-        
-        persona.setFechaNacimiento(FechaUtils.asDate(dtFechaNacDefault));        */
-        //persona.setFechaNacimiento(null);
         return "manejoObjetos";
     }
 
     public void inicializarManejoObjeto() {
-        /*mostrarDlgUbicacion = false;
-        mostrarDlgCustodio = false;
-        mostrarDlgProveedor = false;*/
+        objeto=new Objeto();
+        listaProveedoresAgregados.clear();
+        actualizarListaProveedores();
     }
 
     public void abrirUbicacionDialog() {
-        //mostrarDlgUbicacion = true;
-        RequestContext.getCurrentInstance().update("formContenido:divDialogs");
+        //mostrarDlgUbicacion = true;        
         ejecutarJS("PF('dlgUbicacion').show()");
+        System.err.println("///////////////////////////////Abriendo dlgUbicacion");
     }
 
     public void abrirCustodioDialog() {
@@ -124,52 +139,82 @@ public class GestorObjeto implements Serializable {
 
     public void guardarProveedor() {
         //objeto.setProveedor(getProveedor());
+        proveedor.setId(idProveedorGen);
+        idProveedorGen--;
+        listaProveedoresAgregados.add(proveedor);
+        objeto.setProveedor(proveedor);
+        
+        proveedor=new Proveedor();
         ejecutarJS("PF('dlgProveedor').hide()");
         //System.err.println("$$$$$$$$$$$**********" + proveedor);
     }
-
-    /*
-    public void onCloseDlgUbicacion() {
-        //mostrarDlgUbicacion = false;
-    }
-
-    public void onCloseDlgCustodio() {
-        //mostrarDlgCustodio = false;
-    }
-
-    public void onCloseDlgProveedor() {
-        //mostrarDlgProveedor = false;
-    }
     
-
-    public void setMostrarDlgUbicacion(boolean mostrarDlgUbicacion) {
-        //this.mostrarDlgUbicacion = mostrarDlgUbicacion;
+    public void guardarUbicacion() {
+        //objeto.setProveedor(getProveedor());
+        //proveedor.setId(idProveedorGen);
+        //idProveedorGen--;
+        //listaProveedoresAgregados.add(proveedor);
+        //objeto.setProveedor(proveedor);
+        
+        //proveedor=new Proveedor();
+        ejecutarJS("PF('dlgUbicacion').hide()");
+        //System.err.println("$$$$$$$$$$$**********" + proveedor);
     }
-
-    public void setMostrarDlgCustodio(boolean mostrarDlgCustodio) {
-        //this.mostrarDlgCustodio = mostrarDlgCustodio;
-    }
-
-    public void setMostrarDlgProveedor(boolean mostrarDlgProveedor) {
-        //this.mostrarDlgProveedor = mostrarDlgProveedor;
-    }
-    */
 
     public boolean isModoModificar() {
         return modo == Modo.EDITAR;
     }
-
-    /*
-    public boolean isMostrarDlgUbicacion() {
-        //return mostrarDlgUbicacion;
+    
+    public void actualizarListaProveedores() {
+        try {
+            listaProveedores = proveedorController.listProveedores();
+        } catch (Exception ex) {
+            Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
 
-    public boolean isMostrarDlgCustodio() {
-        return mostrarDlgCustodio;
+    public List<Proveedor> getListaProveedores() {
+        return listaProveedores;
     }
 
-    public boolean isMostrarDlgProveedor() {
-        return mostrarDlgProveedor;
-    }*/
+    public List<Proveedor> getListaProveedoresAgregados() {
+        return listaProveedoresAgregados;
+    }
+    
+    public void actualizarListaObjetos() {
+        try {
+            listaObjetos = objetoController.listObjetos();
+        } catch (Exception ex) {
+            Logger.getLogger(GestorObjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public String initListarObjetos(){
+        actualizarListaObjetos();
+        return "listaObjetos";
+    }
+    
+    public String guardar(){
+        try {
+            if (modoModificar) {
+                objetoController.edit(objeto);
+            } else {
+                objetoController.create(objeto);
+            }            
+            //GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
+            return initListarObjetos();
+            //return "index";
+        } catch (Exception ex) {
+            Logger.getLogger(GestorObjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+    
+    public static GestorObjeto getInstance() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext context = facesContext.getELContext();
+        ValueExpression ex = facesContext.getApplication().getExpressionFactory().createValueExpression(context, "#{gestorObjeto}", GestorObjeto.class);
+        return (GestorObjeto) ex.getValue(context);
+    }
 
 }

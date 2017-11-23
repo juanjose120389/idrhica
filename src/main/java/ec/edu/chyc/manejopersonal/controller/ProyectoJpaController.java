@@ -174,13 +174,14 @@ public class ProyectoJpaController extends GenericJpaController<Proyecto> implem
             em.getTransaction().begin();
             
             if (proyecto.getLineaInvestigacion() != null) {
-                if (proyecto.getLineaInvestigacion().getId() == null || proyecto.getLineaInvestigacion().getId() < 0) {
+                if (proyecto.getLineaInvestigacion().getId() == null 
+                        || proyecto.getLineaInvestigacion().getId() < 0) {
                     proyecto.getLineaInvestigacion().setId(null);
-                    em.persist(proyecto.getLineaInvestigacion());
                 }
             }
             if (proyecto.getGrupoInvestigacion() != null) {
-                if (proyecto.getGrupoInvestigacion().getId() == null || proyecto.getGrupoInvestigacion().getId() < 0) {
+                if (proyecto.getGrupoInvestigacion().getId() == null 
+                        || proyecto.getGrupoInvestigacion().getId() < 0) {
                     proyecto.getGrupoInvestigacion().setId(null);
                     em.persist(proyecto.getGrupoInvestigacion());
                 }

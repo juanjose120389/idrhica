@@ -103,7 +103,7 @@ public class Proyecto implements Serializable {
     @ManyToMany
     @JoinTable(name = "proyectoConvenio", joinColumns = {
         @JoinColumn(name = "idProyecto", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "idConvenio", referencedColumnName = "id")})
+        @JoinColumn(name = "idConvenio", referencedColumnName = "id")})    
     private Set<Convenio> conveniosCollection = new HashSet();
     
     /*@OneToMany(mappedBy = "proyecto")

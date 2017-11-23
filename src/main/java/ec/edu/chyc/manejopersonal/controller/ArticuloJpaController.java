@@ -58,8 +58,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     personaArticulo.setPersona(personaArticulo.getPersonaFirma().getPersona());
                     personaArticulo.setFirma(personaArticulo.getPersonaFirma().getFirma());
                 }
-            }
-            
+            }            
             return list;
         } finally {
             if (em != null) {
@@ -70,7 +69,6 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
     
     public void create(Articulo obj) throws Exception {
         EntityManager em = null;
-
         try {
             em = getEntityManager();
             em.getTransaction().begin();
@@ -105,7 +103,6 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                         persona.setId(null);
                         em.persist(persona);
                     }*/
-
                     if (personaArticulo.getId() == null || personaArticulo.getId() < 0) {
                         personaArticulo.setId(null);
                         em.persist(personaArticulo);
@@ -133,10 +130,6 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                 Files.move(origen, destino, REPLACE_EXISTING);
                 //FileUtils.moveFile(origen, destino);
             }
-            
-
-            //em.merge(obj);
-            //em.persist(obj);
             em.getTransaction().commit();
         } finally {
             if (em != null) {

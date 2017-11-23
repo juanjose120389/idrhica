@@ -72,7 +72,10 @@
                     <span class="asterisk"/>
                 </p:outputLabel>
                 <h:panelGroup>
-                    <p:inputText id="txtIdInterno" requiredMessage="Requerido" required="true" maxlength="255"/>  
+                    <p:inputText id="txtIdInterno" 
+                                 requiredMessage="Requerido" 
+                                 required="true" 
+                                 maxlength="255" value="#{gestorObjeto.objeto.idInterno}"/>  
                     <p:message for="txtIdInterno"/>
                 </h:panelGroup>
 
@@ -84,7 +87,11 @@
 
                 <p:outputLabel value="Descripción"/>            
                 <h:panelGroup>
-                    <p:inputText class="inputLarge" id="txtDescripcion" maxlength="255" />  
+                    <p:inputText 
+                        class="inputLarge" 
+                        id="txtDescripcion" 
+                        maxlength="255" 
+                        value="#{gestorObjeto.objeto.descripcion}"/>  
                     <p:message for="txtDescripcion"/>
                 </h:panelGroup>  
 
@@ -109,14 +116,12 @@
                     <p:message for="txtModelo"/>
                 </h:panelGroup>
 
-
-
                 <p:outputLabel value="Dimensiones"/>
                 <h:panelGroup>
                     <p:inputText id="txtDimensiones" maxlength="255"/>  
                     <p:message for="txtDimensiones"/>
                 </h:panelGroup>
-
+                
                 <p:outputLabel value="Vida Útil"/>
                 <h:panelGroup>
                     <p:inputText id="txtVidaUtil" maxlength="255"/>  
@@ -129,7 +134,7 @@
 
             <h3>Información Contable</h3>
 
-            <h:panelGrid columns="4" columnClasses="labelscolC,inputscolC,labelscolC,inputscolC">    
+            <h:panelGrid id="divProveedor" columns="4" columnClasses="labelscolC,inputscolC,labelscolC,inputscolC">    
 
                 <p:outputLabel value="Número Factura"/>
                 <h:panelGroup>
@@ -139,14 +144,20 @@
 
                 <p:outputLabel value="Proveedor"/>
                 <h:panelGroup id="inputProveedor">
-                    <p:selectOneMenu id="cmbProveedor" value="#{gestorObjeto.objeto.proveedor}" 
+                    <p:selectOneMenu id="cmbProveedor" 
+                                     value="#{gestorObjeto.objeto.proveedor}" 
                                      converter="proveedorConverter"
                                      var="prov" filter="true" 
                                      filterMatchMode="contains"
                                      requiredMessage="#{label.required}">
                         <f:selectItem itemLabel="--Seleccionar--" itemValue="" />
-                        <f:selectItems value="#{gestorProveedor.listaProveedores}" 
-                                       var="p" 
+                        <f:selectItems value="#{gestorObjeto.listaProveedores}" 
+                                       var="p"
+                                       itemLabel="#{p.nombre_comercial} #{p.ruc} " 
+                                       itemValue="#{p}" 
+                                       />
+                        <f:selectItems value="#{gestorObjeto.listaProveedoresAgregados}" 
+                                       var="p"
                                        itemLabel="#{p.nombre_comercial} #{p.ruc} " 
                                        itemValue="#{p}" 
                                        />
@@ -162,7 +173,6 @@
                                    action="#{gestorObjeto.abrirProveedorDialog()}" 
                                    oncomplete="PF('dlgProveedor').show()"
                                    style="padding-left: 15px"/>
-
                 </h:panelGroup>                
 
                 <p:outputLabel value="Fecha adquirido"/>
@@ -248,17 +258,40 @@
             <h:panelGrid columns="2" columnClasses="labelscolC,inputscolC">  
 
                 <p:outputLabel value="Custodio"/>
-                <p:commandButton id="btnDlgCustodio" value="Seleccionar..." icon="ui-icon-extlink" process="@this" action="#{gestorObjeto.abrirCustodioDialog}" />
+                <h:panelGroup layout="block">
+                    <p:selectOneMenu style="width: 300px" required="true" id="cmbCustodio" value="#{gestorObjeto.objeto.custodio}" converter="personaConverter"
+                                     var="per" filter="true" filterMatchMode="contains" requiredMessage="#{label.required}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                        <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" var="u" itemLabel="#{u.nombres} #{u.apellidos}" itemValue="#{u}" />                        
+                        <p:column>
+                            <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
+                        </p:column>
+                    </p:selectOneMenu>                    
+                    <p:message for="cmbCustodio"/>
+                </h:panelGroup>
 
-                <p:outputLabel for="btnDlgUbicacion" value="Ubicación" />
-                <p:commandButton id="btnDlgUbicacion" value="Seleccionar..." icon="ui-icon-extlink" process="@this" action="#{gestorObjeto.abrirUbicacionDialog}" />               
+                <h:panelGroup layout="block">
+                    <p:outputLabel value="Ubicación" />
+                    <p:outputLabel id="inputUbicacion" value="#{gestorObjeto.objeto.ubicacion}" />
+                </h:panelGroup>
+
+                <p:commandLink value="Seleccionar..." styleClass="linkDropdown" 
+                               process="@this" 
+                               action="#{gestorObjeto.abrirUbicacionDialog}" 
+                               oncomplete="PF('dlgUbicacion').show()"
+                               style="padding-left: 15px"/>                
+
             </h:panelGrid>
 
         </p:panel>
 
         <h:panelGroup layout="block" style="height: 15px"/>
 
-        <p:commandButton value="Guardar" update="formContenido" icon="fa fa-save"/>
+        <p:commandButton 
+            value="Guardar" 
+            update="formContenido" 
+            action="#{gestorObjeto.guardar()}"
+            icon="fa fa-save"/>
 
     </ui:define>
 
@@ -270,31 +303,34 @@
                 <h:form>
                     <h:panelGrid columns="3" >
 
-                        <p:outputLabel value="ID">
-                            <span class="asterisk"/>
-                        </p:outputLabel>                        
-                        <h:panelGroup>
-                            <p:inputText id="txtIdProveedor" requiredMessage="Requerido" required="true" maxlength="255"/>  
-                            <p:message for="txtIdProveedor"/>
-                        </h:panelGroup>
-                        <p:commandButton value="Ingresar" />
-
                         <p:outputLabel value="RUC">
                             <span class="asterisk"/>
                         </p:outputLabel>
                         <h:panelGroup>
-                            <p:inputText id="txtRUCProveedor" requiredMessage="Requerido" 
-                                         required="true" maxlength="255" style="width: 150px"/>  
+                            <p:inputText id="txtRUCProveedor" 
+                                         requiredMessage="Requerido" 
+                                         required="true" 
+                                         value="#{gestorObjeto.proveedor.ruc}"
+                                         maxlength="255" 
+                                         style="width: 150px"/>  
                             <p:message for="txtRUCProveedor"/>
                         </h:panelGroup>
-                        <h:panelGroup/>
+                        <p:commandButton value="Ingresar" 
+                                         process="dlgProveedor"
+                                         update=":formContenido:inputProveedor"
+                                         action="#{gestorObjeto.guardarProveedor()}"                        
+                                         />
 
                         <p:outputLabel value="Nombre Comercial">
                             <span class="asterisk"/>
                         </p:outputLabel>
                         <h:panelGroup>
-                            <p:inputText id="txtNom_Com_Proveedor" requiredMessage="Requerido" 
-                                         required="true" maxlength="255" style="width: 150px"/>  
+                            <p:inputText id="txtNom_Com_Proveedor" 
+                                         requiredMessage="Requerido" 
+                                         required="true" 
+                                         value="#{gestorObjeto.proveedor.nombre_comercial}" 
+                                         maxlength="255" 
+                                         style="width: 150px"/>  
                             <p:message for="txtNom_Com_Proveedor"/>
                         </h:panelGroup>
                         <h:panelGroup/>                        
@@ -304,33 +340,39 @@
 
             <p:dialog id="dlgUbicacion" header="Ubicación" widgetVar="dlgUbicacion" 
                       resizable="false" width="400" modal="true" appendTo="@(body)">                
-                <h:panelGroup layout="block" id="divDlgUbicacion">
-                    <h:panelGrid id="panelCamposUbicacion" columns="3">
-                        <p:outputLabel value="Lugar/">
-                            <span class="asterisk"/>
-                        </p:outputLabel>
-                        <p:inputText styleClass="inputEnDlg" id="txtLugarUbicacion" 
-                                     required="true" requiredMessage="Requerido"/>
-                        <p:message for="txtLugarUbicacion"/>                                
+                <h:form>
+                    <h:panelGroup layout="block" id="divDlgUbicacion">
+                        <h:panelGrid id="panelCamposUbicacion" columns="3">
+                            <p:outputLabel value="Lugar">
+                                <span class="asterisk"/>
+                            </p:outputLabel>
+                            <p:inputText styleClass="inputEnDlg" id="txtLugarUbicacion" 
+                                         required="true" requiredMessage="Requerido"/>
+                            <p:message for="txtLugarUbicacion"/>                                
 
-                        <p:outputLabel value="Estante"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtEstanteUbicacion"/>
-                        <p:message for="txtEstanteUbicacion"/>
+                            <p:outputLabel value="Estante"/>
+                            <p:inputText styleClass="inputEnDlg" id="txtEstanteUbicacion"/>
+                            <p:message for="txtEstanteUbicacion"/>
 
-                        <p:outputLabel value="Código"/>
-                        <p:inputText styleClass="inputEnDlg" id="txtCodigoUbicacion"/>
-                        <p:message for="txtCodigoUbicacion"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgUbicacion" update="divDlgUbicacion"/>
-                        <p:commandButton value="Cancelar" onclick="PF('dlgUbicacion').hide();"/>
-                    </h:panelGrid>            
-                </h:panelGroup>
+                            <p:outputLabel value="Código"/>
+                            <p:inputText styleClass="inputEnDlg" id="txtCodigoUbicacion"/>
+                            <p:message for="txtCodigoUbicacion"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:commandButton value="Aceptar" 
+                                             process="dlgUbicacion"                                            
+                                             update=":formContenido:inputUbicacion"
+                                             action="#{gestorObjeto.guardarUbicacion()}"
+                                             />
+                            <p:commandButton value="Cancelar" onclick="PF('dlgUbicacion').hide();"/>
+                        </h:panelGrid>            
+                    </h:panelGroup>                    
+                </h:form>                
             </p:dialog>
 
             <p:dialog id="dlgCustodio" header="Seleccionar Custodio" widgetVar="dlgCustodio" 
                       resizable="false" width="700" modal="true" appendTo="@(body)">                
-
+            
                 <h:panelGroup layout="block" id="divDlgCustodio" style="width: 320px">
                     <p:selectOneListbox id="selListBoxCustodio" converter="custodioConverter" 
                                         var="p" filter="true" filterMatchMode="contains" style="width: 300px">
@@ -345,14 +387,14 @@
                         </p:column>
                     </p:selectOneListbox>
                 </h:panelGroup>
-
+            
                 <h:panelGrid columns="2">
                     <p:commandButton value="Aceptar" process="dlgCustodio" update="divDlgCustodio"/>
                     <p:commandButton value="Cancelar" onclick="PF('dlgCustodio').hide();"/>
-                </h:panelGrid>                      
-
+                </h:panelGrid>
             </p:dialog>
+            
         </h:panelGroup>
     </ui:define>
-
+    
 </ui:composition>

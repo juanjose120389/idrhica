@@ -19,7 +19,10 @@
         </style>
 
         <h:panelGroup layout="block" id="divDialogs">
-            <p:dialog id="dlgInstitucion" header="Institución" widgetVar="dlgInstitucion" rendered="#{gestorProyecto.mostrarDlgInstitucion}" 
+            <p:dialog id="dlgInstitucion" 
+                      header="Institución" 
+                      widgetVar="dlgInstitucion" 
+                      rendered="#{gestorProyecto.mostrarDlgInstitucion}" 
                       resizable="false" width="400">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgInstitucion()}" />
                 <h:panelGroup layout="block" id="divDlgInstitucion">
@@ -36,7 +39,11 @@
                 </h:panelGroup>
             </p:dialog>  
             
-            <p:dialog id="dlgGrupoInvestigacion" header="Grupo Investigación" widgetVar="dlgGrupoInvestigacion" rendered="#{gestorProyecto.mostrarDlgGrupoInvestigacion}" 
+            <p:dialog 
+                id="dlgGrupoInvestigacion" 
+                header="Grupo Investigación" 
+                widgetVar="dlgGrupoInvestigacion" 
+                rendered="#{gestorProyecto.mostrarDlgGrupoInvestigacion}" 
                       resizable="false" width="400">
                 <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgGrupoInvestigacion()}" />
                 <h:panelGroup layout="block" id="divDlgGrupoInvestigacion">
@@ -47,8 +54,12 @@
                         <p:message for="txtNombreGrupoInvestigacion"/>                                
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgGrupoInvestigacion" update="divAccionesGrupoInvestigacion divDlgGrupoInvestigacion" action="#{gestorProyecto.guardarGrupoInvestigacion()}"/>
-                        <p:commandButton value="Cancelar" onclick="PF('dlgGrupoInvestigacion').hide();"/>
+                        <p:commandButton value="Aceptar" 
+                                         process="dlgGrupoInvestigacion" 
+                                         update="divAccionesGrupoInvestigacion divDlgGrupoInvestigacion" 
+                                         action="#{gestorProyecto.guardarGrupoInvestigacion()}"/>
+                        <p:commandButton value="Cancelar" 
+                                         onclick="PF('dlgGrupoInvestigacion').hide();"/>
                     </h:panelGrid>            
                 </h:panelGroup>
             </p:dialog>  
@@ -155,12 +166,26 @@
                 <h:panelGroup/>
 
                 <p:outputLabel value="Grupo investigación"/>
-                <h:panelGroup id="divAccionesGrupoInvestigacion" layout="block">
-                    <p:selectOneMenu rendered="#{not empty gestorProyecto.listaGruposInvestigacion or not empty gestorProyecto.listaGruposInvestigacionAgregados}" styleClass="cmbTitulo" value="#{gestorProyecto.proyecto.grupoInvestigacion}" converter="grupoInvestigacionConverter"
-                                     var="grupo" style="width: 300px;" filter="true" filterMatchMode="contains">
+                <h:panelGroup 
+                    id="divAccionesGrupoInvestigacion" 
+                    layout="block">
+                    <p:selectOneMenu 
+                        rendered="#{not empty gestorProyecto.listaGruposInvestigacion 
+                                    or not empty gestorProyecto.listaGruposInvestigacionAgregados}" 
+                        styleClass="cmbTitulo" 
+                        value="#{gestorProyecto.proyecto.grupoInvestigacion}" 
+                        converter="grupoInvestigacionConverter"
+                        var="grupo" 
+                        style="width: 300px;" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                        <f:selectItems value="#{gestorProyecto.listaGruposInvestigacion}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-                        <f:selectItems value="#{gestorProyecto.listaGruposInvestigacionAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
+                        <f:selectItems value="#{gestorProyecto.listaGruposInvestigacion}" 
+                                       var="t" 
+                                       itemLabel="#{t.nombre}" 
+                                       itemValue="#{t}" />
+                        <f:selectItems value="#{gestorProyecto.listaGruposInvestigacionAgregados}" 
+                                       var="t" 
+                                       itemLabel="#{t.nombre}" 
+                                       itemValue="#{t}" />
 
                         <p:column>
                             <p:outputLabel value="#{grupo.nombre}"/>
@@ -169,8 +194,8 @@
 
                     <p:commandLink value="Nuevo grupo"  style="margin-left: 5px;" update="dlgGrupoInvestigacion" process="@this" action="#{gestorProyecto.abrirNuevoGrupoInvestigacionDlg()}" />
                 </h:panelGroup>
+                
                 <h:panelGroup/>
-
                 <p:outputLabel value="Línea de investigación"/>
                 <h:panelGroup id="divAccionesLineaInvestigacion" layout="block">
                     <p:selectOneMenu rendered="#{not empty gestorProyecto.listaLineasInvestigacion or not empty gestorProyecto.listaLineasInvestigacionAgregados}" styleClass="cmbTitulo" value="#{gestorProyecto.proyecto.lineaInvestigacion}" converter="lineaInvestigacionConverter"
@@ -178,19 +203,16 @@
                         <f:selectItem itemLabel="Seleccionar" itemValue="" />
                         <f:selectItems value="#{gestorProyecto.listaLineasInvestigacion}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
                         <f:selectItems value="#{gestorProyecto.listaLineasInvestigacionAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-
+                        
                         <p:column>
                             <p:outputLabel value="#{linea.nombre}"/>
-                        </p:column>
+                        </p:column>                        
                     </p:selectOneMenu>
 
                     <p:commandLink value="Nueva línea"  style="margin-left: 5px;" update="dlgLineaInvestigacion" process="@this" action="#{gestorProyecto.abrirNuevaLineaInvestigacionDlg()}" />
                 </h:panelGroup>
                 <h:panelGroup/>
               
-                
-
-
                 <p:outputLabel value="Director" >
                     <span class="asterisk"/>
                 </p:outputLabel>
@@ -341,7 +363,11 @@
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>
 
-        <p:commandButton value="Guardar" update="formContenido" action="#{gestorProyecto.guardar()}" icon="fa fa-save"/>
+        <p:commandButton 
+            value="Guardar" 
+            update="formContenido" 
+            action="#{gestorProyecto.guardar()}" 
+            icon="fa fa-save"/>
 
     </ui:define>
 </ui:composition>

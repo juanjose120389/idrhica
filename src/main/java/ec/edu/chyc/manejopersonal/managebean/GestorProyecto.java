@@ -150,7 +150,7 @@ public class GestorProyecto implements Serializable {
         lugarNuevo = new Lugar();
         mostrarDlgLugar = false;
         BeansUtils.ejecutarJS("PF('dlgLugar').hide()");
-    }    
+    }
     public void guardarGrupoInvestigacion() {
         grupoInvestigacion.setId(idGrupoInvestigacionGen);
         idGrupoInvestigacionGen--;
@@ -176,7 +176,6 @@ public class GestorProyecto implements Serializable {
         financiamientoActual.setInstitucion(institucion);
         idInstitucionGen--;
         GestorInstitucion.getInstance().getListaInstitucionesAgregadas().add(institucion);
-        
         institucion = new Institucion();
         mostrarDlgInstitucion = false;
         BeansUtils.ejecutarJS("PF('dlgInstitucion').hide()");
@@ -185,7 +184,6 @@ public class GestorProyecto implements Serializable {
         List<Persona> listaResultao = (List<Persona>) event.getObject();
         //agregarPersonaALista(listaPersonasSel, listaCodirectores);
     }    
-    
     public void onCloseDlgInstitucion() {
         mostrarDlgInstitucion = false;
     }
@@ -195,16 +193,13 @@ public class GestorProyecto implements Serializable {
     public void onCloseDlgGrupoInvestigacion() {
         mostrarDlgGrupoInvestigacion = false;
     }
-
     public void onCloseDlgLineaInvestigacion() {
         mostrarDlgLineaInvestigacion = false;
     }
-    
     public void quitarObservatorio(Lugar observatorioQuitar) {
         listaLugaresSeleccionados.remove(observatorioQuitar);
     }
-    
-    public void quitarFinanciamiento(Financiamiento financiamientoQuitar) {
+    public void quitarFinanciamiento(Financiamiento financiamientoQuitar){
         listaFinanciamientos.remove(financiamientoQuitar);
     }
 
@@ -224,8 +219,6 @@ public class GestorProyecto implements Serializable {
     }
 
     public void agregarGrupoInvestigacion() {
-        
-        
     }
     
     public void agregarFinanciamiento() {
@@ -257,7 +250,6 @@ public class GestorProyecto implements Serializable {
         } catch (Exception ex) {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
         }        
-        
     }
     
     public void actualizarListaLineasInvestigacion() {
@@ -441,8 +433,7 @@ public class GestorProyecto implements Serializable {
         proyecto.setFinanciamientosCollection(listaFinanciamientos);
         if (!hayExtensionFinalizacion) {
             proyecto.setFechaFin(proyecto.getFechaFinEnDocumento());
-        }
-        
+        }        
         if (proyecto.getFechaInicio() != null && proyecto.getFechaFinEnDocumento() != null) {
             //Convertir todos los tiempos a Java Time para realizar comparaciones
             LocalDate fechaInicio = FechaUtils.asLocalDate(proyecto.getFechaInicio());
@@ -457,17 +448,14 @@ public class GestorProyecto implements Serializable {
                 GestorMensajes.getInstance().mostrarMensajeWarn("La fecha extendida de finalización del proyecto no puede ser menor a la fecha original de finalización.");
                 return "";
             }
-        }
-        
-        proyecto.setLugaresCollection(new HashSet(listaLugaresSeleccionados));
-        
+        }        
+        proyecto.setLugaresCollection(new HashSet(listaLugaresSeleccionados));        
         try {
             if (modoModificar) {
                 proyectoController.edit(proyecto);
             } else {
                 proyectoController.create(proyecto);
-            }
-            
+            }            
             GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
             return initListarProyectos();
             //return "index";

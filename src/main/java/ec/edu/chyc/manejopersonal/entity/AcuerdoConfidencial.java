@@ -51,7 +51,6 @@ public class AcuerdoConfidencial implements Serializable{
     @Column(name = "archivo_acuerdo_conf")
     private String archivoAcuerdoConf = "";//nombre del archivo subido que corresponde al artículo
 
-
     /**
      * @return the id
      */

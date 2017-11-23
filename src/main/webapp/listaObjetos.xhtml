@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions" 
+                template="./template_pf_inventarios.xhtml">
+    <ui:define name="body">
+        <style>
+            .fa-download:before {
+                font-size: 1.3em;
+            }  
+        </style>
+        <p:dataTable widgetVar="objetosTable" id="objetosTable" var="objeto" value="#{gestorObjeto.listaObjetos}"                 
+                     rows="10"
+                     paginator="true" emptyMessage="#{label.emptyMessage}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                     rowsPerPageTemplate="10,15,20,40" rowIndexVar="rowIndex"  
+                     >
+            <f:facet name="{Exporters}">
+                <h:panelGroup layout="block" styleClass="exportButtons">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel-file-icon-lg.png" width="24"/>
+                        <pe:exporter type="xlsx" target="objetosTable" fileName="objeto" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage name="images/pdf-file-icon.png" width="24"/>
+                        <pe:exporter type="pdf" target="objetosTable" fileName="objeto" encoding="iso-8859-1"/>
+                    </h:commandLink>
+                </h:panelGroup>                    
+            </f:facet>
+            <f:facet name="header">
+                Lista de Objetos
+            </f:facet>
+
+            <p:column headerText="#" width="20" style="text-align: right" exportable="false">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>            
+
+            <p:column headerText="Id Interno" width="150" filterBy="#{objeto.idInterno}" filterMatchMode="contains" sortBy="#{objeto.idInterno}">
+                <f:facet name="header">  
+                    <h:outputText value="Id Interno"/>  
+                </f:facet>                  
+                <h:outputText value="#{objeto.idInterno}" /> 
+                <!--
+                TODO: Revisar filtros
+                -->
+            </p:column>
+
+            <p:column headerText="Descripción" width="200" sortBy="#{objeto.descripcion}">
+                <f:facet name="header">  
+                    <h:outputText value="Descripción"/>  
+                </f:facet>
+                <h:outputText value="#{objeto.descripcion}"/>                
+            </p:column>
+            <!--
+            TODO: Agregar opciones ver/editar
+            -->
+        </p:dataTable>         
+    </ui:define>
+</ui:composition>

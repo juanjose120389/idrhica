@@ -6,7 +6,9 @@
 package ec.edu.chyc.manejopersonal.managebean.converter;
 
 import ec.edu.chyc.manejopersonal.entity.Proveedor;
+import ec.edu.chyc.manejopersonal.managebean.GestorObjeto;
 import ec.edu.chyc.manejopersonal.managebean.GestorProveedor;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -23,18 +25,24 @@ public class ProveedorConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String RUCProveedor) {
-      
-        System.err.println("############ Valor recuperado (dlg Proveedor): "+RUCProveedor);
-        if(RUCProveedor != null && RUCProveedor.trim().length() > 0) {
-            try {
-                GestorProveedor gestorProveedor = (GestorProveedor) fc.getExternalContext().getApplicationMap().get("gestorProveedor");
-                return gestorProveedor.buscarProveedor(RUCProveedor);
-            } catch(NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid theme."));
+
+        System.err.println("############ Valor recuperado (dlg Proveedor): " + RUCProveedor);
+        if (RUCProveedor != null && RUCProveedor.trim().length() > 0) {
+            
+            List<Proveedor> list = GestorObjeto.getInstance().getListaProveedores();
+            for (Proveedor obj : list) {
+                if (obj.getRuc().equals(RUCProveedor)) {
+                    return obj;
+                }
             }
-        }
-        else {
-            Proveedor provN=new Proveedor();
+            for (Proveedor obj : GestorObjeto.getInstance().getListaProveedoresAgregados()) {
+                if (obj.getRuc().equals(RUCProveedor)) {
+                    return obj;
+                }
+            }
+            return null;
+        } else {
+            Proveedor provN = new Proveedor();
             provN.setRuc("Seleccionar...");
             return provN;
         }
@@ -42,12 +50,10 @@ public class ProveedorConverter implements Converter {
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object proveedor) {
-        
-        if(proveedor != null && proveedor!="") {
-            Proveedor p=(Proveedor) proveedor;
+        if (proveedor != null && proveedor != "") {
+            Proveedor p = (Proveedor) proveedor;
             return String.valueOf(((Proveedor) proveedor).getRuc());
-        }
-        else {
+        } else {
             return null;
         }
     }

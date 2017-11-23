@@ -24,8 +24,7 @@ public class GrupoInvestigacionConverter implements Converter {
             id = Long.valueOf(value);
         } catch (NumberFormatException ex) {
             return null;
-        }
-
+        }        
         List<GrupoInvestigacion> list = GestorProyecto.getInstance().getListaGruposInvestigacion();
         for (GrupoInvestigacion obj : list) {
             if (obj.getId() == id) 

@@ -30,7 +30,7 @@ public class GrupoInvestigacion implements Serializable {
     
     @OneToMany(mappedBy = "grupoInvestigacion")
     private Collection<Proyecto> proyectosCollection = new ArrayList<>();    
-
+    
     public Long getId() {
         return id;
     }

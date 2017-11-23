@@ -137,7 +137,7 @@ public class GestorArticulo implements Serializable{
             }
         }
 
-        if (!encontrado) { 
+        if (!encontrado) {
             //Agregar la nueva persona 
             PersonaArticulo perArt = new PersonaArticulo();
             perArt.setPersona(per);
@@ -249,11 +249,8 @@ public class GestorArticulo implements Serializable{
             perArt.setId(idPersonaArticuloGen);
             
             personaVacia.getPersonaFirmasCollection().add(personaFirmaUsar);
-            
             listaPersonaArticulo.add(perArt);
-            
             idPersonaArticuloGen--;            
-            
             return true;
         }
         return false;
@@ -261,22 +258,10 @@ public class GestorArticulo implements Serializable{
    
     public void onPersonaChosen(SelectEvent event) {
         List<Persona> listaPersonasSel = (List<Persona>) event.getObject();
-        //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Car Selected", "Id:" + car.getId());
         if (listaPersonasSel != null) {
-            for (Persona per : listaPersonasSel) {
-                /*boolean encontrado = false;
-                for (PersonaArticulo perart : listaPersonaArticulo) {
-                    if (perart.getPersona().getId().equals(per.getId())) {
-                        encontrado = true;
-                        break;
-                    }
-                }*/
-                //if (!encontrado) {
+            for (Persona per : listaPersonasSel) {                
                 agregarNuevoAutor(per, null);
-                //}
             }
-
-            //listaAutores.addAll(listaPersonasSel);
             RequestContext.getCurrentInstance().update("formContenido:dtAutores");
         }
     }
@@ -498,34 +483,6 @@ public class GestorArticulo implements Serializable{
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
-/*        
-        InputStreamReader isr = null;
-        try {
-            FileInputStream is = new FileInputStream(pathBibtex.toFile());
-            //isr = new InputStreamReader(is, StandardCharsets.ISO_8859_1);
-            isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            //BufferedReader br = new BufferedReader(new FileReader(pathBibtex.toFile()));
-            StringBuilder stringBuf = new StringBuilder();
-            String linea;
-            try {
-                while ((linea = br.readLine()) != null) {
-                    stringBuf.append(linea).append(" ");
-                }
-                return stringBuf.toString();
-            } catch (IOException ex) {
-                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }/* catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                isr.close();
-            } catch (IOException ex) {
-                Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }        
-        return "";*/
     }
 
     /**
@@ -631,17 +588,7 @@ public class GestorArticulo implements Serializable{
                         Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                //Value valTitulo = firstEntry.getField(BibTeXEntry.KEY_TITLE);
 
-                /*Collection<BibTeXEntry> entries = entryMap.values();
-                for (BibTeXEntry entry : entries) {
-                    Value value = entry.getField(BibTeXEntry.KEY_TITLE);
-                    if (value == null) {
-                        continue;
-                    }
-
-                    // Do something with the title value
-                }*/
             }
         } catch (ParseException | TokenMgrException | FileNotFoundException ex) {
             Logger.getLogger(GestorArticulo.class.getName()).log(Level.SEVERE, null, ex);
