@@ -26,14 +26,15 @@
                     </h:commandLink>
                 </h:panelGroup>                    
             </f:facet>
+
             <f:facet name="header">
                 Proyectos
             </f:facet>
-            
+
             <p:column headerText="#" width="20" style="text-align: right" exportable="false">
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>            
-            
+
             <p:column headerText="Título" width="250" filterBy="#{proyecto.titulo}" 
                       filterMatchMode="contains" sortBy="#{proyecto.titulo}"
                       style="text-align: justify;padding: 15px;"
@@ -77,7 +78,6 @@
                 </h:panelGroup>
             </p:column>
 
-
             <p:column headerText="Director" width="150" filterBy="#{proyecto.director.nombres} #{proyecto.director.apellidos}" filterMatchMode="contains" sortBy="#{proyecto.director.nombres}">
                 <f:facet name="header">  
                     <h:outputText value="Director"/>  
@@ -102,14 +102,35 @@
                 </f:facet>
                 <h:outputText value="#{proyecto.observaciones}" />
             </p:column>
-            
+
             <p:column headerText="Nickname" width="105" filterBy="#{proyecto.nickname}" filterMatchMode="contains" sortBy="#{proyecto.nickname}">
                 <f:facet name="header">  
                     <h:outputText value="Nickname"/>  
                 </f:facet>
                 <h:outputText value="#{proyecto.nickname}" />
             </p:column>
-            
+
+            <p:column 
+                width="90" 
+                filterBy="#{proyecto.fechaFin}" 
+                style="text-align: center" 
+                filterFunction="#{gestorProyecto.filterByStatus}">
+                <f:facet name="header">
+                    <p:outputLabel id="lblEstado" value="Estado"/>
+                    <p:tooltip id="tipEstado" for="lblEstado" value="T=Todos, Act.=Activos, Fin.=Finalizados" />                    
+                </f:facet>
+                <f:facet name="filter">
+                    <p:selectOneButton id="cmdsEstados" styleClass="buttonset" onchange="PF('proyectoTable').filter()">
+                        <f:converter converterId="javax.faces.Boolean" />                        
+                        <f:selectItem itemLabel="Act." itemValue="true" />
+                        <f:selectItem itemLabel="T" itemValue="" noSelectionOption="#{null}"/>
+                        <f:selectItem itemLabel="Fin." itemValue="false" />                        
+                    </p:selectOneButton>
+                </f:facet>            
+                <h:outputText value="#{proyecto.fechaFin==null ? 'Activo' :                                       
+                                       proyecto.fechaFin.after(currentDate) ? 'Activo' : 'Finalizado'}" />
+            </p:column>
+
             <p:column exportable="false" width="80">
                 <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(7, proyecto.id)}"/>
                 <p:outputLabel value=" "/>

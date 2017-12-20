@@ -48,3 +48,27 @@ html, body{
     height: 2.5em; 
     margin-top: -2.5em; 
 }
+
+/*Formato Panel Grid Inventarios*/
+.label1PGInv{
+    /*min-width: 110px !important;*/
+    background-color: whitesmoke;  
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+
+.input1PGInv{
+
+}
+
+.label2PGInv {
+    /*min-width: 110px !important;*/
+    background-color: whitesmoke;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}   
+
+.input2PGInv{
+    
+}
+

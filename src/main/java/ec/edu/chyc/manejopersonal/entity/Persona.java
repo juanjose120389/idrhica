@@ -44,9 +44,10 @@ public class Persona implements Serializable {
         PROFESOR,
         TESISTA,
         INVESTIGADOR,
+        ASISTENTE_INVESTIGACION,
         TECNICO,
         LOGISTICA,
-        EXTERNO
+        EXTERNO  
     }
     
     public enum GradoAcademico {

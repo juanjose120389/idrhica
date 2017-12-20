@@ -28,10 +28,12 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,21 +71,21 @@ public class GestorProyecto implements Serializable {
     private Long idGrupoInvestigacionGen = -1L;
     private Long idLineaInvestigacionGen = -1L;
     private String idTabSel = "";
-    private int  indexTabSel = 0;
+    private int indexTabSel = 0;
 
     private GrupoInvestigacion grupoInvestigacion = null;
     private LineaInvestigacion lineaInvestigacion = null;
     private Financiamiento financiamientoActual = null;
-    
+
     private boolean mostrarDlgInstitucion = false;
     private boolean mostrarDlgLugar = false;
     private boolean mostrarDlgGrupoInvestigacion = false;
     private boolean mostrarDlgLineaInvestigacion = false;
     private boolean hayExtensionFinalizacion = false;
     private boolean modoModificar = false;
-    
+
     private Institucion institucion = null;
-    
+
     private Lugar lugar = null;
     private Lugar lugarNuevo = null;
 
@@ -105,17 +107,17 @@ public class GestorProyecto implements Serializable {
 
     public void abrirNuevaInstitucionDlg(Financiamiento financiamientoActual) {
         this.institucion = new Institucion();
-        
+
         this.financiamientoActual = financiamientoActual;
         mostrarDlgInstitucion = true;
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         BeansUtils.ejecutarJS("PF('dlgInstitucion').show()");
     }
-    
+
     //Al cambiar de tab cuando se eligió añadir un nuevo lugar/observatorio
     public void onTabChange(TabChangeEvent event) {
         String id = event.getTab().getId();
-        
+
         idTabSel = id;
         if (id.equals("tabLugarExistente")) {
             indexTabSel = 0;
@@ -123,7 +125,8 @@ public class GestorProyecto implements Serializable {
             indexTabSel = 1;
         }
         //RequestContext.getCurrentInstance().update("formContenido:tabsLugar");
-    }    
+    }
+
     public void abrirNuevoLugarDlg() {
         this.lugarNuevo = new Lugar();
         idTabSel = "tabLugarExistente";
@@ -132,45 +135,47 @@ public class GestorProyecto implements Serializable {
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         BeansUtils.ejecutarJS("PF('dlgLugar').show()");
     }
+
     public void guardarLugar() {
 
         if (idTabSel.equals("tabLugarExistente")) {
             listaLugaresSeleccionados.add(lugar);
-        }
-        else {
+        } else {
             lugarNuevo.setId(idLugarGen);
             listaLugaresSeleccionados.add(lugarNuevo);
             idLugarGen--;
             listaLugaresAgregados.add(lugarNuevo);
         }
-        
+
         //proyecto.setLugar(lugar);
         //proyecto.getLugaresCollection().add(lugar);
-        
         lugarNuevo = new Lugar();
         mostrarDlgLugar = false;
         BeansUtils.ejecutarJS("PF('dlgLugar').hide()");
     }
+
     public void guardarGrupoInvestigacion() {
         grupoInvestigacion.setId(idGrupoInvestigacionGen);
         idGrupoInvestigacionGen--;
         listaGruposInvestigacionAgregados.add(grupoInvestigacion);
         proyecto.setGrupoInvestigacion(grupoInvestigacion);
-        
+
         grupoInvestigacion = new GrupoInvestigacion();
         mostrarDlgGrupoInvestigacion = false;
-        BeansUtils.ejecutarJS("PF('dlgGrupoInvestigacion').hide()");        
+        BeansUtils.ejecutarJS("PF('dlgGrupoInvestigacion').hide()");
     }
+
     public void guardarLineaInvestigacion() {
         lineaInvestigacion.setId(idLineaInvestigacionGen);
         idLineaInvestigacionGen--;
         listaLineasInvestigacionAgregados.add(lineaInvestigacion);
         proyecto.setLineaInvestigacion(lineaInvestigacion);
-        
+
         lineaInvestigacion = new LineaInvestigacion();
         mostrarDlgLineaInvestigacion = false;
-        BeansUtils.ejecutarJS("PF('dlgLineaInvestigacion').hide()");        
+        BeansUtils.ejecutarJS("PF('dlgLineaInvestigacion').hide()");
     }
+
     public void guardarInstitucion() {
         institucion.setId(idInstitucionGen);
         financiamientoActual.setInstitucion(institucion);
@@ -180,37 +185,42 @@ public class GestorProyecto implements Serializable {
         mostrarDlgInstitucion = false;
         BeansUtils.ejecutarJS("PF('dlgInstitucion').hide()");
     }
+
     public void onPersonaNuevaChosen(SelectEvent event) {
         List<Persona> listaResultao = (List<Persona>) event.getObject();
         //agregarPersonaALista(listaPersonasSel, listaCodirectores);
-    }    
+    }
+
     public void onCloseDlgInstitucion() {
         mostrarDlgInstitucion = false;
     }
+
     public void onCloseDlgLugar() {
         mostrarDlgLugar = false;
     }
+
     public void onCloseDlgGrupoInvestigacion() {
         mostrarDlgGrupoInvestigacion = false;
     }
+
     public void onCloseDlgLineaInvestigacion() {
         mostrarDlgLineaInvestigacion = false;
     }
+
     public void quitarObservatorio(Lugar observatorioQuitar) {
         listaLugaresSeleccionados.remove(observatorioQuitar);
     }
-    public void quitarFinanciamiento(Financiamiento financiamientoQuitar){
+
+    public void quitarFinanciamiento(Financiamiento financiamientoQuitar) {
         listaFinanciamientos.remove(financiamientoQuitar);
     }
 
     public void agregarLugar() {
         if (!listaLugares.isEmpty()) {
             listaLugaresSeleccionados.add(listaLugares.get(0));
-        }
-        else if (!listaLugaresAgregados.isEmpty()) {
+        } else if (!listaLugaresAgregados.isEmpty()) {
             listaLugaresSeleccionados.add(listaLugaresAgregados.get(0));
-        }
-        else {
+        } else {
             Lugar nuevoLugar = new Lugar();
             nuevoLugar.setNombre("Nuevo lugar");
             nuevoLugar.setId(idLugarGen);
@@ -220,10 +230,10 @@ public class GestorProyecto implements Serializable {
 
     public void agregarGrupoInvestigacion() {
     }
-    
+
     public void agregarFinanciamiento() {
         //Agregar a la lista, un financiamiento por defecto con monto 0.0
-        
+
         Financiamiento nuevoFinan = new Financiamiento();
         listaFinanciamientos.add(nuevoFinan);
         nuevoFinan.setId(idFinanciamientoGen);
@@ -241,26 +251,26 @@ public class GestorProyecto implements Serializable {
             listaLugares = proyectoController.listLugares();
         } catch (Exception ex) {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
     }
-    
+
     public void actualizarListaGruposInvestigacion() {
         try {
             listaGruposInvestigacion = proyectoController.listGruposInvestigacion();
         } catch (Exception ex) {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
     }
-    
+
     public void actualizarListaLineasInvestigacion() {
         try {
             listaLineasInvestigacion = proyectoController.listLineasInvestigacion();
         } catch (Exception ex) {
             Logger.getLogger(GestorProyecto.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        
+        }
+
     }
-    
+
     public void actualizarListaProyecto() {
         try {
             listaProyecto = proyectoController.listProyecto();
@@ -272,7 +282,7 @@ public class GestorProyecto implements Serializable {
     public void cargarInformacionProyecto(Long id) {
         proyecto = proyectoController.findEntity(id);
     }
-    
+
     public String initImprimirProyecto() {
         if (proyecto == null || proyecto.getId() == null || proyecto.getId() < 0) {
             return "";
@@ -284,34 +294,33 @@ public class GestorProyecto implements Serializable {
         inicializarManejoProyecto();
         proyecto = proyectoController.findProyecto(id, ProyectoJpaController.Flag.ALL_OPTS);
         listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
-        
+
         Double total = 0.0;
         for (Financiamiento financiamiento : proyecto.getFinanciamientosCollection()) {
             total += financiamiento.getMonto();
         }
         proyecto.setTotalFinanciamientos(total);
-        
+
         colocarDuracion(proyecto);
 
         modoModificar = false;
 
         return "verProyecto";
     }
-    
+
     public String initModificarProyecto(Long id) {
         inicializarManejoProyecto();
         proyecto = proyectoController.findProyecto(id, EnumSet.of(ProyectoJpaController.Flag.INC_FINANCIAMIENTOS, ProyectoJpaController.Flag.INC_LUGARES));
         listaFinanciamientos = new ArrayList<>(proyecto.getFinanciamientosCollection());
         modoModificar = true;
-        
+
         listaLugaresSeleccionados = new ArrayList(proyecto.getLugaresCollection());
         hayExtensionFinalizacion = proyecto.getFechaFinEnDocumento() != null && !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin());
-        
+
         //hayExtensionFinalizacion = !proyecto.getFechaFinEnDocumento().equals(proyecto.getFechaFin());
-        
         return "manejoProyecto";
     }
-    
+
     private void inicializarManejoProyecto() {
         GestorDialogListaPersonas.getInstance().resetearDialog();
         proyecto = new Proyecto();
@@ -331,8 +340,8 @@ public class GestorProyecto implements Serializable {
         idFinanciamientoGen = -1L;
         hayExtensionFinalizacion = false;
 
-        listaLugaresSeleccionados.clear();        
-        listaFinanciamientos.clear();        
+        listaLugaresSeleccionados.clear();
+        listaFinanciamientos.clear();
         listaLugaresAgregados.clear();
     }
 
@@ -342,7 +351,7 @@ public class GestorProyecto implements Serializable {
 
         return "manejoProyecto";
     }
-    
+
     //Convierte la lista de proyectos a una cadena de texto separada por comas
     public String convertirListaProyectos(Collection<Proyecto> listaConvertir) {
         String r = "";
@@ -356,6 +365,7 @@ public class GestorProyecto implements Serializable {
         }
         return r;
     }
+
     public void abrirNuevoGrupoInvestigacionDlg() {
         this.grupoInvestigacion = new GrupoInvestigacion();
 
@@ -363,6 +373,7 @@ public class GestorProyecto implements Serializable {
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         BeansUtils.ejecutarJS("PF('dlgGrupoInvestigacion').show()");
     }
+
     public void abrirNuevaLineaInvestigacionDlg() {
         this.lineaInvestigacion = new LineaInvestigacion();
 
@@ -370,7 +381,7 @@ public class GestorProyecto implements Serializable {
         RequestContext.getCurrentInstance().update("formContenido:divDialogs");
         BeansUtils.ejecutarJS("PF('dlgLineaInvestigacion').show()");
     }
-    
+
     public void abrirDialogNuevaPersona() {
         Map<String, Object> options = new HashMap<>();
         options.put("resizable", true);
@@ -381,7 +392,7 @@ public class GestorProyecto implements Serializable {
         GestorDialogListaPersonas.getInstance().prepararApertura();
         RequestContext.getCurrentInstance().openDialog("dialogListaPersonas", options, null);
     }
-    
+
     public String acortarTitulo(Proyecto proyecto) {
         final int maxLongitud = 80;
         if (proyecto.getTitulo().length() > maxLongitud) {
@@ -390,8 +401,11 @@ public class GestorProyecto implements Serializable {
         return proyecto.getTitulo();
     }
 
-    /***
-     * Llena el parámetro duración con el número de meses de acuerdo a la fecha de inicio y fin (ya sea extendida u original)
+    /**
+     * *
+     * Llena el parámetro duración con el número de meses de acuerdo a la fecha
+     * de inicio y fin (ya sea extendida u original)
+     *
      * @param proy Proyecto el cual el parámetro duración será llenado
      */
     public void colocarDuracion(Proyecto proy) {
@@ -411,7 +425,7 @@ public class GestorProyecto implements Serializable {
             proy.setDuracion(null);
         }
     }
-    
+
     public String initListarProyectos() {
         actualizarListaProyecto();
         for (Proyecto proy : listaProyecto) {
@@ -429,17 +443,17 @@ public class GestorProyecto implements Serializable {
         this.listaProyecto = listaProyecto;
     }
 
-    public String guardar() {        
+    public String guardar() {
         proyecto.setFinanciamientosCollection(listaFinanciamientos);
         if (!hayExtensionFinalizacion) {
             proyecto.setFechaFin(proyecto.getFechaFinEnDocumento());
-        }        
+        }
         if (proyecto.getFechaInicio() != null && proyecto.getFechaFinEnDocumento() != null) {
             //Convertir todos los tiempos a Java Time para realizar comparaciones
             LocalDate fechaInicio = FechaUtils.asLocalDate(proyecto.getFechaInicio());
             LocalDate fechaFinDoc = FechaUtils.asLocalDate(proyecto.getFechaFinEnDocumento());
             LocalDate fechaFin = FechaUtils.asLocalDate(proyecto.getFechaFin());
-        
+
             if (fechaFinDoc.isBefore(fechaInicio) || fechaFin.isBefore(fechaInicio)) {
                 GestorMensajes.getInstance().mostrarMensajeWarn("La fecha de finalización del proyecto no puede ser menor al inicio del mismo.");
                 return "";
@@ -448,14 +462,14 @@ public class GestorProyecto implements Serializable {
                 GestorMensajes.getInstance().mostrarMensajeWarn("La fecha extendida de finalización del proyecto no puede ser menor a la fecha original de finalización.");
                 return "";
             }
-        }        
-        proyecto.setLugaresCollection(new HashSet(listaLugaresSeleccionados));        
+        }
+        proyecto.setLugaresCollection(new HashSet(listaLugaresSeleccionados));
         try {
             if (modoModificar) {
                 proyectoController.edit(proyecto);
             } else {
                 proyectoController.create(proyecto);
-            }            
+            }
             GestorInstitucion.getInstance().getListaInstitucionesAgregadas().clear();
             return initListarProyectos();
             //return "index";
@@ -480,6 +494,7 @@ public class GestorProyecto implements Serializable {
     public void setMostrarDlgInstitucion(boolean mostrarDlgInstitucion) {
         this.mostrarDlgInstitucion = mostrarDlgInstitucion;
     }
+
     public Proyecto getProyecto() {
         return proyecto;
     }
@@ -640,5 +655,25 @@ public class GestorProyecto implements Serializable {
         this.indexTabSel = indexTabSel;
     }
 
-    
+    public boolean filterByStatus(Object value, Object filter, Locale locale) {
+        //True --> Activos
+        //False --> Completados
+        //null --> Todos
+
+        if (filter == null) {
+            return true;
+        }
+
+        Boolean filterBool = (Boolean) filter;
+
+        if (value == null) {
+            return filterBool;
+        }
+
+        Date fecha = (Date) value;
+        if (filterBool) {
+            return fecha.after(new Date());
+        }
+        return !fecha.after(new Date());
+    }
 }

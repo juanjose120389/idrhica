@@ -12,10 +12,10 @@
             }
             .ui-messages-error, .ui-message-error {
                 display: inline-block;
-            }            
+            }
             td > .ui-inputfield.ui-inputtext,td > .ui-inputfield.ui-inputtextarea {
                 width: 300px;
-            }            
+            }
         </style>
 
         <h:panelGroup layout="block" id="divDialogs">
@@ -38,14 +38,17 @@
                     </h:panelGrid>            
                 </h:panelGroup>
             </p:dialog>  
-            
+
             <p:dialog 
                 id="dlgGrupoInvestigacion" 
                 header="Grupo Investigación" 
                 widgetVar="dlgGrupoInvestigacion" 
                 rendered="#{gestorProyecto.mostrarDlgGrupoInvestigacion}" 
-                      resizable="false" width="400">
-                <p:ajax event="close" update="divDialogs" listener="#{gestorProyecto.onCloseDlgGrupoInvestigacion()}" />
+                resizable="false" width="400">
+                <p:ajax 
+                    event="close" 
+                    update="divDialogs" 
+                    listener="#{gestorProyecto.onCloseDlgGrupoInvestigacion()}" />
                 <h:panelGroup layout="block" id="divDlgGrupoInvestigacion">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Nombre"/>
@@ -54,12 +57,14 @@
                         <p:message for="txtNombreGrupoInvestigacion"/>                                
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" 
-                                         process="dlgGrupoInvestigacion" 
-                                         update="divAccionesGrupoInvestigacion divDlgGrupoInvestigacion" 
-                                         action="#{gestorProyecto.guardarGrupoInvestigacion()}"/>
-                        <p:commandButton value="Cancelar" 
-                                         onclick="PF('dlgGrupoInvestigacion').hide();"/>
+                        <p:commandButton 
+                            value="Aceptar" 
+                            process="dlgGrupoInvestigacion" 
+                            update="divAccionesGrupoInvestigacion divDlgGrupoInvestigacion" 
+                            action="#{gestorProyecto.guardarGrupoInvestigacion()}"/>
+                        <p:commandButton 
+                            value="Cancelar" 
+                            onclick="PF('dlgGrupoInvestigacion').hide();"/>
                     </h:panelGrid>            
                 </h:panelGroup>
             </p:dialog>  
@@ -80,7 +85,7 @@
                     </h:panelGrid>            
                 </h:panelGroup>
             </p:dialog>  
-            
+
 
             <p:dialog id="dlgLugar" header="Observatorio" widgetVar="dlgLugar" resizable="false" 
                       width="500" rendered="#{gestorProyecto.mostrarDlgLugar}">
@@ -109,14 +114,13 @@
                                         <p:outputLabel value="#{lugar.nombre}"/>
                                     </p:column>
                                 </p:selectOneMenu>
-
                             </h:panelGroup>
                             <h:panelGrid columns="2">
                                 <p:commandButton value="Aceptar" process="tabLugarExistente" update="tabsLugar :formContenido:divObservatorios" action="#{gestorProyecto.guardarLugar()}" />
                                 <p:commandButton value="Cancelar" onclick="PF('dlgLugar').hide();"/>
                             </h:panelGrid>
-
                         </p:tab>
+                        
                         <p:tab id="tabLugarNuevo" title="Nuevo">
                             <h:panelGrid id="panelCamposTitulo" columns="2">
                                 <p:outputLabel value="Nombre"/>
@@ -132,8 +136,6 @@
 
                         </p:tab>
                     </p:tabView>
-
-
                 </h:panelGroup>
             </p:dialog>  
 
@@ -156,7 +158,7 @@
                 <p:outputLabel value="Nickname"/>
                 <p:inputText value="#{gestorProyecto.proyecto.nickname}"/>
                 <h:panelGroup/>
-                
+
                 <p:outputLabel value="Código externo"/>
                 <p:inputText value="#{gestorProyecto.proyecto.codigoExterno}"/>
                 <h:panelGroup/>
@@ -194,7 +196,7 @@
 
                     <p:commandLink value="Nuevo grupo"  style="margin-left: 5px;" update="dlgGrupoInvestigacion" process="@this" action="#{gestorProyecto.abrirNuevoGrupoInvestigacionDlg()}" />
                 </h:panelGroup>
-                
+
                 <h:panelGroup/>
                 <p:outputLabel value="Línea de investigación"/>
                 <h:panelGroup id="divAccionesLineaInvestigacion" layout="block">
@@ -203,7 +205,7 @@
                         <f:selectItem itemLabel="Seleccionar" itemValue="" />
                         <f:selectItems value="#{gestorProyecto.listaLineasInvestigacion}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
                         <f:selectItems value="#{gestorProyecto.listaLineasInvestigacionAgregados}" var="t" itemLabel="#{t.nombre}" itemValue="#{t}" />
-                        
+
                         <p:column>
                             <p:outputLabel value="#{linea.nombre}"/>
                         </p:column>                        
@@ -212,7 +214,7 @@
                     <p:commandLink value="Nueva línea"  style="margin-left: 5px;" update="dlgLineaInvestigacion" process="@this" action="#{gestorProyecto.abrirNuevaLineaInvestigacionDlg()}" />
                 </h:panelGroup>
                 <h:panelGroup/>
-              
+
                 <p:outputLabel value="Director" >
                     <span class="asterisk"/>
                 </p:outputLabel>

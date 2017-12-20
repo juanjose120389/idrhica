@@ -37,7 +37,12 @@
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>            
 
-            <p:column headerText="Id Interno" width="150" filterBy="#{objeto.idInterno}" filterMatchMode="contains" sortBy="#{objeto.idInterno}">
+            <p:column 
+                headerText="Id Interno" 
+                width="150" 
+                filterBy="#{objeto.idInterno}" 
+                filterMatchMode="contains" 
+                sortBy="#{objeto.idInterno}">
                 <f:facet name="header">  
                     <h:outputText value="Id Interno"/>  
                 </f:facet>                  
@@ -47,15 +52,23 @@
                 -->
             </p:column>
 
-            <p:column headerText="Descripción" width="200" sortBy="#{objeto.descripcion}">
+            <p:column 
+                headerText="Descripción" 
+                width="200" 
+                filterBy="#{objeto.idInterno}" 
+                filterMatchMode="contains"
+                sortBy="#{objeto.descripcion}">
                 <f:facet name="header">  
                     <h:outputText value="Descripción"/>  
                 </f:facet>
                 <h:outputText value="#{objeto.descripcion}"/>                
-            </p:column>
-            <!--
-            TODO: Agregar opciones ver/editar
-            -->
+            </p:column>      
+            <p:column exportable="false" width="80">
+                <p:commandLink value="Ver" action="#{gestorNavegacion.cargarPagina(7, proyecto.id)}"/>
+                <p:outputLabel value=" "/>
+                <p:commandLink rendered="#{gestorUsuario.puedeEditar}" value="Editar" action="#{gestorNavegacion.cargarPaginaCrearModificar(7, proyecto.id)}"/>
+            </p:column>   
+            
         </p:dataTable>         
     </ui:define>
 </ui:composition>

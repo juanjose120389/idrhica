@@ -9,7 +9,7 @@
         <title>Personas</title>
         <h:outputStylesheet library="css" name="layout.css"/>
         <h:outputStylesheet library="css" name="screen.css"/>
-
+        
         <style type="text/css">
             .ui-widget {
                 font-size: 0.9em;
@@ -26,12 +26,12 @@
             }
 
         </style>
+        
     </h:head>
-
+    
     <h:body>
         <h:form id="formTabla">
             <p:accordionPanel>
-
                 <p:tab title="Personas existentes" rendered="#{!gestorDialogListaPersonas.soloNuevaPersona}">
                     <p:dataTable widgetVar="personasTable" 
                                  resizableColumns="false" 
@@ -122,7 +122,8 @@
 
                         <p:outputLabel value="Género"/>
                         <p:selectOneMenu value="#{gestorDialogListaPersonas.nuevaPersona.genero}"
-                                         required="true" style="width: 150px"
+                                         required="true" 
+                                         style="width: 150px"
                                          requiredMessage="Requerido"
                                          id="cboGeneroNuevo">
                             <f:selectItem itemLabel="Masculino" itemValue="M"/>
@@ -131,7 +132,9 @@
                         <p:message for="cboGeneroNuevo"/>
 
                         <p:outputLabel value="Celular"/>
-                        <p:inputText id="txtCelularNuevo" value="#{gestorDialogListaPersonas.nuevaPersona.celular}"/>
+                        <p:inputText 
+                            id="txtCelularNuevo" 
+                            value="#{gestorDialogListaPersonas.nuevaPersona.celular}"/>
                         <p:message for="txtCelularNuevo"/>
 
                         <p:outputLabel value="E-mail"/>
@@ -143,6 +146,7 @@
                         <p:commandButton value="Cancelar" process="@parent" action="#{gestorDialogListaPersonas.cancelarSeleccionPersonas()}"/>
                     </h:panelGrid>
                 </p:tab>
+                
             </p:accordionPanel>
 
         </h:form>

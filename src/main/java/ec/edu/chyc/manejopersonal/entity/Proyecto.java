@@ -78,6 +78,7 @@ public class Proyecto implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFin;
 
+    
     //fecha fin del proyecto de acuerdo al documento
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaFinEnDocumento;

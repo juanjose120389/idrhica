@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template_pf.xhtml">
+    <ui:define name="body">
+        <h:inputHidden id="iDRiCA#{gestorObjeto.objeto.id}" value="#{gestorUsuario.logeado}"/>
+        <p:commandLink value="Regresar" immediate="true" action="#{gestorNavegacion.regresar()}"/>
+        <h:panelGroup layout="block" style="height: 20px"/>        
+
+        <p:panel header="Objeto">
+            <p:messages id="messages" for="formContenido" showDetail="true" autoUpdate="true" closable="true" />
+
+            <h3>Información</h3>            
+
+            <h:panelGrid columns="6" columnClasses="labelscolC,inputscolC,labelscolC,inputscolC,labelscolC,inputscolC">
+                <p:outputLabel value="ID Interno"/>                
+                <p:outputLabel value="#{gestorObjeto.objeto.idInterno}"/>  
+                <p:outputLabel value="Serie"/>
+                <p:outputLabel/>  
+                <p:outputLabel value="Descripción"/>                
+                <p:outputLabel value="#{gestorObjeto.objeto.descripcion}"/>  
+
+                <p:outputLabel value="Categoría"/>
+                <p:outputLabel/>                                
+                <p:outputLabel value="Marca"/>
+                <p:outputLabel/>                  
+                <p:outputLabel value="Modelo"/>
+                <p:outputLabel />                    
+
+                <p:outputLabel value="Dimensiones"/>
+                <p:outputLabel />  
+                <p:outputLabel value="Vida Útil"/>
+                <p:outputLabel />  
+                <h:panelGroup/>
+                <h:panelGroup/>
+            </h:panelGrid>
+
+            <h3>Información Contable</h3>
+
+            <h:panelGrid id="divProveedor" columns="4" columnClasses="labelscolC,inputscolC,labelscolC,inputscolC">    
+                <p:outputLabel value="Número Factura"/>
+                <p:outputLabel/>
+                <p:outputLabel value="Proveedor"/>
+                <p:outputLabel value="#{gestorObjeto.objeto.proveedor.nombre_comercial} #{gestorObjeto.objeto.proveedor.ruc}"/>
+
+                <p:outputLabel value="Fecha adquirido"/>
+                <p:outputLabel />  
+                <p:outputLabel value="Observación"/>  
+                <p:outputLabel />  
+
+                <p:outputLabel value="Valor 1"/>
+                <p:outputLabel />
+                <p:outputLabel value="Valor 2"/>
+                <p:outputLabel />  
+
+                <p:outputLabel value="Depreciación"/>
+                <p:outputLabel />
+                <p:outputLabel value="Valor Libros"/>
+                <p:outputLabel />  
+
+                <p:outputLabel value="Nombre Cuenta Contable"/>
+                <p:outputLabel />
+                <p:outputLabel value="Número Cuenta Contable"/>
+                <p:outputLabel />  
+
+                <p:outputLabel value="Proceso Compra"/>
+                <p:outputLabel />
+                <p:outputLabel value="Número Pedido Proveeduría"/>
+                <p:outputLabel />  
+
+                <p:outputLabel value="Ubicación Seguro"/>               
+                <p:outputLabel />
+                <p:outputLabel value="Garantía"/>               
+                <p:outputLabel />  
+
+            </h:panelGrid>
+
+            <h3>Inventario</h3>
+            <h:panelGrid columns="2" columnClasses="labelscolC,inputscolC">
+                <p:outputLabel value="Custodio"/>
+                <p:outputLabel value="#{gestorObjeto.objeto.custodio.nombres} #{gestorObjeto.objeto.custodio.apellidos}"/>
+
+                <p:outputLabel value="Ubicación" />
+                <p:outputLabel id="inputUbicacion" value="#{gestorObjeto.objeto.ubicacion}" />
+            </h:panelGrid>            
+
+            
+        </p:panel>
+        
+        
+
+    </ui:define>
+</ui:composition>

@@ -58,7 +58,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     personaArticulo.setPersona(personaArticulo.getPersonaFirma().getPersona());
                     personaArticulo.setFirma(personaArticulo.getPersonaFirma().getFirma());
                 }
-            }            
+            }     
             return list;
         } finally {
             if (em != null) {
@@ -175,7 +175,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
             em.getTransaction().begin();
 
             Articulo articuloAntiguo = em.find(Articulo.class, obj.getId());
-            
+
             Set<Proyecto> listaProyectos = obj.getProyectosCollection();
             Iterator<Proyecto> iterProyectoAnterior = articuloAntiguo.getProyectosCollection().iterator();
             while (iterProyectoAnterior.hasNext()) {
@@ -186,6 +186,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     proy.getArticulosCollection().remove(articuloAntiguo);
                 }
             }
+
             for (Proyecto proy : listaProyectos) {
                 //agregar proyectos que han sido agregados en el articulo editado
                 if (!articuloAntiguo.getProyectosCollection().contains(proy)){
@@ -193,7 +194,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     proyectoExistenteAsignado.getArticulosCollection().add(obj);
                 }
             }
-            
+
             Set<Institucion> listaAgradecimientos = obj.getAgradecimientosCollection();
             Iterator<Institucion> iterAgradecimientoAnterior = articuloAntiguo.getAgradecimientosCollection().iterator();
             while (iterAgradecimientoAnterior.hasNext()) {
@@ -203,6 +204,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     inst.getArticulosCollection().remove(articuloAntiguo);
                 }
             }
+
             for (Institucion inst : listaAgradecimientos) {
                 if (!articuloAntiguo.getAgradecimientosCollection().contains(inst)) {
                     Institucion instExistenteAsignado = em.find(Institucion.class, inst.getId());
@@ -216,6 +218,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     em.remove(pa);
                 }
             }
+
             for (PersonaArticulo perArt : obj.getPersonasArticuloCollection()) {
                 //agregar nuevas firmas que surjan en el artículo editado
                 PersonaFirma personaFirma = perArt.getPersonaFirma();
@@ -230,7 +233,7 @@ public class ArticuloJpaController extends GenericJpaController<Articulo> implem
                     em.persist(personaFirma);
                 }
             }
-            
+
             for (PersonaArticulo perArt : obj.getPersonasArticuloCollection()) {
                 //si hay ids menores a uno, significa que son nuevos y deben ser puestos a null para que sean creados
                 if (perArt.getId() != null && perArt.getId() < 0) {

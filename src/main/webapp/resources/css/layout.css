@@ -136,6 +136,12 @@
     width: 200px;
 }
 
+.inputLargeObj{
+    width: 400px;
+    height: 35px;
+    font-size: 24px !important;
+}
+
 /*CSS Panel Grid General*/
 .outputMed{
     width: 180px;
