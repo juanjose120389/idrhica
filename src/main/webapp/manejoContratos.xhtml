@@ -129,12 +129,19 @@
                     </p:selectOneRadio>                      
                 </h:panelGroup>
 
-                <h:panelGroup layout="block" id="divCmbProyecto" style="margin-left: 40px">                    
-                    <p:selectOneMenu rendered="#{!gestorContrato.esProfesor and gestorContrato.contrato.tieneProyecto}" 
-                                     id="cmbProyecto" 
-                                     style="width: 400px" 
-                                     value="#{gestorContrato.contrato.proyecto}" converter="proyectoConverter"
-                                     var="per2" filter="true" filterMatchMode="contains">
+                <h:panelGroup 
+                    layout="block" 
+                    id="divCmbProyecto" 
+                    style="margin-left: 40px">                    
+                    <p:selectOneMenu 
+                        style="width: 400px" required="true"
+                        rendered="#{!gestorContrato.esProfesor and gestorContrato.contrato.tieneProyecto}" 
+                        id="cmbProyecto"                         
+                        value="#{gestorContrato.contrato.proyecto}" 
+                        converter="proyectoConverter"
+                        var="proy" 
+                        filter="true" 
+                        filterMatchMode="contains">
                         <f:selectItem itemLabel="Ninguno" itemValue=""/>                        
                         <f:selectItems 
                             value="#{gestorProyecto.listaProyecto}" 
@@ -142,9 +149,8 @@
                             itemLabel="#{u2.titulo}" 
                             itemValue="#{u2}"                                       
                             />
-
                         <p:column style="width:10%; margin-bottom: 20px">
-                            <p:outputLabel value="#{per2.titulo}"/>
+                            <p:outputLabel value="#{proy.titulo}"/>
                         </p:column>                    
                     </p:selectOneMenu>
 
@@ -174,17 +180,23 @@
 
                 <h:panelGroup/>
                 <h:panelGroup layout="block" id="divProyectos">                    
-                    <p:dataTable rendered="#{gestorContrato.esProfesor}" emptyMessage="#{label.emptyMessage}" 
-                                 id="dtProyectos" paginator="true" rowIndexVar="rowIndex" 
-                                 paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorContrato.listaProyectos}">
+                    <p:dataTable rendered="#{gestorContrato.esProfesor}" 
+                                 emptyMessage="#{label.emptyMessage}" 
+                                 id="dtProyectos" 
+                                 paginator="true" 
+                                 rowIndexVar="rowIndex" 
+                                 paginatorAlwaysVisible="false" 
+                                 rows="10" 
+                                 var="proyecto" 
+                                 value="#{gestorContrato.listaProyectos}">
                         <p:column headerText="Título del proyecto" width="450">
                             <h:outputText value="#{proyecto.titulo}"/>
                         </p:column>
                         <p:column style="text-align: center" width="60">
                             <p:commandButton id="cmdQuitarAutor" action="#{gestorContrato.quitarProyecto(proyecto)}" update="dtProyectos" process="@this" icon="fa fa-remove" title="Eliminar"/>
                         </p:column>
-
                     </p:dataTable>
+
                     <h:panelGroup rendered="#{gestorContrato.esProfesor}" layout="block">
                         <p:commandButton value="Agregar" action="#{gestorContrato.agregarProyecto()}" process="@parent">
                             <p:ajax event="dialogReturn" listener="#{gestorContrato.onProyectoChosen}" update="dtProyectos"/>

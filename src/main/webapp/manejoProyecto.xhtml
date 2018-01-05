@@ -120,7 +120,7 @@
                                 <p:commandButton value="Cancelar" onclick="PF('dlgLugar').hide();"/>
                             </h:panelGrid>
                         </p:tab>
-                        
+
                         <p:tab id="tabLugarNuevo" title="Nuevo">
                             <h:panelGrid id="panelCamposTitulo" columns="2">
                                 <p:outputLabel value="Nombre"/>
@@ -219,18 +219,21 @@
                     <span class="asterisk"/>
                 </p:outputLabel>
                 <h:panelGroup layout="block">
-                    <p:selectOneMenu style="width: 300px" required="true" 
-                                     id="cmbDirector" 
-                                     value="#{gestorProyecto.proyecto.director}" 
-                                     converter="personaConverter"
-                                     var="per" filter="true" 
-                                     filterMatchMode="contains" 
-                                     requiredMessage="#{label.required}">
+                    <p:selectOneMenu 
+                        style="width: 300px" required="true" 
+                        id="cmbDirector" 
+                        value="#{gestorProyecto.proyecto.director}" 
+                        converter="personaConverter"
+                        var="per" 
+                        filter="true" 
+                        filterMatchMode="contains" 
+                        requiredMessage="#{label.required}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" />
-                        <f:selectItems value="#{gestorPersona.listaPersonasConExternos}" 
-                                       var="u" 
-                                       itemLabel="#{u.nombres} #{u.apellidos}" 
-                                       itemValue="#{u}" />                        
+                        <f:selectItems 
+                            value="#{gestorPersona.listaPersonasConExternos}" 
+                            var="u" 
+                            itemLabel="#{u.nombres} #{u.apellidos}" 
+                            itemValue="#{u}" />                        
                         <p:column>
                             <p:outputLabel value="#{per.nombres} #{per.apellidos}"/>
                         </p:column>
@@ -238,9 +241,10 @@
                     <p:commandLink rendered="false" value="Nuevo" styleClass="linkDropdown" process="@this" action="#{gestorProyecto.abrirDialogNuevaPersona()}">
                         <p:ajax event="dialogReturn" listener="#{gestorProyecto.onPersonaNuevaChosen}" update="cmbDirector"/>
                     </p:commandLink>
-
                     <p:message for="cmbDirector"/>
                 </h:panelGroup>
+
+
                 <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Co-Director" />

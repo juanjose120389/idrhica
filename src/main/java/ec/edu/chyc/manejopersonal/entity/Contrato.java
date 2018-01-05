@@ -183,7 +183,7 @@ public class Contrato implements Serializable {
     }
 
     public Proyecto getProyecto() {        
-        return proyecto;
+        return (Proyecto) proyectosCollection.toArray()[0];
     }
 
     public void setProyecto(Proyecto proyecto) {

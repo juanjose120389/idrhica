@@ -9,7 +9,6 @@ package ec.edu.chyc.manejopersonal.managebean.converter;
 import ec.edu.chyc.manejopersonal.entity.Proyecto;
 import ec.edu.chyc.manejopersonal.managebean.GestorProyecto;
 import java.util.List;
-import java.util.Objects;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -21,7 +20,7 @@ public class ProyectoConverter implements Converter {
  
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        Long id;
+        long id;
         try {
             id = Long.valueOf(value);
         } catch (NumberFormatException ex) {
@@ -32,7 +31,7 @@ public class ProyectoConverter implements Converter {
 
        // List<Contratado> list = GestorContratado.getInstance().getListaContratados();
         for (Proyecto pro : list) {
-            if (Objects.equals(pro.getId(), id)) 
+            if (pro.getId()== id) 
                 return pro;
         }
         Proyecto obj = new Proyecto();

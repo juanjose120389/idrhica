@@ -57,9 +57,9 @@
 
             <p:column 
                 headerText="Proyecto" 
-                filterBy="#{contrato.proyecto.titulo}" 
+                filterBy="#{contrato.proyectosCollection.toArray()[0].titulo}" 
                 filterMatchMode="contains" 
-                sortBy="#{contrato.proyecto.titulo}"
+                sortBy="#{contrato.proyectosCollection.toArray()[0].titulo}"
                 exportable="false">
                 <ui:repeat value="#{contrato.proyectosCollection.toArray()}" var="proyecto">
                     <h:outputText value="• #{gestorProyecto.acortarTitulo(proyecto)}"/><br/>
