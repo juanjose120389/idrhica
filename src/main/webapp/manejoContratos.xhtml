@@ -32,25 +32,35 @@
                 <h:panelGroup layout="block"/> 
 
                 <h:panelGroup layout="block" id="divChkEsProfesor">
-                    <p:selectBooleanCheckbox rendered="#{gestorContrato.puedeSerContratoProfesor()}" value="#{gestorContrato.esProfesor}" itemLabel="Es profesor">
-                        <p:ajax update="divCmbTipoProfesor divLblProyecto divCmbProyecto divLblProyectos divProyectos"/>
+                    <p:selectBooleanCheckbox 
+                        rendered="#{gestorContrato.puedeSerContratoProfesor()}" 
+                        value="#{gestorContrato.esProfesor}" 
+                        itemLabel="Es profesor">
+                        <p:ajax update="divLblDependencia divCmbTipoProfesor divChkTieneProyecto divCmbProyecto divLblProyectos divProyectos"/>
                     </p:selectBooleanCheckbox>
                 </h:panelGroup>
+
                 <h:panelGroup layout="block" id="divCmbTipoProfesor">
-                    <p:selectOneMenu rendered="#{gestorContrato.puedeSerContratoProfesor() and gestorContrato.esProfesor}" value="#{gestorContrato.contrato.tipoProfesor}" style="width: 150px">
+                    <p:selectOneMenu 
+                        rendered="#{gestorContrato.puedeSerContratoProfesor() and gestorContrato.esProfesor}" 
+                        value="#{gestorContrato.contrato.tipoProfesor}" 
+                        style="width: 150px">
                         <f:selectItems value="#{gestorContrato.tiposProfesor}" var="tipo"
                                        itemValue="#{tipo}" itemLabel="#{label['contrato.tipoProfesor.' += tipo]}" />
                     </p:selectOneMenu>
                 </h:panelGroup>
+
                 <h:panelGroup/>                
 
                 <p:outputLabel value="Cargo">
                     <span class="asterisk"/>
                 </p:outputLabel>
+
                 <h:panelGroup layout="block">
                     <p:inputText id="txtCargo" style="width:300px" requiredMessage="Requerido" required="true" value="#{gestorContrato.contrato.cargo}"/>  
                     <p:message for="txtCargo"/>
                 </h:panelGroup>
+
                 <h:panelGroup/>
 
 
@@ -93,32 +103,79 @@
                 </p:selectOneMenu>
                 <p:message for="cmbPersona"/>
 
-                <h:panelGroup layout="block" id="divLblProyecto">
-                    <p:outputLabel value="Proyecto" rendered="#{!gestorContrato.esProfesor}"/>
+            </h:panelGrid>
+
+            <h:panelGrid columns="1">
+
+                <h:panelGroup layout="block" id="divLblDependencia" style="width: 120px">
+                    <p:outputLabel 
+                        rendered="#{!gestorContrato.esProfesor}" 
+                        value="Dependencia:"
+                        />
+                </h:panelGroup> 
+
+                <h:panelGroup                    
+                    layout="block" 
+                    id="divChkTieneProyecto" 
+                    style="margin-left: 40px">                    
+                    <p:selectOneRadio id="console" 
+                                      value="#{gestorContrato.contrato.tieneProyecto}" 
+                                      style="width: 400px"
+                                      rendered="#{!gestorContrato.esProfesor}">
+                        <f:selectItem itemLabel="Proyecto" itemValue="true" />
+                        <f:selectItem itemLabel="Otros(Centros, Departamento, ...)" itemValue="false"/> 
+
+                        <p:ajax update="divCmbProyecto"/>
+                    </p:selectOneRadio>                      
                 </h:panelGroup>
-                <h:panelGroup layout="block" id="divCmbProyecto">
-                    <h:panelGroup layout="block" style="height: 15px" rendered="#{!gestorContrato.esProfesor}"/>
-                    <p:selectOneMenu rendered="#{!gestorContrato.esProfesor}" 
+
+                <h:panelGroup layout="block" id="divCmbProyecto" style="margin-left: 40px">                    
+                    <p:selectOneMenu rendered="#{!gestorContrato.esProfesor and gestorContrato.contrato.tieneProyecto}" 
                                      id="cmbProyecto" 
-                                     style="width: 300px" 
+                                     style="width: 400px" 
                                      value="#{gestorContrato.contrato.proyecto}" converter="proyectoConverter"
                                      var="per2" filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="Ninguno" itemValue="" />
-                        <f:selectItems value="#{gestorProyecto.listaProyecto}" var="u2" itemLabel="#{u2.titulo}" itemValue="#{u2}" />
+                        <f:selectItem itemLabel="Ninguno" itemValue=""/>                        
+                        <f:selectItems 
+                            value="#{gestorProyecto.listaProyecto}" 
+                            var="u2" 
+                            itemLabel="#{u2.titulo}" 
+                            itemValue="#{u2}"                                       
+                            />
 
-                        <p:column style="width:10%">
+                        <p:column style="width:10%; margin-bottom: 20px">
                             <p:outputLabel value="#{per2.titulo}"/>
-                        </p:column>
-                    </p:selectOneMenu>                                
-                </h:panelGroup>
-                <h:panelGroup layout="block"/>
+                        </p:column>                    
+                    </p:selectOneMenu>
 
-                <h:panelGroup layout="block" id="divLblProyectos" style="width: 120px">
-                    <p:outputLabel value="Proyectos en los que trabaja" rendered="#{gestorContrato.esProfesor}"/>
+                    <p:selectOneMenu rendered="#{!gestorContrato.esProfesor and !gestorContrato.contrato.tieneProyecto}" 
+                                     id="cmbProyecto2" 
+                                     style="width: 400px;" 
+                                     value="#{gestorContrato.contrato.dependencia}"
+                                     var="per2" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="Ninguno" itemValue="" />
+                        <f:selectItem itemLabel="Departamento de Recursos Hídricos" itemValue="Departamento de Recursos Hídricos" />
+                        <f:selectItem itemLabel="Centro de Hidrología y Clima" itemValue="Centro de Hidrología y Clima" />
+                        <f:selectItem itemLabel="Centro de Saneamiento Ambiental" itemValue="Centro de Saneamiento Ambiental" />
+                        <f:selectItem itemLabel="Maestría en Ecohidrología" itemValue="Maestría en Ecohidrología" />
+                        <f:selectItem itemLabel="Doctorado de Recursos Hídricos" itemValue="Doctorado de Recursos Hídricos" />                    
+                    </p:selectOneMenu>
+
                 </h:panelGroup>
-                <h:panelGroup layout="block" id="divProyectos">
-                    <h:panelGroup layout="block" style="height: 15px" rendered="#{gestorContrato.esProfesor}"/>
-                    <p:dataTable rendered="#{gestorContrato.esProfesor}" emptyMessage="#{label.emptyMessage}" id="dtProyectos" paginator="true" rowIndexVar="rowIndex" 
+
+            </h:panelGrid>
+
+            <h:panelGrid columns="3">
+                <h:panelGroup layout="block" id="divLblProyectos" style="width: 120px;">
+                    <p:outputLabel value="Proyectos en los que trabaja: " rendered="#{gestorContrato.esProfesor}"/>
+                </h:panelGroup>
+                <h:panelGroup/>
+                <h:panelGroup/>
+
+                <h:panelGroup/>
+                <h:panelGroup layout="block" id="divProyectos">                    
+                    <p:dataTable rendered="#{gestorContrato.esProfesor}" emptyMessage="#{label.emptyMessage}" 
+                                 id="dtProyectos" paginator="true" rowIndexVar="rowIndex" 
                                  paginatorAlwaysVisible="false" rows="10" var="proyecto" value="#{gestorContrato.listaProyectos}">
                         <p:column headerText="Título del proyecto" width="450">
                             <h:outputText value="#{proyecto.titulo}"/>

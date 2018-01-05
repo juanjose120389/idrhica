@@ -29,6 +29,34 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Contrato implements Serializable {
 
+    /**
+     * @return the tieneProyecto
+     */
+    public Boolean getTieneProyecto() {
+        return tieneProyecto;
+    }
+
+    /**
+     * @param tieneProyecto the tieneProyecto to set
+     */
+    public void setTieneProyecto(Boolean tieneProyecto) {
+        this.tieneProyecto = tieneProyecto;
+    }
+
+    /**
+     * @return the dependencia
+     */
+    public String getDependencia() {
+        return dependencia;
+    }
+
+    /**
+     * @param dependencia the dependencia to set
+     */
+    public void setDependencia(String dependencia) {
+        this.dependencia = dependencia;
+    }
+
     public enum TipoContrato {
         SERCOP,//los profesores solo pueden tener este tipo de contrato
         OCASIONAL,
@@ -39,6 +67,14 @@ public class Contrato implements Serializable {
         CONTRATADO,
         PRINCIPAL,
         AGREGADO
+    }
+    
+    public enum Dependencia {
+        DEPARTAMENTO_RH,
+        CENTRO_HYC,
+        CENTRO_SA,
+        MAESTRIA_ECOHIDROLOGIA,
+        DOCTORADO_RECURSOS_HIDRICOS
     }
 
     private static final long serialVersionUID = 1L;
@@ -90,6 +126,13 @@ public class Contrato implements Serializable {
 
     @NotNull
     private String archivoContrato = "";
+    
+    @NotNull
+    private Boolean tieneProyecto=true;
+    
+    private String dependencia;
+    
+    
 
     public String getCargo() {
         return cargo;

@@ -66,7 +66,7 @@
                         <p:inputText styleClass="inputEnDlg" id="txtCiudadUniversidad" value="#{gestorPersona.universidad.ciudad}"/>
                         <p:message for="txtCiudadUniversidad"/>
                     </h:panelGrid>
-                    
+
                     <h:panelGrid columns="2">
                         <p:commandButton value="Aceptar" process="dlgUniversidad" update="dtTitulos divDlgUniversidad" action="#{gestorPersona.guardarUniversidad()}"/>
                         <p:commandButton value="Cancelar" onclick="PF('dlgUniversidad').hide();"/>
@@ -88,9 +88,12 @@
                         <p:message for="spnNivel"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:commandButton value="Aceptar" process="dlgTitulo" 
-                                         update="dtTitulos divDlgTitulo" action="#{gestorPersona.guardarTitulo()}" />
-                        <p:commandButton value="Cancelar" onclick="PF('dlgTitulo').hide();"/>
+                        <p:commandButton value="Aceptar" 
+                                         process="dlgTitulo" 
+                                         update="dtTitulos divDlgTitulo" 
+                                         action="#{gestorPersona.guardarTitulo()}" />
+                        <p:commandButton value="Cancelar" 
+                                         onclick="PF('dlgTitulo').hide();"/>
                     </h:panelGrid>
                 </h:panelGroup>
             </p:dialog>  
@@ -174,7 +177,7 @@
                                    itemValue="#{tipo}" itemLabel="#{label['persona.tipo.' += tipo]}" />
                     <p:ajax event="change" partialSubmit="true" process="@this" update="divLblEstado divCmbEstado" />
                 </p:selectOneMenu>
-                <h:panelGroup layout="block"/>                
+                <h:panelGroup layout="block"/>
 
                 <p:outputLabel value="Grado Académico" />
                 <p:selectOneMenu value="#{gestorPersona.persona.gradoAcademico}" style="width: 150px">
@@ -204,16 +207,11 @@
                 <h:panelGroup layout="block" style="width: 100%"/> 
                 <h:panelGroup layout="block"/>             
 
-
-
-
-
                 <p:outputLabel value="Títulos"/>
                 <h:panelGroup layout="block" id="divTitulos">
                     <h:panelGroup layout="block" style="height: 20px"/>
                     <p:dataTable id="dtTitulos" emptyMessage="#{label.emptyMessage}" rowKey="#{personaTitulo.id}" var="personaTitulo" value="#{gestorPersona.listaPersonaTitulos}" 
                                  editable="true" editMode="cell" widgetVar="cellTitulos">
-
                         <p:ajax event="cellEdit" listener="#{gestorPersona.onCellEdit}"  />
 
                         <p:column headerText="Título" width="300">
@@ -297,7 +295,6 @@
                 </h:panelGroup>
                 <h:panelGroup layout="block"/> 
 
-
                 <h:panelGroup layout="block">
                     <p:outputLabel value="Firmas"/>
                     <h:panelGroup id="helpFirmas" style="margin-left: 5px" styleClass="fa fa-question-circle"/>
@@ -336,11 +333,9 @@
                 <h:panelGroup layout="block"/> 
 
             </h:panelGrid>
-            <h:panelGroup layout="block"/> 
-
+            <h:panelGroup layout="block"/>
 
             <h:panelGroup layout="block" style="height: 20px"/>
-
 
             <h:panelGroup layout="block" style="clear: both" id="checksTipoPersona">
 
@@ -349,7 +344,6 @@
             <pe:keyFilter for="txtNombres" regEx="/[A-Z áéíóú]/i" preventPaste="false"/>  
             <pe:keyFilter for="txtApellidos" regEx="/[A-Z áéíóú]/i" preventPaste="false"/> 
             <pe:keyFilter for="txtCelular" regEx="/[\d\-]/" preventPaste="false"/> 
-
 
         </p:panel>
         <h:panelGroup layout="block" style="height: 15px"/>
