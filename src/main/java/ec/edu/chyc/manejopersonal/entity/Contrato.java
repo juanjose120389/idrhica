@@ -68,7 +68,7 @@ public class Contrato implements Serializable {
         PRINCIPAL,
         AGREGADO
     }
-    
+
     public enum Dependencia {
         DEPARTAMENTO_RH,
         CENTRO_HYC,
@@ -103,11 +103,9 @@ public class Contrato implements Serializable {
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")*/
     @Transient
     private Proyecto proyecto = null;
-    
+
     @ManyToMany(mappedBy = "contratosCollection")
     private Set<Proyecto> proyectosCollection = new HashSet<>();
-    
-
 
     private String cargo;
     private String actividadPrincipal;
@@ -126,13 +124,11 @@ public class Contrato implements Serializable {
 
     @NotNull
     private String archivoContrato = "";
-    
+
     @NotNull
-    private Boolean tieneProyecto=true;
-    
+    private Boolean tieneProyecto = true;
+
     private String dependencia;
-    
-    
 
     public String getCargo() {
         return cargo;
@@ -182,8 +178,12 @@ public class Contrato implements Serializable {
         this.administrador = administrador;
     }
 
-    public Proyecto getProyecto() {        
-        return (Proyecto) proyectosCollection.toArray()[0];
+    public Proyecto getProyecto() {
+        if (!proyectosCollection.isEmpty()) {
+            return (Proyecto) proyectosCollection.toArray()[0];
+        } else {
+            return proyecto;
+        }
     }
 
     public void setProyecto(Proyecto proyecto) {
@@ -244,7 +244,8 @@ public class Contrato implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.edu.chyc.manejopersonal.entity.Contrato[ id=" + id + " ]";
+        return "ec.edu.chyc.manejopersonal.entity.Contrato[ id="
+                + id + " ]";
     }
 
     public TipoContrato getTipo() {
